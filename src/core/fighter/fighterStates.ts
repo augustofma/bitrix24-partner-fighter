@@ -3,6 +3,7 @@ import {
   ATTACK_STATES,
   CROUCH_ATTACK_STATES,
   type AttackButton,
+  type AttackLevel,
   type AttackSlot,
   type FighterBoxes,
   type FighterStateId,
@@ -28,6 +29,33 @@ export const BLOCK_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>
   'block',
   'crouchBlock',
 ]);
+
+/** How a guard is held: standing (D) or crouching (↓ + D). */
+export type GuardPosture = 'standing' | 'crouching';
+
+/**
+ * Which guard postures stop each attack level. Geometry still decides whether an attack
+ * touches the defender at all (e.g. most highs pass over a crouching body); this table only
+ * decides whether a guard that IS touched holds.
+ */
+export const GUARD_COVERAGE: Readonly<Record<AttackLevel, readonly GuardPosture[]>> = {
+  high: ['standing', 'crouching'],
+  mid: ['standing', 'crouching'],
+  low: ['crouching'],
+  overhead: ['standing'],
+};
+
+/** The guard posture of a guarding state, or null when not guarding. */
+export function guardPostureOf(state: FighterStateId): GuardPosture | null {
+  if (state === 'block') return 'standing';
+  if (state === 'crouchBlock') return 'crouching';
+  return null;
+}
+
+/** The posture that guards `level` (standing when both work). */
+export function correctGuardFor(level: AttackLevel): GuardPosture {
+  return GUARD_COVERAGE[level].includes('standing') ? 'standing' : 'crouching';
+}
 
 /** States that use the low (crouching) body: crouch, low guard and crouching attacks. */
 export const CROUCHING_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>([

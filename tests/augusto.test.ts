@@ -228,8 +228,9 @@ describe('Augusto integration in FightSimulation', () => {
         ]);
         trace.push([a.state, b.state, a.health, b.health, a.position.x, b.position.x]);
       }
-      expect(a.health).toBeLessThan(a.maxHealth);
-      expect(b.health).toBeLessThan(b.maxHealth);
+      // Both took damage at some point (rounds reset health, so not necessarily at the end).
+      expect(Math.min(...trace.map((t) => Number(t[2])))).toBeLessThan(a.maxHealth);
+      expect(Math.min(...trace.map((t) => Number(t[3])))).toBeLessThan(b.maxHealth);
       return trace;
     };
     expect(run()).toEqual(run());

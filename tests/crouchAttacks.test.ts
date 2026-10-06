@@ -122,7 +122,7 @@ describe('crouching attacks: body, hits and facing', () => {
     }
   });
 
-  it('the low kick also hits a crouching opponent; guards still block it', () => {
+  it('the low kick also hits a crouching opponent; only the low guard blocks it', () => {
     const sim = createFightingSim();
     placeAtDistance(sim, 110);
     const hit = run(
@@ -133,16 +133,20 @@ describe('crouching attacks: body, hits and facing', () => {
     );
     expect(hit.events.some((e) => e.type === 'hit')).toBe(true);
 
-    for (const guard of [{ block: true }, { ...DOWN, block: true }]) {
-      const blocked = createFightingSim();
-      placeAtDistance(blocked, 110);
+    // The sweep is 'low': a standing guard is hit, a crouching guard blocks.
+    for (const [guard, expected] of [
+      [{ block: true }, 'hit'],
+      [{ ...DOWN, block: true }, 'block'],
+    ] as const) {
+      const sim2 = createFightingSim();
+      placeAtDistance(sim2, 110);
       const r = run(
-        blocked,
+        sim2,
         30,
         (f) => press({ ...DOWN, kick: f === 0 }),
         () => press(guard),
       );
-      expect(r.events.some((e) => e.type === 'block')).toBe(true);
+      expect(r.events.some((e) => e.type === expected)).toBe(true);
     }
   });
 

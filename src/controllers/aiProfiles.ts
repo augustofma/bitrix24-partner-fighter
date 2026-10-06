@@ -10,6 +10,11 @@ export interface AIProfile {
   reactionFrames: number;
   /** Chance to block an attack it sees coming in range. */
   blockChance: number;
+  /**
+   * When blocking a seen attack, chance to pick the posture its level requires (crouching vs
+   * low, standing vs overhead). A wrong read guards in the other posture and gets hit.
+   */
+  guardReadChance: number;
   /** Chance to attack when in range and the attack cooldown is over. */
   aggression: number;
   /** Chance to back off when in range instead of attacking. */
@@ -44,6 +49,7 @@ export interface AIProfile {
 export const NORMAL_AI: AIProfile = {
   reactionFrames: 3,
   blockChance: 0.35,
+  guardReadChance: 0.75,
   aggression: 0.42,
   retreatChance: 0.22,
   guardChance: 0.12,

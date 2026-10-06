@@ -2,6 +2,7 @@ import type { AttackConfig } from '../../types/fighter';
 import { SPECIAL_METER } from '../../config/special';
 import type { Direction, Vec2 } from '../../types/geometry';
 import type { Fighter } from '../fighter/Fighter';
+import { GUARD_COVERAGE, guardPostureOf } from '../fighter/fighterStates';
 import { intersectionCenter, rectsOverlap } from '../geometry';
 
 export type FighterIndex = 0 | 1;
@@ -72,12 +73,13 @@ export class CombatSystem {
 }
 
 /**
- * Single place that decides whether a guard stops an attack. Today any guard (standing or
- * crouching) blocks everything. Future high/low/overhead rules belong here, e.g. comparing an
- * `AttackConfig` height with the defender's guard state.
+ * Single place that decides whether a guard stops an attack: the defender must be guarding,
+ * with a posture that covers the attack's level (GUARD_COVERAGE). A low hits a standing guard;
+ * an overhead (jump-ins included) hits a crouching guard.
  */
-export function isAttackBlocked(defender: Fighter, _attack: AttackConfig): boolean {
-  return defender.isBlocking;
+export function isAttackBlocked(defender: Fighter, attack: AttackConfig): boolean {
+  const posture = guardPostureOf(defender.state);
+  return posture !== null && GUARD_COVERAGE[attack.level].includes(posture);
 }
 
 /**

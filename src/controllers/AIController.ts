@@ -1,10 +1,16 @@
 import { attackReach, totalAttackFrames } from '../core/fighter/attackFrames';
 import { attackWouldConnect } from '../core/fighter/attackGeometry';
-import { groundInputFor, isLowPosture } from '../core/fighter/fighterStates';
+import {
+  GUARD_COVERAGE,
+  correctGuardFor,
+  groundInputFor,
+  isLowPosture,
+  type GuardPosture,
+} from '../core/fighter/fighterStates';
 import type { ReadonlyFighter } from '../core/fighter/ReadonlyFighter';
 import { createInputState } from '../core/input';
 import { randomInt, type Rng } from '../core/random';
-import { CROUCH_ATTACK_STATES, GROUND_ATTACK_STATES } from '../types/fighter';
+import { CROUCH_ATTACK_STATES, GROUND_ATTACK_STATES, type AttackLevel } from '../types/fighter';
 import type { Direction } from '../types/geometry';
 import type { InputState } from '../types/input';
 import { NORMAL_AI, type AIProfile, type GroundAttackSlot } from './aiProfiles';
@@ -38,6 +44,8 @@ export class AIController implements FighterController {
   private reactedToCurrentAttack = false;
   /** Decided at jump time: kick on the way down if the opponent comes into range. */
   private plannedAirAttack = false;
+  /** Guard posture to hold in 'guard' mode: ↓ + D when true. */
+  private guardLow = false;
 
   constructor(
     private readonly profile: AIProfile = NORMAL_AI,
@@ -51,6 +59,7 @@ export class AIController implements FighterController {
     this.attackCooldown = 0;
     this.reactedToCurrentAttack = false;
     this.plannedAirAttack = false;
+    this.guardLow = false;
   }
 
   get currentMode(): AIMode {
@@ -103,8 +112,22 @@ export class AIController implements FighterController {
     if (distanceBetween(self, opponent) > threatRange) return;
     if (this.rng() >= this.profile.blockChance) return;
 
+    this.guardLow = this.readGuardPosture(attack.level) === 'crouching';
     const remaining = totalAttackFrames(attack) - opponent.stateFrame;
     this.setMode('guard', remaining + GUARD_SAFETY_FRAMES);
+  }
+
+  /**
+   * Posture against an attack already seen (its level is visible once it started). With
+   * chance guardReadChance the CPU reads it right; otherwise it guesses wrong where only one
+   * posture works (low / overhead) and stays standing for mid / high (both work anyway).
+   */
+  private readGuardPosture(level: AttackLevel): GuardPosture {
+    const correct = correctGuardFor(level);
+    if (this.rng() < this.profile.guardReadChance) return correct;
+    const onlyOneWorks = GUARD_COVERAGE[level].length === 1;
+    if (!onlyOneWorks) return 'standing';
+    return correct === 'standing' ? 'crouching' : 'standing';
   }
 
   private decide(self: ReadonlyFighter, opponent: ReadonlyFighter): void {
@@ -149,6 +172,8 @@ export class AIController implements FighterController {
     if (roll < profile.retreatChance) {
       this.setMode('retreat', randomInt(rng, ...profile.retreatFrames));
     } else if (roll < profile.retreatChance + profile.guardChance) {
+      // Pre-emptive guard: low against a low opponent (crouching attacks are likely).
+      this.guardLow = isLowPosture(opponent.state);
       this.setMode('guard', randomInt(rng, ...profile.guardFrames));
     } else if (distance > punchRange) {
       this.setMode('approach', randomInt(rng, ...profile.approachFrames));
@@ -176,7 +201,7 @@ export class AIController implements FighterController {
       case 'retreat':
         return createInputState(holdAway);
       case 'guard':
-        return createInputState({ block: true });
+        return createInputState({ block: true, down: this.guardLow });
       case 'attack': {
         const input = groundInputFor(this.attackSlot);
         return input
