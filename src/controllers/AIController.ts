@@ -1,10 +1,13 @@
 import { attackReach, totalAttackFrames } from '../core/fighter/attackFrames';
+import { attackWouldConnect } from '../core/fighter/attackGeometry';
+import { groundInputFor, isLowPosture } from '../core/fighter/fighterStates';
 import type { ReadonlyFighter } from '../core/fighter/ReadonlyFighter';
 import { createInputState } from '../core/input';
 import { randomInt, type Rng } from '../core/random';
-import type { AttackButton } from '../types/fighter';
+import { CROUCH_ATTACK_STATES, GROUND_ATTACK_STATES } from '../types/fighter';
+import type { Direction } from '../types/geometry';
 import type { InputState } from '../types/input';
-import { NORMAL_AI, type AIProfile } from './aiProfiles';
+import { NORMAL_AI, type AIProfile, type GroundAttackSlot } from './aiProfiles';
 import type { ControllerContext, FighterController } from './FighterController';
 
 export type AIMode = 'wait' | 'approach' | 'retreat' | 'guard' | 'attack' | 'jump';
@@ -29,9 +32,8 @@ const GUARD_SAFETY_FRAMES = 4;
 export class AIController implements FighterController {
   private mode: AIMode = 'wait';
   private modeFrames = 0;
-  private attackButton: AttackButton = 'punch';
-  /** Kicks can be thrown low (↓ + S = crouchKick). */
-  private attackLow = false;
+  /** The ground attack to perform in 'attack' mode; expressed as button (+ ↓), like a human. */
+  private attackSlot: GroundAttackSlot = 'punch';
   private attackCooldown = 0;
   private reactedToCurrentAttack = false;
   /** Decided at jump time: kick on the way down if the opponent comes into range. */
@@ -102,9 +104,13 @@ export class AIController implements FighterController {
     const punchRange = this.rangeOf('punch', self, opponent);
     const kickRange = this.rangeOf('kick', self, opponent);
     this.plannedAirAttack = false;
+    // Only rolled when the opponent is actually low, so play against a standing opponent is
+    // exactly as before (same random sequence).
+    const targetLow = isLowPosture(opponent.state) && rng() < profile.lowPostureAwareness;
+    const attackRange = targetLow ? this.lowTargetRange(self, opponent) : kickRange;
 
-    if (distance > kickRange) {
-      const canJumpIn = distance < kickRange + JUMP_IN_WINDOW;
+    if (distance > attackRange) {
+      const canJumpIn = distance < attackRange + JUMP_IN_WINDOW;
       if (canJumpIn && rng() < profile.jumpInChance) {
         this.setMode('jump', 1);
         this.plannedAirAttack = rng() < profile.jumpInAttackChance;
@@ -115,9 +121,16 @@ export class AIController implements FighterController {
     }
 
     if (this.attackCooldown === 0 && rng() < profile.aggression) {
-      this.attackButton = distance <= punchRange ? 'punch' : 'kick';
-      this.attackLow = this.attackButton === 'kick' && rng() < profile.lowKickChance;
-      const attack = self.config.attacks[this.attackLow ? 'crouchKick' : this.attackButton];
+      const slot = targetLow
+        ? this.pickLowTargetAttack(self, opponent)
+        : this.pickStandingTargetAttack(distance <= punchRange);
+      if (!slot) {
+        // Nothing would connect from here: close the gap instead of whiffing.
+        this.setMode('approach', randomInt(rng, ...profile.approachFrames));
+        return;
+      }
+      this.attackSlot = slot;
+      const attack = self.config.attacks[slot];
       this.attackCooldown = totalAttackFrames(attack) + randomInt(rng, ...profile.attackCooldown);
       this.setMode('attack', 1);
       return;
@@ -142,7 +155,9 @@ export class AIController implements FighterController {
 
     switch (this.mode) {
       case 'approach': {
-        const stopAt = this.rangeOf('punch', self, opponent) - APPROACH_STOP_MARGIN;
+        // Against a low opponent, stop where the low jab connects (the standing punch whiffs).
+        const closest = isLowPosture(opponent.state) ? 'crouchPunch' : 'punch';
+        const stopAt = this.rangeOf(closest, self, opponent) - APPROACH_STOP_MARGIN;
         if (distanceBetween(self, opponent) <= stopAt) {
           this.modeFrames = 0;
           return createInputState();
@@ -153,8 +168,12 @@ export class AIController implements FighterController {
         return createInputState(holdAway);
       case 'guard':
         return createInputState({ block: true });
-      case 'attack':
-        return createInputState({ [this.attackButton]: true, down: this.attackLow });
+      case 'attack': {
+        const input = groundInputFor(this.attackSlot);
+        return input
+          ? createInputState({ [input.button]: true, down: input.down })
+          : createInputState();
+      }
       case 'jump':
         return createInputState({ up: true, ...holdToward });
       case 'wait':
@@ -162,10 +181,67 @@ export class AIController implements FighterController {
     }
   }
 
-  /** Center-to-center distance at which `button` connects with the opponent. */
-  private rangeOf(button: AttackButton, self: ReadonlyFighter, opponent: ReadonlyFighter): number {
-    return attackReach(self.config.attacks[button]) + halfBodyWidth(opponent);
+  /** Standing opponent: punch up close, kick further away (sometimes a low sweep). */
+  private pickStandingTargetAttack(inPunchRange: boolean): GroundAttackSlot {
+    if (inPunchRange) return 'punch';
+    return this.rng() < this.profile.lowKickChance ? 'crouchKick' : 'kick';
   }
+
+  /**
+   * Low opponent: weighted pick among the ground attacks whose hitbox would touch the
+   * opponent's CURRENT hurtbox (reach and height), so high attacks that pass over are skipped.
+   * Null when nothing connects from here.
+   */
+  private pickLowTargetAttack(
+    self: ReadonlyFighter,
+    opponent: ReadonlyFighter,
+  ): GroundAttackSlot | null {
+    const weights = this.profile.lowPostureAttackWeights;
+    const target = opponent.getHurtbox();
+    const facing = towardDirection(self, opponent);
+    const candidates = GROUND_ATTACK_SLOTS.filter(
+      (slot) =>
+        weights[slot] > 0 &&
+        attackWouldConnect(self.config.attacks[slot], self.position, facing, target),
+    );
+    const total = candidates.reduce((sum, slot) => sum + weights[slot], 0);
+    if (total <= 0) return null;
+    let roll = this.rng() * total;
+    for (const slot of candidates) {
+      roll -= weights[slot];
+      if (roll < 0) return slot;
+    }
+    return candidates.at(-1) ?? null;
+  }
+
+  /** Farthest center distance at which any preferred attack can reach a low opponent. */
+  private lowTargetRange(self: ReadonlyFighter, opponent: ReadonlyFighter): number {
+    const weights = this.profile.lowPostureAttackWeights;
+    const ranges = GROUND_ATTACK_SLOTS.filter((slot) => weights[slot] > 0).map((slot) =>
+      this.rangeOf(slot, self, opponent),
+    );
+    return Math.max(0, ...ranges);
+  }
+
+  /** Center-to-center distance at which `slot` reaches the opponent horizontally. */
+  private rangeOf(
+    slot: GroundAttackSlot,
+    self: ReadonlyFighter,
+    opponent: ReadonlyFighter,
+  ): number {
+    return attackReach(self.config.attacks[slot]) + halfBodyWidth(opponent);
+  }
+}
+
+const GROUND_ATTACK_SLOTS: readonly GroundAttackSlot[] = [
+  ...GROUND_ATTACK_STATES,
+  ...CROUCH_ATTACK_STATES,
+];
+
+function towardDirection(self: ReadonlyFighter, opponent: ReadonlyFighter): Direction {
+  const dx = opponent.position.x - self.position.x;
+  if (dx === 0) return self.direction;
+  return dx > 0 ? 1 : -1;
 }
 
 function distanceBetween(a: ReadonlyFighter, b: ReadonlyFighter): number {

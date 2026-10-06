@@ -70,6 +70,17 @@ sem pedido explícito.**
       determinismo, sprite e placeholder
 - [x] Validação no navegador: teclado real, multi-touch, F2 congelado e fluxo completo
 
+## DONE (v0.5: CPU consciente da postura baixa)
+
+- [x] `isLowPosture` genérico (crouch, crouchBlock, crouchPunch, crouchKick)
+- [x] `attackWouldConnect`: a IA só escolhe golpes cuja hitbox alcança a hurtbox atual (alcance + altura)
+- [x] Contra adversário agachado: soco agachado / rasteira / chute mid com pesos; aproxima se nada alcança
+- [x] `AIProfile.lowPostureAwareness` e `lowPostureAttackWeights` (NORMAL_AI imperfeita de propósito)
+- [x] Comportamento contra adversário em pé inalterado (mesma sequência de RNG)
+- [x] Testes: escolha por postura e alcance, inputs ↓ + A/S, pressão no crouchBlock, alternância,
+      jump-in, determinismo, IA sem IDs de personagem
+- [x] Playtest no navegador com a CPU real: segurar ↓ não neutraliza mais a CPU
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com

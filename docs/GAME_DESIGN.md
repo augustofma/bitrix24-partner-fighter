@@ -158,9 +158,23 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 
 - **Longe:** aproxima-se (às vezes pula na direção do jogador e, nesse pulo, pode soltar um
   chute aéreo na descida se o jogador estiver ao alcance).
-- **No alcance:** ataca (soco se perto, chute se a meia distância; o chute às vezes sai como
-  rasteira, `lowKickChance`), com pausa entre ataques; ou recua, defende preventivamente ou
-  espera.
+- **No alcance, contra adversário em pé:** ataca (soco se perto, chute se a meia distância; o
+  chute às vezes sai como rasteira, `lowKickChance`), com pausa entre ataques; ou recua, defende
+  preventivamente ou espera.
+- **Contra adversário em postura baixa** (`crouch`, `crouchBlock`, `crouchPunch`, `crouchKick`):
+  - Na maioria das decisões (`lowPostureAwareness`, 85% no `NORMAL_AI`), a CPU percebe a
+    postura e escolhe **só entre os golpes que realmente acertariam agora**: a hitbox precisa
+    alcançar e estar na altura da hurtbox atual do adversário. O soco em pé (alto) fica de fora,
+    porque passa por cima.
+  - Entre os que acertam, sorteia com pesos (`lowPostureAttackWeights`): soco agachado (mais
+    comum), rasteira, chute em pé (mid, que alcança quem está agachado) e raramente o soco.
+  - Se nada alcança dali, ela se aproxima até o soco agachado conectar (de longe, pode pular).
+  - Nas outras decisões ela "não percebe" e age como contra alguém em pé, então às vezes ainda
+    erra um soco por cima. É imperfeita de propósito.
+  - Contra `crouchBlock` ela continua pressionando no mesmo ritmo, com golpes que alcançam a
+    guarda baixa (e são bloqueados, como qualquer golpe hoje).
+- Os golpes são feitos com os mesmos inputs de um humano: soco agachado = ↓ + A, rasteira =
+  ↓ + S.
 - **Reação:** ao ver um golpe do jogador vindo dentro do alcance, defende com certa chance, após
   um atraso de reação (3 frames).
 - As decisões dependem da distância e do estado do oponente; o acaso só varia entre opções
