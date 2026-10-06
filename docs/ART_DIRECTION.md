@@ -1,7 +1,8 @@
 # Direção de Arte
 
-> Estado atual (v0.1): **toda a arte é provisória**, desenhada em código (bonecos geométricos,
-> cenário procedural). Este documento define a direção **futura** e o formato esperado dos assets.
+> Estado atual (v0.2): o **pipeline de sprites está pronto**. O FIGHTER_A usa uma spritesheet
+> **de demonstração** (gerada por script, não é arte final); o FIGHTER_B e o cenário ainda são
+> desenhados em código. Este documento define a direção artística e o formato dos assets.
 
 ## Direção
 
@@ -19,16 +20,23 @@
   King of Fighters ou outras franquias. Sem logos oficiais (inclusive o do Bitrix24) até haver
   autorização e guia de marca.
 
-## Restrições técnicas
+## Regras técnicas para lutadores
 
-- Resolução lógica do jogo: **960x540**. Lutador em pé ocupa cerca de **170 px de altura**
-  (cerca de 1/3 da tela).
-- Para pixel art, desenhar em escala inteira dessa resolução (ex.: sprite nativo de 85 px,
-  exibido a 2x) e ativar `pixelArt: true` em `src/main.ts`.
-- Ponto de origem de cada frame: **centro dos pés** (é a posição do lutador na simulação).
-- Sprites desenhados **olhando para a direita** (o jogo espelha).
-- As hitboxes e hurtboxes são definidas no `FighterConfig`, **não** derivadas da arte. Ao trocar a
-  arte, use F2 (debug) para conferir se as caixas ainda batem com o desenho.
+- Resolução lógica do jogo: **960x540**. Um lutador de porte médio em pé ocupa cerca de
+  **170 px de altura na tela** (cerca de 1/3 da altura), que é o tamanho da hurtbox padrão. O
+  tamanho **nativo** do frame é livre: ajuste com `visual.scale`.
+- **A arte nunca define colisão.** Hitboxes, hurtboxes e pushbox ficam no `FighterConfig`
+  (`boxes`, `attacks[].hitbox`). Desenhe a arte para combinar com as caixas e confira com F2.
+- **A arte nunca define timing.** A duração de cada golpe vem do frame data
+  (`startupFrames`, `activeFrames`, `recoveryFrames`). Os frames do sprite são distribuídos
+  automaticamente sobre essas fases.
+- **Desenhe olhando para a direita.** O jogo espelha (`flipX`); não crie sprites para a esquerda.
+- **Pés no centro da base do frame.** A posição lógica do lutador é o centro dos pés, e o sprite
+  é ancorado no centro da borda inferior do frame. Se a sua arte tiver margem embaixo ou estiver
+  descentralizada, compense com `visual.offsetX` / `visual.offsetY`.
+- **Margem para golpes.** O frame precisa caber o chute esticado e o corpo deitado no KO.
+- **Pixel art:** use `pixelArt: true` em `assets` (filtro "nearest", sem borrar) e prefira
+  escalas inteiras (2x, 3x).
 
 ## Estrutura de assets
 
@@ -36,17 +44,8 @@
 public/
   fighters/
     <fighter-id>/
-      portrait.png        Retrato para seleção/VS/vitória
-      idle.png            Spritesheets (uma linha de frames) por estado:
-      walk.png
-      jump.png
-      crouch.png
-      punch.png
-      kick.png
-      block.png
-      hurt.png
-      knockout.png
-      victory.png
+      sprite.png          Spritesheet em grade com todas as animações
+      portrait.png        Retrato para seleção / VS / vitória
   stages/
     <stage-id>/           Camadas de fundo (parallax): sky, far, mid, floor
   ui/                     Molduras de HUD, fontes bitmap, ícones
@@ -56,31 +55,106 @@ public/
     voices/<fighter-id>/  Falas dos personagens
 ```
 
-Cada estado de lutador (`FighterStateId`) corresponde a **uma** animação. Golpes têm
-frames de startup, active e recovery: a animação deve casar com o frame data do ataque
-(ex.: soco de FIGHTER_A = 5 + 3 + 9 = 17 frames de jogo).
+### Spritesheet
 
-## Como plugar a arte (quando existir)
+- **Uma imagem PNG em grade**, com todos os frames do mesmo tamanho (`frameWidth` x
+  `frameHeight`), sem espaçamento entre eles e fundo transparente.
+- Frames numerados **da esquerda para a direita, de cima para baixo, a partir de 0**.
+- Pode sobrar espaço vazio no fim da grade.
 
-1. Coloque os arquivos em `public/fighters/<id>/`.
-2. Preencha `assets` no `FighterConfig`:
-   ```ts
-   assets: {
-     portrait: 'fighters/<id>/portrait.png',
-     animations: {
-       idle: { path: 'fighters/<id>/idle.png', frameWidth: 128, frameHeight: 192, frameRate: 10, loop: true },
-       // ...
-     },
-   },
-   ```
-3. Carregue os assets em `BootScene.preload()` e crie `SpriteFighterView` (implementando
-   `FighterView`), escolhida em `src/render/createFighterView.ts`. O gameplay não muda.
+### Animações (uma por estado do lutador)
+
+| Estado     | Obrigatória | Sugestão de frames       | Comportamento padrão                             | Se faltar, mostra |
+| ---------- | ----------- | ------------------------ | ------------------------------------------------ | ----------------- |
+| `idle`     | **sim**     | 4                        | loop                                             | (obrigatória)     |
+| `walk`     | não         | 4 a 8                    | loop                                             | idle              |
+| `jump`     | não         | 2 (subida, tuck)         | toca uma vez e segura                            | idle              |
+| `crouch`   | não         | 1                        | toca uma vez e segura                            | idle              |
+| `punch`    | não         | 3 (prep, impacto, volta) | sincronizado ao frame data                       | idle              |
+| `kick`     | não         | 3 (prep, impacto, volta) | sincronizado ao frame data                       | punch             |
+| `block`    | não         | 1                        | toca uma vez e segura                            | idle              |
+| `hurt`     | não         | 1 a 2                    | toca uma vez e segura                            | idle              |
+| `knockout` | não         | 2 a 3 (cai, deitado)     | toca uma vez e segura                            | hurt              |
+| `victory`  | não         | 2 a 4                    | toca uma vez e segura (ou loop com `repeat: -1`) | idle              |
+
+Campos de cada animação:
+
+| Campo          | Tipo                                                                                  | Padrão                                |
+| -------------- | ------------------------------------------------------------------------------------- | ------------------------------------- |
+| `frames`       | lista de índices do sheet                                                             | obrigatório                           |
+| `frameRate`    | frames por segundo (só visual)                                                        | 10                                    |
+| `repeat`       | `-1` loop, `0` uma vez, `n` repete n vezes                                            | loop em idle/walk, uma vez nos demais |
+| `attackPhases` | `{ startup, active, recovery }` (quantos frames em cada fase; soma = `frames.length`) | 1 frame de impacto no meio            |
+
+Em golpes, `frameRate` e `repeat` são ignorados: os frames acompanham o frame data. Com 3 frames
+(padrão), o 1º aparece durante o startup, o 2º **exatamente nos frames ativos** (quando a hitbox
+existe) e o 3º durante o recovery.
+
+## Como adicionar arte de um novo lutador
+
+1. **Pasta.** Crie `public/fighters/<fighter-id>/` (mesmo `id` do `FighterConfig`).
+2. **Portrait.** Salve `portrait.png` (busto ou corpo; qualquer proporção, ele é ajustado ao
+   card com "contain" e alinhado pela base). Sugestão: cerca de 240x300 px.
+3. **Spritesheet.** Salve `sprite.png` em grade (regras acima), arte olhando para a direita e
+   pés no centro da base de cada frame.
+4. **Dimensões dos frames.** Informe `frameWidth` e `frameHeight` exatamente como na grade. Não
+   há tamanho único obrigatório: cada personagem pode ter o seu.
+5. **Animations.** Liste os índices de cada estado em `assets.sprite.animations` (no mínimo
+   `idle`).
+6. **Scale.** Ajuste `visual.scale` para o corpo ficar com a altura da hurtbox (cerca de 170 px
+   na tela para o corpo padrão). Exemplo: corpo de 85 px no frame → `scale: 2`.
+7. **Offsets.** Ligue o F2 (ou abra com `?debug=1`) e ajuste `visual.offsetX` / `offsetY` até o
+   ponto branco (posição lógica) ficar entre os pés e o corpo dentro da hurtbox verde. O
+   `offsetX` positivo vai para a frente do lutador e é espelhado automaticamente.
+8. **Fallback.** Se a imagem não carregar ou a config tiver erro, o jogo **não quebra**: o
+   lutador usa o placeholder geométrico e o console (em `npm run dev`) mostra mensagens
+   `[assets]` explicando o problema. Animações que faltarem usam a animação parecida da tabela.
+
+Exemplo completo (o do FIGHTER_A, em `src/fighters/fighterA.ts`):
+
+```ts
+assets: {
+  portrait: 'fighters/fighter-a/portrait.png',
+  pixelArt: true,
+  sprite: {
+    sheet: {
+      key: 'fighter-a-demo-sheet',          // único no jogo todo
+      path: 'fighters/fighter-a/sprite.png',
+      frameWidth: 96,
+      frameHeight: 112,
+    },
+    visual: { scale: 2, offsetX: 0, offsetY: 0 },
+    animations: {
+      idle: { frames: [0, 1, 2, 3], frameRate: 6 },
+      walk: { frames: [4, 5, 6, 7], frameRate: 10 },
+      jump: { frames: [8, 9], frameRate: 6 },
+      crouch: { frames: [10] },
+      punch: { frames: [11, 12, 13] },
+      kick: { frames: [14, 15, 16] },
+      block: { frames: [17] },
+      hurt: { frames: [18, 19], frameRate: 12 },
+      knockout: { frames: [20, 21, 22], frameRate: 8 },
+      victory: { frames: [23, 24, 25], frameRate: 6, repeat: -1 },
+    },
+  },
+},
+```
+
+Nada além do `FighterConfig` precisa mudar: a BootScene carrega os assets declarados pelo roster
+automaticamente.
+
+### Substituir a arte demo do FIGHTER_A
+
+Troque `public/fighters/fighter-a/sprite.png` e `portrait.png` pela arte final e atualize em
+`fighterA.ts`: `frameWidth`/`frameHeight`, os índices de `animations`, `visual` e `pixelArt`
+(remova se a arte não for pixel art). Use uma `key` nova (ex.: `fighter-a-sheet`). Depois disso,
+`scripts/generate-demo-fighter-art.mjs` pode ser apagado.
 
 ## Licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
 registrada aqui:
 
-| Asset          | Autor | Licença |
-| -------------- | ----- | ------- |
-| (nenhum ainda) |       |         |
+| Asset                                    | Autor                                              | Licença             |
+| ---------------------------------------- | -------------------------------------------------- | ------------------- |
+| `public/fighters/fighter-a/*.png` (demo) | Gerado por `scripts/generate-demo-fighter-art.mjs` | Original do projeto |

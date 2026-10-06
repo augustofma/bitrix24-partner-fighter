@@ -1,7 +1,10 @@
-# fighters/fighter-a
+# fighter-a
 
-Arte do lutador (ainda vazia, a v0.1 usa o placeholder geométrico).
+Arte **de demonstração** do FIGHTER_A, gerada por `node scripts/generate-demo-fighter-art.mjs`.
+Serve apenas para validar o pipeline de sprites e será substituída pela arte definitiva.
 
-Arquivos esperados: `portrait.png`, `idle.png`, `walk.png`, `jump.png`, `crouch.png`, `punch.png`, `kick.png`, `block.png`, `hurt.png`, `knockout.png`, `victory.png`.
+- `sprite.png`: grade 8x4 de frames de 96x112 px (26 usados, 0-25), pés na base de cada frame
+- `portrait.png`: busto de 120x150 px
 
-Formato e regras: veja [docs/ART_DIRECTION.md](../../../docs/ART_DIRECTION.md).
+A configuração correspondente fica em `src/fighters/fighterA.ts` (`assets`).
+Formato e passo a passo: [docs/ART_DIRECTION.md](../../../docs/ART_DIRECTION.md).

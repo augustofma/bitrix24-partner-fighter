@@ -67,7 +67,16 @@ src/
     KeyboardInputSource.ts, menuKeys.ts
   render/                 Desenho do mundo (Phaser)
     FighterView.ts        Interface de view de lutador
-    createFighterView.ts  Fábrica (placeholder hoje, sprites no futuro)
+    createFighterView.ts  Fábrica: SpriteFighterView ou PlaceholderFighterView (fallback)
+    FighterShadow.ts      Sombra no chão (compartilhada pelas views)
+    viewEffects.ts        Flash de hit (compartilhado pelas views)
+    sprite/               Lutador desenhado com spritesheet
+      SpriteFighterView.ts  View Phaser: frame, flipX, âncora nos pés, escala, offsets
+      animationHelpers.ts   PURO: estado da simulação -> frame do sheet
+      spriteValidation.ts   PURO: validação da config + decisão de fallback
+    assets/
+      fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
+      textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
     StageView.ts          Cenário procedural com parallax
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
@@ -81,8 +90,9 @@ src/
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
     transitions.ts        Fade entre cenas
   utils/device.ts         Detecção de toque, flags de URL
-tests/                    Vitest: lutador, combate, arena, round, IA
-public/                   Assets estáticos (vazios na v0.1; veja ART_DIRECTION.md)
+tests/                    Vitest: lutador, combate, arena, round, IA, animação/assets de sprite
+scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
+public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
 
 ## Fluxo entre cenas
@@ -175,6 +185,56 @@ Regras do `CombatSystem`:
 - Caso contrário: `damage`, `hitstun`, `knockback`; com vida 0 → `knockout`.
 - Cada contato gera `hitstopFrames` de congelamento (24 no KO).
 
+## Pipeline de arte dos lutadores
+
+A arte é **só apresentação**: nada em `FighterConfig.assets` é lido pela simulação. Trocar,
+remover ou quebrar a arte nunca muda física, caixas, dano ou frame data.
+
+### Carregamento (BootScene)
+
+```
+ROSTER ─ collectFighterAssets() ─▶ lista sem duplicatas ─▶ load.image / load.spritesheet
+       ─ pixelArtTextureKeys()  ─▶ filtro NEAREST nas texturas pixel art
+       ─ validateRosterAssets() ─▶ avisos e erros no console (apenas em dev)
+```
+
+A BootScene não conhece nenhum personagem: adicionar um lutador com arte não exige editá-la.
+Um arquivo que falha ao carregar gera um aviso `[assets]` e o lutador usa o placeholder.
+
+### Escolha da view (fallback)
+
+```
+createFighterView(config)
+  └─ selectSpriteAssets(config, framesCarregados)
+       assets.sprite existe? textura carregou? config sem erros? frames dentro do sheet?
+         SIM ─▶ SpriteFighterView
+         NÃO ─▶ PlaceholderFighterView
+```
+
+O mesmo vale para o retrato: `PortraitView` usa a imagem de `assets.portrait` quando a textura
+existe e, caso contrário, desenha a figura geométrica.
+
+### Como o sprite acompanha a simulação
+
+Não há segunda state machine nem relógio próprio de animação. A cada render,
+`spriteFrameFor(animations, fighter)` calcula o frame **apenas** a partir de `fighter.state`,
+`fighter.stateFrame` e `fighter.activeAttack`:
+
+| Situação                       | Frame mostrado                                                                 |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| Estado sem animação            | Cadeia de fallback visual (`kick → punch → idle`, `knockout → hurt → idle`...) |
+| Ataque (`activeAttack` existe) | Frames divididos entre startup / active / recovery do **frame data real**      |
+| Demais estados                 | `stateFrame × frameRate / 60`, em loop (idle, walk) ou toca uma vez e segura   |
+
+Consequências: o frame de impacto aparece exatamente nos frames em que a hitbox está ativa; o
+hitstop congela o sprite (o `stateFrame` não avança); toda essa lógica é pura e testada em Node.
+
+Posicionamento: a origem do sprite é `(0.5, 1)`, o centro da base do frame, que corresponde aos
+pés (a posição lógica). `visual.scale` escala; `visual.offsetX` (espelhado conforme o lado) e
+`visual.offsetY` corrigem artes cujos pés não estão no centro da base. A virada usa `flipX` (a
+arte sempre olha para a direita). O overlay F2 continua desenhando por cima as caixas da
+simulação, para comparar arte e colisão.
+
 ## Arquitetura de personagens
 
 Um personagem é **só dados**: um `FighterConfig` em `src/fighters/<id>.ts`.
@@ -187,8 +247,8 @@ export const augusto: FighterConfig = {
   boxes: STANDARD_BODY,                 // ou caixas próprias
   attacks: { punch: {...}, kick: {...} },  // frame data completo
   specials: [],                         // reservado (SpecialMoveConfig)
-  palette: {...},                       // cores do placeholder
-  assets: { portrait: '...', animations: { idle: {...}, ... } },  // opcional
+  palette: {...},                       // cores do placeholder (e dos cards)
+  assets: { portrait, sprite: { sheet, animations, visual }, pixelArt },  // opcional
 };
 ```
 
@@ -196,7 +256,8 @@ Para adicionar um personagem:
 
 1. Copie `src/fighters/fighterA.ts` para `src/fighters/<id>.ts` e ajuste os valores.
 2. Adicione-o em `ROSTER` (`src/fighters/roster.ts`).
-3. (Opcional) Coloque a arte em `public/fighters/<id>/` e preencha `assets`.
+3. (Opcional) Coloque a arte em `public/fighters/<id>/` e preencha `assets`
+   (passo a passo em [ART_DIRECTION.md](ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador)).
 
 Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo do config.
 
@@ -207,14 +268,13 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 | Golpes especiais    | `SpecialMoveConfig` em `types/fighter.ts`; detector de sequência no `InputTracker`; novo estado de ataque reutilizando `AttackConfig` |
 | Barra de especial   | Campo novo no `Fighter` + evento no `CombatSystem` + barra no HUD                                                                     |
 | Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                                               |
-| Sprites reais       | `SpriteFighterView` implementando `FighterView`, escolhido em `createFighterView`                                                     |
 | Vários cenários     | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                                                     |
 | Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                                                       |
 | Melhor de 3 rounds  | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                                               |
 | Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos                                |
 | Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                                                  |
 
-## Decisões técnicas (v0.1)
+## Decisões técnicas
 
 - **Resolução lógica 960x540** (16:9), com `Scale.FIT` e letterbox. É 1/2 de 1080p e 1/4 de 4K,
   bom para escalar sprites 2D. Nada é esticado.
@@ -225,3 +285,7 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 - **Aviso de orientação em CSS** (`index.html`): funciona em todas as cenas sem código de jogo.
 - **TypeScript 6** em vez do 7: o `typescript-eslint` ainda não suporta o 7.
 - **Phaser 3.90** (última 3.x), conforme o requisito do projeto.
+- **Frame do sprite derivado do `stateFrame`** (v0.2), não do relógio de animação do Phaser:
+  mantém o visual sincronizado com o frame data, respeita o hitstop e é testável sem navegador.
+- **Arte demo gerada por script** (`scripts/generate-demo-fighter-art.mjs`, só Node, sem
+  dependências) para provar o pipeline sem nenhum asset de terceiros.

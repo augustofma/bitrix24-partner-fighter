@@ -29,6 +29,10 @@ Estas regras existem para que qualquer um consiga continuar o trabalho com segur
   milissegundos.
 - **Render só lê.** Views (`src/render/`) e HUD (`src/ui/`) leem `ReadonlyFighter` e nunca alteram
   o estado da luta.
+- **Arte nunca define gameplay.** Sprites e retratos entram só por `FighterConfig.assets`
+  (veja `docs/ART_DIRECTION.md`). Colisão vem das caixas do config e timing vem do frame data,
+  nunca da arte. Não carregue assets de personagem fora da `BootScene` nem crie lógica por
+  personagem no renderer.
 - **Sem valores mágicos.** Constantes ficam em `src/config/` (globais) ou no topo do arquivo que as
   usa (locais, com nome descritivo). Textos visíveis ao usuário ficam em `src/config/strings.ts`.
 - **Sem dependências circulares.** Tipos compartilhados ficam em `src/types/`.

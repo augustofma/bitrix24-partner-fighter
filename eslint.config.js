@@ -20,6 +20,12 @@ export default tseslint.config(
     },
   },
   {
+    // Build/asset tools run in Node and report progress on the console.
+    files: ['scripts/**/*.mjs'],
+    languageOptions: { globals: globals.node },
+    rules: { 'no-console': 'off' },
+  },
+  {
     // The simulation layer and game data must stay engine-agnostic (testable, deterministic,
     // reusable for online play). See docs/ARCHITECTURE.md.
     files: [

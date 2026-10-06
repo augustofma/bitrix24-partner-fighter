@@ -4,9 +4,13 @@ Fighting game 2D para navegador, inspirado nos jogos de luta arcade dos anos 90,
 personagens, cenários e assets **totalmente originais**.
 
 A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema Bitrix24, com golpes
-ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A **v0.1** é uma _vertical
-slice_ pequena e jogável, com dois lutadores provisórios (`FIGHTER_A` e `FIGHTER_B`) e arte
-geométrica placeholder.
+ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
+_vertical slice_ pequena e jogável, com dois lutadores provisórios: `FIGHTER_A`, que usa uma
+spritesheet **de demonstração** e prova o pipeline de sprites, e `FIGHTER_B`, que usa o boneco
+geométrico placeholder.
+
+Para adicionar arte de um lutador, veja
+[docs/ART_DIRECTION.md](docs/ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador).
 
 > Projeto independente. Não usa logos oficiais nem assets de outras franquias.
 
@@ -54,6 +58,9 @@ O build usa caminhos relativos (`base: './'`), então `dist/` pode ser hospedado
 | `npm run lint`   | ESLint                                                                         |
 | `npm run format` | Prettier (escreve)                                                             |
 | `npm run check`  | typecheck + lint + format:check + test + build (use antes de concluir tarefas) |
+
+A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fighter-art.mjs`
+(usa só o Node; não é necessário no dia a dia).
 
 ## Controles
 

@@ -55,7 +55,33 @@ export const fighterA: FighterConfig = {
   },
   specials: [],
   palette: { body: 0x2f6bff, accent: 0xffd23f, skin: 0xf1c27d, outline: 0x0b0820 },
-  // Real art goes in public/fighters/fighter-a/ (see docs/ART_DIRECTION.md).
-  // Example: { portrait: 'fighters/fighter-a/portrait.png', animations: { idle: {...} } }
-  assets: {},
+  // DEMO art (scripts/generate-demo-fighter-art.mjs) proving the sprite pipeline.
+  // Replace with the final art following docs/ART_DIRECTION.md. Purely visual.
+  assets: {
+    portrait: 'fighters/fighter-a/portrait.png',
+    pixelArt: true,
+    sprite: {
+      sheet: {
+        key: 'fighter-a-demo-sheet',
+        path: 'fighters/fighter-a/sprite.png',
+        frameWidth: 96,
+        frameHeight: 112,
+      },
+      // Native frames are drawn at half size: 2x makes the figure ~176 px tall.
+      visual: { scale: 2, offsetX: 0, offsetY: 0 },
+      animations: {
+        idle: { frames: [0, 1, 2, 3], frameRate: 6 },
+        walk: { frames: [4, 5, 6, 7], frameRate: 10 },
+        jump: { frames: [8, 9], frameRate: 6 },
+        crouch: { frames: [10] },
+        // Attacks follow the real frame data: startup / active / recovery = 1 frame each.
+        punch: { frames: [11, 12, 13] },
+        kick: { frames: [14, 15, 16] },
+        block: { frames: [17] },
+        hurt: { frames: [18, 19], frameRate: 12 },
+        knockout: { frames: [20, 21, 22], frameRate: 8 },
+        victory: { frames: [23, 24, 25], frameRate: 6, repeat: -1 },
+      },
+    },
+  },
 };
