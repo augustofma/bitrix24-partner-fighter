@@ -242,6 +242,21 @@ reposicionado 8 px para baixo. F2 confirmou correspondência aproximada às caix
 gameplay. Seleção, VS, HUD, controles, flipX, cross-up e resultados por KO foram validados no
 Chrome. As poses de guarda/hurt dobram o corpo dentro da hurtbox padrão; arte não muda colisão.
 
+## Tela inicial
+
+Arte ilustrada aprovada (arena noturna com holofotes, globo, torcida e dois lutadores
+genéricos mascarados), com o logo "BITRIX24 / PARTNER FIGHTER" e o botão JOGAR. A fonte fica
+em `scripts/title-art/source.webp`; `prepare_title_art.py` separa três camadas em
+`public/ui/title/` (fundo sem logo/botão, logo e botão com alpha). Detalhes do processo em
+[scripts/title-art/README.md](../scripts/title-art/README.md).
+
+- O logo flutua (±4 px, 2,2 s) e "respira" (escala 1,01, 2,6 s), sempre sobre uma área
+  limpa no fundo: nunca aparece um logo parado atrás do animado.
+- O botão é uma camada real: hover 1,03 com brilho aditivo suave, pressionado 0,97.
+- "PRESSIONE ENTER OU TOQUE", o aviso de projeto de fã e a versão fazem parte do fundo e não
+  são redesenhados pelo código.
+- Se a arte não carregar, a `MenuScene` volta ao visual procedural anterior.
+
 ## Interface da seleção de personagem
 
 Visual de fliperama brasileiro, sem assets de imagem novos: tudo é desenhado em código em
@@ -276,6 +291,7 @@ registrada aqui:
 | `public/fighters/fighter-a/*.png` (demo)                      | Gerado por `scripts/generate-demo-fighter-art.mjs`                                     | Original do projeto                                          |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png` | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local | Arte original gerada para o projeto; sem assets de terceiros |
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`   | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local     | Arte original gerada para o projeto; sem assets de terceiros |
+| `scripts/title-art/source.webp` e `public/ui/title/*`         | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`   | Arte do projeto, aprovada pelo usuário                       |
 
 ## VFX do especial (v0.8)
 

@@ -182,6 +182,14 @@ sem pedido explícito.**
 - [x] Testes de layout, barras e da cena (seleção, toque, confirmar, voltar, paginação, dificuldade)
 - [x] Validado no Chromium headless: desktop 1280×720 e mobile landscape 844×390 com toque
 
+## DONE (v0.14: tela inicial ilustrada, branch `feature/title-screen-redesign`)
+
+- [x] Arte aprovada separada em camadas: fundo limpo, logo e botão JOGAR (script reproduzível)
+- [x] Logo flutuando (±4 px) com leve "respiração", sem logo duplicado atrás
+- [x] Botão JOGAR real: hover, clique, toque (área ampliada), Enter e Espaço; feedback 1,03/0,97
+- [x] Fallback para o visual procedural se a arte não carregar
+- [x] Validado em 1280×720, 1920×1080 e 844×390 com toque
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

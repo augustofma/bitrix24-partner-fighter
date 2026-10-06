@@ -1,13 +1,19 @@
 import Phaser from 'phaser';
 import { SceneKeys } from '../config/sceneKeys';
 import { ROSTER } from '../fighters/roster';
-import { collectFighterAssets, pixelArtTextureKeys } from '../render/assets/fighterAssets';
+import {
+  collectFighterAssets,
+  pixelArtTextureKeys,
+  type AssetRequest,
+} from '../render/assets/fighterAssets';
+import { TITLE_ASSETS } from '../render/assets/titleAssets';
 import { validateRosterAssets } from '../render/sprite/spriteValidation';
 
 /**
- * First scene: loads every asset declared by the roster (FighterConfig.assets), with no
- * per-fighter code. Missing or broken files are not fatal: those fighters simply fall back to
- * the placeholder renderer (see createFighterView).
+ * First scene: loads the title screen art and every asset declared by the roster
+ * (FighterConfig.assets), with no per-fighter code. Missing or broken files are not fatal:
+ * fighters fall back to the placeholder renderer (see createFighterView) and the title screen
+ * to its procedural look (see MenuScene).
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -15,7 +21,8 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    for (const asset of collectFighterAssets(ROSTER)) {
+    const assets: AssetRequest[] = [...TITLE_ASSETS, ...collectFighterAssets(ROSTER)];
+    for (const asset of assets) {
       if (this.textures.exists(asset.key)) continue;
       if (asset.type === 'image') {
         this.load.image(asset.key, asset.path);
@@ -25,7 +32,7 @@ export class BootScene extends Phaser.Scene {
       }
     }
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
-      console.warn(`[assets] Could not load "${file.key}" (${file.src}). Using placeholder art.`);
+      console.warn(`[assets] Could not load "${file.key}" (${file.src}). Using fallback art.`);
     });
   }
 

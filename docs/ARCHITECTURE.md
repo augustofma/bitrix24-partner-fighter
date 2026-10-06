@@ -83,6 +83,7 @@ src/
       spriteValidation.ts   PURO: validação da config + decisão de fallback
     assets/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
+      titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
       textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
     StageView.ts          Cenário procedural com parallax
@@ -117,6 +118,15 @@ scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER
   filipe-art/             Fontes ImageGen e prompts de Filipe (fora do build)
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
+
+## Tela inicial (MenuScene)
+
+A `BootScene` carrega `TITLE_ASSETS` junto com os assets do roster. Com as três texturas
+presentes, a `MenuScene` monta a arte em camadas: fundo (sem logo e sem botão), logo com
+tweens de flutuação e escala, e o botão JOGAR como imagem interativa (hit area 16 px maior
+que o desenho, hover/press por escala e brilho aditivo). Clique, toque, Enter e Espaço usam o
+mesmo `start` (`goToScene` para a seleção, protegido contra chamada dupla). Sem as texturas,
+a cena usa o visual procedural anterior.
 
 ## Fluxo entre cenas
 
