@@ -107,7 +107,8 @@ export const fighterA: FighterConfig = {
       animations: {
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7], frameRate: 10 },
-        jump: { frames: [8, 9], frameRate: 6 },
+        // Picked by vertical velocity: rise / apex (tuck) / fall.
+        jump: { frames: [8, 9, 31] },
         crouch: { frames: [10] },
         // Attacks follow the real frame data: startup / active / recovery = 1 frame each.
         punch: { frames: [11, 12, 13] },

@@ -269,12 +269,13 @@ existe e, caso contrário, desenha a figura geométrica.
 
 Não há segunda state machine nem relógio próprio de animação. A cada render,
 `spriteFrameFor(animations, fighter)` calcula o frame **apenas** a partir de `fighter.state`,
-`fighter.stateFrame` e `fighter.activeAttack`:
+`fighter.stateFrame`, `fighter.activeAttack` e `fighter.velocity` (esta só no pulo):
 
 | Situação                       | Frame mostrado                                                                 |
 | ------------------------------ | ------------------------------------------------------------------------------ |
 | Estado sem animação            | Cadeia de fallback visual (`kick → punch → idle`, `knockout → hurt → idle`...) |
 | Ataque (`activeAttack` existe) | Frames divididos entre startup / active / recovery do **frame data real**      |
+| `jump`                         | Subida / ápice / descida pela velocidade vertical (`render/jumpPhase.ts`)      |
 | Demais estados                 | `stateFrame × frameRate / 60`, em loop (idle, walk) ou toca uma vez e segura   |
 
 Consequências: o frame de impacto aparece exatamente nos frames em que a hitbox está ativa; o

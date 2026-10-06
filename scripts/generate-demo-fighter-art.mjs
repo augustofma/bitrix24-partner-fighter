@@ -7,7 +7,7 @@
  * Uses only Node built-ins (no dependencies): node scripts/generate-demo-fighter-art.mjs
  *
  * Output (see src/fighters/fighterA.ts for the matching config):
- *   public/fighters/fighter-a/sprite.png    8x4 grid of 96x112 frames (31 used, 0-30)
+ *   public/fighters/fighter-a/sprite.png    8x4 grid of 96x112 frames (all 32 used, 0-31)
  *   public/fighters/fighter-a/portrait.png  120x150 bust
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -328,7 +328,7 @@ const FRAMES = [
   walkPose(0, 0),
   walkPose(-1, 1),
   walkPose(0, 0),
-  // 8-9 jump
+  // 8-9 jump (rise, apex tuck); fall is frame 31
   JUMP_RISE,
   JUMP_TUCK,
   // 10 crouch
@@ -388,6 +388,20 @@ const FRAMES = [
     be: P(8, -37),
     bh: P(12, -50),
   }),
+  // 31 jump fall: legs reaching down for the landing, arms open (8 = rise, 9 = apex tuck)
+  {
+    head: P(3, -79),
+    neck: P(2, -69),
+    hip: P(0, -45),
+    fe: P(12, -58),
+    fh: P(18, -61),
+    be: P(-7, -57),
+    bh: P(-12, -60),
+    fk: P(8, -25),
+    ff: P(9, -6),
+    bk: P(-4, -26),
+    bf: P(-7, -8),
+  },
 ];
 
 // ------------------------------------------------------------------ drawing

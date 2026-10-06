@@ -95,6 +95,22 @@ describe('validateSpriteAssets', () => {
     expect(errors.some((m) => m.includes('attackPhases must add up'))).toBe(true);
   });
 
+  it('validates jumpPhases like attackPhases', () => {
+    const config = withSprite(fighterA, {
+      ...demoSprite(),
+      animations: {
+        idle: { frames: [0], jumpPhases: { rise: 1, apex: 0, fall: 0 } },
+        jump: { frames: [8, 9, 31], jumpPhases: { rise: 1, apex: 1, fall: 2 } },
+      },
+    });
+    expect(messages(config, 'error')).toContain(
+      'animations.jump.jumpPhases must add up to 3 (frames.length).',
+    );
+    expect(messages(config, 'warning')).toContain(
+      'animations.idle.jumpPhases is only used by the jump animation.',
+    );
+  });
+
   it('warns (not errors) about missing optional animations', () => {
     const config = withSprite(fighterA, { ...demoSprite(), animations: { idle: { frames: [0] } } });
     expect(messages(config, 'error')).toEqual([]);

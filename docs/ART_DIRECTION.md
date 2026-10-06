@@ -68,7 +68,7 @@ public/
 | ------------- | ----------- | ------------------------- | ------------------------------------------------ | ----------------- |
 | `idle`        | **sim**     | 4                         | loop                                             | (obrigatória)     |
 | `walk`        | não         | 4 a 8                     | loop                                             | idle              |
-| `jump`        | não         | 2 (subida, tuck)          | toca uma vez e segura                            | idle              |
+| `jump`        | não         | 3 (subida, tuck, descida) | escolhido pela velocidade vertical               | idle              |
 | `crouch`      | não         | 1                         | toca uma vez e segura                            | idle              |
 | `punch`       | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | idle              |
 | `kick`        | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | punch             |
@@ -88,6 +88,7 @@ Campos de cada animação:
 | `frameRate`    | frames por segundo (só visual)                                                        | 10                                    |
 | `repeat`       | `-1` loop, `0` uma vez, `n` repete n vezes                                            | loop em idle/walk, uma vez nos demais |
 | `attackPhases` | `{ startup, active, recovery }` (quantos frames em cada fase; soma = `frames.length`) | 1 frame de impacto no meio            |
+| `jumpPhases`   | `{ rise, apex, fall }` (só `jump`; soma = `frames.length`)                            | 3 frames = 1 cada; 2 = subida/descida |
 
 Em golpes, `frameRate` e `repeat` são ignorados: os frames acompanham o frame data. Com 3 frames
 (padrão), o 1º aparece durante o startup, o 2º **exatamente nos frames ativos** (quando a hitbox
@@ -100,6 +101,9 @@ Poses específicas:
   manter a pose de impacto até o fim: use `attackPhases: { startup: 1, active: 1, recovery: 0 }`
   com 2 frames. O chute aéreo do corpo padrão aponta para a frente e para baixo e pega levemente
   atrás do corpo (cross-up); confira com F2 se a perna cobre a hitbox.
+- **`jump`:** o frame vem da **velocidade vertical** (subida, ápice com |vy| < 3 px/frame,
+  descida), não do tempo no estado. Assim, um pulo retomado depois de um ataque aéreo mostra a
+  fase certa. Vários frames numa mesma fase alternam no `frameRate`.
 - **`crouchBlock`:** mesma altura do `crouch` (a hurtbox agachada não muda), com os braços em
   guarda à frente do rosto, para diferenciar visualmente do agachado comum.
 - O lutador **não vira no ar**: os golpes aéreos são desenhados só olhando para a direita, como
@@ -142,7 +146,7 @@ assets: {
     animations: {
       idle: { frames: [0, 1, 2, 3], frameRate: 6 },
       walk: { frames: [4, 5, 6, 7], frameRate: 10 },
-      jump: { frames: [8, 9], frameRate: 6 },
+      jump: { frames: [8, 9, 31] }, // subida, ápice (tuck), descida
       crouch: { frames: [10] },
       punch: { frames: [11, 12, 13] },
       kick: { frames: [14, 15, 16] },

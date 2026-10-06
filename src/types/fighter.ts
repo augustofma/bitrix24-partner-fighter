@@ -162,12 +162,23 @@ export interface SpriteAnimationConfig {
    * Must add up to frames.length. Default: 1 active "impact" frame in the middle.
    */
   attackPhases?: AttackPhaseFrameCounts;
+  /**
+   * `jump` only: how many of `frames` show the rise / apex (tuck) / fall, picked from the
+   * vertical velocity. Must add up to frames.length. Default: 3 frames = 1 each.
+   */
+  jumpPhases?: JumpPhaseFrameCounts;
 }
 
 export interface AttackPhaseFrameCounts {
   startup: number;
   active: number;
   recovery: number;
+}
+
+export interface JumpPhaseFrameCounts {
+  rise: number;
+  apex: number;
+  fall: number;
 }
 
 /** `idle` is mandatory; other states fall back to a similar animation when absent. */

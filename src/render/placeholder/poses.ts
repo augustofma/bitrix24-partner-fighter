@@ -1,6 +1,7 @@
 import { attackPhaseAt } from '../../core/fighter/attackFrames';
 import type { ReadonlyFighter } from '../../core/fighter/ReadonlyFighter';
 import type { Vec2 } from '../../types/geometry';
+import { jumpPhaseFor, type JumpPhase } from '../jumpPhase';
 
 /**
  * Skeleton of the placeholder stick-figure, relative to the feet, facing right.
@@ -49,10 +50,23 @@ export const POSES = {
     frontElbow: p(28, -76), frontHand: p(38, -92), backElbow: p(6, -72), backHand: p(24, -86),
     frontKnee: p(26, -34), frontFoot: p(22, 0), backKnee: p(-18, -26), backFoot: p(-24, 0),
   },
+  // Jump apex (tuck). Also the rest pose of air attacks.
   jump: {
     head: p(6, -160), neck: p(4, -140), hip: p(0, -90),
     frontElbow: p(20, -118), frontHand: p(30, -134), backElbow: p(-8, -112), backHand: p(12, -126),
     frontKnee: p(22, -70), frontFoot: p(12, -42), backKnee: p(-2, -62), backFoot: p(-14, -40),
+  },
+  // Going up: body stretched, arms raised, legs trailing below.
+  jumpRise: {
+    head: p(6, -162), neck: p(4, -142), hip: p(0, -92),
+    frontElbow: p(20, -124), frontHand: p(28, -146), backElbow: p(-8, -118), backHand: p(4, -136),
+    frontKnee: p(10, -48), frontFoot: p(8, -10), backKnee: p(-6, -46), backFoot: p(-12, -8),
+  },
+  // Coming down: legs reaching for the floor, arms open for balance.
+  jumpFall: {
+    head: p(6, -158), neck: p(4, -138), hip: p(0, -90),
+    frontElbow: p(24, -116), frontHand: p(36, -122), backElbow: p(-14, -114), backHand: p(-24, -120),
+    frontKnee: p(16, -50), frontFoot: p(18, -12), backKnee: p(-8, -52), backFoot: p(-14, -16),
   },
   punchWindup: {
     head: p(2, -156), neck: p(0, -137), hip: p(0, -84),
@@ -156,6 +170,13 @@ function attackPose(fighter: ReadonlyFighter, windup: Pose, extended: Pose, rest
   }
 }
 
+/** Jump pose by vertical direction (also correct when a jump resumes after an air attack). */
+const JUMP_POSES: Readonly<Record<JumpPhase, Pose>> = {
+  rise: POSES.jumpRise,
+  apex: POSES.jump,
+  fall: POSES.jumpFall,
+};
+
 /** Picks the placeholder pose for the fighter's current state. `timeMs` drives idle loops. */
 export function poseFor(fighter: ReadonlyFighter, timeMs: number): Pose {
   switch (fighter.state) {
@@ -164,7 +185,7 @@ export function poseFor(fighter: ReadonlyFighter, timeMs: number): Pose {
     case 'walk':
       return walkPose(fighter.stateFrame);
     case 'jump':
-      return POSES.jump;
+      return JUMP_POSES[jumpPhaseFor(fighter.velocity.y)];
     case 'crouch':
       return POSES.crouch;
     case 'punch':

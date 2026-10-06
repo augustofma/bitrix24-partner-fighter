@@ -52,6 +52,8 @@ sem pedido explícito.**
 - [x] Knockback "para longe do atacante" (correto no cross-up)
 - [x] CPU: chance de chute aéreo no jump-in (`jumpInAttackChance`)
 - [x] Sprite demo (frames 26-30) e placeholder com poses de `airPunch`, `airKick`, `crouchBlock`
+- [x] Visual do pulo por velocidade vertical (subida / ápice / descida) no sprite (frame 31) e no
+      placeholder, correto também quando o pulo é retomado após um ataque aéreo
 - [x] Testes: ataques aéreos, landing, crouchBlock e transições, cross-up, facing, determinismo
 - [x] Validação no navegador: teclado real, multi-touch emulado, F2 e fluxo completo
 
@@ -70,8 +72,7 @@ sem pedido explícito.**
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
 7. [ ] Golpes agachados (`crouchPunch`/`crouchKick`, postura `crouch` em `ATTACK_SLOTS`) e
        alturas de golpe alto/baixo/overhead em `isAttackBlocked`.
-8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo)
-       e animação de pulo que distinga subida e descida após um ataque aéreo.
+8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
 11. [ ] CI (GitHub Actions) rodando `npm run check`.

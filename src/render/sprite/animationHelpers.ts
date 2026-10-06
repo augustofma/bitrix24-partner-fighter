@@ -6,12 +6,15 @@ import {
   type AttackPhaseFrameCounts,
   type FighterAnimationSet,
   type FighterStateId,
+  type JumpPhaseFrameCounts,
   type SpriteAnimationConfig,
 } from '../../types/fighter';
+import type { Vec2 } from '../../types/geometry';
+import { jumpPhaseFor, type JumpPhase } from '../jumpPhase';
 
 /*
  * Pure functions (no Phaser) that turn simulation state into a spritesheet frame.
- * The sprite frame is a function of (state, stateFrame, activeAttack) only, so:
+ * The sprite frame is a function of (state, stateFrame, activeAttack, velocity) only, so:
  * - there is no second state machine: the visual always mirrors the simulation;
  * - hitstop freezes the sprite automatically (stateFrame does not advance);
  * - attack frames line up exactly with the real startup/active/recovery frame data.
@@ -134,11 +137,53 @@ export function attackFrameIndex(
   return Math.min(length - 1, Math.max(0, index));
 }
 
+/** Default split of a jump animation: 1 frame = all phases, 2 = rise/fall, 3+ = one apex frame. */
+export function defaultJumpPhases(frameCount: number): JumpPhaseFrameCounts {
+  if (frameCount <= 0) return { rise: 0, apex: 0, fall: 0 };
+  const apex = frameCount >= 3 ? 1 : 0;
+  const rise = Math.ceil((frameCount - apex) / 2);
+  return { rise, apex, fall: frameCount - apex - rise };
+}
+
+/** If a phase has no frames, show the most similar one instead. */
+const JUMP_PHASE_FALLBACKS: Readonly<Record<JumpPhase, readonly JumpPhase[]>> = {
+  rise: ['rise', 'apex', 'fall'],
+  apex: ['apex', 'rise', 'fall'],
+  fall: ['fall', 'apex', 'rise'],
+};
+
+/**
+ * Index into `animation.frames` for the jump, chosen by the CURRENT vertical velocity (not by
+ * time in the state). So a jump resumed after an air attack shows the correct rise/apex/fall.
+ * Several frames in one phase loop at `frameRate`.
+ */
+export function jumpFrameIndex(
+  animation: SpriteAnimationConfig,
+  verticalVelocity: number,
+  stateFrame: number,
+): number {
+  const length = animation.frames.length;
+  if (length === 0) return 0;
+  const counts = animation.jumpPhases ?? defaultJumpPhases(length);
+  const starts: Record<JumpPhase, number> = {
+    rise: 0,
+    apex: counts.rise,
+    fall: counts.rise + counts.apex,
+  };
+  const wanted = jumpPhaseFor(verticalVelocity);
+  const phase = JUMP_PHASE_FALLBACKS[wanted].find((p) => counts[p] > 0) ?? wanted;
+  const count = Math.max(1, counts[phase]);
+  const frameRate = animation.frameRate ?? DEFAULT_ANIMATION_FRAME_RATE;
+  const step = Math.floor((Math.max(0, stateFrame) * frameRate) / SIMULATION_FPS);
+  return Math.min(length - 1, starts[phase] + (step % count));
+}
+
 /** What the sprite needs to know about a fighter (a subset of ReadonlyFighter). */
 export interface AnimatedFighterState {
   state: FighterStateId;
   stateFrame: number;
   activeAttack: AttackConfig | null;
+  velocity: Readonly<Vec2>;
 }
 
 /** The spritesheet frame to display for the fighter right now. */
@@ -146,9 +191,15 @@ export function spriteFrameFor(
   animations: FighterAnimationSet,
   fighter: AnimatedFighterState,
 ): number {
-  const animation = animationForState(animations, fighter.state);
-  const index = fighter.activeAttack
-    ? attackFrameIndex(animation, fighter.activeAttack, fighter.stateFrame)
-    : timedFrameIndex(animation, fighter.state, fighter.stateFrame);
+  const animationState = resolveAnimationState(animations, fighter.state);
+  const animation = animations[animationState] ?? animations.idle;
+  let index: number;
+  if (fighter.activeAttack) {
+    index = attackFrameIndex(animation, fighter.activeAttack, fighter.stateFrame);
+  } else if (animationState === 'jump') {
+    index = jumpFrameIndex(animation, fighter.velocity.y, fighter.stateFrame);
+  } else {
+    index = timedFrameIndex(animation, fighter.state, fighter.stateFrame);
+  }
   return animation.frames[index] ?? animation.frames[0] ?? 0;
 }
