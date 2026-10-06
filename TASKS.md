@@ -108,6 +108,17 @@ sem pedido explícito.**
       cross-up com dano e troca de lado, vitória e derrota por KO
 - [x] Testes do carregamento atualizados para incluir os assets do Augusto
 
+## DONE (v0.8: especiais e 24ZAP COMBO)
+
+- [x] F/ESP com borda e buffer compartilhado; multi-touch preservado
+- [x] Meter 0..100, ganhos por contato normal e custo na ativação
+- [x] SpecialMoveConfig genérico; nenhum ID de personagem no core
+- [x] 24ZAP COMBO: custo 30, dano 18, 9/5/28, avanço e um contato forte
+- [x] Barras com prontidão e VFX digital azul/verde original; PNGs preservados
+- [x] Testes de input, meter, buffer, dano, defesa, KO, IA e determinismo
+- [x] 162 testes; playtest com F2, meter por acertos, F sem energia, defesa, whiff, KO e ESP
+- [x] Multi-touch emulado e três partidas automatizadas consecutivas contra CPU no navegador
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
@@ -130,12 +141,11 @@ sem pedido explícito.**
 
 ## FUTURE (não implementar agora)
 
-- AUGUSTO: **24ZAP COMBO** (apenas ideia, não implementado)
 - AUGUSTO: **MINDHUB AGENT** (apenas ideia, não implementado)
 - AUGUSTO: **TOP 1 MUNDIAL** (apenas ideia, não implementado)
 
 - Elenco de 8 a 16 personagens reais (com autorização) e character select maior
-- Golpes especiais (sequências de comando) e barra de especial
+- Sequências de comando para especiais e suporte a multi-hit real
 - Combos, contador de hits, cancelamentos
 - Vários cenários
 - Sons, músicas e falas dos personagens

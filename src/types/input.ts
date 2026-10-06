@@ -2,7 +2,16 @@
  * Abstract game actions. Devices (keyboard, touch, gamepad, AI, network) all map to these.
  * Directions are ABSOLUTE (screen left/right); the fighter converts them to forward/back.
  */
-export const INPUT_ACTIONS = ['left', 'right', 'up', 'down', 'punch', 'kick', 'block'] as const;
+export const INPUT_ACTIONS = [
+  'left',
+  'right',
+  'up',
+  'down',
+  'punch',
+  'kick',
+  'block',
+  'special',
+] as const;
 
 export type InputAction = (typeof INPUT_ACTIONS)[number];
 

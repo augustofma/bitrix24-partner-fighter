@@ -12,6 +12,7 @@ export const FIGHTER_STATES = [
   'crouchKick',
   'airPunch',
   'airKick',
+  'special',
   'block',
   'crouchBlock',
   'hurt',
@@ -36,12 +37,13 @@ export const AIR_ATTACK_STATES = [
   'airPunch',
   'airKick',
 ] as const satisfies readonly FighterStateId[];
-/** Every state that executes an attack. Future: 'special', 'super'... */
-export const ATTACK_STATES = [
+/** Normal attack slots remain separate from configurable special moves. */
+export const NORMAL_ATTACK_STATES = [
   ...GROUND_ATTACK_STATES,
   ...CROUCH_ATTACK_STATES,
   ...AIR_ATTACK_STATES,
 ] as const;
+export const ATTACK_STATES = [...NORMAL_ATTACK_STATES, 'special'] as const;
 export type AttackStateId = (typeof ATTACK_STATES)[number];
 
 /**
@@ -58,7 +60,7 @@ export type AttackLevel = 'high' | 'mid' | 'low' | 'overhead';
  * Key of an attack in `FighterConfig.attacks`. Which slot a button triggers depends on the
  * fighter's stance (see core/fighter/fighterStates.ts).
  */
-export type AttackSlot = AttackStateId;
+export type AttackSlot = Exclude<AttackStateId, 'special'>;
 
 /** Frame data for one attack. All durations are in simulation frames (60 per second). */
 export interface AttackConfig {
@@ -114,18 +116,13 @@ export interface FighterBoxes {
   pushHeight: number;
 }
 
-/**
- * RESERVED - not implemented in v0.1.
- * Shape of a future special move, so content authors know where it will live.
- */
-export interface SpecialMoveConfig {
-  id: string;
-  displayName: string;
-  /** Motion input relative to facing, e.g. ['down', 'downForward', 'forward']. */
-  motion: readonly string[];
-  button: AttackButton;
+/** One strong contact today; future hit timelines extend the shared attack resolver. */
+export interface SpecialMoveConfig extends AttackConfig {
+  state: 'special';
   meterCost: number;
-  attack: AttackConfig;
+  groundOnly: boolean;
+  /** Forward speed during startup and active frames; zero during recovery. */
+  advanceSpeed: number;
 }
 
 /** Colors for the placeholder (geometric) renderer. */
@@ -148,6 +145,8 @@ export interface FighterAssetManifest {
   sprite?: FighterSpriteAssets;
   /** Use nearest-neighbour scaling for this fighter's textures (crisp pixel art). */
   pixelArt?: boolean;
+  /** Optional procedural presentation, keyed by special move id. */
+  specialEffects?: Readonly<Record<string, { style: 'digital'; label: string }>>;
 }
 
 export interface FighterSpriteAssets {
@@ -236,7 +235,7 @@ export interface FighterConfig {
   boxes: FighterBoxes;
   /** Standing, crouching and air normals. Each AttackConfig.state should match its slot. */
   attacks: Record<AttackSlot, AttackConfig>;
-  /** RESERVED for future special moves. Keep empty in v0.1. */
+  /** F selects the first affordable move allowed in the current posture. */
   specials: readonly SpecialMoveConfig[];
   palette: PlaceholderPalette;
   assets: FighterAssetManifest;

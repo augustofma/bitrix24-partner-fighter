@@ -29,7 +29,7 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 ### AUGUSTO
 
 **Arrecife Digital.** Lutador móvel e ofensivo, voltado à pressão curta/média. Configuração
-própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte pixel-art e nenhum especial.
+própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte pixel-art e o especial 24ZAP COMBO.
 
 | Estatística                   | Valor         |
 | ----------------------------- | ------------- |
@@ -198,6 +198,28 @@ Prioridade de input quando livre no chão:
 > apertar A/S sai o golpe agachado assim que o lutador estiver livre (o buffer guarda o aperto
 > feito no fim do blockstun); terminado o golpe, ele volta à defesa agachada.
 
+## Especiais e energia
+
+F no teclado ou ESP no touch. A barra de cada lutador começa em 0, limitada a 100.
+Acertar um normal dá +10 ao atacante e, havendo dano, +5 ao defensor. Um normal bloqueado
+rende +3 ao atacante (chip não gera energia para o defensor). Um especial, bloqueado ou não,
+não dá energia a nenhum participante. Errar não rende energia.
+
+O especial tem prioridade sobre A/S quando apertados juntos. Usa borda e buffer de 6 frames:
+um aperto no fim de recovery ou stun pode sair quando o lutador ficar livre, sem cancelar
+ataque, hurt ou blockstun. Segurar F nunca renova o buffer. Sem energia, o comando é descartado
+sem custo. No ar, um especial groundOnly é descartado. KO e vitória nunca aceitam golpes.
+A barra fica verde com PRONTO quando há energia para algum especial configurado.
+
+**24ZAP COMBO:** custo 30 descontado no primeiro frame, somente no chão, dano 18, chip 2,
+startup 9 / ativo 5 / recovery 28, hitstun 24, blockstun 14, knockback 8, pushback 5 e hitstop 10.
+Hitbox (24, -126, 108, 56): alcance frontal de 132 px. Avança 5 px/frame no startup/ativo
+(até 70 px sem obstáculos); para no recovery. Facing travado, sem invulnerabilidade.
+Tem um único contato por execução. Contra o chute normal (11 de dano, 10/4/16), ganha dano,
+alcance e avanão, mas fica exposto por 28 frames se errar e pode ser punido ao ser bloqueado.
+A sequência visual reaproveita os sprites, acompanhada de mensagens digitais azul/verde.
+A CPU não usa especiais, mas reage, bloqueia e recebe seus impactos pelas regras existentes.
+
 ## CPU (FIGHTER_B)
 
 State machine simples (sem aprendizado de máquina), com modos: `approach`, `retreat`, `attack`,
@@ -244,6 +266,7 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 | Agachar            | ↓                                          | ▼                      |
 | Soco               | A                                          | SOCO (direita da tela) |
 | Chute              | S                                          | CHUTE                  |
+| Especial           | F                                          | ESP                    |
 | Defender           | D                                          | DEF                    |
 | Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | ▲, depois SOCO / CHUTE |
 | Defesa agachada    | ↓ + D                                      | ▼ + DEF                |

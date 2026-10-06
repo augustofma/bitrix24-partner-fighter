@@ -211,6 +211,7 @@ export function poseFor(fighter: ReadonlyFighter, timeMs: number): Pose {
     case 'crouch':
       return POSES.crouch;
     case 'punch':
+    case 'special':
       return attackPose(fighter, POSES.punchWindup, POSES.punch, POSES.idle);
     case 'kick':
       return attackPose(fighter, POSES.kickWindup, POSES.kick, POSES.idle);

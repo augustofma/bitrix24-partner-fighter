@@ -1,16 +1,12 @@
-import {
-  GRAVITY,
-  GROUND_FRICTION,
-  INPUT_BUFFER_FRAMES,
-  KO_KNOCKBACK_MULTIPLIER,
-  KO_LAUNCH_SPEED,
-  MIN_SLIDE_SPEED,
-} from '../../config/simulation';
+import { KO_KNOCKBACK_MULTIPLIER, KO_LAUNCH_SPEED } from '../../config/simulation';
+import { AttackInputBuffer } from './AttackInputBuffer';
+import { integrateFighterPhysics } from './fighterPhysics';
+import { SPECIAL_METER } from '../../config/special';
 import type {
-  AttackButton,
   AttackConfig,
   FighterConfig,
   FighterStateId,
+  SpecialMoveConfig,
 } from '../../types/fighter';
 import type { Direction, Rect, Vec2 } from '../../types/geometry';
 import type { InputFrame, InputState } from '../../types/input';
@@ -29,11 +25,6 @@ import {
 } from './fighterStates';
 import type { ReadonlyFighter } from './ReadonlyFighter';
 
-interface BufferedAttack {
-  button: AttackButton;
-  framesLeft: number;
-}
-
 /**
  * One fighter in a match: state machine + physics + boxes.
  *
@@ -44,6 +35,7 @@ interface BufferedAttack {
 export class Fighter implements ReadonlyFighter {
   readonly config: FighterConfig;
   health: number;
+  private meter = 0;
   readonly position: Vec2;
   readonly velocity: Vec2 = { x: 0, y: 0 };
   direction: Direction;
@@ -54,7 +46,7 @@ export class Fighter implements ReadonlyFighter {
   private attackConnected = false;
   /** Remaining hitstun (state 'hurt') or blockstun (block states). */
   private stunFrames = 0;
-  private bufferedAttack: BufferedAttack | null = null;
+  private readonly inputBuffer = new AttackInputBuffer();
   /** One air attack per jump: no mid-air spam. Reset on landing. */
   private airAttackUsed = false;
   private lastX: number;
@@ -73,6 +65,18 @@ export class Fighter implements ReadonlyFighter {
 
   get state(): FighterStateId {
     return this.currentState;
+  }
+
+  get specialMeter(): number {
+    return this.meter;
+  }
+
+  changeSpecialMeter(amount: number): void {
+    this.meter = Math.max(0, Math.min(SPECIAL_METER.max, this.meter + amount));
+  }
+
+  private get activeSpecial(): SpecialMoveConfig | undefined {
+    return this.config.specials.find((move) => move === this.attack);
   }
 
   get stateFrame(): number {
@@ -130,7 +134,7 @@ export class Fighter implements ReadonlyFighter {
   update(input: InputFrame): void {
     this.lastX = this.position.x;
     this.framesInState++;
-    this.bufferAttackInput(input.pressed);
+    this.inputBuffer.update(input.pressed);
     this.runStateLogic(input.held);
     this.integratePhysics();
   }
@@ -167,7 +171,7 @@ export class Fighter implements ReadonlyFighter {
 
   applyHit(attack: AttackConfig, pushDirection: Direction): void {
     this.health = Math.max(0, this.health - attack.damage);
-    this.bufferedAttack = null;
+    this.inputBuffer.clear();
     if (this.health === 0) {
       this.setState('knockout', true);
       this.velocity.x = pushDirection * attack.knockback * KO_KNOCKBACK_MULTIPLIER;
@@ -205,14 +209,6 @@ export class Fighter implements ReadonlyFighter {
     if (!ATTACK_STATE_SET.has(next)) this.attack = null;
   }
 
-  private bufferAttackInput(pressed: Readonly<InputState>): void {
-    if (pressed.punch) this.bufferedAttack = { button: 'punch', framesLeft: INPUT_BUFFER_FRAMES };
-    else if (pressed.kick)
-      this.bufferedAttack = { button: 'kick', framesLeft: INPUT_BUFFER_FRAMES };
-    else if (this.bufferedAttack && --this.bufferedAttack.framesLeft <= 0)
-      this.bufferedAttack = null;
-  }
-
   private runStateLogic(held: Readonly<InputState>): void {
     switch (this.currentState) {
       case 'idle':
@@ -232,6 +228,17 @@ export class Fighter implements ReadonlyFighter {
         return;
       case 'jump':
         this.handleJumpState();
+        return;
+      case 'special':
+        if (this.attack && this.framesInState >= totalAttackFrames(this.attack)) {
+          if (this.isAirborne) this.setState('jump');
+          else this.handleFreeGroundState(held);
+        } else if (!this.isAirborne) {
+          this.velocity.x =
+            this.attackPhase === 'recovery'
+              ? 0
+              : this.direction * (this.activeSpecial?.advanceSpeed ?? 0);
+        }
         return;
       case 'airPunch':
       case 'airKick':
@@ -258,9 +265,11 @@ export class Fighter implements ReadonlyFighter {
 
   /** Decision tree for a grounded fighter that is free to act. Order = priority. */
   private handleFreeGroundState(held: Readonly<InputState>): void {
-    if (this.bufferedAttack) {
-      const slot = ATTACK_SLOTS[groundStance(held.down)][this.bufferedAttack.button];
-      this.bufferedAttack = null;
+    if (this.tryBufferedSpecial()) return;
+    if (this.inputBuffer.current) {
+      if (this.inputBuffer.current.button === 'special') return;
+      const slot = ATTACK_SLOTS[groundStance(held.down)][this.inputBuffer.current.button];
+      this.inputBuffer.clear();
       this.startAttack(this.config.attacks[slot]);
       this.velocity.x = 0;
       return;
@@ -295,9 +304,14 @@ export class Fighter implements ReadonlyFighter {
 
   /** Airborne and free: an attack press (or buffered press) starts the air attack. */
   private handleJumpState(): void {
-    if (!this.bufferedAttack || this.airAttackUsed || !this.isAirborne) return;
-    const slot = ATTACK_SLOTS.air[this.bufferedAttack.button];
-    this.bufferedAttack = null;
+    if (!this.inputBuffer.current || this.airAttackUsed || !this.isAirborne) return;
+    if (this.tryBufferedSpecial()) {
+      this.airAttackUsed = true;
+      return;
+    }
+    if (!this.inputBuffer.current || this.inputBuffer.current.button === 'special') return;
+    const slot = ATTACK_SLOTS.air[this.inputBuffer.current.button];
+    this.inputBuffer.clear();
     this.airAttackUsed = true;
     // Velocity is untouched: gravity and the jump's horizontal motion continue.
     this.startAttack(this.config.attacks[slot]);
@@ -309,31 +323,35 @@ export class Fighter implements ReadonlyFighter {
     this.attackConnected = false;
   }
 
+  private tryBufferedSpecial(): boolean {
+    if (this.inputBuffer.current?.button !== 'special') return false;
+    this.inputBuffer.clear();
+    const move = this.config.specials.find(
+      (candidate) =>
+        (!candidate.groundOnly || !this.isAirborne) && candidate.meterCost <= this.meter,
+    );
+    if (!move) return false;
+    this.changeSpecialMeter(-move.meterCost);
+    this.startAttack(move);
+    if (!this.isAirborne) this.velocity.x = this.direction * move.advanceSpeed;
+    return true;
+  }
+
   /** Touching the ground ends jumps and air attacks (and therefore their hitboxes). */
   private land(): void {
     this.airAttackUsed = false;
-    if (!LANDING_STATES.has(this.currentState)) return;
+    if (!LANDING_STATES.has(this.currentState) && this.currentState !== 'special') return;
     this.setState('idle');
     this.velocity.x = 0;
   }
 
   private integratePhysics(): void {
-    if (this.isAirborne || this.velocity.y < 0) this.velocity.y += GRAVITY;
-
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-
-    if (this.position.y >= this.groundY) {
-      const wasAirborne = this.velocity.y > 0;
-      this.position.y = this.groundY;
-      this.velocity.y = 0;
-      if (wasAirborne) this.land();
-    }
-
-    const sliding = !this.isAirborne && this.currentState !== 'walk';
-    if (sliding) {
-      this.velocity.x *= GROUND_FRICTION;
-      if (Math.abs(this.velocity.x) < MIN_SLIDE_SPEED) this.velocity.x = 0;
-    }
+    integrateFighterPhysics(
+      this.position,
+      this.velocity,
+      this.groundY,
+      () => this.currentState,
+      () => this.land(),
+    );
   }
 }

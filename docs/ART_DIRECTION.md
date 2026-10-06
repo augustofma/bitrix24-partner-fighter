@@ -229,3 +229,10 @@ registrada aqui:
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `public/fighters/fighter-a/*.png` (demo)                      | Gerado por `scripts/generate-demo-fighter-art.mjs`                                     | Original do projeto                                          |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png` | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local | Arte original gerada para o projeto; sem assets de terceiros |
+
+## VFX do especial (v0.8)
+
+24ZAP reutiliza os frames 14, 17, 15, 18, 19 e 16 na animação special, com fases 2/2/2.
+Os PNGs definitivos permanecem iguais. SpecialEffects desenha pequenos envelopes e rastros
+azul/verde originais, sem logos ou áudio, por configuração em assets.specialEffects.
+O efeito acompanha stateFrame e espelha o avanão; não define dano nem caixas.

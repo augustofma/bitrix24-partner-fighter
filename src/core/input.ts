@@ -9,6 +9,7 @@ export function createInputState(partial: Partial<InputState> = {}): InputState 
     punch: partial.punch ?? false,
     kick: partial.kick ?? false,
     block: partial.block ?? false,
+    special: partial.special ?? false,
   };
 }
 

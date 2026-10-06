@@ -53,6 +53,7 @@ export function validateSpriteAssets(config: FighterConfig, frameCount?: number)
   for (const state of FIGHTER_STATES) {
     const animation = animations[state];
     if (!animation) {
+      if (state === 'special' && config.specials.length === 0) continue;
       if (state !== 'idle') {
         const shown = resolveAnimationState(animations, state);
         warn(`No "${state}" animation; showing "${shown}" instead.`);
