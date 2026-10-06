@@ -46,7 +46,9 @@ src/
     FightSimulation.ts    Orquestra um frame da luta
     fighter/Fighter.ts    Entidade lutador: state machine + física + caixas
     fighter/attackFrames.ts  Fases de ataque (startup/active/recovery)
-    fighter/fighterStates.ts Regras puras: grupos de estados, botão → slot, hurtbox/pushbox
+    fighter/fighterStates.ts Regras puras: grupos de estados, botão → slot (e o inverso),
+                             postura baixa, hurtbox/pushbox
+    fighter/attackGeometry.ts "Este golpe acertaria agora?" (alcance + altura), usado pela IA
     fighter/ReadonlyFighter.ts  Visão somente leitura (para IA e render)
     systems/CombatSystem.ts  Hitbox x hurtbox, dano, bloqueio, KO
     systems/ArenaSystem.ts   Paredes, colisão de corpos, distância máxima
@@ -56,8 +58,8 @@ src/
   controllers/            Quem controla um lutador (sem Phaser)
     FighterController.ts  Interface comum
     PlayerController.ts   Junta várias InputSource (teclado + touch)
-    AIController.ts       CPU (state machine)
-    aiProfiles.ts         Perfis de dificuldade da CPU
+    AIController.ts       CPU (state machine), escolha de golpe consciente da postura
+    aiProfiles.ts         Perfis de dificuldade/personalidade da CPU
   fighters/               CONTEÚDO: um arquivo por personagem
     fighterA.ts, fighterB.ts
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
@@ -249,6 +251,28 @@ O critério é só geometria (`pushboxFor`), sem nada específico de personagem:
 livre (`idle`, `walk`, `crouch`) ou de guarda (`block`, `crouchBlock`). Nunca no ar e nunca
 durante ataques: um golpe aéreo mantém sprite e hitbox na direção inicial mesmo cruzando o
 adversário; a correção acontece no primeiro frame livre após o landing.
+
+## CPU (AIController)
+
+A CPU é um `FighterController` como o jogador: lê `ReadonlyFighter` e devolve `InputState`.
+Nunca chama golpes diretamente. Os modos (`approach`, `retreat`, `attack`, `guard`, `jump`,
+`wait`) são escolhidos em `decide()` a cada poucos frames, com pesos do `AIProfile` e RNG
+injetado (determinístico em testes).
+
+**Escolha do golpe consciente da postura**, só com dados genéricos:
+
+1. `isLowPosture(opponent.state)` (`fighterStates.ts`) diz se o adversário está baixo
+   (`crouch`, `crouchBlock`, `crouchPunch`, `crouchKick`).
+2. Se estiver, a CPU percebe com chance `lowPostureAwareness` (sorteio feito só nesse caso, então
+   o jogo contra adversário em pé consome exatamente a mesma sequência de RNG de antes).
+3. Percebendo, filtra os golpes de chão (`punch`, `kick`, `crouchPunch`, `crouchKick`) com
+   `attackWouldConnect` (`attackGeometry.ts`): a hitbox, se ficasse ativa agora, tocaria a
+   **hurtbox atual** do adversário? Isso cobre alcance e altura de uma vez.
+4. Sorteia entre os que conectam com `lowPostureAttackWeights`. Se nenhum conecta, `approach`.
+5. O golpe vira input humano por `groundInputFor(slot)` (inverso do `ATTACK_SLOTS`):
+   `crouchPunch` → ↓ + A, `crouchKick` → ↓ + S.
+
+A IA não conhece nenhum personagem: um teste garante que `src/controllers/` não contém IDs.
 
 ## Pipeline de arte dos lutadores
 

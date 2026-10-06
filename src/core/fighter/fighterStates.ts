@@ -36,6 +36,11 @@ export const CROUCHING_STATES: ReadonlySet<FighterStateId> = new Set<FighterStat
   ...CROUCH_ATTACK_STATES,
 ]);
 
+/** Whether a fighter in this state presents the low (crouching) body: high attacks whiff. */
+export function isLowPosture(state: FighterStateId): boolean {
+  return CROUCHING_STATES.has(state);
+}
+
 /** States that end when the fighter touches the ground. */
 export const LANDING_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>([
   'jump',
@@ -50,6 +55,16 @@ export const ATTACK_SLOTS: Readonly<Record<Stance, Readonly<Record<AttackButton,
   crouch: { punch: 'crouchPunch', kick: 'crouchKick' },
   air: { punch: 'airPunch', kick: 'airKick' },
 };
+
+/** The button and ↓ that perform `slot` on the ground (inverse of ATTACK_SLOTS), or null. */
+export function groundInputFor(slot: AttackSlot): { button: AttackButton; down: boolean } | null {
+  for (const stance of ['ground', 'crouch'] as const) {
+    for (const button of ['punch', 'kick'] as const) {
+      if (ATTACK_SLOTS[stance][button] === slot) return { button, down: stance === 'crouch' };
+    }
+  }
+  return null;
+}
 
 /**
  * Stance of a grounded fighter starting an attack: holding ↓ at that moment means crouching.
