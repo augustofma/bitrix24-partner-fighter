@@ -191,30 +191,41 @@ Troque `public/fighters/fighter-a/sprite.png` e `portrait.png` pela arte final e
 
 ## AUGUSTO
 
-Primeiro personagem real: **AUGUSTO — Arrecife Digital**. Por enquanto usa `assets: {}`,
-PlaceholderFighterView e portrait fallback existentes. Roupa predominantemente preta com
-detalhes azuis; a cabeça cinza do manequim é neutra e não representa a aparência da pessoa.
-Não há retrato, caricatura ou PNG provisório criado para ele.
+Primeiro personagem real: **AUGUSTO — Arrecife Digital**. Usa arte pixel-art original gerada
+com ImageGen a partir das fotos e do concept aprovados pelo usuário. Homem adulto robusto,
+cabelo curto escuro, barba cheia aparada, blazer/camisa/calça/tênis pretos e cordão/crachá azul.
 
-Direção visual futura:
+Direção visual:
 
 - Homem adulto, camisa preta e detalhes azuis ligados à Arrecife Digital.
 - Crachá azul pode fazer parte do design; tatuagens podem aparecer.
 - Estética de fighting game arcade, sprite estilizado e portrait mais detalhado que o sprite.
-- Nenhuma outra característica física está definida nesta etapa.
+- A aparência segue as referências fornecidas; não foram usados sprites de franquias.
 
-A pasta `public/fighters/augusto/` contém apenas README.md. Na próxima etapa receberá
-`portrait.png` e `sprite.png`; a spritesheet deve cobrir os 15 estados listados acima.
-Além dos arquivos, preencher o manifesto em `src/fighters/augusto.ts`: caminhos, chave única
-do sheet, dimensões dos frames, animações e escala/offsets. O pipeline existente carrega e
-renderiza esses dados sem alterações em BootScene, CharacterSelectScene, VersusScene,
-FightScene, VictoryScene ou CombatSystem. Registrar a autoria/licença da arte quando chegar.
+`sprite.png` tem 1536×1120 px, 8×5 células de 192×224 e 40 frames com alpha real.
+`portrait.png` tem 240×300 px com alpha real. O manifesto em `src/fighters/augusto.ts`
+usa `pixelArt: true`, `scale: 1`, `offsetX: 0`, `offsetY: 8`: sola terrestre na linha
+216 da célula, com oito pixels transparentes abaixo. Idle ocupa cerca de 170–174 px.
+Poses aéreas mantêm espaço abaixo dos pés; poses agachadas permanecem baixas.
+
+A ordem dos frames e os comandos reproduzíveis estão no
+[README dos assets](../public/fighters/augusto/README.md).
+As fontes e o conjunto de prompts ficam em `scripts/augusto-art/`. A preparação offline usa
+recortes revisados, remoção de fragmentos desconectados, escala proporcional por vizinho mais
+próximo e margem mínima de quatro pixels. A recuperação do chute foi gerada separadamente;
+a queda do KO foi ordenada da pose inclinada até o corpo deitado. Ajustes de posição nas poses
+ativas aproximam os membros das hitboxes sem mudar gameplay. A correspondência é aproximada,
+não uma silhueta idêntica às caixas; guarda e hurt têm o corpo curvado dentro da hurtbox em pé.
+
+Seleção, VS, HUD, estados, flipX e cross-up foram conferidos no Chrome com F2. Nenhuma alteração
+foi feita no core, BootScene, FightScene, CombatSystem ou no renderer.
 
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
 registrada aqui:
 
-| Asset                                    | Autor                                              | Licença             |
-| ---------------------------------------- | -------------------------------------------------- | ------------------- |
-| `public/fighters/fighter-a/*.png` (demo) | Gerado por `scripts/generate-demo-fighter-art.mjs` | Original do projeto |
+| Asset                                                         | Autor                                                                                  | Licença                                                      |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `public/fighters/fighter-a/*.png` (demo)                      | Gerado por `scripts/generate-demo-fighter-art.mjs`                                     | Original do projeto                                          |
+| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png` | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local | Arte original gerada para o projeto; sem assets de terceiros |

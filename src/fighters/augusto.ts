@@ -128,6 +128,35 @@ export const augusto: FighterConfig = {
   },
   specials: [],
   palette: { body: 0x191c24, accent: 0x258bff, skin: 0xb8b8b8, outline: 0x080b12 },
-  // Neutral mannequin palette; final portrait and sprite will be supplied later.
-  assets: {},
+  assets: {
+    portrait: 'fighters/augusto/portrait.png',
+    pixelArt: true,
+    sprite: {
+      sheet: {
+        key: 'augusto-sheet',
+        path: 'fighters/augusto/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      // The atlas keeps an eight-pixel transparent margin below the grounded soles.
+      visual: { scale: 1, offsetX: 0, offsetY: 8 },
+      animations: {
+        idle: { frames: [0, 1, 2, 3], frameRate: 6 },
+        walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
+        jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },
+        crouch: { frames: [13] },
+        punch: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        kick: { frames: [17, 18, 19], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        crouchPunch: { frames: [20, 21, 22], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        crouchKick: { frames: [23, 24, 25], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        airPunch: { frames: [26, 27, 28], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        airKick: { frames: [29, 30, 31], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        block: { frames: [32] },
+        crouchBlock: { frames: [33] },
+        hurt: { frames: [34, 35], frameRate: 10 },
+        knockout: { frames: [36, 37, 38], frameRate: 8 },
+        victory: { frames: [39] },
+      },
+    },
+  },
 };

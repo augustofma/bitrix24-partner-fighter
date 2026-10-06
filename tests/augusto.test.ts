@@ -87,10 +87,19 @@ describe('Augusto roster and data', () => {
     expect(augusto.attacks.crouchKick.hitbox.y).toBe(-28);
   });
 
-  it('requires no textures and selects the existing placeholder fallback', () => {
-    expect(augusto.assets).toEqual({});
-    expect(collectFighterAssets([augusto])).toEqual([]);
+  it('loads its art through the shared pipeline and falls back when the sheet is unavailable', () => {
+    expect(collectFighterAssets([augusto])).toHaveLength(2);
     expect(selectSpriteAssets(augusto, null)).toBeNull();
+    expect(selectSpriteAssets(augusto, 40)).toBe(augusto.assets.sprite);
+    expect(selectSpriteAssets(augusto, 39)).toBeNull();
+    const animations = augusto.assets.sprite!.animations;
+    expect(Object.values(animations).flatMap((animation) => animation.frames)).toEqual(
+      Array.from({ length: 40 }, (_, index) => index),
+    );
+    for (const slot of ATTACK_STATES) {
+      expect(animations[slot]?.attackPhases).toEqual({ startup: 1, active: 1, recovery: 1 });
+    }
+    expect(animations.jump?.jumpPhases).toEqual({ rise: 1, apex: 1, fall: 1 });
   });
 
   it('keeps the core, controllers, scenes and renderer unaware of the character ID', () => {

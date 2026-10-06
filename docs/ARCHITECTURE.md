@@ -96,6 +96,8 @@ src/
 tests/                    Vitest: lutador, combate, arena, round, IA, ataques aéreos e agachados,
                           defesa agachada, cross-up, determinismo, animação/assets de sprite
 scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
+  prepare-augusto-art.ps1 Montagem/validação offline do atlas do Augusto (Windows/System.Drawing)
+  augusto-art/            Fontes ImageGen e prompts; não publicados no build
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
 

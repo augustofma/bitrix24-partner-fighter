@@ -29,7 +29,7 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 ### AUGUSTO
 
 **Arrecife Digital.** Lutador móvel e ofensivo, voltado à pressão curta/média. Configuração
-própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte vazia e nenhum especial.
+própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte pixel-art e nenhum especial.
 
 | Estatística                   | Valor         |
 | ----------------------------- | ------------- |

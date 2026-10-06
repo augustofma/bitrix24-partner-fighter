@@ -96,14 +96,26 @@ sem pedido explícito.**
       fixtures removidas ao recarregar, nenhum erro de execução observado
 - [x] Direção visual futura e integração de portrait/sprite documentadas
 
+## DONE (v0.7: arte jogável do AUGUSTO, branch `feature/augusto-art`)
+
+- [x] Sprite e portrait pixel-art originais via ImageGen, baseados nas referências aprovadas
+- [x] Atlas RGBA 1536×1120, 40 células 192×224; portrait RGBA 240×300
+- [x] Preparação offline reproduzível com System.Drawing, fontes e prompts versionados
+- [x] Recortes isolados, margens transparentes, baseline e fases dos golpes/KO revisados
+- [x] Manifesto dos 15 estados, attackPhases 1/1/1 e jumpPhases 1/1/1
+- [x] Scale 1, offsets 0/8, filtro pixel-art; nenhuma alteração de gameplay ou renderer
+- [x] Playtest visual Chrome: seleção, VS, HUD, estados com F2, ataques, guardas, flipX,
+      cross-up com dano e troca de lado, vitória e derrota por KO
+- [x] Testes do carregamento atualizados para incluir os assets do Augusto
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
        pessoas reais; adicionar perfis de dificuldade (fácil/normal/difícil) no menu.
 2. [ ] **Melhor de 3 rounds:** `MatchSystem` acima do `RoundSystem`, indicadores de rounds
        vencidos no HUD, "ROUND 2/3", "FINAL ROUND".
-3. [ ] **Estudo de estilo e arte definitiva do Augusto** (fornecer portrait.png e sprite.png,
-       preencher assets em augusto.ts seguindo `docs/ART_DIRECTION.md`).
+3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
+       com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
 4. [ ] **Áudio básico:** `AudioManager` ouvindo `SimulationEvent` (hit, block, KO, anúncios) e
        música de menu e de luta, respeitando o desbloqueio de áudio no mobile.
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de

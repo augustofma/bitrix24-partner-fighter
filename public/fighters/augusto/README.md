@@ -1,22 +1,30 @@
-# AUGUSTO — arte futura
+# AUGUSTO — arte jogável
 
-Esta pasta contém apenas este README. O personagem usa assets vazios, o
-PlaceholderFighterView e o retrato geométrico existentes. A paleta preta com detalhes
-azuis e pele cinza é um manequim provisório, sem representar características físicas.
+- sprite.png: 1536×1120, grade 8×5, 40 células de 192×224, PNG com alpha real.
+- portrait.png: 240×300, busto pixel-art com alpha real.
+- Config: pixelArt true, scale 1, offsetX 0, offsetY 8.
+- Baseline terrestre: 216; margem inferior: 8 px; margens mínimas: 4 px.
 
-Arquivos a fornecer futuramente:
+| Estado                      | Frames |
+| --------------------------- | ------ |
+| idle                        | 0–3    |
+| walk                        | 4–9    |
+| jump (subida/ápice/descida) | 10–12  |
+| crouch                      | 13     |
+| punch                       | 14–16  |
+| kick                        | 17–19  |
+| crouchPunch                 | 20–22  |
+| crouchKick                  | 23–25  |
+| airPunch                    | 26–28  |
+| airKick                     | 29–31  |
+| block                       | 32     |
+| crouchBlock                 | 33     |
+| hurt                        | 34–35  |
+| knockout                    | 36–38  |
+| victory                     | 39     |
 
-- portrait.png: retrato mais detalhado para seleção, VS e vitória.
-- sprite.png: spritesheet estilizada em grade, fundo transparente, olhando para a direita,
-  pés no centro inferior de cada frame.
+Ataques: um frame visual por fase (startup/active/recovery). Pulo: um frame por fase vertical.
+Nenhum timing, dano, movimento ou caixa de gameplay foi alterado.
 
-A arte definitiva deve representar todos os estados:
-idle, walk, jump, crouch, punch, kick, crouchPunch, crouchKick,
-airPunch, airKick, block, crouchBlock, hurt, knockout, victory.
-
-Preencher assets.portrait e assets.sprite em src/fighters/augusto.ts, incluindo
-key, caminhos, dimensões dos frames, índices das animações e escala/offsets.
-Não é necessário modificar BootScene, CharacterSelectScene, VersusScene, FightScene,
-VictoryScene ou CombatSystem. Arte não altera caixas nem frame data.
-
-Direção visual e requisitos: [ART_DIRECTION.md](../../../docs/ART_DIRECTION.md#augusto).
+Produção e reprodução: [fontes e prompts](../../../scripts/augusto-art/README.md).
+Direção visual e autoria: [ART_DIRECTION.md](../../../docs/ART_DIRECTION.md#augusto).
