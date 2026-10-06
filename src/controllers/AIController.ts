@@ -32,6 +32,8 @@ export class AIController implements FighterController {
   private attackButton: AttackButton = 'punch';
   private attackCooldown = 0;
   private reactedToCurrentAttack = false;
+  /** Decided at jump time: kick on the way down if the opponent comes into range. */
+  private plannedAirAttack = false;
 
   constructor(
     private readonly profile: AIProfile = NORMAL_AI,
@@ -45,8 +47,9 @@ export class AIController implements FighterController {
   getInput({ self, opponent }: ControllerContext): InputState {
     if (this.attackCooldown > 0) this.attackCooldown--;
 
-    const busy = self.state === 'knockout' || self.state === 'victory' || self.isAirborne;
+    const busy = self.state === 'knockout' || self.state === 'victory';
     if (busy || opponent.isKnockedOut) return createInputState();
+    if (self.isAirborne) return this.airInput(self, opponent);
     if (self.state === 'hurt') {
       // Re-think as soon as hitstun ends.
       this.modeFrames = 0;
@@ -57,6 +60,16 @@ export class AIController implements FighterController {
     if (this.modeFrames <= 0) this.decide(self, opponent);
     this.modeFrames--;
     return this.express(self, opponent);
+  }
+
+  /** In the air the CPU only decides whether to throw its planned air kick (once). */
+  private airInput(self: ReadonlyFighter, opponent: ReadonlyFighter): InputState {
+    const descending = self.velocity.y > 0;
+    if (!this.plannedAirAttack || self.state !== 'jump' || !descending) return createInputState();
+    const reach = attackReach(self.config.attacks.airKick) + halfBodyWidth(opponent);
+    if (distanceBetween(self, opponent) > reach) return createInputState();
+    this.plannedAirAttack = false;
+    return createInputState({ kick: true });
   }
 
   private setMode(mode: AIMode, frames: number): void {
@@ -86,11 +99,16 @@ export class AIController implements FighterController {
     const distance = distanceBetween(self, opponent);
     const punchRange = this.rangeOf('punch', self, opponent);
     const kickRange = this.rangeOf('kick', self, opponent);
+    this.plannedAirAttack = false;
 
     if (distance > kickRange) {
       const canJumpIn = distance < kickRange + JUMP_IN_WINDOW;
-      if (canJumpIn && rng() < profile.jumpInChance) this.setMode('jump', 1);
-      else this.setMode('approach', randomInt(rng, ...profile.approachFrames));
+      if (canJumpIn && rng() < profile.jumpInChance) {
+        this.setMode('jump', 1);
+        this.plannedAirAttack = rng() < profile.jumpInAttackChance;
+      } else {
+        this.setMode('approach', randomInt(rng, ...profile.approachFrames));
+      }
       return;
     }
 

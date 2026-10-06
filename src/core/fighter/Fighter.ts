@@ -17,14 +17,16 @@ import type { InputFrame, InputState } from '../../types/input';
 import { toWorldRect } from '../geometry';
 import { horizontalAxis } from '../input';
 import { attackPhaseAt, totalAttackFrames, type AttackPhase } from './attackFrames';
+import {
+  ATTACK_SLOTS,
+  ATTACK_STATE_SET,
+  BLOCK_STATES,
+  FREE_GROUND_STATES,
+  LANDING_STATES,
+  hurtboxFor,
+  pushboxFor,
+} from './fighterStates';
 import type { ReadonlyFighter } from './ReadonlyFighter';
-
-const ATTACK_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>(['punch', 'kick']);
-const FREE_GROUND_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>([
-  'idle',
-  'walk',
-  'crouch',
-]);
 
 interface BufferedAttack {
   button: AttackButton;
@@ -49,9 +51,11 @@ export class Fighter implements ReadonlyFighter {
   private framesInState = 0;
   private attack: AttackConfig | null = null;
   private attackConnected = false;
-  /** Remaining hitstun (state 'hurt') or blockstun (state 'block'). */
+  /** Remaining hitstun (state 'hurt') or blockstun (block states). */
   private stunFrames = 0;
   private bufferedAttack: BufferedAttack | null = null;
+  /** One air attack per jump: no mid-air spam. Reset on landing. */
+  private airAttackUsed = false;
   private lastX: number;
   private readonly groundY: number;
 
@@ -104,16 +108,20 @@ export class Fighter implements ReadonlyFighter {
   }
 
   get isBlocking(): boolean {
-    return this.currentState === 'block';
+    return BLOCK_STATES.has(this.currentState);
   }
 
   get isKnockedOut(): boolean {
     return this.currentState === 'knockout';
   }
 
-  /** Whether the fighter may turn to face the opponent this frame. */
+  /**
+   * Whether the fighter may turn to face the opponent this frame. Never in the air nor during
+   * an attack, so a cross-up never flips a jump or an attack (and its hitbox) halfway.
+   */
   get canTurn(): boolean {
-    return !this.isAirborne && (FREE_GROUND_STATES.has(this.currentState) || this.isBlocking);
+    if (this.isAirborne) return false;
+    return FREE_GROUND_STATES.has(this.currentState) || this.isBlocking;
   }
 
   // ---------------------------------------------------------------- simulation
@@ -134,10 +142,7 @@ export class Fighter implements ReadonlyFighter {
   /** Vulnerable area in world space, or null when invulnerable. */
   getHurtbox(): Rect | null {
     if (this.currentState === 'knockout') return null;
-    const { boxes } = this.config;
-    let box = boxes.standing;
-    if (this.isAirborne) box = boxes.airborne;
-    else if (this.currentState === 'crouch') box = boxes.crouching;
+    const box = hurtboxFor(this.config.boxes, this.currentState, this.isAirborne);
     return toWorldRect(box, this.position, this.direction);
   }
 
@@ -147,12 +152,11 @@ export class Fighter implements ReadonlyFighter {
     return toWorldRect(this.attack.hitbox, this.position, this.direction);
   }
 
-  /** Body used to keep fighters apart. */
+  /** Body used to keep fighters apart (see pushboxFor for the cross-up rule). */
   getPushbox(): Rect | null {
-    const hurtbox = this.getHurtbox();
-    if (!hurtbox) return null;
-    const width = this.config.boxes.pushWidth;
-    return { x: this.position.x - width / 2, y: hurtbox.y, width, height: hurtbox.height };
+    if (this.currentState === 'knockout') return null;
+    const box = pushboxFor(this.config.boxes, this.currentState, this.isAirborne);
+    return toWorldRect(box, this.position, this.direction);
   }
 
   /** Each attack can hit only once. */
@@ -177,7 +181,8 @@ export class Fighter implements ReadonlyFighter {
   applyBlock(attack: AttackConfig, pushDirection: Direction): void {
     // Chip damage can never knock out.
     this.health = Math.max(1, this.health - attack.chipDamage);
-    this.setState('block', true);
+    // Keep the guard posture (standing or crouching) during blockstun.
+    this.setState(this.currentState === 'crouchBlock' ? 'crouchBlock' : 'block', true);
     this.stunFrames = attack.blockstunFrames;
     this.velocity.x = pushDirection * attack.blockPushback;
   }
@@ -196,7 +201,7 @@ export class Fighter implements ReadonlyFighter {
     if (next === this.currentState && !restart) return;
     this.currentState = next;
     this.framesInState = 0;
-    if (!ATTACK_STATES.has(next)) this.attack = null;
+    if (!ATTACK_STATE_SET.has(next)) this.attack = null;
   }
 
   private bufferAttackInput(pressed: Readonly<InputState>): void {
@@ -220,7 +225,18 @@ export class Fighter implements ReadonlyFighter {
           this.handleFreeGroundState(held);
         }
         return;
+      case 'jump':
+        this.handleJumpState();
+        return;
+      case 'airPunch':
+      case 'airKick':
+        // Finished in the air: keep falling. Landing (integratePhysics) ends it otherwise.
+        if (this.attack && this.framesInState >= totalAttackFrames(this.attack)) {
+          this.setState('jump');
+        }
+        return;
       case 'block':
+      case 'crouchBlock':
         if (this.stunFrames > 0) this.stunFrames--;
         else this.handleFreeGroundState(held);
         return;
@@ -228,10 +244,9 @@ export class Fighter implements ReadonlyFighter {
         if (this.stunFrames > 0) this.stunFrames--;
         else if (!this.isAirborne) this.handleFreeGroundState(held);
         return;
-      case 'jump':
       case 'knockout':
       case 'victory':
-        // Driven by physics (landing) or terminal.
+        // Terminal.
         return;
     }
   }
@@ -239,18 +254,21 @@ export class Fighter implements ReadonlyFighter {
   /** Decision tree for a grounded fighter that is free to act. Order = priority. */
   private handleFreeGroundState(held: Readonly<InputState>): void {
     if (this.bufferedAttack) {
-      const attack = this.config.attacks[this.bufferedAttack.button];
+      const slot = ATTACK_SLOTS.ground[this.bufferedAttack.button];
       this.bufferedAttack = null;
-      this.startAttack(attack);
+      this.startAttack(this.config.attacks[slot]);
+      this.velocity.x = 0;
       return;
     }
     if (held.block) {
-      this.setState('block');
+      // Guarding never walks; holding down keeps the low guard.
+      this.setState(held.down ? 'crouchBlock' : 'block');
       return;
     }
     const axis = horizontalAxis(held);
     if (held.up) {
       this.setState('jump');
+      this.airAttackUsed = false;
       this.velocity.y = -this.config.stats.jumpForce;
       this.velocity.x = axis * this.config.stats.jumpHorizontalSpeed;
       return;
@@ -270,10 +288,27 @@ export class Fighter implements ReadonlyFighter {
     this.velocity.x = 0;
   }
 
+  /** Airborne and free: an attack press (or buffered press) starts the air attack. */
+  private handleJumpState(): void {
+    if (!this.bufferedAttack || this.airAttackUsed || !this.isAirborne) return;
+    const slot = ATTACK_SLOTS.air[this.bufferedAttack.button];
+    this.bufferedAttack = null;
+    this.airAttackUsed = true;
+    // Velocity is untouched: gravity and the jump's horizontal motion continue.
+    this.startAttack(this.config.attacks[slot]);
+  }
+
   private startAttack(attack: AttackConfig): void {
     this.setState(attack.state, true);
     this.attack = attack;
     this.attackConnected = false;
+  }
+
+  /** Touching the ground ends jumps and air attacks (and therefore their hitboxes). */
+  private land(): void {
+    this.airAttackUsed = false;
+    if (!LANDING_STATES.has(this.currentState)) return;
+    this.setState('idle');
     this.velocity.x = 0;
   }
 
@@ -284,12 +319,10 @@ export class Fighter implements ReadonlyFighter {
     this.position.y += this.velocity.y;
 
     if (this.position.y >= this.groundY) {
+      const wasAirborne = this.velocity.y > 0;
       this.position.y = this.groundY;
       this.velocity.y = 0;
-      if (this.currentState === 'jump') {
-        this.setState('idle');
-        this.velocity.x = 0;
-      }
+      if (wasAirborne) this.land();
     }
 
     const sliding = !this.isAirborne && this.currentState !== 'walk';

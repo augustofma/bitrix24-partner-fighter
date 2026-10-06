@@ -7,7 +7,7 @@
  * Uses only Node built-ins (no dependencies): node scripts/generate-demo-fighter-art.mjs
  *
  * Output (see src/fighters/fighterA.ts for the matching config):
- *   public/fighters/fighter-a/sprite.png    8x4 grid of 96x112 frames (26 used, 0-25)
+ *   public/fighters/fighter-a/sprite.png    8x4 grid of 96x112 frames (31 used, 0-30)
  *   public/fighters/fighter-a/portrait.png  120x150 bust
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -354,6 +354,40 @@ const FRAMES = [
   bob(withPose(VICTORY, { fe: P(12, -70), fh: P(16, -84) }), 0),
   VICTORY,
   bob(VICTORY, 2),
+  // 26-27 airPunch (startup / active, held through recovery)
+  withPose(JUMP_TUCK, { fe: P(6, -58), fh: P(10, -65), be: P(-8, -56), bh: P(-4, -64) }),
+  withPose(JUMP_TUCK, {
+    head: P(6, -79),
+    neck: P(4, -70),
+    fe: P(18, -59),
+    fh: P(31, -52),
+    be: P(-7, -58),
+    bh: P(-2, -64),
+  }),
+  // 28-29 airKick (startup / active, held through recovery)
+  withPose(JUMP_TUCK, { fk: P(14, -44), ff: P(9, -27) }),
+  {
+    head: P(-3, -78),
+    neck: P(-2, -69),
+    hip: P(0, -45),
+    fe: P(7, -60),
+    fh: P(11, -67),
+    be: P(-9, -58),
+    bh: P(-14, -64),
+    fk: P(15, -35),
+    ff: P(35, -27),
+    bk: P(-1, -33),
+    bf: P(-8, -22),
+  },
+  // 30 crouchBlock: crouched with both forearms raised in front of the face
+  withPose(CROUCH, {
+    head: P(5, -54),
+    neck: P(3, -46),
+    fe: P(11, -40),
+    fh: P(13, -53),
+    be: P(8, -37),
+    bh: P(12, -50),
+  }),
 ];
 
 // ------------------------------------------------------------------ drawing

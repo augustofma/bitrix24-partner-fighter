@@ -11,4 +11,7 @@ export const STANDARD_BODY: FighterBoxes = {
   crouching: { x: -30, y: -112, width: 64, height: 112 },
   airborne: { x: -26, y: -150, width: 52, height: 120 },
   pushWidth: 50,
+  // A jumper whose feet are ~80 px above the ground (airborne box bottom at -30) clears this
+  // body and can cross over: a forward jump from close/mid range lands on the other side.
+  pushHeight: 110,
 };

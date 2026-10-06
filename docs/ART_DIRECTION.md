@@ -64,18 +64,21 @@ public/
 
 ### Animações (uma por estado do lutador)
 
-| Estado     | Obrigatória | Sugestão de frames       | Comportamento padrão                             | Se faltar, mostra |
-| ---------- | ----------- | ------------------------ | ------------------------------------------------ | ----------------- |
-| `idle`     | **sim**     | 4                        | loop                                             | (obrigatória)     |
-| `walk`     | não         | 4 a 8                    | loop                                             | idle              |
-| `jump`     | não         | 2 (subida, tuck)         | toca uma vez e segura                            | idle              |
-| `crouch`   | não         | 1                        | toca uma vez e segura                            | idle              |
-| `punch`    | não         | 3 (prep, impacto, volta) | sincronizado ao frame data                       | idle              |
-| `kick`     | não         | 3 (prep, impacto, volta) | sincronizado ao frame data                       | punch             |
-| `block`    | não         | 1                        | toca uma vez e segura                            | idle              |
-| `hurt`     | não         | 1 a 2                    | toca uma vez e segura                            | idle              |
-| `knockout` | não         | 2 a 3 (cai, deitado)     | toca uma vez e segura                            | hurt              |
-| `victory`  | não         | 2 a 4                    | toca uma vez e segura (ou loop com `repeat: -1`) | idle              |
+| Estado        | Obrigatória | Sugestão de frames        | Comportamento padrão                             | Se faltar, mostra |
+| ------------- | ----------- | ------------------------- | ------------------------------------------------ | ----------------- |
+| `idle`        | **sim**     | 4                         | loop                                             | (obrigatória)     |
+| `walk`        | não         | 4 a 8                     | loop                                             | idle              |
+| `jump`        | não         | 2 (subida, tuck)          | toca uma vez e segura                            | idle              |
+| `crouch`      | não         | 1                         | toca uma vez e segura                            | idle              |
+| `punch`       | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | idle              |
+| `kick`        | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | punch             |
+| `airPunch`    | não         | 2 (prep, impacto mantido) | sincronizado ao frame data                       | jump              |
+| `airKick`     | não         | 2 (prep, impacto mantido) | sincronizado ao frame data                       | airPunch          |
+| `block`       | não         | 1                         | toca uma vez e segura                            | idle              |
+| `crouchBlock` | não         | 1 (agachado, guarda alta) | toca uma vez e segura                            | crouch            |
+| `hurt`        | não         | 1 a 2                     | toca uma vez e segura                            | idle              |
+| `knockout`    | não         | 2 a 3 (cai, deitado)      | toca uma vez e segura                            | hurt              |
+| `victory`     | não         | 2 a 4                     | toca uma vez e segura (ou loop com `repeat: -1`) | idle              |
 
 Campos de cada animação:
 
@@ -89,6 +92,18 @@ Campos de cada animação:
 Em golpes, `frameRate` e `repeat` são ignorados: os frames acompanham o frame data. Com 3 frames
 (padrão), o 1º aparece durante o startup, o 2º **exatamente nos frames ativos** (quando a hitbox
 existe) e o 3º durante o recovery.
+
+Poses específicas:
+
+- **`airPunch` / `airKick`:** desenhe com o corpo no ar (pernas recolhidas), com os **pés do
+  quadro na mesma referência dos frames de pulo** (centro da base = posição lógica). É comum
+  manter a pose de impacto até o fim: use `attackPhases: { startup: 1, active: 1, recovery: 0 }`
+  com 2 frames. O chute aéreo do corpo padrão aponta para a frente e para baixo e pega levemente
+  atrás do corpo (cross-up); confira com F2 se a perna cobre a hitbox.
+- **`crouchBlock`:** mesma altura do `crouch` (a hurtbox agachada não muda), com os braços em
+  guarda à frente do rosto, para diferenciar visualmente do agachado comum.
+- O lutador **não vira no ar**: os golpes aéreos são desenhados só olhando para a direita, como
+  todo o resto, e o jogo espelha conforme a direção em que o pulo começou.
 
 ## Como adicionar arte de um novo lutador
 
@@ -131,7 +146,10 @@ assets: {
       crouch: { frames: [10] },
       punch: { frames: [11, 12, 13] },
       kick: { frames: [14, 15, 16] },
+      airPunch: { frames: [26, 27], attackPhases: { startup: 1, active: 1, recovery: 0 } },
+      airKick: { frames: [28, 29], attackPhases: { startup: 1, active: 1, recovery: 0 } },
       block: { frames: [17] },
+      crouchBlock: { frames: [30] },
       hurt: { frames: [18, 19], frameRate: 12 },
       knockout: { frames: [20, 21, 22], frameRate: 8 },
       victory: { frames: [23, 24, 25], frameRate: 6, repeat: -1 },

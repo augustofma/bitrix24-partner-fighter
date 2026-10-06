@@ -1,5 +1,5 @@
 import type { AttackConfig } from '../../types/fighter';
-import type { Vec2 } from '../../types/geometry';
+import type { Direction, Vec2 } from '../../types/geometry';
 import type { Fighter } from '../fighter/Fighter';
 import { intersectionCenter, rectsOverlap } from '../geometry';
 
@@ -52,16 +52,36 @@ export class CombatSystem {
     const defender = fighters[defenderIndex];
     attacker.markAttackConnected();
 
+    const push = pushDirection(attacker, defender);
     let type: CombatEvent['type'];
-    if (defender.isBlocking) {
-      defender.applyBlock(attack, attacker.direction);
+    if (isAttackBlocked(defender, attack)) {
+      defender.applyBlock(attack, push);
       type = 'block';
     } else {
-      defender.applyHit(attack, attacker.direction);
+      defender.applyHit(attack, push);
       type = defender.isKnockedOut ? 'koHit' : 'hit';
     }
     return { type, attackerIndex, defenderIndex, attack, point };
   }
+}
+
+/**
+ * Single place that decides whether a guard stops an attack. Today any guard (standing or
+ * crouching) blocks everything. Future high/low/overhead rules belong here, e.g. comparing an
+ * `AttackConfig` height with the defender's guard state.
+ */
+export function isAttackBlocked(defender: Fighter, _attack: AttackConfig): boolean {
+  return defender.isBlocking;
+}
+
+/**
+ * Hits push the defender away from the attacker. For ground attacks this equals the
+ * attacker's facing; for a cross-up it correctly pushes toward the side the defender is on.
+ */
+export function pushDirection(attacker: Fighter, defender: Fighter): Direction {
+  const dx = defender.position.x - attacker.position.x;
+  if (dx === 0) return attacker.direction;
+  return dx > 0 ? 1 : -1;
 }
 
 export function otherIndex(index: FighterIndex): FighterIndex {

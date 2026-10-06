@@ -74,6 +74,21 @@ export const POSES = {
     frontElbow: p(14, -116), frontHand: p(24, -128), backElbow: p(-20, -110), backHand: p(-12, -124),
     frontKnee: p(44, -88), frontFoot: p(92, -86), backKnee: p(-6, -44), backFoot: p(-10, 0),
   },
+  airPunch: {
+    head: p(12, -158), neck: p(8, -140), hip: p(0, -90),
+    frontElbow: p(36, -118), frontHand: p(62, -104), backElbow: p(-14, -116), backHand: p(-4, -128),
+    frontKnee: p(22, -70), frontFoot: p(12, -42), backKnee: p(-2, -62), backFoot: p(-14, -40),
+  },
+  airKick: {
+    head: p(-6, -156), neck: p(-4, -138), hip: p(0, -90),
+    frontElbow: p(14, -120), frontHand: p(22, -132), backElbow: p(-18, -116), backHand: p(-28, -128),
+    frontKnee: p(30, -70), frontFoot: p(70, -54), backKnee: p(-2, -66), backFoot: p(-16, -44),
+  },
+  crouchBlock: {
+    head: p(10, -108), neck: p(6, -92), hip: p(-4, -50),
+    frontElbow: p(22, -80), frontHand: p(26, -106), backElbow: p(16, -74), backHand: p(24, -100),
+    frontKnee: p(26, -34), frontFoot: p(22, 0), backKnee: p(-18, -26), backFoot: p(-24, 0),
+  },
   block: {
     head: p(2, -150), neck: p(0, -132), hip: p(-4, -80),
     frontElbow: p(26, -118), frontHand: p(30, -146), backElbow: p(20, -108), backHand: p(28, -138),
@@ -124,18 +139,19 @@ function walkPose(frame: number): Pose {
   return pose;
 }
 
-function attackPose(fighter: ReadonlyFighter, windup: Pose, extended: Pose): Pose {
+/** `rest` is the pose the attack starts from and returns to (idle on the ground, jump in the air). */
+function attackPose(fighter: ReadonlyFighter, windup: Pose, extended: Pose, rest: Pose): Pose {
   const attack = fighter.activeAttack;
-  if (!attack) return POSES.idle;
+  if (!attack) return rest;
   const frame = fighter.stateFrame;
   switch (attackPhaseAt(attack, frame)) {
     case 'startup':
-      return lerpPose(POSES.idle, windup, Math.min(1, (frame + 1) / attack.startupFrames));
+      return lerpPose(rest, windup, Math.min(1, (frame + 1) / attack.startupFrames));
     case 'active':
       return extended;
     case 'recovery': {
       const elapsed = frame - attack.startupFrames - attack.activeFrames;
-      return lerpPose(extended, POSES.idle, Math.min(1, elapsed / attack.recoveryFrames));
+      return lerpPose(extended, rest, Math.min(1, elapsed / attack.recoveryFrames));
     }
   }
 }
@@ -152,11 +168,17 @@ export function poseFor(fighter: ReadonlyFighter, timeMs: number): Pose {
     case 'crouch':
       return POSES.crouch;
     case 'punch':
-      return attackPose(fighter, POSES.punchWindup, POSES.punch);
+      return attackPose(fighter, POSES.punchWindup, POSES.punch, POSES.idle);
     case 'kick':
-      return attackPose(fighter, POSES.kickWindup, POSES.kick);
+      return attackPose(fighter, POSES.kickWindup, POSES.kick, POSES.idle);
+    case 'airPunch':
+      return attackPose(fighter, POSES.jump, POSES.airPunch, POSES.jump);
+    case 'airKick':
+      return attackPose(fighter, POSES.jump, POSES.airKick, POSES.jump);
     case 'block':
       return POSES.block;
+    case 'crouchBlock':
+      return POSES.crouchBlock;
     case 'hurt':
       return POSES.hurt;
     case 'knockout':

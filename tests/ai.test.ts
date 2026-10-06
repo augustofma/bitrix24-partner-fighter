@@ -41,4 +41,18 @@ describe('AIController', () => {
     }
     expect(blocked).toBe(true);
   });
+
+  it('can jump in with an air kick (when its profile allows it)', () => {
+    const sim = createFightingSim();
+    const profile = { ...NORMAL_AI, jumpInChance: 1, jumpInAttackChance: 1 };
+    const ai = new AIController(profile, createRng(5));
+    placeAtDistance(sim, 260);
+    const [player, cpu] = sim.fighters;
+    let airKicked = false;
+    for (let i = 0; i < 120; i++) {
+      sim.step([idle(), ai.getInput({ self: cpu, opponent: player })]);
+      if (cpu.state === 'airKick') airKicked = true;
+    }
+    expect(airKicked).toBe(true);
+  });
 });

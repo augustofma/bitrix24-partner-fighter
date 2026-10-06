@@ -12,7 +12,7 @@ import {
   validateRosterAssets,
   validateSpriteAssets,
 } from '../src/render/sprite/spriteValidation';
-import type { FighterConfig, FighterSpriteAssets } from '../src/types/fighter';
+import { FIGHTER_STATES, type FighterConfig, type FighterSpriteAssets } from '../src/types/fighter';
 
 /** FIGHTER_A demo sheet: 8x4 grid. */
 const DEMO_SHEET_FRAMES = 32;
@@ -98,7 +98,7 @@ describe('validateSpriteAssets', () => {
   it('warns (not errors) about missing optional animations', () => {
     const config = withSprite(fighterA, { ...demoSprite(), animations: { idle: { frames: [0] } } });
     expect(messages(config, 'error')).toEqual([]);
-    expect(messages(config, 'warning')).toHaveLength(9);
+    expect(messages(config, 'warning')).toHaveLength(FIGHTER_STATES.length - 1); // every state but idle
   });
 
   it('reports two different sheets sharing a texture key', () => {

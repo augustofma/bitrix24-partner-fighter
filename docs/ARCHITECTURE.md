@@ -46,6 +46,7 @@ src/
     FightSimulation.ts    Orquestra um frame da luta
     fighter/Fighter.ts    Entidade lutador: state machine + física + caixas
     fighter/attackFrames.ts  Fases de ataque (startup/active/recovery)
+    fighter/fighterStates.ts Regras puras: grupos de estados, botão → slot, hurtbox/pushbox
     fighter/ReadonlyFighter.ts  Visão somente leitura (para IA e render)
     systems/CombatSystem.ts  Hitbox x hurtbox, dano, bloqueio, KO
     systems/ArenaSystem.ts   Paredes, colisão de corpos, distância máxima
@@ -90,7 +91,8 @@ src/
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
     transitions.ts        Fade entre cenas
   utils/device.ts         Detecção de toque, flags de URL
-tests/                    Vitest: lutador, combate, arena, round, IA, animação/assets de sprite
+tests/                    Vitest: lutador, combate, arena, round, IA, ataques aéreos, defesa
+                          agachada, cross-up, determinismo, animação/assets de sprite
 scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
@@ -172,18 +174,67 @@ Cada caixa (`LocalBox`) é escrita **como se o lutador olhasse para a direita**,
 | ------- | ---------------------------------------------- | ----------------------------------------------- |
 | Hurtbox | `FighterConfig.boxes` (em pé, agachado, no ar) | Onde o lutador pode ser atingido                |
 | Hitbox  | `AttackConfig.hitbox`                          | Onde o ataque acerta (apenas nos frames ativos) |
-| Pushbox | `boxes.pushWidth`                              | Impede que os corpos se sobreponham             |
+| Pushbox | `boxes.pushWidth`, `boxes.pushHeight`          | Impede que os corpos se sobreponham             |
 
 O visual **não** participa da colisão: trocar o boneco por sprites não muda o gameplay.
+As regras de qual caixa vale em cada estado ficam em `core/fighter/fighterStates.ts`
+(`hurtboxFor`, `pushboxFor`): `crouch` e `crouchBlock` usam o corpo agachado; no ar vale o
+corpo aéreo.
 
 Regras do `CombatSystem`:
 
 - Cada ataque acerta no máximo uma vez (`markAttackConnected`).
 - Todos os contatos do frame são coletados antes de serem aplicados, então golpes simultâneos
   trocam dano (trade).
-- Defensor em `block`: recebe `chipDamage` (que nunca nocauteia), `blockstun` e `blockPushback`.
+- Bloqueio decidido num único ponto, `isAttackBlocked(defender, attack)`: hoje qualquer guarda
+  (`block` ou `crouchBlock`) bloqueia tudo. Golpes altos/baixos/overhead entrarão ali.
+- Bloqueado: `chipDamage` (que nunca nocauteia), `blockstun` e `blockPushback`; a postura
+  (em pé ou agachado) é mantida durante o blockstun.
 - Caso contrário: `damage`, `hitstun`, `knockback`; com vida 0 → `knockout`.
+- O empurrão é sempre **para longe do atacante** (`pushDirection`), o que funciona também no
+  cross-up.
 - Cada contato gera `hitstopFrames` de congelamento (24 no KO).
+
+### Ataques terrestres e aéreos
+
+`FighterConfig.attacks` tem um `AttackConfig` por slot: `punch`, `kick`, `airPunch`, `airKick`.
+O botão vira slot pela postura (`ATTACK_SLOTS` em `fighterStates.ts`):
+
+| Postura | A          | S         |
+| ------- | ---------- | --------- |
+| chão    | `punch`    | `kick`    |
+| ar      | `airPunch` | `airKick` |
+
+Uma postura nova (por exemplo, golpes agachados) é só uma linha nessa tabela, mais os slots e
+estados correspondentes.
+
+- **Ataque aéreo:** sai do estado `jump` quando há um soco ou chute apertado (borda ou buffer),
+  no máximo **um por pulo** (flag `airAttackUsed`, zerada no landing). A velocidade não é
+  alterada: gravidade e movimento horizontal continuam.
+- **Regra de landing:** em `integratePhysics`, quando o lutador toca o chão vindo de cima, os
+  estados de `LANDING_STATES` (`jump`, `airPunch`, `airKick`) vão para `idle` e o ataque é
+  descartado. Como a física roda antes do combate no mesmo frame, **nenhuma hitbox aérea existe
+  no frame do landing nem depois**. No frame seguinte o lutador age normalmente.
+- Se o recovery do ataque aéreo acabar no ar, o lutador volta para `jump` (sem novo ataque).
+
+### Cross-up (passar por cima)
+
+O critério é só geometria (`pushboxFor`), sem nada específico de personagem:
+
+- **No chão**, a pushbox vai dos pés até `pushHeight`. Duas pushboxes no chão sempre se
+  sobrepõem verticalmente, então nunca se atravessa andando.
+- **No ar**, a pushbox é a faixa vertical do corpo aéreo. Quando ela fica inteira acima da
+  pushbox do adversário, não há sobreposição e a `ArenaSystem` não empurra: o pulador passa por
+  cima com a física normal do pulo.
+- Ao descer, as caixas voltam a se sobrepor e `ArenaSystem.separateBodies` empurra cada um para
+  o lado em que seu centro está; se ele já cruzou, fica do outro lado.
+
+### Facing
+
+`FightSimulation` vira para o oponente apenas os lutadores com `canTurn`: no chão e em estado
+livre (`idle`, `walk`, `crouch`) ou de guarda (`block`, `crouchBlock`). Nunca no ar e nunca
+durante ataques: um golpe aéreo mantém sprite e hitbox na direção inicial mesmo cruzando o
+adversário; a correção acontece no primeiro frame livre após o landing.
 
 ## Pipeline de arte dos lutadores
 
@@ -245,7 +296,7 @@ export const augusto: FighterConfig = {
   description: '...', selectable: true,
   stats: { maxHealth, walkSpeed, backWalkSpeed, jumpForce, jumpHorizontalSpeed },
   boxes: STANDARD_BODY,                 // ou caixas próprias
-  attacks: { punch: {...}, kick: {...} },  // frame data completo
+  attacks: { punch, kick, airPunch, airKick },  // frame data completo de cada um
   specials: [],                         // reservado (SpecialMoveConfig)
   palette: {...},                       // cores do placeholder (e dos cards)
   assets: { portrait, sprite: { sheet, animations, visual }, pixelArt },  // opcional
@@ -263,16 +314,18 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro              | Onde encaixa                                                                                                                          |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Golpes especiais    | `SpecialMoveConfig` em `types/fighter.ts`; detector de sequência no `InputTracker`; novo estado de ataque reutilizando `AttackConfig` |
-| Barra de especial   | Campo novo no `Fighter` + evento no `CombatSystem` + barra no HUD                                                                     |
-| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                                               |
-| Vários cenários     | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                                                     |
-| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                                                       |
-| Melhor de 3 rounds  | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                                               |
-| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos                                |
-| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                                                  |
+| Futuro                  | Onde encaixa                                                                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Golpes especiais        | `SpecialMoveConfig` em `types/fighter.ts`; detector de sequência no `InputTracker`; novo estado de ataque reutilizando `AttackConfig` |
+| Alto / baixo / overhead | Campo de altura no `AttackConfig` + comparação com a guarda em `isAttackBlocked` (`CombatSystem`)                                     |
+| Golpes agachados        | Postura `crouch` em `ATTACK_SLOTS` + slots/estados `crouchPunch`/`crouchKick`                                                         |
+| Barra de especial       | Campo novo no `Fighter` + evento no `CombatSystem` + barra no HUD                                                                     |
+| Combos                  | Contador no `CombatSystem` (já é uma classe com estado)                                                                               |
+| Vários cenários         | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                                                     |
+| Som, música e falas     | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                                                       |
+| Melhor de 3 rounds      | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                                               |
+| Multiplayer online      | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos                                |
+| Torneio e ranking       | Novas cenas consumindo `MatchResult`                                                                                                  |
 
 ## Decisões técnicas
 

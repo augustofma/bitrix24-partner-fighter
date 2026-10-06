@@ -12,6 +12,8 @@ export interface AIProfile {
   guardChance: number;
   /** Chance to jump in when approaching from mid range. */
   jumpInChance: number;
+  /** Chance that a jump-in includes an air kick on the way down. */
+  jumpInAttackChance: number;
   /** Minimum/maximum pause after an attack before the next one. */
   attackCooldown: readonly [number, number];
   /** Duration ranges of each movement decision. */
@@ -28,6 +30,7 @@ export const NORMAL_AI: AIProfile = {
   retreatChance: 0.22,
   guardChance: 0.12,
   jumpInChance: 0.08,
+  jumpInAttackChance: 0.6,
   attackCooldown: [22, 48],
   approachFrames: [16, 36],
   retreatFrames: [14, 28],
