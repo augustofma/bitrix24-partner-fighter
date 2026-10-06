@@ -20,7 +20,8 @@ export type FighterStateId = (typeof FIGHTER_STATES)[number];
 export type AttackButton = 'punch' | 'kick';
 
 /** States that execute an attack. Future: 'special', 'super', 'airPunch'... */
-export type AttackStateId = Extract<FighterStateId, 'punch' | 'kick'>;
+export const ATTACK_STATES = ['punch', 'kick'] as const satisfies readonly FighterStateId[];
+export type AttackStateId = (typeof ATTACK_STATES)[number];
 
 /** Frame data for one attack. All durations are in simulation frames (60 per second). */
 export interface AttackConfig {
@@ -92,21 +93,75 @@ export interface PlaceholderPalette {
 }
 
 /**
- * Optional sprite assets for a fighter (paths relative to /public).
- * When missing, the placeholder renderer is used. See docs/ART_DIRECTION.md.
+ * Optional art for a fighter (paths relative to /public). Purely visual: nothing here affects
+ * the simulation. Anything missing or invalid falls back to the placeholder renderer.
+ * Format and step-by-step guide: docs/ART_DIRECTION.md.
  */
 export interface FighterAssetManifest {
+  /** Character-card image for select / VS / victory screens. */
   portrait?: string;
-  animations?: Partial<Record<FighterStateId, SpriteAnimationAsset>>;
+  /** Animated in-fight sprite. Without it, the geometric placeholder is drawn. */
+  sprite?: FighterSpriteAssets;
+  /** Use nearest-neighbour scaling for this fighter's textures (crisp pixel art). */
+  pixelArt?: boolean;
 }
 
-export interface SpriteAnimationAsset {
-  /** Spritesheet path relative to /public, e.g. 'fighters/fighter-a/idle.png'. */
+export interface FighterSpriteAssets {
+  sheet: SpriteSheetAsset;
+  animations: FighterAnimationSet;
+  visual?: SpriteVisualConfig;
+}
+
+/** A grid spritesheet. Frames are numbered left-to-right, top-to-bottom, starting at 0. */
+export interface SpriteSheetAsset {
+  /** Texture key, unique across the whole game. */
+  key: string;
+  /** Path relative to /public, e.g. 'fighters/fighter-a/sprite.png'. */
   path: string;
   frameWidth: number;
   frameHeight: number;
-  frameRate: number;
-  loop: boolean;
+}
+
+/**
+ * One visual animation. Its timing is VISUAL ONLY: gameplay timing always comes from the
+ * simulation (AttackConfig frame data, hitstun...). Frames are picked from fighter.stateFrame.
+ */
+export interface SpriteAnimationConfig {
+  /** Frame indices in the sheet. */
+  frames: readonly number[];
+  /** Animation frames per second (default 10). Ignored for attack states. */
+  frameRate?: number;
+  /**
+   * -1 = loop forever, 0 = play once and hold the last frame, n = play n extra times.
+   * Default: loop for idle/walk, play once for everything else. Ignored for attack states.
+   */
+  repeat?: number;
+  /**
+   * Attack states only: how many of `frames` belong to startup / active / recovery.
+   * Must add up to frames.length. Default: 1 active "impact" frame in the middle.
+   */
+  attackPhases?: AttackPhaseFrameCounts;
+}
+
+export interface AttackPhaseFrameCounts {
+  startup: number;
+  active: number;
+  recovery: number;
+}
+
+/** `idle` is mandatory; other states fall back to a similar animation when absent. */
+export type FighterAnimationSet = { idle: SpriteAnimationConfig } & Partial<
+  Record<Exclude<FighterStateId, 'idle'>, SpriteAnimationConfig>
+>;
+
+/** How the sprite is placed over the fighter's logical position (center of the feet). */
+export interface SpriteVisualConfig {
+  /** Display scale of the frames (default 1). */
+  scale?: number;
+  /** World pixels; positive = in front of the fighter (mirrors with facing). Default 0. */
+  offsetX?: number;
+  /** World pixels; positive = down. Use it when the feet are not on the frame's bottom row. */
+  offsetY?: number;
 }
 
 /**
