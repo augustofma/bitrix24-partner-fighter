@@ -7,7 +7,7 @@ lateral; vence quem zerar a vida do oponente (KO) ou tiver mais vida quando o te
 
 Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossistema Bitrix24
 (parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
-`AUGUSTO` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B` reservado à CPU.
+`AUGUSTO`, `FILIPE` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B` reservado à CPU.
 
 ## Game loop (v0.1)
 
@@ -17,7 +17,7 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
 2. **Seleção:** cards gerados pelo roster, em páginas de até quatro. Augusto é a seleção
-   inicial; FIGHTER_A permanece selecionável. FIGHTER_B aparece com a marca "CPU".
+   inicial; FILIPE e FIGHTER_A também são selecionáveis. FIGHTER_B aparece com a marca "CPU".
    Setas ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
    novamente confirma. O adversário prioriza os personagens reservados à CPU.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
@@ -68,6 +68,28 @@ perdem um pouco de alcance. Chute e rasteira ganham quatro pixels de alcance, co
 maior; o chute em pé também começa um frame depois. O chute aéreo começa antes, mas recupera
 um frame depois. Esses compromissos são um ponto de partida, ainda sujeito a balanceamento
 com pessoas reais. Os níveis permanecem semânticos: ambas as guardas ainda bloqueiam tudo.
+
+### FILIPE
+
+**Filipe Gomes — Arrecife Digital.** Técnico e equilibrado, favorece golpes de média distância.
+Vida 100; caminhada para frente/trás 3,25/2,65 px/frame; impulso de pulo 16,5 e velocidade
+horizontal no ar 4 px/frame. Corpo padrão, sem especiais (specials vazio).
+
+Tem 8–10 px a mais de alcance que Augusto, mas anda cerca de 6% mais devagar e seus socos
+levam dois frames extras para sair. Chutes causam um ponto a menos de dano e o recovery de
+todos os golpes cresce 2–3 frames. Não ganha vida nem invulnerabilidade para compensar.
+
+| Ataque      | Dano/chip | Startup/ativo/recovery | Hitstun/blockstun | Knockback/pushback | Hitstop | Hitbox (x,y,w,h) |
+| ----------- | --------- | ---------------------- | ----------------- | ------------------ | ------- | ---------------- |
+| punch       | 7/0       | 6/3/10                 | 14/9              | 4/3                | 6       | (24,-142,62,22)  |
+| kick        | 10/1      | 11/4/18                | 18/12             | 6/4,5              | 8       | (30,-100,80,30)  |
+| crouchPunch | 5/0       | 5/3/9                  | 13/8              | 3/2,5              | 5       | (22,-92,56,22)   |
+| crouchKick  | 8/1       | 10/4/20                | 16/11             | 5/4                | 7       | (26,-28,94,24)   |
+| airPunch    | 6/0       | 5/6/10                 | 14/9              | 3,5/3              | 6       | (16,-118,58,28)  |
+| airKick     | 9/1       | 8/8/15                 | 17/12             | 5/4                | 8       | (-12,-80,96,36)  |
+
+Níveis: punch high; kick e crouchPunch mid; crouchKick low; aéreos overhead. São semânticos,
+como nos demais personagens. Guardas, cross-up, KO e vitória usam o motor compartilhado.
 
 ### Regras comuns
 

@@ -220,6 +220,28 @@ não uma silhueta idêntica às caixas; guarda e hurt têm o corpo curvado dentr
 Seleção, VS, HUD, estados, flipX e cross-up foram conferidos no Chrome com F2. Nenhuma alteração
 foi feita no core, BootScene, FightScene, CombatSystem ou no renderer.
 
+## FILIPE GOMES
+
+**FILIPE — Arrecife Digital** usa as duas fotos de identidade e o pôster aprovado como referências.
+Cabelo cacheado escuro, barba curta, pele morena, proporções naturais, blazer azul escuro,
+camisa/calça pretas e tênis brancos. Sem logos. ImageGen integrado produziu sprite e portrait
+pixel-art originais, na linguagem visual do Augusto; o portrait é mais detalhado.
+
+Atlas 1536×1120, grade 8×5, 40 células 192×224 e alpha real; portrait 240×300 com alpha.
+Escala 1, offsets 0/8 e baseline 216; idle e caminhada com 172 px de altura. Todas as células
+mantêm margem transparente de pelo menos 4 px; poses aéreas preservam elevação.
+A ordem de frames coincide com a do Augusto. Ataques têm fases 1/1/1 e pulo 1/1/1.
+
+O script offline usa regiões revisadas, raízes do corpo por pose e vizinho mais próximo.
+Idle4 retorna à guarda de idle2; recuperação do soco agachado retorna ao crouch para não erguer
+o corpo. Isso reaproveita a arte original gerada. A apresentação pode ser refinada sem alterar
+hitboxes ou frame data. Fontes e prompts: [filipe-art](../scripts/filipe-art/README.md).
+Comandos e mapa: [README dos assets](../public/fighters/filipe/README.md).
+O chute ativo foi gerado separadamente para alinhar a perna com a cintura; o soco aéreo foi
+reposicionado 8 px para baixo. F2 confirmou correspondência aproximada às caixas, sem alterar
+gameplay. Seleção, VS, HUD, controles, flipX, cross-up e resultados por KO foram validados no
+Chrome. As poses de guarda/hurt dobram o corpo dentro da hurtbox padrão; arte não muda colisão.
+
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
@@ -229,3 +251,4 @@ registrada aqui:
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `public/fighters/fighter-a/*.png` (demo)                      | Gerado por `scripts/generate-demo-fighter-art.mjs`                                     | Original do projeto                                          |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png` | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local | Arte original gerada para o projeto; sem assets de terceiros |
+| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`   | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local     | Arte original gerada para o projeto; sem assets de terceiros |

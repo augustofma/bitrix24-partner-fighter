@@ -8,7 +8,7 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 `FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
-desenvolvimento. A seleção começa em Augusto e permite escolher FIGHTER_A; ambos enfrentam
+desenvolvimento. A seleção começa em Augusto e permite escolher FILIPE e FIGHTER_A; todos enfrentam
 FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à CPU.
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
@@ -16,6 +16,14 @@ por recuperações maiores nos chutes. Possui os seis ataques atuais e nenhum es
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
 A seleção pagina automaticamente a cada quatro cards quando o roster cresce; setas do teclado
 ou botões laterais percorrem os selecionáveis. Não há posições específicas por personagem.
+
+**FILIPE — Arrecife Digital** tem 100 de vida, mobilidade de 3,25 px/frame e maior alcance,
+com startup/recovery maiores e menos dano nos chutes em comparação ao Augusto. Usa seis ataques,
+sem especiais, e arte pixel-art original baseada nas fotos e no pôster aprovados.
+A montagem reproduzível usa `powershell -File scripts/prepare-filipe-art.ps1`;
+fontes e prompts em [scripts/filipe-art/README.md](scripts/filipe-art/README.md).
+Os testes dos PNGs usam apenas `fs`/`zlib` do Node; `@types/node` é uma dependência de
+desenvolvimento para tipar essa validação de dimensões, alpha e margens. Não entra no jogo.
 
 Para adicionar arte de um lutador, veja
 [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador).

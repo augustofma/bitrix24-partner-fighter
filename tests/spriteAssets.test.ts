@@ -145,6 +145,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/filipe/portrait.png'),
+        path: 'fighters/filipe/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'filipe-sheet',
+        path: 'fighters/filipe/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/fighter-a/portrait.png'),
         path: 'fighters/fighter-a/portrait.png',
       },
@@ -171,6 +183,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
     expect(pixelArtTextureKeys(ROSTER).sort()).toEqual(
       [
         'augusto-sheet',
+        'filipe-sheet',
+        portraitTextureKey('fighters/filipe/portrait.png'),
         portraitTextureKey('fighters/augusto/portrait.png'),
         'fighter-a-demo-sheet',
         portraitTextureKey('fighters/fighter-a/portrait.png'),

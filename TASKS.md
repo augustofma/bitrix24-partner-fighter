@@ -108,6 +108,18 @@ sem pedido explícito.**
       cross-up com dano e troca de lado, vitória e derrota por KO
 - [x] Testes do carregamento atualizados para incluir os assets do Augusto
 
+## DONE (FILIPE, branch feature/filipe-fighter)
+
+- [x] Filipe Gomes selecionável, perfil técnico de médio alcance, seis ataques e specials vazio
+- [x] Portrait e spritesheet pixel-art originais baseados nas fotos e no pôster aprovados
+- [x] 40 células 192×224, atlas 1536×1120, portrait 240×300 e alpha real
+- [x] Normalização reproduzível, fases 1/1/1, baseline, raízes e margens validadas por código
+- [x] Integração via FighterConfig e roster, sem alterações no core ou renderer
+- [x] Testes de config, assets, combate, guardas, cross-up, vitória/derrota, CPU e determinismo
+- [x] Playtest Chrome com teclado e F2: seleção/VS/HUD, estados, flipX e cross-up com dano
+- [x] Vitória completa contra adversário controlado e derrota para CPU real; ambas as guardas
+- [x] 170 testes e npm run check aprovados; alpha e margens dos PNGs verificados em Node
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com

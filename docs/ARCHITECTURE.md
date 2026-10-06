@@ -61,7 +61,7 @@ src/
     AIController.ts       CPU (state machine), escolha de golpe consciente da postura
     aiProfiles.ts         Perfis de dificuldade/personalidade da CPU
   fighters/               CONTEÚDO: um arquivo por personagem
-    augusto.ts, fighterA.ts, fighterB.ts
+    augusto.ts, filipe.ts, fighterA.ts, fighterB.ts
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
@@ -98,6 +98,8 @@ tests/                    Vitest: lutador, combate, arena, round, IA, ataques a�
 scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
   prepare-augusto-art.ps1 Montagem/validação offline do atlas do Augusto (Windows/System.Drawing)
   augusto-art/            Fontes ImageGen e prompts; não publicados no build
+  prepare-filipe-art.ps1  Recortes e normalização offline do atlas/portrait de Filipe
+  filipe-art/             Fontes ImageGen e prompts de Filipe (fora do build)
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
 
