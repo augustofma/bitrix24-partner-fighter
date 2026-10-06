@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0b0820" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Bitrix24 Partner Fighter</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #05040f;
+        /* Prevent browser gestures (scroll, zoom, text selection) from stealing touches. */
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      #game {
+        width: 100%;
+        height: 100%;
+      }
+
+      #rotate-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        background: #0b0820;
+        color: #ffd23f;
+        font:
+          900 22px/1.3 'Arial Black',
+          Impact,
+          sans-serif;
+        text-align: center;
+        padding: 24px;
+      }
+
+      #rotate-overlay .icon {
+        font-size: 56px;
+        animation: rotate-hint 1.6s ease-in-out infinite;
+      }
+
+      @keyframes rotate-hint {
+        0%,
+        30% {
+          transform: rotate(0deg);
+        }
+        60%,
+        100% {
+          transform: rotate(90deg);
+        }
+      }
+
+      /* Touch devices in portrait: gameplay is landscape-only. */
+      @media (orientation: portrait) and (pointer: coarse) {
+        #rotate-overlay {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game"></div>
+    <div id="rotate-overlay" aria-live="polite">
+      <div class="icon">📱</div>
+      <div>Gire o dispositivo para jogar</div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

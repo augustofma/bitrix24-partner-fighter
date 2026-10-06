@@ -1,0 +1,34 @@
+/**
+ * All user-facing text lives here (ready for future localisation).
+ * Use functions for strings with parameters.
+ */
+export const STRINGS = {
+  titleTop: 'BITRIX24',
+  titleBottom: 'PARTNER FIGHTER',
+  play: 'JOGAR',
+  confirm: 'CONFIRMAR',
+  pressStart: 'PRESSIONE ENTER OU TOQUE',
+  version: 'v0.1 - protótipo',
+  disclaimer: 'Projeto de fã. Arte e personagens provisórios.',
+  selectTitle: 'ESCOLHA SEU LUTADOR',
+  selectHint: '← → escolher   ENTER confirmar   ESC voltar',
+  vsSkipHint: 'ENTER ou toque para pular',
+  cpuOnly: 'CPU',
+  versus: 'VS',
+  round: (n: number) => `ROUND ${n}`,
+  fight: 'FIGHT!',
+  ko: 'K.O.',
+  timeOver: 'TIME OVER',
+  draw: 'EMPATE',
+  wins: (name: string) => `${name} VENCEU!`,
+  youWin: 'VOCÊ VENCEU!',
+  youLose: 'VOCÊ PERDEU',
+  reasonKo: 'Vitória por nocaute',
+  reasonTimeout: 'Vitória por tempo',
+  reasonDraw: 'Tempo esgotado com vida igual',
+  backToMenu: 'VOLTAR AO MENU',
+  touchPunch: 'SOCO',
+  touchKick: 'CHUTE',
+  touchBlock: 'DEF',
+  debugHint: 'F2: hitboxes',
+} as const;

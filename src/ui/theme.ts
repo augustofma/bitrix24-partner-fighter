@@ -1,0 +1,68 @@
+import type Phaser from 'phaser';
+
+/** Shared look of the provisional arcade UI. Change here, not in scenes. */
+export const COLORS = {
+  gold: 0xffd23f,
+  cyan: 0x2fc6f6,
+  magenta: 0xff3e9a,
+  red: 0xe63946,
+  white: 0xffffff,
+  ink: 0x0b0820,
+  panel: 0x1b1240,
+  panelLight: 0x2c1f63,
+  healthFull: 0xffd23f,
+  healthLow: 0xff6b35,
+  healthTrail: 0xffffff,
+  healthBack: 0x5c0f1a,
+  hitSpark: 0xfff3b0,
+  blockSpark: 0x7fe7ff,
+  koSpark: 0xff3e3e,
+} as const;
+
+export const FONT_FAMILY = '"Arial Black", Impact, "Trebuchet MS", sans-serif';
+
+export const DEPTH = {
+  stage: 0,
+  shadows: 5,
+  fighters: 10,
+  effects: 20,
+  debug: 30,
+  hud: 100,
+  announcer: 110,
+  touch: 120,
+} as const;
+
+/** Hex number -> CSS color string. */
+export function css(color: number): string {
+  return `#${color.toString(16).padStart(6, '0')}`;
+}
+
+/** Standard arcade text: bold, outlined, with a drop shadow. */
+export function arcadeText(
+  size: number,
+  color: number = COLORS.white,
+  stroke: number = COLORS.ink,
+): Phaser.Types.GameObjects.Text.TextStyle {
+  return {
+    fontFamily: FONT_FAMILY,
+    fontSize: `${size}px`,
+    color: css(color),
+    stroke: css(stroke),
+    strokeThickness: Math.max(3, Math.round(size / 7)),
+    shadow: { offsetX: 0, offsetY: Math.max(2, size / 12), color: '#000000', blur: 0, fill: true },
+    align: 'center',
+  };
+}
+
+/** Plain, readable text for descriptions and hints. */
+export function bodyText(
+  size: number,
+  color: number = COLORS.white,
+): Phaser.Types.GameObjects.Text.TextStyle {
+  return {
+    fontFamily: 'system-ui, "Segoe UI", Roboto, sans-serif',
+    fontSize: `${size}px`,
+    color: css(color),
+    align: 'center',
+  };
+}

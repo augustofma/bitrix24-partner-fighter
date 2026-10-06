@@ -1,0 +1,85 @@
+# Bitrix24 Partner Fighter
+
+Fighting game 2D para navegador, inspirado nos jogos de luta arcade dos anos 90, com identidade,
+personagens, cenários e assets **totalmente originais**.
+
+A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema Bitrix24, com golpes
+ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A **v0.1** é uma _vertical
+slice_ pequena e jogável, com dois lutadores provisórios (`FIGHTER_A` e `FIGHTER_B`) e arte
+geométrica placeholder.
+
+> Projeto independente. Não usa logos oficiais nem assets de outras franquias.
+
+## Stack
+
+| Ferramenta                           | Versão | Papel                                 |
+| ------------------------------------ | ------ | ------------------------------------- |
+| Phaser                               | 3.90   | Engine 2D (render, cenas, input)      |
+| TypeScript                           | 6.0    | Linguagem (modo `strict`)             |
+| Vite                                 | 8      | Dev server e build                    |
+| Vitest                               | 5      | Testes da lógica pura (simulação, IA) |
+| ESLint + typescript-eslint, Prettier | 10 / 3 | Lint e formatação                     |
+
+Requer **Node.js 20.19+** (testado com Node 24).
+
+## Instalação e execução
+
+```bash
+npm install
+npm run dev          # abre em http://localhost:5173
+```
+
+Para testar no celular pela rede local:
+
+```bash
+npm run dev:host     # expõe o dev server na LAN; abra o IP mostrado no celular
+```
+
+## Build de produção
+
+```bash
+npm run build        # typecheck + build em dist/
+npm run preview      # serve o build localmente
+```
+
+O build usa caminhos relativos (`base: './'`), então `dist/` pode ser hospedado em qualquer subpasta.
+
+## Scripts
+
+| Script           | O que faz                                                                      |
+| ---------------- | ------------------------------------------------------------------------------ |
+| `npm run dev`    | Dev server com hot reload                                                      |
+| `npm run build`  | `tsc --noEmit` + build de produção                                             |
+| `npm run test`   | Testes unitários (Vitest)                                                      |
+| `npm run lint`   | ESLint                                                                         |
+| `npm run format` | Prettier (escreve)                                                             |
+| `npm run check`  | typecheck + lint + format:check + test + build (use antes de concluir tarefas) |
+
+## Controles
+
+**Teclado (Player 1)**
+
+| Ação     | Tecla                                     |
+| -------- | ----------------------------------------- |
+| Mover    | ← / →                                     |
+| Pular    | ↑                                         |
+| Agachar  | ↓                                         |
+| Soco     | A                                         |
+| Chute    | S                                         |
+| Defender | D                                         |
+| Menus    | Enter / Espaço confirma, Esc volta        |
+| Debug    | F2 mostra hitboxes (ou `?debug=1` na URL) |
+
+**Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF à direita. Aparecem
+automaticamente em dispositivos de toque (force com `?touch=1` ou `?touch=0`). Em celular na
+vertical o jogo pede para girar o aparelho.
+
+As teclas ficam em [src/config/controls.ts](src/config/controls.ts) e podem ser remapeadas ali.
+
+## Documentação
+
+- [AGENTS.md](AGENTS.md): regras para agentes de IA e colaboradores
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): estrutura de código e sistemas
+- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md): regras do jogo
+- [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md): direção de arte e formato de assets
+- [TASKS.md](TASKS.md): backlog (DONE / NEXT / FUTURE)

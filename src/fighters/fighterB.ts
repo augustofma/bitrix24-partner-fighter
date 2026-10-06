@@ -1,0 +1,56 @@
+import type { FighterConfig } from '../types/fighter';
+import { STANDARD_BODY } from './shared/standardBody';
+
+/** FIGHTER_B - provisional heavy-hitter, slower. CPU opponent in v0.1. */
+export const fighterB: FighterConfig = {
+  id: 'fighter-b',
+  name: 'fighter_b',
+  displayName: 'FIGHTER_B',
+  description: 'Lutador pesado: mais lento, golpes mais fortes.',
+  selectable: false,
+  stats: {
+    maxHealth: 100,
+    walkSpeed: 2.7,
+    backWalkSpeed: 2.2,
+    jumpForce: 16,
+    jumpHorizontalSpeed: 3.6,
+  },
+  boxes: STANDARD_BODY,
+  attacks: {
+    punch: {
+      id: 'fighter-b.punch',
+      displayName: 'Soco',
+      state: 'punch',
+      damage: 8,
+      chipDamage: 0,
+      startupFrames: 6,
+      activeFrames: 3,
+      recoveryFrames: 11,
+      hitbox: { x: 24, y: -142, width: 58, height: 24 },
+      hitstunFrames: 14,
+      blockstunFrames: 9,
+      knockback: 4.5,
+      blockPushback: 3.5,
+      hitstopFrames: 7,
+    },
+    kick: {
+      id: 'fighter-b.kick',
+      displayName: 'Chute',
+      state: 'kick',
+      damage: 12,
+      chipDamage: 1,
+      startupFrames: 10,
+      activeFrames: 4,
+      recoveryFrames: 17,
+      hitbox: { x: 30, y: -100, width: 68, height: 30 },
+      hitstunFrames: 18,
+      blockstunFrames: 12,
+      knockback: 6.5,
+      blockPushback: 5,
+      hitstopFrames: 9,
+    },
+  },
+  specials: [],
+  palette: { body: 0xe63946, accent: 0x2ec4b6, skin: 0xc68642, outline: 0x0b0820 },
+  assets: {},
+};
