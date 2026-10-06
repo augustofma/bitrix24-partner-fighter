@@ -17,6 +17,9 @@ const CARD_WIDTH = 160;
 const CARD_HEIGHT = 210;
 const CARD_GAP = 36;
 const CARDS_Y = 245;
+const CARDS_PER_PAGE = 4;
+const PAGE_BUTTON_INSET = 30;
+const PAGE_BUTTON_STYLE = { width: 44, height: 60, fontSize: 24 };
 const CURSOR_PADDING = 10;
 
 /**
@@ -25,6 +28,7 @@ const CURSOR_PADDING = 10;
  */
 export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
+  private cards: Phaser.GameObjects.Container[] = [];
   private cursor!: Phaser.GameObjects.Rectangle;
   private infoName!: Phaser.GameObjects.Text;
   private infoDescription!: Phaser.GameObjects.Text;
@@ -46,7 +50,26 @@ export class CharacterSelectScene extends Phaser.Scene {
       .rectangle(0, CARDS_Y, CARD_WIDTH + CURSOR_PADDING, CARD_HEIGHT + CURSOR_PADDING)
       .setStrokeStyle(5, COLORS.gold);
     this.tweens.add({ targets: this.cursor, alpha: 0.4, duration: 400, yoyo: true, repeat: -1 });
+    this.cards = [];
     this.createCards();
+    if (ROSTER.length > CARDS_PER_PAGE) {
+      new MenuButton(
+        this,
+        PAGE_BUTTON_INSET,
+        CARDS_Y,
+        STRINGS.previousFighter,
+        () => this.moveSelection(-1),
+        PAGE_BUTTON_STYLE,
+      );
+      new MenuButton(
+        this,
+        GAME_WIDTH - PAGE_BUTTON_INSET,
+        CARDS_Y,
+        STRINGS.nextFighter,
+        () => this.moveSelection(1),
+        PAGE_BUTTON_STYLE,
+      );
+    }
 
     this.infoName = this.add.text(centerX, 378, '', arcadeText(26, COLORS.cyan)).setOrigin(0.5);
     this.infoDescription = this.add
@@ -72,8 +95,12 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private cardX(index: number): number {
-    const totalWidth = ROSTER.length * CARD_WIDTH + (ROSTER.length - 1) * CARD_GAP;
-    return (GAME_WIDTH - totalWidth) / 2 + CARD_WIDTH / 2 + index * (CARD_WIDTH + CARD_GAP);
+    const pageStart = Math.floor(index / CARDS_PER_PAGE) * CARDS_PER_PAGE;
+    const count = Math.min(CARDS_PER_PAGE, ROSTER.length - pageStart);
+    const totalWidth = count * CARD_WIDTH + (count - 1) * CARD_GAP;
+    return (
+      (GAME_WIDTH - totalWidth) / 2 + CARD_WIDTH / 2 + (index - pageStart) * (CARD_WIDTH + CARD_GAP)
+    );
   }
 
   private createCards(): void {
@@ -82,6 +109,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
       });
+      this.cards.push(card);
       if (!config.selectable) {
         card.setAlpha(0.55);
         const tag = this.add
@@ -122,6 +150,12 @@ export class CharacterSelectScene extends Phaser.Scene {
   private refreshSelection(): void {
     const fighter = ROSTER[this.selectedIndex];
     if (!fighter) return;
+    const page = Math.floor(this.selectedIndex / CARDS_PER_PAGE);
+    this.cards.forEach((card, index) => {
+      const visible = Math.floor(index / CARDS_PER_PAGE) === page;
+      card.setVisible(visible);
+      if (card.input) card.input.enabled = visible;
+    });
     this.cursor.setX(this.cardX(this.selectedIndex));
     this.infoName.setText(fighter.displayName);
     this.infoDescription.setText(fighter.description);

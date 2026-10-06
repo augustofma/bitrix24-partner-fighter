@@ -6,8 +6,8 @@ Fighting game 2D 1x1 no estilo arcade dos anos 90. Cada luta é entre dois perso
 lateral; vence quem zerar a vida do oponente (KO) ou tiver mais vida quando o tempo acabar.
 
 Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossistema Bitrix24
-(parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. A v0.1 tem apenas
-`FIGHTER_A` (jogador) e `FIGHTER_B` (CPU), provisórios.
+(parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
+`AUGUSTO` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B` reservado à CPU.
 
 ## Game loop (v0.1)
 
@@ -16,13 +16,60 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 ```
 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
-2. **Seleção:** grade gerada a partir do roster. Na v0.1 só `FIGHTER_A` é selecionável;
-   `FIGHTER_B` aparece com a marca "CPU".
+2. **Seleção:** cards gerados pelo roster, em páginas de até quatro. Augusto é a seleção
+   inicial; FIGHTER_A permanece selecionável. FIGHTER_B aparece com a marca "CPU".
+   Setas ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
+   novamente confirma. O adversário prioriza os personagens reservados à CPU.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
 4. **Luta:** "ROUND 1" → "FIGHT!" (2 s sem controle) → combate → "K.O." ou "TIME OVER".
 5. **Vitória:** vencedor (ou empate) e motivo; botão VOLTAR AO MENU.
 
 ## Sistema de combate
+
+### AUGUSTO
+
+**Arrecife Digital.** Lutador móvel e ofensivo, voltado à pressão curta/média. Configuração
+própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte vazia e nenhum especial.
+
+| Estatística                   | Valor         |
+| ----------------------------- | ------------- |
+| Vida                          | 100           |
+| Andar para frente             | 3,45 px/frame |
+| Andar para trás               | 2,85 px/frame |
+| Impulso vertical do pulo      | 16,8 px/frame |
+| Velocidade horizontal do pulo | 4,2 px/frame  |
+
+Valores de tempo em frames, simulação a 60 Hz:
+
+| Ataque      | Nível    | Dano / chip | Startup / ativo / recovery | Hitstun / blockstun | Knockback / pushback | Hitstop |
+| ----------- | -------- | ----------- | -------------------------- | ------------------- | -------------------- | ------- |
+| punch       | high     | 6 / 0       | 4 / 3 / 8                  | 14 / 9              | 4 / 3                | 6       |
+| kick        | mid      | 11 / 1      | 10 / 4 / 16                | 18 / 12             | 6 / 4,5              | 8       |
+| crouchPunch | mid      | 4 / 0       | 3 / 3 / 6                  | 13 / 8              | 3 / 2,5              | 5       |
+| crouchKick  | low      | 9 / 1       | 8 / 4 / 18                 | 16 / 11             | 5 / 4                | 7       |
+| airPunch    | overhead | 5 / 0       | 3 / 6 / 8                  | 14 / 9              | 3,5 / 3              | 6       |
+| airKick     | overhead | 10 / 1      | 6 / 8 / 13                 | 17 / 12             | 5 / 4                | 8       |
+
+Hitboxes locais `(x, y, largura, altura)`, em px relativos aos pés, olhando para a direita:
+
+| Ataque      | Hitbox             |
+| ----------- | ------------------ |
+| punch       | (24, -142, 54, 22) |
+| kick        | (30, -100, 70, 30) |
+| crouchPunch | (22, -92, 48, 22)  |
+| crouchKick  | (26, -28, 86, 24)  |
+| airPunch    | (16, -118, 50, 28) |
+| airKick     | (-12, -80, 88, 36) |
+
+Em relação ao FIGHTER_A, anda aproximadamente 8% mais rápido para frente e 10% para trás.
+O pulo tem 5% mais velocidade horizontal e impulso vertical ligeiramente menor. Os socos
+começam um frame antes, mas causam um ponto a menos de dano; os socos terrestres também
+perdem um pouco de alcance. Chute e rasteira ganham quatro pixels de alcance, com recovery
+maior; o chute em pé também começa um frame depois. O chute aéreo começa antes, mas recupera
+um frame depois. Esses compromissos são um ponto de partida, ainda sujeito a balanceamento
+com pessoas reais. Os níveis permanecem semânticos: ambas as guardas ainda bloqueiam tudo.
+
+### Regras comuns
 
 - Tempo em **frames a 60 fps**. Todo golpe tem três fases:
   **startup** (preparação) → **active** (hitbox ativa) → **recovery** (volta à guarda).

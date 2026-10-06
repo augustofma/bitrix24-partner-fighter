@@ -61,7 +61,7 @@ src/
     AIController.ts       CPU (state machine), escolha de golpe consciente da postura
     aiProfiles.ts         Perfis de dificuldade/personalidade da CPU
   fighters/               CONTEÚDO: um arquivo por personagem
-    fighterA.ts, fighterB.ts
+    augusto.ts, fighterA.ts, fighterB.ts
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
@@ -116,6 +116,12 @@ Os dados passam pelo `scene.start(key, data)`:
 | Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo)            |
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
+
+A seleção deriva os cards do `ROSTER`, com até quatro por página; navegar troca a página
+automaticamente e os cards ocultos não recebem input. Há botões laterais para touch quando
+há mais de uma página, mantendo o layout utilizável com 8–16 personagens.
+`pickCpuOpponent` prioriza um personagem não selecionável diferente do jogador e, na ausência
+dele, usa o primeiro diferente. As cenas continuam recebendo apenas `MatchSetup`.
 
 ## O frame da luta
 

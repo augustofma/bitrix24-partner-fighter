@@ -10,6 +10,8 @@ export const STRINGS = {
   pressStart: 'PRESSIONE ENTER OU TOQUE',
   version: 'v0.1 - protótipo',
   disclaimer: 'Projeto de fã. Arte e personagens provisórios.',
+  previousFighter: '◀',
+  nextFighter: '▶',
   selectTitle: 'ESCOLHA SEU LUTADOR',
   selectHint: '← → escolher   ENTER confirmar   ESC voltar',
   vsSkipHint: 'ENTER ou toque para pular',

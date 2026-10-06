@@ -81,14 +81,29 @@ sem pedido explícito.**
       jump-in, determinismo, IA sem IDs de personagem
 - [x] Playtest no navegador com a CPU real: segurar ↓ não neutraliza mais a CPU
 
+## DONE (v0.6: AUGUSTO, branch `feature/augusto-fighter`)
+
+- [x] AUGUSTO — Arrecife Digital, selecionável, configuração própria, seis ataques e 100 de vida
+- [x] Mobilidade e pressão moderadas, compensadas por dano menor nos socos e recovery dos chutes
+- [x] FIGHTER_A e FIGHTER_B preservados; regra genérica prioriza adversário reservado à CPU
+- [x] Seleção paginada por quatro cards, navegação por teclado e touch para expansão do roster
+- [x] Placeholder preto/azul e portrait fallback; pasta de arte com apenas README, sem PNGs
+- [x] Testes de roster, frame data, inputs, guardas, cross-up, KO, tempo, IA e determinismo
+- [x] Seleção testada com MatchSetup real e fixtures de 8/16 entradas; 137 testes no total
+- [x] Playtest Chrome desktop 1280×720 e mobile landscape 844×390, teclado/multi-touch, F2,
+      vitória com adversário controlado e derrota para CPU real; fluxo completo até o menu
+- [x] Paginação com 16 entradas temporárias conferida também no navegador por teclado/toque;
+      fixtures removidas ao recarregar, nenhum erro de execução observado
+- [x] Direção visual futura e integração de portrait/sprite documentadas
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
        pessoas reais; adicionar perfis de dificuldade (fácil/normal/difícil) no menu.
 2. [ ] **Melhor de 3 rounds:** `MatchSystem` acima do `RoundSystem`, indicadores de rounds
        vencidos no HUD, "ROUND 2/3", "FINAL ROUND".
-3. [ ] **Estudo de estilo e arte definitiva do primeiro lutador** (substituir a demo do
-       FIGHTER_A seguindo `docs/ART_DIRECTION.md`).
+3. [ ] **Estudo de estilo e arte definitiva do Augusto** (fornecer portrait.png e sprite.png,
+       preencher assets em augusto.ts seguindo `docs/ART_DIRECTION.md`).
 4. [ ] **Áudio básico:** `AudioManager` ouvindo `SimulationEvent` (hit, block, KO, anúncios) e
        música de menu e de luta, respeitando o desbloqueio de áudio no mobile.
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
@@ -102,6 +117,10 @@ sem pedido explícito.**
 11. [ ] CI (GitHub Actions) rodando `npm run check`.
 
 ## FUTURE (não implementar agora)
+
+- AUGUSTO: **24ZAP COMBO** (apenas ideia, não implementado)
+- AUGUSTO: **MINDHUB AGENT** (apenas ideia, não implementado)
+- AUGUSTO: **TOP 1 MUNDIAL** (apenas ideia, não implementado)
 
 - Elenco de 8 a 16 personagens reais (com autorização) e character select maior
 - Golpes especiais (sequências de comando) e barra de especial
