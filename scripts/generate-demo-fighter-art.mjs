@@ -7,7 +7,7 @@
  * Uses only Node built-ins (no dependencies): node scripts/generate-demo-fighter-art.mjs
  *
  * Output (see src/fighters/fighterA.ts for the matching config):
- *   public/fighters/fighter-a/sprite.png    8x4 grid of 96x112 frames (all 32 used, 0-31)
+ *   public/fighters/fighter-a/sprite.png    8x5 grid of 96x112 frames (38 used, 0-37)
  *   public/fighters/fighter-a/portrait.png  120x150 bust
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -21,7 +21,7 @@ const OUT_DIR = join(ROOT, 'public', 'fighters', 'fighter-a');
 const FRAME_W = 96;
 const FRAME_H = 112;
 const COLUMNS = 8;
-const ROWS = 4;
+const ROWS = 5;
 /** Local y=0 (the feet) maps to this pixel row, so the soles touch the frame's bottom edge. */
 const FOOT_RADIUS = 3;
 const BASE_Y = FRAME_H - 1 - FOOT_RADIUS;
@@ -402,6 +402,26 @@ const FRAMES = [
     bk: P(-4, -26),
     bf: P(-7, -8),
   },
+  // 32-34 crouchPunch (startup / active / recovery): stays crouched, low jab at torso height
+  withPose(CROUCH, { fe: P(7, -37), fh: P(11, -42) }),
+  withPose(CROUCH, { head: P(9, -56), neck: P(7, -47), fe: P(20, -42), fh: P(34, -41) }),
+  withPose(CROUCH, { fe: P(14, -40), fh: P(24, -42) }),
+  // 35-37 crouchKick (startup / active / recovery): sweep with the front leg along the floor
+  withPose(CROUCH, { fk: P(15, -20), ff: P(15, -7) }),
+  {
+    head: P(-4, -52),
+    neck: P(-2, -43),
+    hip: P(-3, -22),
+    fe: P(5, -35),
+    fh: P(11, -40),
+    be: P(-10, -32),
+    bh: P(-15, -25),
+    fk: P(20, -12),
+    ff: P(44, -7),
+    bk: P(-8, -7),
+    bf: P(-15, 0),
+  },
+  withPose(CROUCH, { fk: P(18, -14), ff: P(28, -6) }),
 ];
 
 // ------------------------------------------------------------------ drawing

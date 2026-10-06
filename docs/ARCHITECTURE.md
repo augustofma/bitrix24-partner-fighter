@@ -91,8 +91,8 @@ src/
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
     transitions.ts        Fade entre cenas
   utils/device.ts         Detecção de toque, flags de URL
-tests/                    Vitest: lutador, combate, arena, round, IA, ataques aéreos, defesa
-                          agachada, cross-up, determinismo, animação/assets de sprite
+tests/                    Vitest: lutador, combate, arena, round, IA, ataques aéreos e agachados,
+                          defesa agachada, cross-up, determinismo, animação/assets de sprite
 scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
@@ -178,7 +178,8 @@ Cada caixa (`LocalBox`) é escrita **como se o lutador olhasse para a direita**,
 
 O visual **não** participa da colisão: trocar o boneco por sprites não muda o gameplay.
 As regras de qual caixa vale em cada estado ficam em `core/fighter/fighterStates.ts`
-(`hurtboxFor`, `pushboxFor`): `crouch` e `crouchBlock` usam o corpo agachado; no ar vale o
+(`hurtboxFor`, `pushboxFor`): `crouch`, `crouchBlock`, `crouchPunch` e `crouchKick` usam o
+corpo agachado; no ar vale o
 corpo aéreo.
 
 Regras do `CombatSystem`:
@@ -195,18 +196,31 @@ Regras do `CombatSystem`:
   cross-up.
 - Cada contato gera `hitstopFrames` de congelamento (24 no KO).
 
-### Ataques terrestres e aéreos
+### Ataques em pé, agachados e aéreos
 
-`FighterConfig.attacks` tem um `AttackConfig` por slot: `punch`, `kick`, `airPunch`, `airKick`.
-O botão vira slot pela postura (`ATTACK_SLOTS` em `fighterStates.ts`):
+`FighterConfig.attacks` tem um `AttackConfig` por slot: `punch`, `kick`, `crouchPunch`,
+`crouchKick`, `airPunch`, `airKick`. O botão vira slot pela postura (`ATTACK_SLOTS` em
+`fighterStates.ts`):
 
-| Postura | A          | S         |
-| ------- | ---------- | --------- |
-| chão    | `punch`    | `kick`    |
-| ar      | `airPunch` | `airKick` |
+| Postura                | A             | S            |
+| ---------------------- | ------------- | ------------ |
+| chão (`ground`)        | `punch`       | `kick`       |
+| agachado (`crouch`, ↓) | `crouchPunch` | `crouchKick` |
+| ar (`air`)             | `airPunch`    | `airKick`    |
 
-Uma postura nova (por exemplo, golpes agachados) é só uma linha nessa tabela, mais os slots e
-estados correspondentes.
+No chão, `groundStance(held.down)` decide entre `ground` e `crouch` **no momento em que o golpe
+sai** (inclusive quando vem do buffer). No ar a postura é sempre `air`. Uma postura nova é só
+uma linha nessa tabela, mais os slots e estados correspondentes; o `Fighter` não tem
+condicionais por golpe.
+
+- **Golpes agachados:** estão em `CROUCHING_STATES`, então usam a hurtbox e a pushbox
+  agachadas o golpe inteiro. Terminam pelo mesmo caminho dos golpes em pé: no frame do fim,
+  `handleFreeGroundState` relê o input, e com ↓ segurado vai direto para `crouch` (ou
+  `crouchBlock`, ou outro golpe agachado do buffer), sem nenhum frame em pé.
+- **Níveis de ataque:** cada `AttackConfig` tem `level: AttackLevel`
+  (`high | mid | low | overhead`). Por enquanto é só semântico: `isAttackBlocked` ainda aceita
+  qualquer guarda. A próxima evolução compara `attack.level` com a guarda (`block` em pé ×
+  `crouchBlock`) nesse único ponto.
 
 - **Ataque aéreo:** sai do estado `jump` quando há um soco ou chute apertado (borda ou buffer),
   no máximo **um por pulo** (flag `airAttackUsed`, zerada no landing). A velocidade não é
@@ -297,7 +311,7 @@ export const augusto: FighterConfig = {
   description: '...', selectable: true,
   stats: { maxHealth, walkSpeed, backWalkSpeed, jumpForce, jumpHorizontalSpeed },
   boxes: STANDARD_BODY,                 // ou caixas próprias
-  attacks: { punch, kick, airPunch, airKick },  // frame data completo de cada um
+  attacks: { punch, kick, crouchPunch, crouchKick, airPunch, airKick },  // frame data + level
   specials: [],                         // reservado (SpecialMoveConfig)
   palette: {...},                       // cores do placeholder (e dos cards)
   assets: { portrait, sprite: { sheet, animations, visual }, pixelArt },  // opcional
@@ -318,8 +332,7 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 | Futuro                  | Onde encaixa                                                                                                                          |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | Golpes especiais        | `SpecialMoveConfig` em `types/fighter.ts`; detector de sequência no `InputTracker`; novo estado de ataque reutilizando `AttackConfig` |
-| Alto / baixo / overhead | Campo de altura no `AttackConfig` + comparação com a guarda em `isAttackBlocked` (`CombatSystem`)                                     |
-| Golpes agachados        | Postura `crouch` em `ATTACK_SLOTS` + slots/estados `crouchPunch`/`crouchKick`                                                         |
+| Alto / baixo / overhead | `AttackConfig.level` já existe; falta comparar com a guarda em `isAttackBlocked` (`CombatSystem`)                                     |
 | Barra de especial       | Campo novo no `Fighter` + evento no `CombatSystem` + barra no HUD                                                                     |
 | Combos                  | Contador no `CombatSystem` (já é uma classe com estado)                                                                               |
 | Vários cenários         | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                                                     |

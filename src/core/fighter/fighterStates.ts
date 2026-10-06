@@ -1,6 +1,7 @@
 import {
   AIR_ATTACK_STATES,
   ATTACK_STATES,
+  CROUCH_ATTACK_STATES,
   type AttackButton,
   type AttackSlot,
   type FighterBoxes,
@@ -28,10 +29,11 @@ export const BLOCK_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>
   'crouchBlock',
 ]);
 
-/** States that use the low (crouching) body. */
+/** States that use the low (crouching) body: crouch, low guard and crouching attacks. */
 export const CROUCHING_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateId>([
   'crouch',
   'crouchBlock',
+  ...CROUCH_ATTACK_STATES,
 ]);
 
 /** States that end when the fighter touches the ground. */
@@ -40,13 +42,22 @@ export const LANDING_STATES: ReadonlySet<FighterStateId> = new Set<FighterStateI
   ...AIR_ATTACK_STATES,
 ]);
 
-export type Stance = 'ground' | 'air';
+export type Stance = 'ground' | 'crouch' | 'air';
 
-/** Which attack each button performs in each stance. Future: a 'crouch' stance. */
+/** Which attack each button performs in each stance. */
 export const ATTACK_SLOTS: Readonly<Record<Stance, Readonly<Record<AttackButton, AttackSlot>>>> = {
   ground: { punch: 'punch', kick: 'kick' },
+  crouch: { punch: 'crouchPunch', kick: 'crouchKick' },
   air: { punch: 'airPunch', kick: 'airKick' },
 };
+
+/**
+ * Stance of a grounded fighter starting an attack: holding ↓ at that moment means crouching.
+ * (Being in the crouch state implies ↓ is held, so this also covers "already crouched".)
+ */
+export function groundStance(downHeld: boolean): Stance {
+  return downHeld ? 'crouch' : 'ground';
+}
 
 /** The body box (relative to the feet) that can be hit in this situation. */
 export function hurtboxFor(

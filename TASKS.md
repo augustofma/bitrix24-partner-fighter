@@ -57,6 +57,19 @@ sem pedido explícito.**
 - [x] Testes: ataques aéreos, landing, crouchBlock e transições, cross-up, facing, determinismo
 - [x] Validação no navegador: teclado real, multi-touch emulado, F2 e fluxo completo
 
+## DONE (v0.4: golpes agachados)
+
+- [x] Estados `crouchPunch` e `crouchKick` com frame data próprio (FIGHTER_A e FIGHTER_B)
+- [x] Postura `crouch` em `ATTACK_SLOTS` (↓ segurado no momento do golpe), sem condicionais por golpe
+- [x] Golpes agachados ficam baixos o tempo todo (hurtbox/pushbox agachadas) e voltam direto a
+      `crouch` com ↓ segurado, ou a `idle` com ↓ solto
+- [x] `AttackLevel` (`high | mid | low | overhead`) registrado em todos os golpes (ainda não aplicado)
+- [x] CPU: chance de rasteira (`lowKickChance`)
+- [x] Sprite demo (grade 8x5, frames 32-37) e placeholder com poses dos dois golpes
+- [x] Testes: input, hurtbox, acerto único, transições, buffer a partir do crouchBlock, facing,
+      determinismo, sprite e placeholder
+- [x] Validação no navegador: teclado real, multi-touch, F2 congelado e fluxo completo
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
@@ -70,8 +83,8 @@ sem pedido explícito.**
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
        remapeamento de teclas salva em `localStorage`.
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
-7. [ ] Golpes agachados (`crouchPunch`/`crouchKick`, postura `crouch` em `ATTACK_SLOTS`) e
-       alturas de golpe alto/baixo/overhead em `isAttackBlocked`.
+7. [ ] Aplicar os níveis de ataque em `isAttackBlocked` (`low` só se defende agachado,
+       `overhead` só em pé) e ensinar a CPU a escolher a guarda certa.
 8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.

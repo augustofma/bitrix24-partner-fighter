@@ -30,7 +30,8 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 - **Defesa (D):** segurar defende os golpes vindos de qualquer lado. Bloquear causa
   _blockstun_ e empurra; os chutes causam 1 de dano residual (_chip_), que nunca nocauteia.
 - **Defesa agachada (↓ + D):** fica agachado, usa a hurtbox agachada e não anda. Por enquanto
-  bloqueia exatamente os mesmos golpes que a defesa em pé (ainda não há golpes altos/baixos).
+  bloqueia exatamente os mesmos golpes que a defesa em pé (os níveis de golpe ainda não são
+  aplicados; veja "Níveis de ataque").
 - **Agachar** abaixa a hurtbox: o **soco (alto) passa por cima**, o **chute (médio) acerta**.
 - **Hitstun:** quem é atingido fica atordoado por alguns frames e é empurrado (_knockback_)
   **para longe do atacante**.
@@ -39,6 +40,35 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
   que possível (inclusive no ar).
 - Os corpos não se atravessam no chão; as paredes limitam a arena; a distância máxima entre os
   dois é limitada para ambos caberem na tela.
+
+### Ataques agachados
+
+- **↓ + A = soco agachado** (`crouchPunch`) e **↓ + S = rasteira** (`crouchKick`). Vale
+  segurar ↓ e apertar o botão, ou apertar os dois juntos; não é preciso soltar ↓.
+- A postura é decidida no instante em que o golpe sai: ↓ segurado = golpe agachado.
+- Durante o golpe o lutador **continua agachado o tempo todo** (hurtbox agachada), não anda e
+  não vira.
+- Ao terminar: com ↓ ainda segurado volta direto para `crouch` (sem nenhum frame em pé); com ↓
+  solto, volta para `idle`. Soltar ↓ no meio do golpe não o interrompe.
+- Segurar A ou S não repete o golpe (só o aperto conta, com o buffer de 6 frames).
+- O **soco agachado** é rápido e acerta o tronco do adversário (em pé ou agachado). A
+  **rasteira** é mais lenta, mais longa e acerta as canelas; tem o recovery mais longo, então é
+  arriscada se for bloqueada.
+
+### Níveis de ataque (registrados, ainda não aplicados)
+
+Cada golpe tem um `level` no config:
+
+| Golpe               | Nível      | Motivo                                                     |
+| ------------------- | ---------- | ---------------------------------------------------------- |
+| Soco                | `high`     | Altura da cabeça; já passa por cima de quem está agachado  |
+| Chute               | `mid`      | Altura do tronco                                           |
+| Soco agachado       | `mid`      | A hitbox (y −92 a −70) acerta o tronco, não as pernas      |
+| Rasteira            | `low`      | Hitbox rente ao chão (y −28 a −4)                          |
+| Soco e chute aéreos | `overhead` | "Jump-in": quando os níveis valerem, exigirão defesa em pé |
+
+Regras planejadas: `high` e `mid` podem ser defendidos em pé ou agachado; `low` só agachado;
+`overhead` só em pé. **Hoje qualquer defesa bloqueia tudo.**
 
 ### Ataques aéreos
 
@@ -72,16 +102,22 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 
 ### Frame data provisório
 
-| Lutador   | Golpe       | Dano | Startup | Ativo | Recovery | Hitstun | Blockstun |
-| --------- | ----------- | ---- | ------- | ----- | -------- | ------- | --------- |
-| FIGHTER_A | Soco        | 7    | 5       | 3     | 9        | 14      | 9         |
-| FIGHTER_A | Chute       | 11   | 9       | 4     | 15       | 18      | 12        |
-| FIGHTER_A | Soco aéreo  | 6    | 4       | 6     | 8        | 14      | 9         |
-| FIGHTER_A | Chute aéreo | 10   | 7       | 8     | 12       | 17      | 12        |
-| FIGHTER_B | Soco        | 8    | 6       | 3     | 11       | 14      | 9         |
-| FIGHTER_B | Chute       | 12   | 10      | 4     | 17       | 18      | 12        |
-| FIGHTER_B | Soco aéreo  | 7    | 5       | 5     | 9        | 14      | 9         |
-| FIGHTER_B | Chute aéreo | 11   | 8       | 8     | 13       | 17      | 12        |
+| Lutador   | Golpe         | Dano | Startup | Ativo | Recovery | Hitstun | Blockstun | Alcance |
+| --------- | ------------- | ---- | ------- | ----- | -------- | ------- | --------- | ------- |
+| FIGHTER_A | Soco          | 7    | 5       | 3     | 9        | 14      | 9         | 80      |
+| FIGHTER_A | Chute         | 11   | 9       | 4     | 15       | 18      | 12        | 96      |
+| FIGHTER_A | Soco agachado | 5    | 4       | 3     | 7        | 13      | 8         | 72      |
+| FIGHTER_A | Rasteira      | 9    | 8       | 4     | 16       | 16      | 11        | 108     |
+| FIGHTER_A | Soco aéreo    | 6    | 4       | 6     | 8        | 14      | 9         | 66      |
+| FIGHTER_A | Chute aéreo   | 10   | 7       | 8     | 12       | 17      | 12        | 76      |
+| FIGHTER_B | Soco          | 8    | 6       | 3     | 11       | 14      | 9         | 82      |
+| FIGHTER_B | Chute         | 12   | 10      | 4     | 17       | 18      | 12        | 98      |
+| FIGHTER_B | Soco agachado | 6    | 5       | 3     | 9        | 13      | 8         | 74      |
+| FIGHTER_B | Rasteira      | 10   | 9       | 4     | 18       | 16      | 11        | 110     |
+| FIGHTER_B | Soco aéreo    | 7    | 5       | 5     | 9        | 14      | 9         | 68      |
+| FIGHTER_B | Chute aéreo   | 11   | 8       | 8     | 13       | 17      | 12        | 78      |
+
+"Alcance" = quanto a hitbox se estende à frente do centro do lutador (px).
 
 Vida: 100 para ambos. `FIGHTER_A` é mais rápido (andar 3,2 px/frame); `FIGHTER_B` é mais
 lento (2,7) e bate mais forte. A fonte da verdade são os arquivos `src/fighters/*.ts`.
@@ -96,6 +132,8 @@ lento (2,7) e bate mais forte. A fonte da verdade são os arquivos `src/fighters
 | `crouch`      | ↓ segurado                            | Soltar ↓                                                                             |
 | `punch`       | A no chão (borda ou buffer)           | Fim do recovery                                                                      |
 | `kick`        | S no chão (borda ou buffer)           | Fim do recovery                                                                      |
+| `crouchPunch` | A no chão com ↓ segurado              | Fim do recovery → `crouch` (↓ segurado) ou `idle` (↓ solto)                          |
+| `crouchKick`  | S no chão com ↓ segurado              | Fim do recovery → `crouch` (↓ segurado) ou `idle` (↓ solto)                          |
 | `airPunch`    | A no ar (1 ataque aéreo por pulo)     | Fim do recovery → `jump`, ou landing → `idle`                                        |
 | `airKick`     | S no ar (1 ataque aéreo por pulo)     | Fim do recovery → `jump`, ou landing → `idle`                                        |
 | `block`       | D segurado, ou ao bloquear em pé      | Soltar D (depois do blockstun)                                                       |
@@ -105,9 +143,13 @@ lento (2,7) e bate mais forte. A fonte da verdade são os arquivos `src/fighters
 | `victory`     | Vencedor, ~1,2 s após KO ou tempo     | Terminal                                                                             |
 
 Prioridade de input quando livre no chão:
-**ataque > defesa agachada (↓+D) > defesa (D) > pulo > agachar > andar > idle**.
-Por isso, apertar A junto com ↑ ainda no chão dá um soco terrestre; para o soco aéreo, pule e
-depois aperte A.
+**ataque (agachado se ↓ estiver segurado) > defesa agachada (↓+D) > defesa (D) > pulo > agachar
+
+> andar > idle**.
+> Por isso, apertar A junto com ↑ ainda no chão dá um soco terrestre; para o soco aéreo, pule e
+> depois aperte A. No ar, ↓ não muda nada: A/S são sempre golpes aéreos. Com ↓ + D segurados,
+> apertar A/S sai o golpe agachado assim que o lutador estiver livre (o buffer guarda o aperto
+> feito no fim do blockstun); terminado o golpe, ele volta à defesa agachada.
 
 ## CPU (FIGHTER_B)
 
@@ -116,8 +158,9 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 
 - **Longe:** aproxima-se (às vezes pula na direção do jogador e, nesse pulo, pode soltar um
   chute aéreo na descida se o jogador estiver ao alcance).
-- **No alcance:** ataca (soco se perto, chute se a meia distância), com pausa entre ataques; ou
-  recua, defende preventivamente ou espera.
+- **No alcance:** ataca (soco se perto, chute se a meia distância; o chute às vezes sai como
+  rasteira, `lowKickChance`), com pausa entre ataques; ou recua, defende preventivamente ou
+  espera.
 - **Reação:** ao ver um golpe do jogador vindo dentro do alcance, defende com certa chance, após
   um atraso de reação (3 frames).
 - As decisões dependem da distância e do estado do oponente; o acaso só varia entre opções
@@ -143,6 +186,9 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 | Defender           | D                                          | DEF                    |
 | Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | ▲, depois SOCO / CHUTE |
 | Defesa agachada    | ↓ + D                                      | ▼ + DEF                |
+| Soco agachado      | ↓ + A                                      | ▼ + SOCO               |
+| Rasteira           | ↓ + S                                      | ▼ + CHUTE              |
 
-Touch suporta vários dedos ao mesmo tempo (direção + pulo, direção + ataque aéreo, ▼ + DEF).
+Touch suporta vários dedos ao mesmo tempo (direção + pulo, direção + ataque aéreo, ▼ + DEF,
+▼ + SOCO, ▼ + CHUTE).
 O jogo é landscape; em celulares na vertical aparece "Gire o dispositivo para jogar".

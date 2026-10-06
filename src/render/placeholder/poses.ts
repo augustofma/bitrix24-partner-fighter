@@ -88,6 +88,28 @@ export const POSES = {
     frontElbow: p(14, -116), frontHand: p(24, -128), backElbow: p(-20, -110), backHand: p(-12, -124),
     frontKnee: p(44, -88), frontFoot: p(92, -86), backKnee: p(-6, -44), backFoot: p(-10, 0),
   },
+  crouchPunchWindup: {
+    head: p(12, -110), neck: p(8, -92), hip: p(-2, -50),
+    frontElbow: p(14, -74), frontHand: p(22, -84), backElbow: p(4, -72), backHand: p(20, -86),
+    frontKnee: p(26, -34), frontFoot: p(22, 0), backKnee: p(-18, -26), backFoot: p(-24, 0),
+  },
+  // Low jab at the opponent's torso (hitbox y -92..-70).
+  crouchPunch: {
+    head: p(18, -110), neck: p(14, -92), hip: p(0, -50),
+    frontElbow: p(40, -84), frontHand: p(68, -82), backElbow: p(4, -74), backHand: p(18, -88),
+    frontKnee: p(28, -34), frontFoot: p(24, 0), backKnee: p(-18, -26), backFoot: p(-24, 0),
+  },
+  crouchKickWindup: {
+    head: p(8, -108), neck: p(6, -90), hip: p(-4, -48),
+    frontElbow: p(24, -76), frontHand: p(32, -90), backElbow: p(2, -72), backHand: p(18, -84),
+    frontKnee: p(30, -40), frontFoot: p(30, -14), backKnee: p(-18, -24), backFoot: p(-26, 0),
+  },
+  // Sweep: leaning back on the rear leg, front leg straight along the floor (hitbox y -28..-4).
+  crouchKick: {
+    head: p(-8, -104), neck: p(-4, -86), hip: p(-6, -44),
+    frontElbow: p(10, -70), frontHand: p(22, -80), backElbow: p(-20, -64), backHand: p(-30, -50),
+    frontKnee: p(40, -24), frontFoot: p(92, -14), backKnee: p(-16, -14), backFoot: p(-30, 0),
+  },
   airPunch: {
     head: p(12, -158), neck: p(8, -140), hip: p(0, -90),
     frontElbow: p(36, -118), frontHand: p(62, -104), backElbow: p(-14, -116), backHand: p(-4, -128),
@@ -192,6 +214,11 @@ export function poseFor(fighter: ReadonlyFighter, timeMs: number): Pose {
       return attackPose(fighter, POSES.punchWindup, POSES.punch, POSES.idle);
     case 'kick':
       return attackPose(fighter, POSES.kickWindup, POSES.kick, POSES.idle);
+    // Crouching attacks start from and return to the crouch: never a standing frame.
+    case 'crouchPunch':
+      return attackPose(fighter, POSES.crouchPunchWindup, POSES.crouchPunch, POSES.crouch);
+    case 'crouchKick':
+      return attackPose(fighter, POSES.crouchKickWindup, POSES.crouchKick, POSES.crouch);
     case 'airPunch':
       return attackPose(fighter, POSES.jump, POSES.airPunch, POSES.jump);
     case 'airKick':

@@ -64,6 +64,14 @@ public/
 
 ### Animações (uma por estado do lutador)
 
+Lista completa de poses de um lutador (uma animação por estado do jogo):
+
+`idle`, `walk`, `jump`, `crouch`, `punch`, `kick`, `crouchPunch`, `crouchKick`, `airPunch`,
+`airKick`, `block`, `crouchBlock`, `hurt`, `knockout`, `victory`.
+
+Para arte final, desenhe **todas**. Só `idle` é tecnicamente obrigatória: qualquer outra que
+falte mostra a animação de fallback da tabela (e o console avisa em `npm run dev`).
+
 | Estado        | Obrigatória | Sugestão de frames        | Comportamento padrão                             | Se faltar, mostra |
 | ------------- | ----------- | ------------------------- | ------------------------------------------------ | ----------------- |
 | `idle`        | **sim**     | 4                         | loop                                             | (obrigatória)     |
@@ -72,6 +80,8 @@ public/
 | `crouch`      | não         | 1                         | toca uma vez e segura                            | idle              |
 | `punch`       | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | idle              |
 | `kick`        | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | punch             |
+| `crouchPunch` | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | crouch            |
+| `crouchKick`  | não         | 3 (prep, impacto, volta)  | sincronizado ao frame data                       | crouchPunch       |
 | `airPunch`    | não         | 2 (prep, impacto mantido) | sincronizado ao frame data                       | jump              |
 | `airKick`     | não         | 2 (prep, impacto mantido) | sincronizado ao frame data                       | airPunch          |
 | `block`       | não         | 1                         | toca uma vez e segura                            | idle              |
@@ -106,6 +116,11 @@ Poses específicas:
   fase certa. Vários frames numa mesma fase alternam no `frameRate`.
 - **`crouchBlock`:** mesma altura do `crouch` (a hurtbox agachada não muda), com os braços em
   guarda à frente do rosto, para diferenciar visualmente do agachado comum.
+- **`crouchPunch` / `crouchKick`:** o corpo **fica agachado em todos os frames** (prep, impacto e
+  volta): a hurtbox é a agachada o golpe inteiro e, terminado o golpe, o lutador volta direto ao
+  `crouch`. Nunca desenhe um frame de "levantar". O soco agachado vai na altura do tronco do
+  adversário (hitbox padrão y −92 a −70); a rasteira estende a perna da frente rente ao chão
+  (hitbox y −28 a −4, bem comprida). Como sempre, confira com F2.
 - O lutador **não vira no ar**: os golpes aéreos são desenhados só olhando para a direita, como
   todo o resto, e o jogo espelha conforme a direção em que o pulo começou.
 
@@ -150,6 +165,8 @@ assets: {
       crouch: { frames: [10] },
       punch: { frames: [11, 12, 13] },
       kick: { frames: [14, 15, 16] },
+      crouchPunch: { frames: [32, 33, 34] },
+      crouchKick: { frames: [35, 36, 37] },
       airPunch: { frames: [26, 27], attackPhases: { startup: 1, active: 1, recovery: 0 } },
       airKick: { frames: [28, 29], attackPhases: { startup: 1, active: 1, recovery: 0 } },
       block: { frames: [17] },

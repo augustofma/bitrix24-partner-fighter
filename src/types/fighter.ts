@@ -8,6 +8,8 @@ export const FIGHTER_STATES = [
   'crouch',
   'punch',
   'kick',
+  'crouchPunch',
+  'crouchKick',
   'airPunch',
   'airKick',
   'block',
@@ -24,14 +26,33 @@ export type AttackButton = 'punch' | 'kick';
 
 /** Attacks performed standing on the ground. */
 export const GROUND_ATTACK_STATES = ['punch', 'kick'] as const satisfies readonly FighterStateId[];
+/** Attacks performed crouching (↓ held). The fighter stays low for the whole attack. */
+export const CROUCH_ATTACK_STATES = [
+  'crouchPunch',
+  'crouchKick',
+] as const satisfies readonly FighterStateId[];
 /** Attacks performed while jumping. They end on landing. */
 export const AIR_ATTACK_STATES = [
   'airPunch',
   'airKick',
 ] as const satisfies readonly FighterStateId[];
-/** Every state that executes an attack. Future: crouching attacks, 'special', 'super'... */
-export const ATTACK_STATES = [...GROUND_ATTACK_STATES, ...AIR_ATTACK_STATES] as const;
+/** Every state that executes an attack. Future: 'special', 'super'... */
+export const ATTACK_STATES = [
+  ...GROUND_ATTACK_STATES,
+  ...CROUCH_ATTACK_STATES,
+  ...AIR_ATTACK_STATES,
+] as const;
 export type AttackStateId = (typeof ATTACK_STATES)[number];
+
+/**
+ * How an attack must be guarded (semantic only for now: every guard still blocks everything,
+ * see `isAttackBlocked` in CombatSystem). Planned rules:
+ * - `high`: blockable standing or crouching; usually whiffs over crouching fighters.
+ * - `mid`: blockable standing or crouching.
+ * - `low`: must be blocked crouching.
+ * - `overhead`: must be blocked standing (includes jump-in attacks).
+ */
+export type AttackLevel = 'high' | 'mid' | 'low' | 'overhead';
 
 /**
  * Key of an attack in `FighterConfig.attacks`. Which slot a button triggers depends on the
@@ -45,6 +66,8 @@ export interface AttackConfig {
   displayName: string;
   /** Fighter state (and therefore animation) used while performing this attack. */
   state: AttackStateId;
+  /** How it must be guarded (see AttackLevel). Not enforced yet. */
+  level: AttackLevel;
   damage: number;
   /** Damage dealt through a block. Can never KO. */
   chipDamage: number;
@@ -211,7 +234,7 @@ export interface FighterConfig {
   selectable: boolean;
   stats: FighterStats;
   boxes: FighterBoxes;
-  /** Ground and air normals. Each AttackConfig.state should match its slot. */
+  /** Standing, crouching and air normals. Each AttackConfig.state should match its slot. */
   attacks: Record<AttackSlot, AttackConfig>;
   /** RESERVED for future special moves. Keep empty in v0.1. */
   specials: readonly SpecialMoveConfig[];
