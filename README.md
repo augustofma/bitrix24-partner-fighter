@@ -5,9 +5,17 @@ personagens, cenários e assets **totalmente originais**.
 
 A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema Bitrix24, com golpes
 ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
-_vertical slice_ pequena e jogável, com dois lutadores provisórios: `FIGHTER_A`, que usa uma
-spritesheet **de demonstração** e prova o pipeline de sprites, e `FIGHTER_B`, que usa o boneco
-geométrico placeholder.
+_vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
+selecionável, ainda com visual geométrico provisório preto e azul, sem arte definitiva.
+`FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
+desenvolvimento. A seleção começa em Augusto e permite escolher FIGHTER_A; ambos enfrentam
+FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à CPU.
+
+Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
+por recuperações maiores nos chutes. Possui os seis ataques atuais e nenhum especial.
+Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
+A seleção pagina automaticamente a cada quatro cards quando o roster cresce; setas do teclado
+ou botões laterais percorrem os selecionáveis. Não há posições específicas por personagem.
 
 Para adicionar arte de um lutador, veja
 [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador).

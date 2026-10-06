@@ -189,7 +189,28 @@ Troque `public/fighters/fighter-a/sprite.png` e `portrait.png` pela arte final e
 (remova se a arte não for pixel art). Use uma `key` nova (ex.: `fighter-a-sheet`). Depois disso,
 `scripts/generate-demo-fighter-art.mjs` pode ser apagado.
 
-## Licenças
+## AUGUSTO
+
+Primeiro personagem real: **AUGUSTO — Arrecife Digital**. Por enquanto usa `assets: {}`,
+PlaceholderFighterView e portrait fallback existentes. Roupa predominantemente preta com
+detalhes azuis; a cabeça cinza do manequim é neutra e não representa a aparência da pessoa.
+Não há retrato, caricatura ou PNG provisório criado para ele.
+
+Direção visual futura:
+
+- Homem adulto, camisa preta e detalhes azuis ligados à Arrecife Digital.
+- Crachá azul pode fazer parte do design; tatuagens podem aparecer.
+- Estética de fighting game arcade, sprite estilizado e portrait mais detalhado que o sprite.
+- Nenhuma outra característica física está definida nesta etapa.
+
+A pasta `public/fighters/augusto/` contém apenas README.md. Na próxima etapa receberá
+`portrait.png` e `sprite.png`; a spritesheet deve cobrir os 15 estados listados acima.
+Além dos arquivos, preencher o manifesto em `src/fighters/augusto.ts`: caminhos, chave única
+do sheet, dimensões dos frames, animações e escala/offsets. O pipeline existente carrega e
+renderiza esses dados sem alterações em BootScene, CharacterSelectScene, VersusScene,
+FightScene, VictoryScene ou CombatSystem. Registrar a autoria/licença da arte quando chegar.
+
+## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
 registrada aqui:
