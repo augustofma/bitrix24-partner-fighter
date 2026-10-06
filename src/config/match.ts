@@ -1,3 +1,4 @@
+import type { AIDifficulty } from '../types/match';
 import { SIMULATION_FPS } from './simulation';
 
 export const ROUND_TIME_SECONDS = 99;
@@ -17,3 +18,6 @@ export const ROUNDS_TO_WIN = 2;
  * the fighter with more round wins takes the match, otherwise the match is a draw.
  */
 export const MAX_ROUNDS = 9;
+
+/** CPU difficulty selected when the player has not chosen one in this session. */
+export const DEFAULT_AI_DIFFICULTY: AIDifficulty = 'normal';

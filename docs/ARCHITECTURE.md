@@ -32,16 +32,17 @@ src/
   config/                 Constantes globais (sem Phaser)
     display.ts            Resolução lógica 960x540
     simulation.ts         FPS fixo, gravidade, atrito, buffer de input, limites
-    match.ts              Tempo de round (99 s), durações de intro/outro
+    match.ts              Tempo de round (99 s), durações de intro/outro, dificuldade padrão
     controls.ts           Bindings de teclado (remapeáveis)
     sceneKeys.ts          Nomes das cenas
+    registryKeys.ts       Chaves do registry do Phaser (estado da sessão entre cenas)
     strings.ts            Todos os textos de UI (pronto para i18n)
   types/                  Tipos compartilhados (sem lógica)
     fighter.ts            FighterConfig, AttackConfig, estados, assets
     input.ts              InputAction, InputState, InputSource
     geometry.ts           Vec2, Rect, LocalBox, Direction
     stage.ts              StageConfig
-    match.ts              MatchSetup, RoundResult, MatchResult
+    match.ts              MatchSetup (com AIDifficulty), RoundResult, MatchResult
   core/                   SIMULAÇÃO PURA
     FightSimulation.ts    Orquestra um frame da luta
     fighter/Fighter.ts    Entidade lutador: state machine + física + caixas
@@ -49,7 +50,7 @@ src/
     fighter/AttackInputBuffer.ts  Borda e expiração do buffer de normais/especiais
     fighter/fighterPhysics.ts Integração de gravidade, landing e atrito
     fighter/fighterStates.ts Regras puras: grupos de estados, botão → slot (e o inverso),
-                             postura baixa, hurtbox/pushbox
+                             postura baixa, GUARD_COVERAGE (nível × guarda), hurtbox/pushbox
     fighter/attackGeometry.ts "Este golpe acertaria agora?" (alcance + altura), usado pela IA
     fighter/ReadonlyFighter.ts  Visão somente leitura (para IA e render)
     systems/CombatSystem.ts  Hitbox x hurtbox, dano, bloqueio, KO
@@ -62,7 +63,7 @@ src/
     FighterController.ts  Interface comum
     PlayerController.ts   Junta várias InputSource (teclado + touch)
     AIController.ts       CPU (state machine), escolha de golpe consciente da postura
-    aiProfiles.ts         Perfis de dificuldade/personalidade da CPU
+    aiProfiles.ts         AIProfile por dificuldade (EASY_AI, NORMAL_AI, HARD_AI, aiProfileFor)
   fighters/               CONTEÚDO: um arquivo por personagem
     augusto.ts, filipe.ts, fighterA.ts, fighterB.ts
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
@@ -92,14 +93,15 @@ src/
     PortraitView.ts       Card de personagem (seleção/VS/vitória)
   ui/                     Interface fixa na tela (Phaser)
     FightHud.ts, HealthBar.ts, Announcer.ts, TouchControls.ts,
-    SpecialMeterBar.ts,
+    SpecialMeterBar.ts, DifficultySelector.ts (seletor < FÁCIL | NORMAL | DIFÍCIL >),
     MenuButton.ts, ArcadeBackground.ts, theme.ts
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
     transitions.ts        Fade entre cenas
   utils/device.ts         Detecção de toque, flags de URL
-tests/                    Vitest: lutador, combate, arena, round, IA, ataques aéreos e agachados,
-                          defesa agachada, cross-up, determinismo, animação/assets de sprite
+tests/                    Vitest: lutador, combate, arena, round, partida, IA, dificuldade da CPU,
+                          ataques aéreos e agachados, níveis de ataque × guarda, cross-up,
+                          especiais, determinismo, seleção, animação/assets de sprite
 scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
   prepare-augusto-art.ps1 Montagem/validação offline do atlas do Augusto (Windows/System.Drawing)
   augusto-art/            Fontes ImageGen e prompts; não publicados no build
@@ -118,11 +120,11 @@ BootScene → MenuScene → CharacterSelectScene → VersusScene → FightScene 
 
 Os dados passam pelo `scene.start(key, data)`:
 
-| De → Para                | Dado                                                        |
-| ------------------------ | ----------------------------------------------------------- |
-| CharacterSelect → Versus | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`) |
-| Versus → Fight           | `MatchSetup`                                                |
-| Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)   |
+| De → Para                | Dado                                                                      |
+| ------------------------ | ------------------------------------------------------------------------- |
+| CharacterSelect → Versus | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`, `difficulty`) |
+| Versus → Fight           | `MatchSetup`                                                              |
+| Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)                 |
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
@@ -131,6 +133,13 @@ automaticamente e os cards ocultos não recebem input. Há botões laterais para
 há mais de uma página, mantendo o layout utilizável com 8–16 personagens.
 `pickCpuOpponent` prioriza um personagem não selecionável diferente do jogador e, na ausência
 dele, usa o primeiro diferente. As cenas continuam recebendo apenas `MatchSetup`.
+
+A seleção também escolhe a dificuldade da CPU (`DifficultySelector`: ↑/↓, botões `<` `>` ou
+toque na opção) e a grava em `MatchSetup.difficulty`. A última escolha fica no registry do
+Phaser (`this.registry`, chave `RegistryKeys.aiDifficulty`), que dura a sessão do jogo e é
+compartilhado pelas cenas; não há variável global solta. Valor ausente ou inválido volta para
+`DEFAULT_AI_DIFFICULTY` (`normal`). A `FightScene` cria o `AIController` com
+`aiProfileFor(setup.difficulty)`.
 
 ## O frame da luta
 
@@ -210,8 +219,10 @@ Regras do `CombatSystem`:
 - Cada ataque acerta no máximo uma vez (`markAttackConnected`).
 - Todos os contatos do frame são coletados antes de serem aplicados, então golpes simultâneos
   trocam dano (trade).
-- Bloqueio decidido num único ponto, `isAttackBlocked(defender, attack)`: hoje qualquer guarda
-  (`block` ou `crouchBlock`) bloqueia tudo. Golpes altos/baixos/overhead entrarão ali.
+- Bloqueio decidido num único ponto, `isAttackBlocked(defender, attack)`: a postura da guarda
+  (`guardPostureOf`: `block` = em pé, `crouchBlock` = agachada) precisa constar em
+  `GUARD_COVERAGE[attack.level]` (`high`/`mid`: as duas; `low`: só agachada; `overhead`: só em
+  pé). A geometria decide antes se o golpe encosta; a tabela só decide se a guarda segura.
 - Bloqueado: `chipDamage` (que nunca nocauteia), `blockstun` e `blockPushback`; a postura
   (em pé ou agachado) é mantida durante o blockstun.
 - Caso contrário: `damage`, `hitstun`, `knockback`; com vida 0 → `knockout`.
@@ -240,10 +251,9 @@ condicionais por golpe.
   agachadas o golpe inteiro. Terminam pelo mesmo caminho dos golpes em pé: no frame do fim,
   `handleFreeGroundState` relê o input, e com ↓ segurado vai direto para `crouch` (ou
   `crouchBlock`, ou outro golpe agachado do buffer), sem nenhum frame em pé.
-- **Níveis de ataque:** cada `AttackConfig` tem `level: AttackLevel`
-  (`high | mid | low | overhead`). Por enquanto é só semântico: `isAttackBlocked` ainda aceita
-  qualquer guarda. A próxima evolução compara `attack.level` com a guarda (`block` em pé ×
-  `crouchBlock`) nesse único ponto.
+- **Níveis de ataque:** cada `AttackConfig` (e cada especial) tem `level: AttackLevel`
+  (`high | mid | low | overhead`), aplicado via `GUARD_COVERAGE` em `isAttackBlocked`. Um
+  nível novo, ou outra regra de guarda, é uma linha nessa tabela; nada no `Fighter` muda.
 
 - **Ataque aéreo:** sai do estado `jump` quando há um soco ou chute apertado (borda ou buffer),
   no máximo **um por pulo** (flag `airAttackUsed`, zerada no landing). A velocidade não é
@@ -323,6 +333,18 @@ injetado (determinístico em testes).
 4. Sorteia entre os que conectam com `lowPostureAttackWeights`. Se nenhum conecta, `approach`.
 5. O golpe vira input humano por `groundInputFor(slot)` (inverso do `ATTACK_SLOTS`):
    `crouchPunch` → ↓ + A, `crouchKick` → ↓ + S.
+
+**Guarda reativa:** `watchIncomingAttack` só olha para `opponent.activeAttack`, um golpe que já
+começou, e só depois de `opponent.stateFrame >= reactionFrames`; então, com `blockChance`,
+entra em `guard` até o golpe acabar. A postura vem de `readGuardPosture(attack.level)`: com
+`guardReadChance` usa `correctGuardFor(level)`; senão, em `low`/`overhead` (só uma postura
+funciona) escolhe a oposta, e em `high`/`mid` fica em pé.
+
+**Dificuldade:** `AIDifficulty` (`easy | normal | hard`, em `types/match.ts`) indexa
+`AI_PROFILES`; `aiProfileFor(difficulty)` devolve o `AIProfile`. Existe um único
+`AIController`: dificuldade é só dado (tempos de reação, chances, pesos e durações), nunca
+atributos, dano, vida, leitura de input futuro ou RNG manipulado. Valores por dificuldade em
+[GAME_DESIGN.md](GAME_DESIGN.md#dificuldade).
 
 A IA não conhece nenhum personagem: um teste garante que `src/controllers/` não contém IDs.
 
@@ -405,15 +427,13 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro                  | Onde encaixa                                                                                           |
-| ----------------------- | ------------------------------------------------------------------------------------------------------ |
-| Alto / baixo / overhead | `AttackConfig.level` já existe; falta comparar com a guarda em `isAttackBlocked` (`CombatSystem`)      |
-| Combos                  | Contador no `CombatSystem` (já é uma classe com estado)                                                |
-| Vários cenários         | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                      |
-| Som, música e falas     | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                        |
-| Melhor de 3 rounds      | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                |
-| Multiplayer online      | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos |
-| Torneio e ranking       | Novas cenas consumindo `MatchResult`                                                                   |
+| Futuro              | Onde encaixa                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                |
+| Vários cenários     | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                      |
+| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                        |
+| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos |
+| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                   |
 
 ## Decisões técnicas
 

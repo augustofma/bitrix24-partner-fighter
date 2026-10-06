@@ -1,14 +1,17 @@
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
+import { DEFAULT_AI_DIFFICULTY } from '../config/match';
+import { RegistryKeys } from '../config/registryKeys';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { ROSTER, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { createPortrait } from '../render/PortraitView';
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
-import type { MatchSetup } from '../types/match';
+import { isAIDifficulty, type AIDifficulty, type MatchSetup } from '../types/match';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
+import { DifficultySelector } from '../ui/DifficultySelector';
 import { MenuButton } from '../ui/MenuButton';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
@@ -16,11 +19,16 @@ import { fadeIn, goToScene } from './transitions';
 const CARD_WIDTH = 160;
 const CARD_HEIGHT = 210;
 const CARD_GAP = 36;
-const CARDS_Y = 245;
+const CARDS_Y = 232;
 const CARDS_PER_PAGE = 4;
 const PAGE_BUTTON_INSET = 30;
 const PAGE_BUTTON_STYLE = { width: 44, height: 60, fontSize: 24 };
 const CURSOR_PADDING = 10;
+const INFO_NAME_Y = 358;
+const INFO_DESCRIPTION_Y = 388;
+const DIFFICULTY_Y = 434;
+const CONFIRM_Y = 486;
+const CONFIRM_STYLE = { width: 220, height: 46, fontSize: 24 };
 
 /**
  * Character grid built from ROSTER. Works for any number of fighters; non-selectable
@@ -32,6 +40,7 @@ export class CharacterSelectScene extends Phaser.Scene {
   private cursor!: Phaser.GameObjects.Rectangle;
   private infoName!: Phaser.GameObjects.Text;
   private infoDescription!: Phaser.GameObjects.Text;
+  private difficulty!: DifficultySelector;
 
   constructor() {
     super(SceneKeys.CharacterSelect);
@@ -71,16 +80,21 @@ export class CharacterSelectScene extends Phaser.Scene {
       );
     }
 
-    this.infoName = this.add.text(centerX, 378, '', arcadeText(26, COLORS.cyan)).setOrigin(0.5);
+    this.infoName = this.add
+      .text(centerX, INFO_NAME_Y, '', arcadeText(26, COLORS.cyan))
+      .setOrigin(0.5);
     this.infoDescription = this.add
-      .text(centerX, 410, '', bodyText(16, COLORS.white))
+      .text(centerX, INFO_DESCRIPTION_Y, '', bodyText(16, COLORS.white))
       .setOrigin(0.5);
 
-    new MenuButton(this, centerX, 465, STRINGS.confirm, () => this.confirm(), {
-      width: 220,
-      height: 50,
-      fontSize: 24,
-    });
+    this.difficulty = new DifficultySelector(
+      this,
+      centerX,
+      DIFFICULTY_Y,
+      this.savedDifficulty(),
+      (difficulty) => this.registry.set(RegistryKeys.aiDifficulty, difficulty),
+    );
+    new MenuButton(this, centerX, CONFIRM_Y, STRINGS.confirm, () => this.confirm(), CONFIRM_STYLE);
     this.add
       .text(centerX, GAME_HEIGHT - 18, STRINGS.selectHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
@@ -88,10 +102,18 @@ export class CharacterSelectScene extends Phaser.Scene {
 
     onKeys(this, ['LEFT'], () => this.moveSelection(-1));
     onKeys(this, ['RIGHT'], () => this.moveSelection(1));
+    onKeys(this, ['UP'], () => this.difficulty.step(1));
+    onKeys(this, ['DOWN'], () => this.difficulty.step(-1));
     onKeys(this, MENU_CONFIRM_KEYS, () => this.confirm());
     onKeys(this, MENU_BACK_KEYS, () => goToScene(this, SceneKeys.Menu));
 
     this.refreshSelection();
+  }
+
+  /** Last difficulty chosen in this session (game registry), or the default. */
+  private savedDifficulty(): AIDifficulty {
+    const saved: unknown = this.registry.get(RegistryKeys.aiDifficulty);
+    return isAIDifficulty(saved) ? saved : DEFAULT_AI_DIFFICULTY;
   }
 
   private cardX(index: number): number {
@@ -168,6 +190,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       playerFighterId: player.id,
       cpuFighterId: pickCpuOpponent(player.id).id,
       stageId: DEFAULT_STAGE_ID,
+      difficulty: this.difficulty.value,
     };
     this.cameras.main.flash(150, 255, 255, 255);
     goToScene(this, SceneKeys.Versus, setup);

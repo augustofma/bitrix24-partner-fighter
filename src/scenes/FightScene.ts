@@ -5,7 +5,7 @@ import { SceneKeys } from '../config/sceneKeys';
 import { FIXED_STEP_MS, MAX_STEPS_PER_FRAME } from '../config/simulation';
 import { STRINGS } from '../config/strings';
 import { AIController } from '../controllers/AIController';
-import { NORMAL_AI } from '../controllers/aiProfiles';
+import { aiProfileFor } from '../controllers/aiProfiles';
 import type { FighterController } from '../controllers/FighterController';
 import { PlayerController } from '../controllers/PlayerController';
 import { FightSimulation, type SimulationEvent } from '../core/FightSimulation';
@@ -74,7 +74,7 @@ export class FightScene extends Phaser.Scene {
     this.announcer = new Announcer(this);
     this.controllers = [
       new PlayerController(this.createPlayerInputSources()),
-      new AIController(NORMAL_AI),
+      new AIController(aiProfileFor(setup.difficulty)),
     ];
     this.setupDebugOverlay();
 

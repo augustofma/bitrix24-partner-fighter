@@ -13,15 +13,22 @@ FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à 
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
 por recuperações maiores nos chutes. Possui seis ataques normais e o especial **24ZAP COMBO** (F / ESP, custo 30).
-A barra começa em 0 e vai até 100: +10 por acerto normal, +5 por dano normal recebido e
-+3 quando o normal é bloqueado. Especiais não geram energia; segurar F não repete.
+A barra começa em 0 e vai até 100: +10 por acerto normal, +5 por dano recebido (inclusive de
+especial) e +3 quando o normal é bloqueado. Especiais nunca geram energia para quem os executa;
+o custo é descontado ao iniciar, mesmo errando; segurar F não repete. A barra é mantida entre
+os rounds e zera numa nova partida.
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
 A seleção pagina automaticamente a cada quatro cards quando o roster cresce; setas do teclado
 ou botões laterais percorrem os selecionáveis. Não há posições específicas por personagem.
+Na mesma tela escolhe-se a dificuldade da CPU (FÁCIL, NORMAL ou DIFÍCIL; padrão NORMAL, a
+última escolha é lembrada durante a sessão). As lutas são em melhor de 3 rounds e a defesa
+depende do nível do golpe: rasteira só se defende agachado e golpes aéreos só em pé
+([GAME_DESIGN.md](docs/GAME_DESIGN.md#níveis-de-ataque-e-guarda)).
 
 **FILIPE — Arrecife Digital** tem 100 de vida, mobilidade de 3,25 px/frame e maior alcance,
-com startup/recovery maiores e menos dano nos chutes em comparação ao Augusto. Usa seis ataques,
-sem especiais, e arte pixel-art original baseada nas fotos e no pôster aprovados.
+com startup/recovery maiores e menos dano nos chutes em comparação ao Augusto. Usa seis ataques
+e o especial **MINDHUB AGENT** (F / ESP, custo 35, só no chão), com arte pixel-art original
+baseada nas fotos e no pôster aprovados.
 A montagem reproduzível usa `powershell -File scripts/prepare-filipe-art.ps1`;
 fontes e prompts em [scripts/filipe-art/README.md](scripts/filipe-art/README.md).
 Os testes dos PNGs usam apenas `fs`/`zlib` do Node; `@types/node` é uma dependência de
@@ -96,17 +103,19 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Agachar            | ↓                                            |
 | Soco               | A                                            |
 | Chute              | S                                            |
-| Especial           | F                                            |
+| Especial           | F (gasta a barra de especial)                |
 | Defender           | D                                            |
 | Defesa agachada    | ↓ + D                                        |
 | Soco agachado      | ↓ + A                                        |
 | Rasteira           | ↓ + S                                        |
 | Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal) |
 | Menus              | Enter / Espaço confirma, Esc volta           |
+| Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU      |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)    |
 
 **Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF / ESP à direita, com
-multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF; ▼ + SOCO; ▼ + CHUTE). Aparecem
+multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF; ▼ + SOCO; ▼ + CHUTE). Na seleção, os botões
+`<` `>` (ou um toque na opção) trocam a dificuldade. Os controles de luta aparecem
 automaticamente em dispositivos de toque (force com `?touch=1` ou `?touch=0`). Em celular na
 vertical o jogo pede para girar o aparelho.
 

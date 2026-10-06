@@ -18,8 +18,9 @@ Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitóri
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
 2. **Seleção:** cards gerados pelo roster, em páginas de até quatro. Augusto é a seleção
    inicial; FILIPE e FIGHTER_A também são selecionáveis. FIGHTER_B aparece com a marca "CPU".
-   Setas ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
-   novamente confirma. O adversário prioriza os personagens reservados à CPU.
+   ← → ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
+   novamente confirma. O adversário prioriza os personagens reservados à CPU. Abaixo, o
+   seletor "DIFICULDADE < FÁCIL | NORMAL | DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
@@ -69,13 +70,14 @@ começam um frame antes, mas causam um ponto a menos de dano; os socos terrestre
 perdem um pouco de alcance. Chute e rasteira ganham quatro pixels de alcance, com recovery
 maior; o chute em pé também começa um frame depois. O chute aéreo começa antes, mas recupera
 um frame depois. Esses compromissos são um ponto de partida, ainda sujeito a balanceamento
-com pessoas reais. Os níveis permanecem semânticos: ambas as guardas ainda bloqueiam tudo.
+com pessoas reais. Os níveis valem na defesa: a rasteira (low) exige defesa agachada e os
+golpes aéreos (overhead) exigem defesa em pé (veja "Níveis de ataque e guarda").
 
 ### FILIPE
 
 **Filipe Gomes — Arrecife Digital.** Técnico e equilibrado, favorece golpes de média distância.
 Vida 100; caminhada para frente/trás 3,25/2,65 px/frame; impulso de pulo 16,5 e velocidade
-horizontal no ar 4 px/frame. Corpo padrão, sem especiais (specials vazio).
+horizontal no ar 4 px/frame. Corpo padrão e o especial MINDHUB AGENT (veja "Especiais e energia").
 
 Tem 8–10 px a mais de alcance que Augusto, mas anda cerca de 6% mais devagar e seus socos
 levam dois frames extras para sair. Chutes causam um ponto a menos de dano e o recovery de
@@ -90,19 +92,20 @@ todos os golpes cresce 2–3 frames. Não ganha vida nem invulnerabilidade para 
 | airPunch    | 6/0       | 5/6/10                 | 14/9              | 3,5/3              | 6       | (16,-118,58,28)  |
 | airKick     | 9/1       | 8/8/15                 | 17/12             | 5/4                | 8       | (-12,-80,96,36)  |
 
-Níveis: punch high; kick e crouchPunch mid; crouchKick low; aéreos overhead. São semânticos,
-como nos demais personagens. Guardas, cross-up, KO e vitória usam o motor compartilhado.
+Níveis: punch high; kick e crouchPunch mid; crouchKick low; aéreos overhead, aplicados na
+defesa como nos demais personagens. Guardas, cross-up, KO e vitória usam o motor compartilhado.
 
 ### Regras comuns
 
 - Tempo em **frames a 60 fps**. Todo golpe tem três fases:
   **startup** (preparação) → **active** (hitbox ativa) → **recovery** (volta à guarda).
 - Cada golpe acerta **uma vez**. Golpes simultâneos trocam dano.
-- **Defesa (D):** segurar defende os golpes vindos de qualquer lado. Bloquear causa
-  _blockstun_ e empurra; os chutes causam 1 de dano residual (_chip_), que nunca nocauteia.
-- **Defesa agachada (↓ + D):** fica agachado, usa a hurtbox agachada e não anda. Por enquanto
-  bloqueia exatamente os mesmos golpes que a defesa em pé (os níveis de golpe ainda não são
-  aplicados; veja "Níveis de ataque").
+- **Defesa (D):** segurar defende os golpes vindos de qualquer lado, exceto os baixos (`low`,
+  a rasteira). Bloquear causa _blockstun_ e empurra; os chutes causam 1 de dano residual
+  (_chip_), que nunca nocauteia.
+- **Defesa agachada (↓ + D):** fica agachado, usa a hurtbox agachada e não anda. Defende
+  `high`, `mid` e `low`, mas **não** os golpes aéreos (`overhead`). Veja "Níveis de ataque e
+  guarda".
 - **Agachar** abaixa a hurtbox: o **soco (alto) passa por cima**, o **chute (médio) acerta**.
 - **Hitstun:** quem é atingido fica atordoado por alguns frames e é empurrado (_knockback_)
   **para longe do atacante**.
@@ -126,20 +129,47 @@ como nos demais personagens. Guardas, cross-up, KO e vitória usam o motor compa
   **rasteira** é mais lenta, mais longa e acerta as canelas; tem o recovery mais longo, então é
   arriscada se for bloqueada.
 
-### Níveis de ataque (registrados, ainda não aplicados)
+### Níveis de ataque e guarda
 
-Cada golpe tem um `level` no config:
+Cada golpe tem um `level` no config, e a defesa depende dele (`GUARD_COVERAGE` em
+`src/core/fighter/fighterStates.ts`, aplicado num único ponto, `isAttackBlocked`):
 
-| Golpe               | Nível      | Motivo                                                     |
-| ------------------- | ---------- | ---------------------------------------------------------- |
-| Soco                | `high`     | Altura da cabeça; já passa por cima de quem está agachado  |
-| Chute               | `mid`      | Altura do tronco                                           |
-| Soco agachado       | `mid`      | A hitbox (y −92 a −70) acerta o tronco, não as pernas      |
-| Rasteira            | `low`      | Hitbox rente ao chão (y −28 a −4)                          |
-| Soco e chute aéreos | `overhead` | "Jump-in": quando os níveis valerem, exigirão defesa em pé |
+| Golpe               | Nível      | Motivo                                                    |
+| ------------------- | ---------- | --------------------------------------------------------- |
+| Soco                | `high`     | Altura da cabeça; já passa por cima de quem está agachado |
+| Chute               | `mid`      | Altura do tronco                                          |
+| Soco agachado       | `mid`      | A hitbox (y −92 a −70) acerta o tronco, não as pernas     |
+| Rasteira            | `low`      | Hitbox rente ao chão (y −28 a −4)                         |
+| Soco e chute aéreos | `overhead` | "Jump-in": vem de cima, exige defesa em pé                |
+| MINDHUB AGENT       | `mid`      | Descarga na altura do tronco                              |
 
-Regras planejadas: `high` e `mid` podem ser defendidos em pé ou agachado; `low` só agachado;
-`overhead` só em pé. **Hoje qualquer defesa bloqueia tudo.**
+Matriz (o golpe precisa antes **encostar** na hurtbox; a tabela decide se a guarda segura):
+
+| Nível      | Defesa em pé (D) | Defesa agachada (↓ + D) |
+| ---------- | ---------------- | ----------------------- |
+| `high`     | bloqueia         | bloqueia\*              |
+| `mid`      | bloqueia         | bloqueia                |
+| `low`      | **não** (acerta) | bloqueia                |
+| `overhead` | bloqueia         | **não** (acerta)        |
+
+\* Na prática o soco em pé (`high`) passa por cima de quem está agachado e nem encosta.
+
+- **Rasteira (low):** só a defesa agachada segura; quem defende em pé leva o golpe inteiro.
+- **Golpes aéreos (overhead):** só a defesa em pé segura. O chute aéreo, mais baixo e largo,
+  acerta quem está em `crouchBlock`. O soco aéreo tem hitbox na altura do peito: contra um
+  corpo agachado ele só encosta numa janela curta, logo antes do landing (no resto do pulo
+  passa por cima); quando encosta, `crouchBlock` não o bloqueia.
+- Especiais seguem a mesma regra pelo próprio `level` (o MINDHUB AGENT é `mid`).
+- A postura vale no frame do contato: trocar de guarda depois do golpe começar ainda funciona,
+  se der tempo.
+
+**Guarda da CPU.** A CPU não lê o futuro: só reage a um golpe que **já começou**, depois de
+`reactionFrames` (contados a partir do primeiro frame do golpe) e com chance `blockChance`.
+Ao reagir, escolhe a postura pelo nível do golpe, que já é visível: com chance
+`guardReadChance` acerta (agachada contra `low`, em pé contra `overhead`); numa leitura errada
+escolhe a postura oposta nesses dois níveis e é atingida. Contra `high`/`mid`, onde as duas
+guardas funcionam, fica em pé. A guarda preventiva (sem golpe à vista) é baixa contra
+adversário em postura baixa e em pé no resto, sem relação com o golpe que virá.
 
 ### Ataques aéreos
 
@@ -277,13 +307,52 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
   - Nas outras decisões ela "não percebe" e age como contra alguém em pé, então às vezes ainda
     erra um soco por cima. É imperfeita de propósito.
   - Contra `crouchBlock` ela continua pressionando no mesmo ritmo, com golpes que alcançam a
-    guarda baixa (e são bloqueados, como qualquer golpe hoje).
+    guarda baixa (são bloqueados; a rasteira também, porque a guarda baixa segura `low`).
 - Os golpes são feitos com os mesmos inputs de um humano: soco agachado = ↓ + A, rasteira =
   ↓ + S.
-- **Reação:** ao ver um golpe do jogador vindo dentro do alcance, defende com certa chance, após
-  um atraso de reação (3 frames).
+- **Reação:** ao ver um golpe do jogador já iniciado dentro do alcance, defende com chance
+  `blockChance`, após `reactionFrames` (3 no `NORMAL_AI`), escolhendo a postura pelo nível do
+  golpe com chance `guardReadChance` (veja "Níveis de ataque e guarda").
 - As decisões dependem da distância e do estado do oponente; o acaso só varia entre opções
-  plausíveis. Parâmetros em `src/controllers/aiProfiles.ts` (`NORMAL_AI`).
+  plausíveis. Parâmetros em `src/controllers/aiProfiles.ts`.
+
+### Dificuldade
+
+Escolhida na seleção de personagem: **FÁCIL**, **NORMAL** (padrão) ou **DIFÍCIL**. ↑/↓ no
+teclado, ou os botões `<` `>` e um toque na opção. A última escolha fica guardada durante a
+sessão (registry do Phaser; recarregar a página volta ao NORMAL). O HUD não mostra a
+dificuldade.
+
+Cada dificuldade é só um `AIProfile` diferente para o **mesmo** `AIController`
+(`AI_PROFILES` / `aiProfileFor`). Nenhuma trapaceia: a CPU difícil não lê input futuro, não
+reage antes de o golpe começar + `reactionFrames`, usa o mesmo RNG e os mesmos atributos,
+dano e vida do lutador. Ela só decide melhor.
+
+| Parâmetro                   | FÁCIL (`EASY_AI`)   | NORMAL (`NORMAL_AI`) | DIFÍCIL (`HARD_AI`) |
+| --------------------------- | ------------------- | -------------------- | ------------------- |
+| `reactionFrames`            | 6                   | 3                    | 2                   |
+| `blockChance`               | 0,15                | 0,35                 | 0,60                |
+| `guardReadChance`           | 0,40                | 0,75                 | 0,92                |
+| `aggression`                | 0,25                | 0,42                 | 0,58                |
+| `retreatChance`             | 0,25                | 0,22                 | 0,14                |
+| `guardChance`               | 0,06                | 0,12                 | 0,16                |
+| `jumpInChance`              | 0,04                | 0,08                 | 0,12                |
+| `jumpInAttackChance`        | 0,35                | 0,60                 | 0,85                |
+| `lowKickChance`             | 0,20                | 0,30                 | 0,35                |
+| `lowPostureAwareness`       | 0,50                | 0,85                 | 0,97                |
+| Pesos vs. baixo (P/K/↓P/↓K) | 0,15/0,30/0,35/0,20 | 0,05/0,25/0,40/0,30  | 0/0,25/0,40/0,35    |
+| `attackCooldown` (frames)   | 40–80               | 22–48                | 12–30               |
+| `approachFrames`            | 20–44               | 16–36                | 12–28               |
+| `retreatFrames`             | 14–28               | 14–28                | 10–20               |
+| `guardFrames`               | 10–20               | 12–24                | 12–24               |
+| `waitFrames`                | 20–40               | 10–24                | 6–14                |
+
+Na prática: a FÁCIL reage tarde demais para a maioria dos socos rápidos e só às vezes
+defende chutes e rasteiras, erra a postura em mais da metade das leituras, ataca pouco e
+pula raramente. A DIFÍCIL defende com frequência e quase sempre na postura certa, quase nunca
+desperdiça o soco alto contra quem está agachado, pressiona com pausas curtas e quase
+sempre ataca no jump-in. Em simulações CPU x CPU (20 partidas por par, lados e lutadores
+alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 
 ## Rounds e vitória (melhor de 3)
 
@@ -314,6 +383,7 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 | Soco               | A                                          | SOCO (direita da tela) |
 | Chute              | S                                          | CHUTE                  |
 | Especial           | F                                          | ESP                    |
+| Dificuldade (sel.) | ↑ / ↓ na seleção de personagem             | `<` `>` ou tocar opção |
 | Defender           | D                                          | DEF                    |
 | Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | ▲, depois SOCO / CHUTE |
 | Defesa agachada    | ↓ + D                                      | ▼ + DEF                |

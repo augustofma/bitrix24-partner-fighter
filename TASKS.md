@@ -148,12 +148,35 @@ sem pedido explícito.**
       buffers, VFX, decisões da CPU) com o meter preservado; nova partida zera o meter
 - [x] Testes: 2x0, 2x1, Final Round, tempo, draw, limite, reset, meter e determinismo
 
+## DONE (v0.11: níveis de ataque aplicados, branch `feature/fighting-polish`)
+
+- [x] `GUARD_COVERAGE` em `fighterStates.ts`, aplicado em `isAttackBlocked`: high/mid = as duas
+      guardas, low (rasteira) = só `crouchBlock`, overhead (golpes aéreos) = só `block` em pé
+- [x] Especiais seguem o próprio `level` (MINDHUB AGENT é mid)
+- [x] CPU reage só a golpes já iniciados (após `reactionFrames`) e escolhe a postura pelo nível;
+      `AIProfile.guardReadChance` controla a leitura (erro = postura oposta em low/overhead)
+- [x] Testes: matriz nível × guarda com geometria real (incluindo a janela curta do soco aéreo
+      contra corpo agachado), especiais, guarda da CPU e ausência de leitura do futuro
+
+## DONE (v0.12: dificuldade da CPU, branch `feature/fighting-polish`)
+
+- [x] `AIDifficulty` (`easy | normal | hard`) e `AI_PROFILES` / `aiProfileFor` em `aiProfiles.ts`;
+      um único `AIController`, `NORMAL_AI` mantido como NORMAL
+- [x] FÁCIL (`EASY_AI`) mais permissiva, DIFÍCIL (`HARD_AI`) com decisões melhores, sem trapaça
+      (sem input futuro, sem reagir antes do golpe + `reactionFrames`, sem RNG ou atributos extras)
+- [x] `MatchSetup.difficulty`; a `FightScene` cria a CPU com o profile escolhido
+- [x] Seleção: "DIFICULDADE < FÁCIL | NORMAL | DIFÍCIL >" com ↑/↓, botões `<` `>` e toque na
+      opção; padrão NORMAL; última escolha guardada no registry do Phaser durante a sessão
+- [x] Testes (`tests/aiDifficulty.test.ts` e seleção): profiles, ordem dos parâmetros, guarda
+      por nível, reação nunca antecipada, determinismo e CPU x CPU com dano por dificuldade
+- [x] Simulação CPU x CPU (20 partidas por par): DIFÍCIL > NORMAL > FÁCIL em todas
+
 ## NEXT (próximas tarefas recomendadas)
 
-1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
-       pessoas reais; adicionar perfis de dificuldade (fácil/normal/difícil) no menu.
-2. [ ] **Melhor de 3 rounds:** `MatchSystem` acima do `RoundSystem`, indicadores de rounds
-       vencidos no HUD, "ROUND 2/3", "FINAL ROUND".
+1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
+       (`EASY_AI`, `NORMAL_AI`, `HARD_AI`) com pessoas reais; a FÁCIL ainda pode estar difícil
+       para iniciantes e a DIFÍCIL não usa especiais.
+2. [ ] CPU usar especiais (decisão por `AIProfile`, só com meter disponível, sem ler o futuro).
 3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
 4. [ ] **Áudio básico:** `AudioManager` ouvindo `SimulationEvent` (hit, block, KO, anúncios) e
@@ -161,8 +184,7 @@ sem pedido explícito.**
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
        remapeamento de teclas salva em `localStorage`.
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
-7. [ ] Aplicar os níveis de ataque em `isAttackBlocked` (`low` só se defende agachado,
-       `overhead` só em pé) e ensinar a CPU a escolher a guarda certa.
+7. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
 8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.

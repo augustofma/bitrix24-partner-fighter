@@ -1,8 +1,18 @@
+/** CPU difficulty levels, easiest first (the order the selector cycles through). */
+export const AI_DIFFICULTIES = ['easy', 'normal', 'hard'] as const;
+export type AIDifficulty = (typeof AI_DIFFICULTIES)[number];
+
+export function isAIDifficulty(value: unknown): value is AIDifficulty {
+  return AI_DIFFICULTIES.some((difficulty) => difficulty === value);
+}
+
 /** What the scenes pass to each other to describe a match. */
 export interface MatchSetup {
   playerFighterId: string;
   cpuFighterId: string;
   stageId: string;
+  /** Picks the CPU's AIProfile; never changes fighter stats, damage or health. */
+  difficulty: AIDifficulty;
 }
 
 export type RoundEndReason = 'ko' | 'timeout';
