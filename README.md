@@ -75,12 +75,14 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Chute              | S                                            |
 | Defender           | D                                            |
 | Defesa agachada    | ↓ + D                                        |
+| Soco agachado      | ↓ + A                                        |
+| Rasteira           | ↓ + S                                        |
 | Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal) |
 | Menus              | Enter / Espaço confirma, Esc volta           |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)    |
 
 **Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF à direita, com
-multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF). Aparecem
+multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF; ▼ + SOCO; ▼ + CHUTE). Aparecem
 automaticamente em dispositivos de toque (force com `?touch=1` ou `?touch=0`). Em celular na
 vertical o jogo pede para girar o aparelho.
 

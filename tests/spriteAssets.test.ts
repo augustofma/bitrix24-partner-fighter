@@ -14,8 +14,8 @@ import {
 } from '../src/render/sprite/spriteValidation';
 import { FIGHTER_STATES, type FighterConfig, type FighterSpriteAssets } from '../src/types/fighter';
 
-/** FIGHTER_A demo sheet: 8x4 grid. */
-const DEMO_SHEET_FRAMES = 32;
+/** FIGHTER_A demo sheet: 8x5 grid. */
+const DEMO_SHEET_FRAMES = 40;
 
 function withSprite(base: FighterConfig, sprite: FighterSpriteAssets): FighterConfig {
   return { ...base, id: `${base.id}-test`, assets: { ...base.assets, sprite } };

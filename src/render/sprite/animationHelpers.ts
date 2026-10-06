@@ -34,6 +34,9 @@ export const ANIMATION_FALLBACKS: Readonly<
   crouch: 'idle',
   punch: 'idle',
   kick: 'punch',
+  // Crouching attacks never fall back to a standing pose.
+  crouchPunch: 'crouch',
+  crouchKick: 'crouchPunch',
   airPunch: 'jump',
   airKick: 'airPunch',
   block: 'idle',

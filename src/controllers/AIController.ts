@@ -30,6 +30,8 @@ export class AIController implements FighterController {
   private mode: AIMode = 'wait';
   private modeFrames = 0;
   private attackButton: AttackButton = 'punch';
+  /** Kicks can be thrown low (↓ + S = crouchKick). */
+  private attackLow = false;
   private attackCooldown = 0;
   private reactedToCurrentAttack = false;
   /** Decided at jump time: kick on the way down if the opponent comes into range. */
@@ -114,7 +116,8 @@ export class AIController implements FighterController {
 
     if (this.attackCooldown === 0 && rng() < profile.aggression) {
       this.attackButton = distance <= punchRange ? 'punch' : 'kick';
-      const attack = self.config.attacks[this.attackButton];
+      this.attackLow = this.attackButton === 'kick' && rng() < profile.lowKickChance;
+      const attack = self.config.attacks[this.attackLow ? 'crouchKick' : this.attackButton];
       this.attackCooldown = totalAttackFrames(attack) + randomInt(rng, ...profile.attackCooldown);
       this.setMode('attack', 1);
       return;
@@ -151,7 +154,7 @@ export class AIController implements FighterController {
       case 'guard':
         return createInputState({ block: true });
       case 'attack':
-        return createInputState({ [this.attackButton]: true });
+        return createInputState({ [this.attackButton]: true, down: this.attackLow });
       case 'jump':
         return createInputState({ up: true, ...holdToward });
       case 'wait':

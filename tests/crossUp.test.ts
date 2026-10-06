@@ -144,7 +144,14 @@ describe('determinism', () => {
     expect(a).toEqual(b);
     // The scripted fight actually exercises the new states.
     const states = new Set(a.flatMap((line) => line.split('|').map((f) => f.split(':')[0])));
-    for (const state of ['airPunch', 'airKick', 'crouchBlock', 'jump']) {
+    for (const state of [
+      'airPunch',
+      'airKick',
+      'crouchBlock',
+      'crouchPunch',
+      'crouchKick',
+      'jump',
+    ]) {
       expect(states.has(state), state).toBe(true);
     }
   });

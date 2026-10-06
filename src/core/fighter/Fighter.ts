@@ -22,6 +22,7 @@ import {
   ATTACK_STATE_SET,
   BLOCK_STATES,
   FREE_GROUND_STATES,
+  groundStance,
   LANDING_STATES,
   hurtboxFor,
   pushboxFor,
@@ -221,6 +222,10 @@ export class Fighter implements ReadonlyFighter {
         return;
       case 'punch':
       case 'kick':
+      case 'crouchPunch':
+      case 'crouchKick':
+        // Re-reads the input on the same frame: still holding ↓ goes straight back to crouch
+        // (or a low guard / another crouching attack), never through a standing frame.
         if (this.attack && this.framesInState >= totalAttackFrames(this.attack)) {
           this.handleFreeGroundState(held);
         }
@@ -254,7 +259,7 @@ export class Fighter implements ReadonlyFighter {
   /** Decision tree for a grounded fighter that is free to act. Order = priority. */
   private handleFreeGroundState(held: Readonly<InputState>): void {
     if (this.bufferedAttack) {
-      const slot = ATTACK_SLOTS.ground[this.bufferedAttack.button];
+      const slot = ATTACK_SLOTS[groundStance(held.down)][this.bufferedAttack.button];
       this.bufferedAttack = null;
       this.startAttack(this.config.attacks[slot]);
       this.velocity.x = 0;
