@@ -15,7 +15,7 @@ const CHIP_HEIGHT = 32;
 const LABEL_INSET = 18;
 const ARROW_GAP = 30;
 const ARROW_BUTTON = { width: 50, height: 42, fontSize: 22, variant: 'secondary' } as const;
-const UNSELECTED_ALPHA = 0.7;
+const UNSELECTED_ALPHA = 0.82;
 
 /**
  * Framed "DIFICULDADE  < FÁCIL  NORMAL  DIFÍCIL >" panel; the chosen option sits on a gold chip.
@@ -40,10 +40,10 @@ export class DifficultySelector {
     const left = centerX - width / 2;
     const panel = scene.add.graphics();
     drawArcadeFrame(panel, left, y - height / 2, width, height, {
-      fill: COLORS.petrol,
-      fillAlpha: 0.94,
-      border: COLORS.tealLight,
-      inner: COLORS.teal,
+      fill: COLORS.navy,
+      fillAlpha: 0.95,
+      border: COLORS.neon,
+      inner: COLORS.royal,
     });
     scene.add
       .text(left + LABEL_INSET, y, STRINGS.difficultyLabel, arcadeText(14, COLORS.gold))

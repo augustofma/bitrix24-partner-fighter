@@ -17,12 +17,16 @@ export const COLORS = {
   hitSpark: 0xfff3b0,
   blockSpark: 0x7fe7ff,
   koSpark: 0xff3e3e,
-  // Character select: Brazilian arcade palette (petrol blue / teal / gold / orange).
-  petrol: 0x062a33,
-  teal: 0x0d5c66,
-  tealLight: 0x37c4b4,
+  // Character select, tuned to the title screen art: night navy/indigo, neon cyan and royal
+  // blue for the cold side, violet + gold for the main call to action, orange/magenta accents.
+  navy: 0x0c0f45,
+  navyDeep: 0x07082c,
+  indigo: 0x17117a,
+  royal: 0x2a5cff,
+  neon: 0x2fe0ff,
+  violet: 0x4a10cc,
+  violetLight: 0x7a2cf0,
   orange: 0xff8a1f,
-  sand: 0xe6c27a,
 } as const;
 
 export const FONT_FAMILY = '"Arial Black", Impact, "Trebuchet MS", sans-serif';

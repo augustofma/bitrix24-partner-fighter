@@ -259,24 +259,32 @@ em `scripts/title-art/source.webp`; `prepare_title_art.py` separa três camadas 
 
 ## Interface da seleção de personagem
 
-Visual de fliperama brasileiro, sem assets de imagem novos: tudo é desenhado em código em
-`src/ui/select/`.
+Visual de fliperama, sem assets de imagem novos: tudo é desenhado em código em
+`src/ui/select/`. A paleta segue a tela inicial, para as duas telas parecerem do mesmo jogo.
 
-- **Fundo:** mapa pixel-art procedural de um litoral tropical ao entardecer (mar petróleo,
-  praias, mata, morros arredondados, rio, vila colorida no morro, coqueiros e veleiros), em
-  "pixels" de 6 px, gerado de forma determinística e escurecido para não competir com a UI.
-  Nuvens translúcidas fazem um parallax lento.
-- **Paleta:** petróleo, teal, dourado, amarelo e laranja (`COLORS.petrol`, `teal`,
-  `tealLight`, `gold`, `orange`) com contorno escuro (`ink`).
+- **Paleta (`theme.ts`):** noite azul-marinho/índigo (`navy`, `navyDeep`, `indigo`) na base;
+  ciano neon (`neon`) e azul royal (`royal`) como cores frias; violeta em dois tons (`violet`,
+  `violetLight`) com dourado (`gold`) na ação principal, como o JOGAR; laranja e magenta como
+  acentos. Textos secundários em branco.
+- **Fundo:** mapa pixel-art procedural de um litoral tropical à noite (mar índigo, terra
+  azul-violeta, litoral lilás, rio ciano, vila iluminada em neon, coqueiros e veleiros), em
+  "pixels" de 6 px, determinístico e escurecido para não competir com a UI. Feixes de luz ciano
+  e magenta (como os holofotes da arena da tela inicial) e nuvens em parallax lento.
 - **Molduras:** `drawArcadeFrame`, com contorno, borda colorida, linha interna (contorno
-  duplo), brilho no topo e cantos em degrau, só com retângulos alinhados (nítido em qualquer
-  escala).
-- **Cards:** retrato existente sobre faixas na cor do personagem e plaqueta de nome. O card
-  selecionado tem borda dourada, brilho pulsante, leve zoom e marcador P1.
-- **Painel de destaque:** retrato ampliado sob um "holofote" na cor do personagem, faixa
-  com o nome, descrição e barras em blocos.
-- **Botões:** SELECIONAR amarelo/dourado com pulso; VOLTAR e setas em teal. Hover clareia e
-  pressionar afunda o texto.
+  duplo), faixa superior mais clara opcional (dois tons, como o botão JOGAR), brilho no topo e
+  cantos em degrau, só com retângulos alinhados (nítido em qualquer escala).
+- **Título:** faixa violeta em dois tons com moldura dourada/laranja e brilho que passa; texto
+  dourado com halo magenta.
+- **Cards:** retrato existente sobre faixas na cor do personagem, plaqueta marinho e borda
+  azul royal. O selecionado tem borda dourada, linha interna ciano, halo ciano pulsante, leve
+  zoom e marcador P1 magenta.
+- **Painel de destaque:** fundo marinho profundo, moldura dourada com linha violeta e contorno
+  ciano pulsante; faixa violeta com o nome dourado e halo ciano; disco neon sob o retrato;
+  barras em blocos que vão de ciano a dourado e laranja, com brilho no topo.
+- **Botões:** SELECIONAR no estilo do JOGAR (violeta, moldura dourada, texto dourado), com
+  pulso; VOLTAR e setas em índigo com borda ciano. Hover clareia o fundo e acende um halo
+  (dourado ou ciano); pressionar afunda o texto.
+- **Dificuldade:** painel marinho com borda ciano; a opção ativa fica num destaque dourado.
 
 Inspirada na linguagem de telas de seleção de fliperama, sem copiar logos, textos,
 personagens ou artes de outros jogos.

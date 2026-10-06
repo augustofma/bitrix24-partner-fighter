@@ -15,6 +15,7 @@ const SELECT_TWEEN_MS = 120;
 const GLOW_PULSE_MS = 520;
 const DIMMED_ALPHA = 0.82;
 const LOCKED_ALPHA = 0.55;
+const LOCKED_BORDER = 0x2b2f78;
 
 /**
  * One square of the roster grid: portrait over a palette-tinted backdrop, a name plate and,
@@ -37,7 +38,7 @@ export class RosterCard {
   ) {
     this.container = scene.add.container(x, y);
     this.glow = scene.add
-      .rectangle(0, 0, WIDTH + GLOW_PAD * 2, HEIGHT + GLOW_PAD * 2, COLORS.gold, 0.35)
+      .rectangle(0, 0, WIDTH + GLOW_PAD * 2, HEIGHT + GLOW_PAD * 2, COLORS.neon, 0.6)
       .setVisible(false);
     this.frame = scene.add.graphics();
     this.container.add([this.glow, this.frame]);
@@ -96,9 +97,9 @@ export class RosterCard {
     const locked = !this.config?.selectable;
     this.frame.clear();
     drawArcadeFrame(this.frame, -WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT, {
-      fill: COLORS.petrol,
-      border: this.selected ? COLORS.gold : locked ? COLORS.teal : COLORS.tealLight,
-      inner: this.selected ? COLORS.orange : COLORS.petrol,
+      fill: COLORS.navy,
+      border: this.selected ? COLORS.gold : locked ? LOCKED_BORDER : COLORS.royal,
+      inner: this.selected ? COLORS.neon : COLORS.navyDeep,
       shadow: 4,
     });
   }
@@ -128,7 +129,14 @@ export class RosterCard {
       framed: false,
     });
     const plateY = HEIGHT / 2 - ART_INSET - NAME_PLATE_HEIGHT / 2;
-    const plate = scene.add.rectangle(0, plateY, artWidth, NAME_PLATE_HEIGHT, COLORS.ink, 0.9);
+    const plate = scene.add.rectangle(
+      0,
+      plateY,
+      artWidth,
+      NAME_PLATE_HEIGHT,
+      COLORS.navyDeep,
+      0.92,
+    );
     const name = scene.add
       .text(0, plateY, config.displayName, arcadeText(15, COLORS.white))
       .setOrigin(0.5);
@@ -138,7 +146,7 @@ export class RosterCard {
     if (!config.selectable) {
       this.container.setAlpha(LOCKED_ALPHA);
       const tag = scene.add
-        .text(WIDTH / 2 - 10, -HEIGHT / 2 + 10, STRINGS.cpuOnly, arcadeText(15, COLORS.red))
+        .text(WIDTH / 2 - 10, -HEIGHT / 2 + 10, STRINGS.cpuOnly, arcadeText(15, COLORS.magenta))
         .setOrigin(1, 0);
       this.container.add(tag);
     }
@@ -147,10 +155,10 @@ export class RosterCard {
   private addEmptySlot(): void {
     const scene = this.scene;
     const mark = scene.add
-      .text(0, -14, STRINGS.lockedSlot, arcadeText(54, COLORS.teal, COLORS.ink))
+      .text(0, -14, STRINGS.lockedSlot, arcadeText(54, COLORS.royal, COLORS.ink))
       .setOrigin(0.5);
     const label = scene.add
-      .text(0, HEIGHT / 2 - 24, STRINGS.comingSoon, arcadeText(13, COLORS.tealLight))
+      .text(0, HEIGHT / 2 - 24, STRINGS.comingSoon, arcadeText(13, COLORS.neon))
       .setOrigin(0.5);
     this.container.add([mark, label]).setAlpha(LOCKED_ALPHA);
   }
@@ -159,7 +167,7 @@ export class RosterCard {
     const scene = this.scene;
     const x = -WIDTH / 2 + 4;
     const y = -HEIGHT / 2 - 6;
-    const badge = scene.add.rectangle(0, 0, 38, 22, COLORS.orange).setStrokeStyle(3, COLORS.ink);
+    const badge = scene.add.rectangle(0, 0, 38, 22, COLORS.magenta).setStrokeStyle(3, COLORS.ink);
     const text = scene.add
       .text(0, 0, STRINGS.playerOneTag, arcadeText(15, COLORS.white))
       .setOrigin(0.5);

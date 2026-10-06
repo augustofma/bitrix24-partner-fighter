@@ -15,25 +15,38 @@ export interface ArcadeButtonOptions {
 
 interface VariantLook {
   frame: ArcadeFrameStyle;
+  /** Fill and upper band while hovered / focused. */
   hoverFill: number;
+  hoverHighlight: number;
+  /** Halo shown behind the button while hovered / focused. */
+  glow: number;
   text: number;
   textStroke: number;
 }
 
 const LOOKS: Record<ArcadeButtonVariant, VariantLook> = {
+  // Same language as the title screen's JOGAR: two-tone violet, gold frame, gold lettering.
   primary: {
-    frame: { fill: COLORS.gold, border: COLORS.orange, inner: COLORS.white },
-    hoverFill: 0xffe680,
-    text: COLORS.ink,
-    textStroke: 0xfff3c4,
-  },
-  secondary: {
-    frame: { fill: COLORS.teal, border: COLORS.tealLight, inner: COLORS.petrol },
-    hoverFill: 0x147a85,
+    frame: { fill: COLORS.violet, highlight: 0x6a22e8, border: COLORS.gold, inner: COLORS.orange },
+    hoverFill: 0x5d1fe6,
+    hoverHighlight: 0x8a44ff,
+    glow: COLORS.gold,
     text: COLORS.gold,
     textStroke: COLORS.ink,
   },
+  secondary: {
+    frame: { fill: COLORS.indigo, highlight: 0x1f2a9a, border: COLORS.neon, inner: COLORS.royal },
+    hoverFill: 0x2318a0,
+    hoverHighlight: 0x2d3fc4,
+    glow: COLORS.neon,
+    text: COLORS.white,
+    textStroke: COLORS.ink,
+  },
 };
+/** Halo size beyond the button on each side, and its strength while hovered. */
+const GLOW_PAD = 7;
+const GLOW_ALPHA = 0.32;
+const GLOW_MS = 140;
 
 const PRESS_OFFSET = 2;
 const HOVER_SCALE = 1.05;
@@ -43,6 +56,7 @@ const PULSE_MS = 620;
 /** Chunky pixel-art button with hover, press and (optional) idle pulse feedback. */
 export class ArcadeButton extends Phaser.GameObjects.Container {
   private readonly frame: Phaser.GameObjects.Graphics;
+  private readonly glow: Phaser.GameObjects.Rectangle;
   private readonly label: Phaser.GameObjects.Text;
   private readonly look: VariantLook;
 
@@ -56,11 +70,14 @@ export class ArcadeButton extends Phaser.GameObjects.Container {
   ) {
     super(scene, x, y);
     this.look = LOOKS[options.variant ?? 'primary'];
+    this.glow = scene.add
+      .rectangle(0, 0, options.width + GLOW_PAD * 2, options.height + GLOW_PAD * 2, this.look.glow)
+      .setAlpha(0);
     this.frame = scene.add.graphics();
     this.label = scene.add
       .text(0, 0, text, arcadeText(options.fontSize, this.look.text, this.look.textStroke))
       .setOrigin(0.5);
-    this.add([this.frame, this.label]);
+    this.add([this.glow, this.frame, this.label]);
     this.setSize(options.width, options.height);
     this.draw(false);
 
@@ -89,6 +106,11 @@ export class ArcadeButton extends Phaser.GameObjects.Container {
   /** Hover (pointer) or keyboard focus. */
   setHighlighted(highlighted: boolean): this {
     this.draw(highlighted);
+    this.scene.tweens.add({
+      targets: this.glow,
+      alpha: highlighted ? GLOW_ALPHA : 0,
+      duration: GLOW_MS,
+    });
     if (!this.options.pulse) this.setScale(highlighted ? HOVER_SCALE : 1);
     if (!highlighted) this.label.setY(0);
     return this;
@@ -102,11 +124,11 @@ export class ArcadeButton extends Phaser.GameObjects.Container {
 
   private draw(highlighted: boolean): void {
     const { width, height } = this.options;
-    const fill = highlighted ? this.look.hoverFill : this.look.frame.fill;
+    const { frame, hoverFill, hoverHighlight } = this.look;
     this.frame.clear();
     drawArcadeFrame(this.frame, -width / 2, -height / 2, width, height, {
-      ...this.look.frame,
-      fill,
+      ...frame,
+      ...(highlighted ? { fill: hoverFill, highlight: hoverHighlight } : {}),
     });
   }
 }

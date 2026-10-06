@@ -190,6 +190,14 @@ sem pedido explícito.**
 - [x] Fallback para o visual procedural se a arte não carregar
 - [x] Validado em 1280×720, 1920×1080 e 844×390 com toque
 
+## DONE (v0.15: paleta da seleção alinhada à tela inicial, branch `feature/character-select-color-polish`)
+
+- [x] Tokens `navy`/`indigo`/`royal`/`neon`/`violet` em `theme.ts` no lugar do teal/petróleo
+- [x] Mapa de fundo em versão noturna (índigo, neon) com feixes de luz ciano e magenta
+- [x] SELECIONAR no estilo do JOGAR (violeta + dourado) e halo no hover dos botões
+- [x] Card selecionado com borda dourada e halo ciano; P1 magenta; barras ciano → dourado
+- [x] Layout, seleção, dificuldade e navegação inalterados; validado em desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

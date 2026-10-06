@@ -2,7 +2,7 @@ import type Phaser from 'phaser';
 import { STRINGS } from '../../config/strings';
 import { createPortrait } from '../../render/PortraitView';
 import type { FighterConfig } from '../../types/fighter';
-import { COLORS, arcadeText, bodyText } from '../theme';
+import { COLORS, arcadeText, bodyText, css } from '../theme';
 import { drawArcadeFrame } from './arcadeFrame';
 import { RATING_MAX, rateFighter, type FighterRatings } from './fighterRatings';
 import { SELECT_LAYOUT } from './selectLayout';
@@ -23,6 +23,10 @@ const PIP_GAP = 4;
 const ENTER_OFFSET = 18;
 const ENTER_MS = 170;
 const BORDER_PULSE_MS = 900;
+/** Filled pips go from cold to hot along the bar (neon, neon, gold, gold, orange). */
+const PIP_COLORS = [COLORS.neon, COLORS.neon, COLORS.gold, COLORS.gold, COLORS.orange] as const;
+const EMPTY_PIP = 0x1b2170;
+const NAME_GLOW_BLUR = 10;
 
 const STAT_ROWS: readonly { key: keyof FighterRatings; label: string }[] = [
   { key: 'power', label: STRINGS.statPower },
@@ -43,15 +47,15 @@ export class HeroPanel {
   ) {
     const frame = scene.add.graphics();
     drawArcadeFrame(frame, LEFT, TOP, WIDTH, HEIGHT, {
-      fill: COLORS.petrol,
-      fillAlpha: 0.94,
+      fill: COLORS.navyDeep,
+      fillAlpha: 0.95,
       border: COLORS.gold,
-      inner: COLORS.orange,
+      inner: COLORS.violet,
       shadow: 6,
     });
 
     const pulse = scene.add.graphics();
-    pulse.lineStyle(3, COLORS.gold, 1).strokeRect(LEFT - 4, TOP - 4, WIDTH + 8, HEIGHT + 8);
+    pulse.lineStyle(3, COLORS.neon, 1).strokeRect(LEFT - 4, TOP - 4, WIDTH + 8, HEIGHT + 8);
     scene.tweens.add({
       targets: pulse,
       alpha: 0.15,
@@ -70,18 +74,18 @@ export class HeroPanel {
 
     // The ribbon is part of the content so it always covers art that reaches the top.
     const ribbon = scene.add.graphics();
-    ribbon.fillStyle(COLORS.teal, 1);
-    ribbon.fillRect(
-      LEFT + PADDING,
-      NAME_Y - NAME_RIBBON_HEIGHT / 2,
-      WIDTH - PADDING * 2,
-      NAME_RIBBON_HEIGHT,
-    );
-    ribbon.fillStyle(COLORS.tealLight, 1);
+    // Two-tone violet like the title screen's button, with a gold underline.
+    const ribbonTop = NAME_Y - NAME_RIBBON_HEIGHT / 2;
+    ribbon.fillStyle(COLORS.violet, 1);
+    ribbon.fillRect(LEFT + PADDING, ribbonTop, WIDTH - PADDING * 2, NAME_RIBBON_HEIGHT);
+    ribbon.fillStyle(COLORS.violetLight, 1);
+    ribbon.fillRect(LEFT + PADDING, ribbonTop, WIDTH - PADDING * 2, NAME_RIBBON_HEIGHT * 0.45);
+    ribbon.fillStyle(COLORS.gold, 1);
     ribbon.fillRect(LEFT + PADDING, NAME_Y + NAME_RIBBON_HEIGHT / 2 - 3, WIDTH - PADDING * 2, 3);
     const name = scene.add
       .text(CENTER_X, NAME_Y, config.displayName, arcadeText(30, COLORS.gold))
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setShadow(0, 0, css(COLORS.neon), NAME_GLOW_BLUR, true, true);
     const maxNameWidth = WIDTH - PADDING * 4;
     if (name.width > maxNameWidth) name.setScale(maxNameWidth / name.width);
 
@@ -91,8 +95,11 @@ export class HeroPanel {
       spotlight.fillStyle(config.palette.body, 0.1 + ring * 0.06);
       spotlight.fillEllipse(CENTER_X, artCenterY + 8, 230 - ring * 44, 190 - ring * 36);
     }
-    spotlight.fillStyle(COLORS.ink, 0.55);
-    spotlight.fillEllipse(CENTER_X, ART_TOP + ART_HEIGHT - 4, 170, 18);
+    // A neon stage disc under the fighter, echoing the title screen arena floor.
+    spotlight.fillStyle(COLORS.neon, 0.18);
+    spotlight.fillEllipse(CENTER_X, ART_TOP + ART_HEIGHT - 4, 200, 26);
+    spotlight.fillStyle(COLORS.ink, 0.6);
+    spotlight.fillEllipse(CENTER_X, ART_TOP + ART_HEIGHT - 4, 160, 16);
 
     const portrait = createPortrait(scene, CENTER_X, artCenterY, config, {
       width: WIDTH - PADDING * 2,
@@ -126,9 +133,7 @@ export class HeroPanel {
     STAT_ROWS.forEach(({ key, label }, row) => {
       const y = STATS_TOP + row * STAT_ROW;
       objects.push(
-        scene.add
-          .text(LEFT + PADDING + 2, y, label, arcadeText(12, COLORS.tealLight))
-          .setOrigin(0, 0.5),
+        scene.add.text(LEFT + PADDING + 2, y, label, arcadeText(12, COLORS.neon)).setOrigin(0, 0.5),
       );
       const pips = scene.add.graphics();
       for (let pip = 0; pip < RATING_MAX; pip++) {
@@ -137,8 +142,12 @@ export class HeroPanel {
           .fillStyle(COLORS.ink, 1)
           .fillRect(x - 2, y - PIP_HEIGHT / 2 - 2, PIP_WIDTH + 4, PIP_HEIGHT + 4);
         const filled = pip < ratings[key];
-        pips.fillStyle(filled ? (pip >= 3 ? COLORS.orange : COLORS.gold) : COLORS.teal, 1);
+        pips.fillStyle(filled ? (PIP_COLORS[pip] ?? COLORS.gold) : EMPTY_PIP, 1);
         pips.fillRect(x, y - PIP_HEIGHT / 2, PIP_WIDTH, PIP_HEIGHT);
+        if (filled) {
+          // Shine along the top of lit pips.
+          pips.fillStyle(COLORS.white, 0.45).fillRect(x, y - PIP_HEIGHT / 2, PIP_WIDTH, 2);
+        }
       }
       objects.push(pips);
     });

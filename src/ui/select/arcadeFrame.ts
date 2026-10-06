@@ -9,7 +9,12 @@ export interface ArcadeFrameStyle {
   inner?: number;
   /** Drop shadow offset in px (0 = none). */
   shadow?: number;
+  /** Lighter upper band of the fill (two-tone, like the title screen's JOGAR button). */
+  highlight?: number;
 }
+
+/** Share of the fill height covered by `highlight`. */
+const HIGHLIGHT_SHARE = 0.46;
 
 /** Size of the cut corners: square steps sell the pixel-art look. */
 const CORNER = 4;
@@ -29,7 +34,7 @@ export function drawArcadeFrame(
   height: number,
   style: ArcadeFrameStyle,
 ): void {
-  const { fill, fillAlpha = 1, border, inner, shadow = 4 } = style;
+  const { fill, fillAlpha = 1, border, inner, shadow = 4, highlight } = style;
   if (shadow > 0) {
     g.fillStyle(0x000000, 0.45);
     steppedRect(g, x + shadow, y + shadow, width, height, CORNER);
@@ -48,6 +53,11 @@ export function drawArcadeFrame(
   g.fillRect(x + fillEdge, y + fillEdge, width - fillEdge * 2, height - fillEdge * 2);
   g.fillStyle(fill, fillAlpha);
   g.fillRect(x + fillEdge, y + fillEdge, width - fillEdge * 2, height - fillEdge * 2);
+  if (highlight !== undefined) {
+    const innerHeight = height - fillEdge * 2;
+    g.fillStyle(highlight, fillAlpha);
+    g.fillRect(x + fillEdge, y + fillEdge, width - fillEdge * 2, innerHeight * HIGHLIGHT_SHARE);
+  }
   // Bevel: a lighter strip along the top of the fill.
   g.fillStyle(COLORS.white, 0.12);
   g.fillRect(x + fillEdge, y + fillEdge, width - fillEdge * 2, 3);

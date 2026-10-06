@@ -6,18 +6,26 @@ import { COLORS } from '../theme';
 const CELL = 6;
 const COLS = Math.ceil(GAME_WIDTH / CELL);
 const ROWS = Math.ceil(GAME_HEIGHT / CELL);
-const TEXTURE_KEY = 'select-map-background';
+const TEXTURE_KEY = 'select-map-background-night';
 
-const SEA_TOP = 0x0f5868;
-const SEA_BOTTOM = 0x06303b;
-const WAVE = 0x2a8f98;
-const GRASS = [0x2f8f45, 0x29803d, 0x3a9c4c] as const;
-const FOREST = 0x1b5e2e;
-const HILL = 0x5f8a5a;
-const RIVER = 0x2aa3b8;
-const BEACH = COLORS.sand;
+// Night palette shared with the title screen: indigo sea, blue-violet land, neon coastline.
+const SEA_TOP = 0x15106a;
+const SEA_BOTTOM = 0x0a0842;
+const WAVE = 0x3a46c8;
+const GRASS = [0x1e2a8c, 0x1a247a, 0x23319c] as const;
+const FOREST = 0x141a5e;
+const HILL = 0x3b3aa6;
+const HILL_TOP = 0x5d4fd0;
+const RIVER = COLORS.neon;
+const BEACH = 0x7a5cff;
+const PALM_TRUNK = 0x3b2a6a;
+const PALM_LEAVES = 0x1f7fb8;
+const BOAT_HULL = 0x3b2a6a;
+const BOAT_SAIL = 0xc67cf8;
 /** Darkening on top of the map so the UI panels always win the contrast. */
-const SHADE_ALPHA = 0.24;
+const SHADE_ALPHA = 0.3;
+/** Stage-light beams from the top corners, like the title screen's arena spotlights. */
+const BEAM_ALPHA = 0.08;
 const CLOUD_DRIFT_PX = 60;
 const CLOUD_DRIFT_MS = 26000;
 
@@ -34,10 +42,11 @@ const LAND: readonly (readonly [number, number, number, number])[] = [
 const BEACH_BAND = 0.1;
 
 /**
- * Illustrated pixel-art backdrop for the select screen: a stylized tropical coast at dusk
- * (sea, beaches, forests, hills, a river, a colorful hillside village, palms and a sailboat),
- * generated procedurally and deterministically (no image assets), then shaded so the UI stays
- * readable. A cloud layer drifts slowly on top for a light parallax.
+ * Illustrated pixel-art backdrop for the select screen: a stylized tropical coast at night in
+ * the title screen's colors (indigo sea, blue-violet land with a neon coastline and river, a
+ * hillside village lit in neon, palms and sailboats), generated procedurally and
+ * deterministically (no image assets), then shaded so the UI stays readable. Spotlight beams
+ * and slowly drifting clouds sit on top.
  */
 export function createSelectBackground(scene: Phaser.Scene): void {
   if (!scene.textures.exists(TEXTURE_KEY)) {
@@ -48,6 +57,7 @@ export function createSelectBackground(scene: Phaser.Scene): void {
   }
   scene.add.image(0, 0, TEXTURE_KEY).setOrigin(0);
   scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, COLORS.ink, SHADE_ALPHA).setOrigin(0);
+  paintBeams(scene.add.graphics());
 
   const clouds = scene.add.graphics();
   paintClouds(clouds);
@@ -126,7 +136,7 @@ function paintHills(g: Phaser.GameObjects.Graphics): void {
     const base = cellAt(v, GAME_HEIGHT);
     for (let step = 0; step < size; step++) {
       const half = Math.max(1, Math.round(Math.sqrt(size * size - step * step) / 1.6));
-      g.fillStyle(step < size - 2 ? HILL : 0x86a77c, 1);
+      g.fillStyle(step < size - 2 ? HILL : HILL_TOP, 1);
       g.fillRect((cx - half) * CELL, (base - step) * CELL, half * 2 * CELL, CELL);
     }
   }
@@ -150,9 +160,9 @@ function paintVillage(g: Phaser.GameObjects.Graphics, u: number, v: number): voi
 }
 
 function paintPalm(g: Phaser.GameObjects.Graphics, col: number, row: number): void {
-  g.fillStyle(0x7a4a22, 1);
+  g.fillStyle(PALM_TRUNK, 1);
   g.fillRect(col * CELL, row * CELL, CELL, CELL * 3);
-  g.fillStyle(0x3fbf4f, 1);
+  g.fillStyle(PALM_LEAVES, 1);
   for (const [dx, dy] of [
     [-2, 0],
     [-1, -1],
@@ -167,15 +177,34 @@ function paintPalm(g: Phaser.GameObjects.Graphics, col: number, row: number): vo
 }
 
 function paintBoat(g: Phaser.GameObjects.Graphics, col: number, row: number): void {
-  g.fillStyle(0x8a5a2b, 1);
+  g.fillStyle(BOAT_HULL, 1);
   g.fillRect((col - 1) * CELL, row * CELL, CELL * 3, CELL);
-  g.fillStyle(0xf4f1e8, 1);
+  g.fillStyle(BOAT_SAIL, 1);
   g.fillRect(col * CELL, (row - 2) * CELL, CELL, CELL * 2);
   g.fillRect((col + 1) * CELL, (row - 1) * CELL, CELL, CELL);
 }
 
+/** Two soft light cones (cyan from the left, magenta from the right) over the map. */
+function paintBeams(g: Phaser.GameObjects.Graphics): void {
+  const beams = [
+    { from: 0.1, to: [0.22, 0.62], color: COLORS.neon },
+    { from: 0.9, to: [0.48, 0.82], color: COLORS.magenta },
+  ] as const;
+  for (const { from, to, color } of beams) {
+    g.fillStyle(color, BEAM_ALPHA);
+    g.fillTriangle(
+      from * GAME_WIDTH,
+      0,
+      to[0] * GAME_WIDTH,
+      GAME_HEIGHT,
+      to[1] * GAME_WIDTH,
+      GAME_HEIGHT,
+    );
+  }
+}
+
 function paintClouds(g: Phaser.GameObjects.Graphics): void {
-  g.fillStyle(COLORS.white, 0.14);
+  g.fillStyle(COLORS.white, 0.1);
   for (const [u, v, length] of [
     [0.06, 0.2, 14],
     [0.58, 0.12, 18],

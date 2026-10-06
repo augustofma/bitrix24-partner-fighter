@@ -22,12 +22,13 @@ import {
   fillerSlots,
   pageCount,
 } from '../ui/select/selectLayout';
-import { COLORS, arcadeText, bodyText } from '../ui/theme';
+import { COLORS, arcadeText, bodyText, css } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
 const TITLE_SHINE_MS = 1400;
 const TITLE_SHINE_DELAY_MS = 2200;
 const FOOTER_HEIGHT = 28;
+const TITLE_GLOW_BLUR = 10;
 
 /**
  * Arcade roster screen built from ROSTER: illustrated map background, a paged grid of fighter
@@ -79,12 +80,12 @@ export class CharacterSelectScene extends Phaser.Scene {
     );
 
     this.add
-      .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.ink, 0.75)
-      .setStrokeStyle(2, COLORS.teal);
+      .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.navyDeep, 0.85)
+      .setStrokeStyle(2, COLORS.royal);
     this.add
       .text(GAME_WIDTH / 2, footerY, STRINGS.selectHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
-      .setAlpha(0.85);
+      .setAlpha(0.92);
 
     onKeys(this, ['LEFT'], () => this.moveSelection(-1));
     onKeys(this, ['RIGHT'], () => this.moveSelection(1));
@@ -113,7 +114,8 @@ export class CharacterSelectScene extends Phaser.Scene {
     const top = topBarY - title.height / 2;
     const banner = this.add.graphics();
     drawArcadeFrame(banner, left, top, title.width, title.height, {
-      fill: COLORS.teal,
+      fill: COLORS.violet,
+      highlight: COLORS.violetLight,
       border: COLORS.gold,
       inner: COLORS.orange,
       shadow: 5,
@@ -131,7 +133,8 @@ export class CharacterSelectScene extends Phaser.Scene {
     });
     this.add
       .text(title.x, topBarY, STRINGS.selectTitle, arcadeText(30, COLORS.gold))
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setShadow(0, 0, css(COLORS.magenta), TITLE_GLOW_BLUR, true, true);
 
     if (pageCount(ROSTER.length) > 1) {
       const style = { width: pager.buttonWidth, height: pager.height, fontSize: 20 } as const;
@@ -162,7 +165,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         topBarY - opponentBadge.height / 2,
         opponentBadge.width,
         opponentBadge.height,
-        { fill: COLORS.ink, fillAlpha: 0.85, border: COLORS.red, inner: COLORS.petrol },
+        { fill: COLORS.navyDeep, fillAlpha: 0.9, border: COLORS.magenta, inner: COLORS.violet },
       );
       this.opponentLabel = this.add
         .text(opponentBadge.x, topBarY, '', arcadeText(17, COLORS.white))
