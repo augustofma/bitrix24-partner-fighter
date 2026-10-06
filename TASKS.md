@@ -39,6 +39,24 @@ sem pedido explícito.**
 - [x] Testes: mapeamento estado → frame, sincronização com frame data, validação, fallback e coleta de assets
 - [x] Validação visual: todos os estados, troca de lado, F2, touch, fluxo completo e falha de carga
 
+## DONE (v0.3: combate aéreo, defesa agachada e cross-up, branch `feature/air-crouch-combat`)
+
+- [x] Estados `airPunch` e `airKick` com frame data próprio em `FighterConfig.attacks` (A e B)
+- [x] Mapeamento genérico botão + postura → slot de ataque (`ATTACK_SLOTS`)
+- [x] Ataque aéreo na subida e na descida, com gravidade e momento horizontal; 1 por pulo
+- [x] Landing encerra o ataque aéreo e remove a hitbox no mesmo frame
+- [x] Estado `crouchBlock` (↓ + D): hurtbox agachada, não anda, blockstun e chip normais
+- [x] Bloqueio centralizado em `isAttackBlocked` (pronto para alto/baixo/overhead)
+- [x] Cross-up pela física: `boxes.pushHeight` + pushbox aérea; no chão nunca atravessa
+- [x] Facing travado no ar e durante golpes; corrigido após o landing
+- [x] Knockback "para longe do atacante" (correto no cross-up)
+- [x] CPU: chance de chute aéreo no jump-in (`jumpInAttackChance`)
+- [x] Sprite demo (frames 26-30) e placeholder com poses de `airPunch`, `airKick`, `crouchBlock`
+- [x] Visual do pulo por velocidade vertical (subida / ápice / descida) no sprite (frame 31) e no
+      placeholder, correto também quando o pulo é retomado após um ataque aéreo
+- [x] Testes: ataques aéreos, landing, crouchBlock e transições, cross-up, facing, determinismo
+- [x] Validação no navegador: teclado real, multi-touch emulado, F2 e fluxo completo
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
@@ -52,10 +70,12 @@ sem pedido explícito.**
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
        remapeamento de teclas salva em `localStorage`.
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
-7. [ ] Ataques agachados e aéreos (novos `AttackConfig` com `state` próprios).
-8. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
-9. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
-10. [ ] CI (GitHub Actions) rodando `npm run check`.
+7. [ ] Golpes agachados (`crouchPunch`/`crouchKick`, postura `crouch` em `ATTACK_SLOTS`) e
+       alturas de golpe alto/baixo/overhead em `isAttackBlocked`.
+8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
+9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
+10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
+11. [ ] CI (GitHub Actions) rodando `npm run check`.
 
 ## FUTURE (não implementar agora)
 

@@ -8,7 +8,10 @@ export const FIGHTER_STATES = [
   'crouch',
   'punch',
   'kick',
+  'airPunch',
+  'airKick',
   'block',
+  'crouchBlock',
   'hurt',
   'knockout',
   'victory',
@@ -19,9 +22,22 @@ export type FighterStateId = (typeof FIGHTER_STATES)[number];
 /** Buttons that trigger a normal attack. Adding a button = add it here + to the input layer. */
 export type AttackButton = 'punch' | 'kick';
 
-/** States that execute an attack. Future: 'special', 'super', 'airPunch'... */
-export const ATTACK_STATES = ['punch', 'kick'] as const satisfies readonly FighterStateId[];
+/** Attacks performed standing on the ground. */
+export const GROUND_ATTACK_STATES = ['punch', 'kick'] as const satisfies readonly FighterStateId[];
+/** Attacks performed while jumping. They end on landing. */
+export const AIR_ATTACK_STATES = [
+  'airPunch',
+  'airKick',
+] as const satisfies readonly FighterStateId[];
+/** Every state that executes an attack. Future: crouching attacks, 'special', 'super'... */
+export const ATTACK_STATES = [...GROUND_ATTACK_STATES, ...AIR_ATTACK_STATES] as const;
 export type AttackStateId = (typeof ATTACK_STATES)[number];
+
+/**
+ * Key of an attack in `FighterConfig.attacks`. Which slot a button triggers depends on the
+ * fighter's stance (see core/fighter/fighterStates.ts).
+ */
+export type AttackSlot = AttackStateId;
 
 /** Frame data for one attack. All durations are in simulation frames (60 per second). */
 export interface AttackConfig {
@@ -64,10 +80,15 @@ export interface FighterBoxes {
   standing: LocalBox;
   /** Vulnerable area while crouching (lower, so high attacks whiff). */
   crouching: LocalBox;
-  /** Vulnerable area while airborne. */
+  /** Vulnerable area while airborne. Also the body that blocks movement in the air. */
   airborne: LocalBox;
   /** Width of the body used to stop fighters from overlapping. */
   pushWidth: number;
+  /**
+   * Height (from the feet) of the grounded body that blocks movement. A jumping fighter whose
+   * airborne box is entirely above it passes over (cross-up). Ground vs ground always collides.
+   */
+  pushHeight: number;
 }
 
 /**
@@ -141,12 +162,23 @@ export interface SpriteAnimationConfig {
    * Must add up to frames.length. Default: 1 active "impact" frame in the middle.
    */
   attackPhases?: AttackPhaseFrameCounts;
+  /**
+   * `jump` only: how many of `frames` show the rise / apex (tuck) / fall, picked from the
+   * vertical velocity. Must add up to frames.length. Default: 3 frames = 1 each.
+   */
+  jumpPhases?: JumpPhaseFrameCounts;
 }
 
 export interface AttackPhaseFrameCounts {
   startup: number;
   active: number;
   recovery: number;
+}
+
+export interface JumpPhaseFrameCounts {
+  rise: number;
+  apex: number;
+  fall: number;
 }
 
 /** `idle` is mandatory; other states fall back to a similar animation when absent. */
@@ -179,7 +211,8 @@ export interface FighterConfig {
   selectable: boolean;
   stats: FighterStats;
   boxes: FighterBoxes;
-  attacks: Record<AttackButton, AttackConfig>;
+  /** Ground and air normals. Each AttackConfig.state should match its slot. */
+  attacks: Record<AttackSlot, AttackConfig>;
   /** RESERVED for future special moves. Keep empty in v0.1. */
   specials: readonly SpecialMoveConfig[];
   palette: PlaceholderPalette;

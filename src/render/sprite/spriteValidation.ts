@@ -1,9 +1,11 @@
 import {
   ATTACK_STATES,
   FIGHTER_STATES,
+  type AttackPhaseFrameCounts,
   type FighterConfig,
   type FighterSpriteAssets,
   type FighterStateId,
+  type JumpPhaseFrameCounts,
 } from '../../types/fighter';
 import { resolveAnimationState } from './animationHelpers';
 
@@ -68,27 +70,43 @@ export function validateSpriteAssets(config: FighterConfig, frameCount?: number)
     if (animation.frameRate !== undefined && !(animation.frameRate > 0)) {
       error(`animations.${state}.frameRate must be > 0.`);
     }
-    validateAttackPhases(state, animation.attackPhases, animation.frames.length, error, warn);
+    const report = { error };
+    const animationLength = animation.frames.length;
+    validatePhaseCounts(
+      `animations.${state}.attackPhases`,
+      animation.attackPhases,
+      animationLength,
+      report,
+    );
+    if (animation.attackPhases && !ATTACK_STATE_SET.has(state)) {
+      warn(`animations.${state}.attackPhases is only used while an attack is active.`);
+    }
+    validatePhaseCounts(
+      `animations.${state}.jumpPhases`,
+      animation.jumpPhases,
+      animationLength,
+      report,
+    );
+    if (animation.jumpPhases && state !== 'jump') {
+      warn(`animations.${state}.jumpPhases is only used by the jump animation.`);
+    }
   }
   return issues;
 }
 
-function validateAttackPhases(
-  state: FighterStateId,
-  phases: { startup: number; active: number; recovery: number } | undefined,
+/** Phase frame counts (attackPhases, jumpPhases) must be non-negative and add up to frames. */
+function validatePhaseCounts(
+  field: string,
+  phases: AttackPhaseFrameCounts | JumpPhaseFrameCounts | undefined,
   frameCount: number,
-  error: (message: string) => void,
-  warn: (message: string) => void,
+  report: { error: (message: string) => void },
 ): void {
   if (!phases) return;
-  const counts = [phases.startup, phases.active, phases.recovery];
+  const counts: number[] = Object.values(phases);
   if (counts.some((n) => !Number.isInteger(n) || n < 0)) {
-    error(`animations.${state}.attackPhases must be non-negative integers.`);
+    report.error(`${field} must be non-negative integers.`);
   } else if (counts.reduce((sum, n) => sum + n, 0) !== frameCount) {
-    error(`animations.${state}.attackPhases must add up to ${frameCount} (frames.length).`);
-  }
-  if (!ATTACK_STATE_SET.has(state)) {
-    warn(`animations.${state}.attackPhases is only used while an attack is active.`);
+    report.error(`${field} must add up to ${frameCount} (frames.length).`);
   }
 }
 
