@@ -133,6 +133,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
     expect(requests).toEqual([
       {
         type: 'image',
+        key: portraitTextureKey('fighters/augusto/portrait.png'),
+        path: 'fighters/augusto/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'augusto-sheet',
+        path: 'fighters/augusto/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/fighter-a/portrait.png'),
         path: 'fighters/fighter-a/portrait.png',
       },
@@ -157,7 +169,12 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
 
   it('lists pixel-art textures for nearest-neighbour filtering', () => {
     expect(pixelArtTextureKeys(ROSTER).sort()).toEqual(
-      ['fighter-a-demo-sheet', portraitTextureKey('fighters/fighter-a/portrait.png')].sort(),
+      [
+        'augusto-sheet',
+        portraitTextureKey('fighters/augusto/portrait.png'),
+        'fighter-a-demo-sheet',
+        portraitTextureKey('fighters/fighter-a/portrait.png'),
+      ].sort(),
     );
   });
 });

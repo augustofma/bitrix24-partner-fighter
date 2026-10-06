@@ -6,7 +6,7 @@ personagens, cenários e assets **totalmente originais**.
 A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema Bitrix24, com golpes
 ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
-selecionável, ainda com visual geométrico provisório preto e azul, sem arte definitiva.
+selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 `FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
 desenvolvimento. A seleção começa em Augusto e permite escolher FIGHTER_A; ambos enfrentam
 FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à CPU.
@@ -19,6 +19,11 @@ ou botões laterais percorrem os selecionáveis. Não há posições específica
 
 Para adicionar arte de um lutador, veja
 [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador).
+
+A arte do Augusto pode ser remontada com `powershell -File scripts/prepare-augusto-art.ps1`
+no Windows (System.Drawing, sem dependências adicionais). Use `-ValidateOnly` para conferir
+dimensões, alpha e margens das 40 células. As fontes geradas e os prompts estão em
+[scripts/augusto-art/README.md](scripts/augusto-art/README.md); não entram no build do jogo.
 
 > Projeto independente. Não usa logos oficiais nem assets de outras franquias.
 
