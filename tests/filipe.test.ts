@@ -1,3 +1,4 @@
+import type { MatchRules } from '../src/core/systems/MatchSystem';
 import { describe, expect, it } from 'vitest';
 import { AIController } from '../src/controllers/AIController';
 import { NORMAL_AI } from '../src/controllers/aiProfiles';
@@ -18,10 +19,11 @@ import { collectFighterAssets } from '../src/render/assets/fighterAssets';
 import { selectSpriteAssets } from '../src/render/sprite/spriteValidation';
 import { partnerArena } from '../src/stages/partnerArena';
 import { NORMAL_ATTACK_STATES as ATTACK_STATES } from '../src/types/fighter';
-import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
+import { FAST_TIMING, idle, placeAtDistance, press, stepFrames, SINGLE_ROUND } from './helpers';
 
-function createSim(timeFrames = FAST_TIMING.timeFrames): FightSimulation {
+function createSim(timeFrames = FAST_TIMING.timeFrames, matchRules?: MatchRules): FightSimulation {
   const sim = new FightSimulation({
+    ...(matchRules ? { matchRules } : {}),
     fighters: [filipe, fighterB],
     stage: partnerArena,
     roundTiming: { ...FAST_TIMING, timeFrames },
@@ -234,7 +236,7 @@ describe('Filipe integration in FightSimulation', () => {
   });
 
   it('wins by timeout after dealing damage', () => {
-    const sim = createSim(120);
+    const sim = createSim(120, SINGLE_ROUND);
     placeAtDistance(sim, 70);
     stepFrames(sim, 1, press({ punch: true }));
     stepFrames(sim, 180);

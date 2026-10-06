@@ -13,7 +13,18 @@ const EFFECTS: Record<HitEffectKind, { color: number; radius: number; rays: numb
 
 /** Short-lived impact sparks. Purely cosmetic. */
 export class HitEffects {
+  private readonly live = new Set<Phaser.GameObjects.Graphics>();
+
   constructor(private readonly scene: Phaser.Scene) {}
+
+  /** Removes every spark still on screen (e.g. when a new round starts). */
+  clear(): void {
+    for (const g of this.live) {
+      this.scene.tweens.killTweensOf(g);
+      g.destroy();
+    }
+    this.live.clear();
+  }
 
   spawn(point: Vec2, kind: HitEffectKind): void {
     const { color, radius, rays, ms } = EFFECTS[kind];
@@ -30,13 +41,17 @@ export class HitEffects {
       );
     }
     g.setScale(0.4);
+    this.live.add(g);
     this.scene.tweens.add({
       targets: g,
       scale: 1.3,
       alpha: 0,
       duration: ms,
       ease: 'Cubic.easeOut',
-      onComplete: () => g.destroy(),
+      onComplete: () => {
+        this.live.delete(g);
+        g.destroy();
+      },
     });
   }
 }

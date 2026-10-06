@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { fighterA } from '../src/fighters/fighterA';
-import { createFightingSim, placeAtDistance, press, stepFrames } from './helpers';
+import {
+  FAST_TIMING,
+  SINGLE_ROUND,
+  createFightingSim,
+  placeAtDistance,
+  press,
+  stepFrames,
+} from './helpers';
 
 /** Frames until the punch's first active frame has been resolved. */
 const PUNCH_FRAMES = fighterA.attacks.punch.startupFrames + 1;
@@ -50,7 +57,7 @@ describe('CombatSystem', () => {
   });
 
   it('reaching zero health produces a KO, then the victory pose and round over', () => {
-    const sim = createFightingSim();
+    const sim = createFightingSim(FAST_TIMING, SINGLE_ROUND);
     placeAtDistance(sim, 80);
     sim.fighters[1].health = 1;
     const events = stepFrames(sim, PUNCH_FRAMES, press({ punch: true }));

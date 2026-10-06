@@ -13,6 +13,9 @@ export interface RoundResult {
   reason: RoundEndReason;
 }
 
+/** Final result of a best-of-N match, handed to the victory screen. */
 export interface MatchResult extends RoundResult {
   setup: MatchSetup;
+  /** Rounds won by each side (0 = player, 1 = CPU). */
+  roundWins: readonly [number, number];
 }

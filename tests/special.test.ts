@@ -1,3 +1,4 @@
+import type { MatchRules } from '../src/core/systems/MatchSystem';
 import { describe, expect, it } from 'vitest';
 import { PLAYER_ONE_KEYS } from '../src/config/controls';
 import { AIController } from '../src/controllers/AIController';
@@ -9,11 +10,12 @@ import { augusto } from '../src/fighters/augusto';
 import { fighterB } from '../src/fighters/fighterB';
 import { partnerArena } from '../src/stages/partnerArena';
 import type { FighterConfig } from '../src/types/fighter';
-import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
+import { FAST_TIMING, idle, placeAtDistance, press, stepFrames, SINGLE_ROUND } from './helpers';
 
 const move = augusto.specials[0]!;
-function setup(config: FighterConfig = augusto) {
+function setup(config: FighterConfig = augusto, matchRules?: MatchRules) {
   const sim = new FightSimulation({
+    ...(matchRules ? { matchRules } : {}),
     fighters: [config, fighterB],
     stage: partnerArena,
     roundTiming: FAST_TIMING,
@@ -171,7 +173,7 @@ describe('special combat', () => {
     expect(sim.fighters[1].health).toBe(1);
   });
   it('causes KO and normal round completion', () => {
-    const sim = setup();
+    const sim = setup(augusto, SINGLE_ROUND);
     sim.fighters[0].changeSpecialMeter(30);
     sim.fighters[1].health = 18;
     const events = stepFrames(sim, 100, press({ special: true }));
@@ -212,7 +214,8 @@ describe('special combat', () => {
   it.each(['hurt', 'blockstun', 'attack', 'jump', 'knockout'] as const)(
     'does not cancel %s',
     (state) => {
-      const sim = setup();
+      // Single round: a knocked-out fighter must stay down (no next round).
+      const sim = setup(augusto, SINGLE_ROUND);
       placeAtDistance(sim, 400);
       const a = sim.fighters[0];
       a.changeSpecialMeter(100);

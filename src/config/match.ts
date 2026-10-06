@@ -10,5 +10,10 @@ export const VICTORY_POSE_DELAY_FRAMES = Math.round(1.2 * SIMULATION_FPS);
 /** Frames after KO / time over before the round is considered finished. */
 export const ROUND_OUTRO_FRAMES = Math.round(3.2 * SIMULATION_FPS);
 
-/** Only one round in v0.1. */
-export const ROUND_NUMBER = 1;
+/** Best of three: the first fighter to win this many rounds wins the match. */
+export const ROUNDS_TO_WIN = 2;
+/**
+ * Safety cap on rounds played (drawn rounds award no point and are replayed). When reached,
+ * the fighter with more round wins takes the match, otherwise the match is a draw.
+ */
+export const MAX_ROUNDS = 9;

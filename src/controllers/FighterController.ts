@@ -13,6 +13,8 @@ export interface ControllerContext {
  */
 export interface FighterController {
   getInput(context: ControllerContext): InputState;
+  /** Forgets per-round memory (decisions, cooldowns) when a new round starts. */
+  reset?(): void;
   /** Releases listeners / DOM / timers. */
   destroy?(): void;
 }

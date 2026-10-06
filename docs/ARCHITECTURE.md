@@ -54,7 +54,8 @@ src/
     fighter/ReadonlyFighter.ts  Visão somente leitura (para IA e render)
     systems/CombatSystem.ts  Hitbox x hurtbox, dano, bloqueio, KO
     systems/ArenaSystem.ts   Paredes, colisão de corpos, distância máxima
-    systems/RoundSystem.ts   Intro, cronômetro, KO, time over, fim do round
+    systems/RoundSystem.ts   Um round: intro, cronômetro, KO, time over, fim do round
+    systems/MatchSystem.ts   Melhor de N: pontos por round, empate repetido, FINAL ROUND, fim
     input.ts              InputTracker (bordas "pressed"), merge de inputs
     geometry.ts, random.ts   Utilitários (RNG com seed)
   controllers/            Quem controla um lutador (sem Phaser)
@@ -121,7 +122,7 @@ Os dados passam pelo `scene.start(key, data)`:
 | ------------------------ | ----------------------------------------------------------- |
 | CharacterSelect → Versus | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`) |
 | Versus → Fight           | `MatchSetup`                                                |
-| Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo)            |
+| Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)   |
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
@@ -155,6 +156,12 @@ Dentro de `FightSimulation.step()`:
 5. **Facing:** quem está livre vira para o oponente.
 6. **CombatSystem.resolve** (apenas na fase `fight`): gera eventos `hit` / `block` / `koHit`.
 7. **RoundSystem.step(health):** gera `fightStart`, `ko`, `timeUp`, `victoryPose`, `roundOver`.
+8. **MatchSystem.recordRound** (a cada `roundOver`): pontua o vencedor, emite `roundDraw` se
+   empatou, e então `roundStart` (próximo round) ou `matchOver` (fim da partida). No
+   `roundStart` a simulação reinicia o round: `Fighter.resetForRound` (vida, spawn,
+   velocidade, estado, stuns, buffers; **meter mantido**), novo `RoundSystem`, novos
+   `InputTracker`s, hitstop zerado. A cena limpa faíscas, chama `reset()` nos controllers e só
+   navega para a vitória no `matchOver`.
 
 Eventos são dados simples (`SimulationEvent`). A apresentação reage a eles; a simulação nunca
 chama a apresentação.

@@ -1,3 +1,4 @@
+import type { MatchRules } from '../src/core/systems/MatchSystem';
 import { describe, expect, it } from 'vitest';
 import { SPECIAL_METER } from '../src/config/special';
 import { totalAttackFrames } from '../src/core/fighter/attackFrames';
@@ -6,12 +7,13 @@ import { fighterB } from '../src/fighters/fighterB';
 import { filipe } from '../src/fighters/filipe';
 import { partnerArena } from '../src/stages/partnerArena';
 import type { InputState } from '../src/types/input';
-import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
+import { FAST_TIMING, idle, placeAtDistance, press, stepFrames, SINGLE_ROUND } from './helpers';
 
 const agent = filipe.specials[0]!;
 
-function setup(distance = 150): FightSimulation {
+function setup(distance = 150, matchRules?: MatchRules): FightSimulation {
   const sim = new FightSimulation({
+    ...(matchRules ? { matchRules } : {}),
     fighters: [filipe, fighterB],
     stage: partnerArena,
     roundTiming: FAST_TIMING,
@@ -131,7 +133,7 @@ describe('Filipe: MINDHUB AGENT execution', () => {
   });
 
   it('can KO', () => {
-    const sim = setup();
+    const sim = setup(150, SINGLE_ROUND);
     const [a, b] = sim.fighters;
     a.changeSpecialMeter(35);
     b.health = 10;

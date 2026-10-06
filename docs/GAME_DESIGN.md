@@ -9,10 +9,10 @@ Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossi
 (parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
 `AUGUSTO`, `FILIPE` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B` reservado à CPU.
 
-## Game loop (v0.1)
+## Game loop
 
 ```
-Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo → Tela de vitória → Menu
+Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitória → Menu
 ```
 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
@@ -21,8 +21,10 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
    Setas ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
    novamente confirma. O adversário prioriza os personagens reservados à CPU.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
-4. **Luta:** "ROUND 1" → "FIGHT!" (2 s sem controle) → combate → "K.O." ou "TIME OVER".
-5. **Vitória:** vencedor (ou empate) e motivo; botão VOLTAR AO MENU.
+4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
+   controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
+5. **Vitória:** vencedor da partida, motivo do último round e placar (ex.: 2 x 1); botão
+   VOLTAR AO MENU.
 
 ## Sistema de combate
 
@@ -283,13 +285,24 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 - As decisões dependem da distância e do estado do oponente; o acaso só varia entre opções
   plausíveis. Parâmetros em `src/controllers/aiProfiles.ts` (`NORMAL_AI`).
 
-## Rounds e vitória
+## Rounds e vitória (melhor de 3)
 
-- Um round de **99 segundos** (v0.1 tem apenas o ROUND 1).
-- **KO:** vida 0 → "K.O." → vencedor faz a pose de vitória → tela de vitória.
-- **Duplo KO** no mesmo frame → empate.
-- **Tempo esgotado:** vence quem tiver mais vida; vida igual = **EMPATE**.
-- O timer fica laranja nos últimos 10 segundos.
+- A partida é **melhor de 3**: o primeiro a vencer **2 rounds** vence. Ex.: 2 x 0 ou 2 x 1.
+- Cada round dura **99 segundos**. O timer fica laranja nos últimos 10 segundos.
+- **KO:** vida 0 → "K.O." → o vencedor do round faz a pose de vitória e marca 1 ponto.
+- **Tempo esgotado:** vence o round quem tiver mais vida.
+- **Empate no round** (vida exatamente igual no fim do tempo, ou duplo KO no mesmo frame):
+  aparece **DRAW**, ninguém pontua e o round é **repetido**.
+- Anúncio: "ROUND 1", "ROUND 2"... e **"FINAL ROUND"** quando os dois já têm 1 vitória.
+- HUD: abaixo do rótulo do round, dois losangos por lado (o jogador à esquerda, a CPU à
+  direita) ficam dourados conforme os rounds vencidos.
+- **Entre rounds:** vida cheia, volta ao ponto de partida, velocidade zerada, estado `idle`,
+  hitstun/blockstun e hitstop zerados, timer em 99, inputs e buffers limpos e efeitos
+  temporários removidos. A CPU também esquece as decisões do round anterior.
+- **A barra de especial é mantida entre rounds.** Só uma nova partida volta a zerá-la.
+- A tela de vitória só aparece quando alguém chega a 2 rounds.
+- Limite de segurança: no máximo 9 rounds por partida (empates repetidos). Atingido o limite,
+  vence quem tiver mais rounds; com placar igual, a partida termina empatada.
 
 ## Controles
 

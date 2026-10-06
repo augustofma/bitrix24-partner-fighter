@@ -1,5 +1,6 @@
 import { FightSimulation, type SimulationEvent } from '../src/core/FightSimulation';
 import { createInputState } from '../src/core/input';
+import type { MatchRules } from '../src/core/systems/MatchSystem';
 import type { RoundTiming } from '../src/core/systems/RoundSystem';
 import { fighterA } from '../src/fighters/fighterA';
 import { fighterB } from '../src/fighters/fighterB';
@@ -13,12 +14,19 @@ export const FAST_TIMING: RoundTiming = {
   outroFrames: 20,
 };
 
-/** A simulation already in the 'fight' phase. */
-export function createFightingSim(timing: RoundTiming = FAST_TIMING): FightSimulation {
+/** One round decides the match: for tests about a single round's outcome (KO, time over...). */
+export const SINGLE_ROUND: MatchRules = { roundsToWin: 1, maxRounds: 1 };
+
+/** A simulation already in the 'fight' phase (best of three unless `matchRules` says otherwise). */
+export function createFightingSim(
+  timing: RoundTiming = FAST_TIMING,
+  matchRules?: MatchRules,
+): FightSimulation {
   const sim = new FightSimulation({
     fighters: [fighterA, fighterB],
     stage: partnerArena,
     roundTiming: timing,
+    ...(matchRules ? { matchRules } : {}),
   });
   stepFrames(sim, 1);
   return sim;

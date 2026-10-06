@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { DEBUG_TOGGLE_KEY, PLAYER_ONE_KEYS } from '../config/controls';
 import { GAME_HEIGHT } from '../config/display';
-import { ROUND_NUMBER } from '../config/match';
 import { SceneKeys } from '../config/sceneKeys';
 import { FIXED_STEP_MS, MAX_STEPS_PER_FRAME } from '../config/simulation';
 import { STRINGS } from '../config/strings';
@@ -80,7 +79,7 @@ export class FightScene extends Phaser.Scene {
     this.setupDebugOverlay();
 
     this.events.once('shutdown', () => this.controllers.forEach((c) => c.destroy?.()));
-    this.announcer.show(STRINGS.round(ROUND_NUMBER), 1000);
+    this.announcer.show(this.roundLabel(), 1000);
     this.renderFrame(0);
   }
 
@@ -148,12 +147,38 @@ export class FightScene extends Phaser.Scene {
         return;
       case 'victoryPose':
         return;
-      case 'roundOver': {
-        const result: MatchResult = { ...event.result, setup: this.setup };
+      case 'roundOver':
+        // The point is already scored: show it while the next round is being prepared.
+        this.hud.setRound(this.roundLabel(), this.simulation.match.roundWins);
+        return;
+      case 'roundDraw':
+        this.announcer.show(STRINGS.roundDraw, 1200);
+        return;
+      case 'roundStart':
+        this.startRoundPresentation();
+        return;
+      case 'matchOver': {
+        const { winnerIndex, reason, roundWins } = event.outcome;
+        const result: MatchResult = { winnerIndex, reason, roundWins, setup: this.setup };
         goToScene(this, SceneKeys.Victory, result);
         return;
       }
     }
+  }
+
+  /** "ROUND n", or "FINAL ROUND" when both sides are one win away. */
+  private roundLabel(): string {
+    const { match } = this.simulation;
+    return match.isFinalRound ? STRINGS.finalRound : STRINGS.round(match.currentRound);
+  }
+
+  /** The simulation already reset the fighters: reset what only the presentation holds. */
+  private startRoundPresentation(): void {
+    this.effects.clear();
+    this.controllers.forEach((controller) => controller.reset?.());
+    this.fightCamera.follow(this.simulation.fighters, true);
+    this.hud.setRound(this.roundLabel(), this.simulation.match.roundWins);
+    this.announcer.show(this.roundLabel(), 1000);
   }
 
   private renderFrame(timeMs: number): void {

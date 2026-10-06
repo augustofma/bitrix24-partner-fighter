@@ -200,6 +200,26 @@ export class Fighter implements ReadonlyFighter {
     return true;
   }
 
+  /**
+   * Back to a fresh round: full health at the spawn point, idle, no velocity, stun, attack or
+   * buffered input. The special meter is deliberately kept (it carries across rounds).
+   */
+  resetForRound(spawn: Readonly<Vec2>, direction: Direction): void {
+    this.health = this.config.stats.maxHealth;
+    this.position.x = spawn.x;
+    this.position.y = spawn.y;
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.direction = direction;
+    this.lastX = spawn.x;
+    this.setState('idle', true);
+    this.attack = null;
+    this.attackConnected = false;
+    this.stunFrames = 0;
+    this.inputBuffer.clear();
+    this.airAttackUsed = false;
+  }
+
   // ---------------------------------------------------------------- internals
 
   private setState(next: FighterStateId, restart = false): void {

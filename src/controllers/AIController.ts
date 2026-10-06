@@ -44,6 +44,15 @@ export class AIController implements FighterController {
     private readonly rng: Rng = Math.random,
   ) {}
 
+  /** New round: drop every decision in progress (the RNG keeps going, so it stays deterministic). */
+  reset(): void {
+    this.mode = 'wait';
+    this.modeFrames = 0;
+    this.attackCooldown = 0;
+    this.reactedToCurrentAttack = false;
+    this.plannedAirAttack = false;
+  }
+
   get currentMode(): AIMode {
     return this.mode;
   }

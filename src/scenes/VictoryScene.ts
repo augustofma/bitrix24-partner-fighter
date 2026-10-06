@@ -26,17 +26,18 @@ export class VictoryScene extends Phaser.Scene {
     fadeIn(this);
     createArcadeBackground(this);
     const centerX = GAME_WIDTH / 2;
-    const { setup, winnerIndex, reason } = result;
+    const { setup, winnerIndex, reason, roundWins } = result;
     const sides = [getFighterConfig(setup.playerFighterId), getFighterConfig(setup.cpuFighterId)];
+    const score = STRINGS.matchScore(roundWins[0], roundWins[1]);
 
     let title: string = STRINGS.draw;
-    let subtitle: string = STRINGS.reasonDraw;
+    let subtitle = `${STRINGS.reasonMatchDraw}  -  ${score}`;
     if (winnerIndex !== null) {
       const winner = sides[winnerIndex];
       title = STRINGS.wins(winner?.displayName ?? '');
       const verdict = winnerIndex === 0 ? STRINGS.youWin : STRINGS.youLose;
       const why = reason === 'ko' ? STRINGS.reasonKo : STRINGS.reasonTimeout;
-      subtitle = `${verdict}  -  ${why}`;
+      subtitle = `${verdict}  -  ${why}  -  ${score}`;
       if (winner) {
         createPortrait(this, centerX, PORTRAIT_Y, winner, {
           ...PORTRAIT_SIZE,

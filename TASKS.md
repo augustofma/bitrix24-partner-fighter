@@ -140,6 +140,14 @@ sem pedido explícito.**
 - [x] Animação `special` do Filipe mapeada para frames existentes (nenhum PNG alterado)
 - [x] Testes: custo, F segurado, alcance x normais, whiff, guardas, KO, hitstop, estados proibidos
 
+## DONE (v0.10: melhor de 3, branch `feature/fighting-polish`)
+
+- [x] `MatchSystem`: 2 vitórias vencem; DRAW não pontua e repete o round; limite de 9 rounds
+- [x] ROUND n / FINAL ROUND; marcadores de rounds vencidos no HUD; placar na tela de vitória
+- [x] Reset entre rounds (vida, spawn, velocidade, estado, stuns, hitstop, timer, inputs,
+      buffers, VFX, decisões da CPU) com o meter preservado; nova partida zera o meter
+- [x] Testes: 2x0, 2x1, Final Round, tempo, draw, limite, reset, meter e determinismo
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
