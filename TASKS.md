@@ -120,6 +120,26 @@ sem pedido explícito.**
 - [x] Vitória completa contra adversário controlado e derrota para CPU real; ambas as guardas
 - [x] 170 testes e npm run check aprovados; alpha e margens dos PNGs verificados em Node
 
+## DONE (v0.8: especiais e 24ZAP COMBO)
+
+- [x] F/ESP com borda e buffer compartilhado; multi-touch preservado
+- [x] Meter 0..100, ganhos por contato normal e custo na ativação
+- [x] SpecialMoveConfig genérico; nenhum ID de personagem no core
+- [x] 24ZAP COMBO: custo 30, dano 18, 9/5/28, avanço e um contato forte
+- [x] Barras com prontidão e VFX digital azul/verde original; PNGs preservados
+- [x] Testes de input, meter, buffer, dano, defesa, KO, IA e determinismo
+- [x] 162 testes; playtest com F2, meter por acertos, F sem energia, defesa, whiff, KO e ESP
+- [x] Multi-touch emulado e três partidas automatizadas consecutivas contra CPU no navegador
+
+## DONE (v0.9: MINDHUB AGENT do Filipe, branch `feature/fighting-polish`)
+
+- [x] Sistema de especial/meter da `feature/special-meter-24zap` reaproveitado (sem sistema paralelo)
+- [x] MINDHUB AGENT: custo 35, só no chão, mid, 18 de dano, 15/6/24, alcance 170, hitstop 12
+- [x] Receber dano rende +5 também quando o dano vem de um especial; o executor nunca ganha
+- [x] Estilos de VFX por configuração (`digital`, `agentNetwork`); rede de agentes procedural
+- [x] Animação `special` do Filipe mapeada para frames existentes (nenhum PNG alterado)
+- [x] Testes: custo, F segurado, alcance x normais, whiff, guardas, KO, hitstop, estados proibidos
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e `NORMAL_AI` com
@@ -142,12 +162,11 @@ sem pedido explícito.**
 
 ## FUTURE (não implementar agora)
 
-- AUGUSTO: **24ZAP COMBO** (apenas ideia, não implementado)
 - AUGUSTO: **MINDHUB AGENT** (apenas ideia, não implementado)
 - AUGUSTO: **TOP 1 MUNDIAL** (apenas ideia, não implementado)
 
 - Elenco de 8 a 16 personagens reais (com autorização) e character select maior
-- Golpes especiais (sequências de comando) e barra de especial
+- Sequências de comando para especiais e suporte a multi-hit real
 - Combos, contador de hits, cancelamentos
 - Vários cenários
 - Sons, músicas e falas dos personagens

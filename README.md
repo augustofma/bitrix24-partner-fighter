@@ -12,7 +12,9 @@ desenvolvimento. A seleção começa em Augusto e permite escolher FILIPE e FIGH
 FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à CPU.
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
-por recuperações maiores nos chutes. Possui os seis ataques atuais e nenhum especial.
+por recuperações maiores nos chutes. Possui seis ataques normais e o especial **24ZAP COMBO** (F / ESP, custo 30).
+A barra começa em 0 e vai até 100: +10 por acerto normal, +5 por dano normal recebido e
++3 quando o normal é bloqueado. Especiais não geram energia; segurar F não repete.
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
 A seleção pagina automaticamente a cada quatro cards quando o roster cresce; setas do teclado
 ou botões laterais percorrem os selecionáveis. Não há posições específicas por personagem.
@@ -94,6 +96,7 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Agachar            | ↓                                            |
 | Soco               | A                                            |
 | Chute              | S                                            |
+| Especial           | F                                            |
 | Defender           | D                                            |
 | Defesa agachada    | ↓ + D                                        |
 | Soco agachado      | ↓ + A                                        |
@@ -102,7 +105,7 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Menus              | Enter / Espaço confirma, Esc volta           |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)    |
 
-**Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF à direita, com
+**Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF / ESP à direita, com
 multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF; ▼ + SOCO; ▼ + CHUTE). Aparecem
 automaticamente em dispositivos de toque (force com `?touch=1` ou `?touch=0`). Em celular na
 vertical o jogo pede para girar o aparelho.

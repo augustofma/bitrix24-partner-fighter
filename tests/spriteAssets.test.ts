@@ -114,7 +114,8 @@ describe('validateSpriteAssets', () => {
   it('warns (not errors) about missing optional animations', () => {
     const config = withSprite(fighterA, { ...demoSprite(), animations: { idle: { frames: [0] } } });
     expect(messages(config, 'error')).toEqual([]);
-    expect(messages(config, 'warning')).toHaveLength(FIGHTER_STATES.length - 1); // every state but idle
+    // Idle exists, and this fighter has no special to animate.
+    expect(messages(config, 'warning')).toHaveLength(FIGHTER_STATES.length - 2);
   });
 
   it('reports two different sheets sharing a texture key', () => {

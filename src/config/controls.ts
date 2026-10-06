@@ -15,6 +15,7 @@ export const PLAYER_ONE_KEYS: KeyBindings = {
   punch: ['A'],
   kick: ['S'],
   block: ['D'],
+  special: ['F'],
 };
 
 /** Keys used to confirm / go back in menus. */

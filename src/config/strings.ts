@@ -32,5 +32,11 @@ export const STRINGS = {
   touchPunch: 'SOCO',
   touchKick: 'CHUTE',
   touchBlock: 'DEF',
+  touchSpecial: 'ESP',
+  specialMeter: (value: number) => `ESP ${value}/100`,
+  specialReady: 'PRONTO',
+  special24Zap: '24ZAP COMBO',
+  special24ZapEffect: '24ZAP!',
+  specialMindhubAgent: 'MINDHUB AGENT',
   debugHint: 'F2: hitboxes',
 } as const;

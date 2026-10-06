@@ -1,4 +1,5 @@
 import type { FighterConfig } from '../types/fighter';
+import { STRINGS } from '../config/strings';
 import { STANDARD_BODY } from './shared/standardBody';
 
 /** Mobile pressure fighter: faster normals trade damage for initiative. */
@@ -126,9 +127,31 @@ export const augusto: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      id: 'augusto.24zap',
+      displayName: STRINGS.special24Zap,
+      state: 'special',
+      level: 'mid',
+      meterCost: 30,
+      groundOnly: true,
+      advanceSpeed: 5,
+      damage: 18,
+      chipDamage: 2,
+      startupFrames: 9,
+      activeFrames: 5,
+      recoveryFrames: 28,
+      hitbox: { x: 24, y: -126, width: 108, height: 56 },
+      hitstunFrames: 24,
+      blockstunFrames: 14,
+      knockback: 8,
+      blockPushback: 5,
+      hitstopFrames: 10,
+    },
+  ],
   palette: { body: 0x191c24, accent: 0x258bff, skin: 0xb8b8b8, outline: 0x080b12 },
   assets: {
+    specialEffects: { 'augusto.24zap': { style: 'digital', label: STRINGS.special24ZapEffect } },
     portrait: 'fighters/augusto/portrait.png',
     pixelArt: true,
     sprite: {
@@ -141,6 +164,10 @@ export const augusto: FighterConfig = {
       // The atlas keeps an eight-pixel transparent margin below the grounded soles.
       visual: { scale: 1, offsetX: 0, offsetY: 8 },
       animations: {
+        special: {
+          frames: [14, 17, 15, 18, 19, 16],
+          attackPhases: { startup: 2, active: 2, recovery: 2 },
+        },
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
         jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },

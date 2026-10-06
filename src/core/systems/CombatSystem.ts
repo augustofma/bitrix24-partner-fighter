@@ -1,4 +1,5 @@
 import type { AttackConfig } from '../../types/fighter';
+import { SPECIAL_METER } from '../../config/special';
 import type { Direction, Vec2 } from '../../types/geometry';
 import type { Fighter } from '../fighter/Fighter';
 import { intersectionCenter, rectsOverlap } from '../geometry';
@@ -54,11 +55,16 @@ export class CombatSystem {
 
     const push = pushDirection(attacker, defender);
     let type: CombatEvent['type'];
+    // Meter: a special never pays its own user; taking damage always pays the defender.
+    const normalAttack = attack.state !== 'special';
     if (isAttackBlocked(defender, attack)) {
       defender.applyBlock(attack, push);
+      if (normalAttack) attacker.changeSpecialMeter(SPECIAL_METER.blocked);
       type = 'block';
     } else {
       defender.applyHit(attack, push);
+      if (normalAttack) attacker.changeSpecialMeter(SPECIAL_METER.hit);
+      if (attack.damage > 0) defender.changeSpecialMeter(SPECIAL_METER.received);
       type = defender.isKnockedOut ? 'koHit' : 'hit';
     }
     return { type, attackerIndex, defenderIndex, attack, point };

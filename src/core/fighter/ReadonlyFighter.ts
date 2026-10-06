@@ -9,6 +9,7 @@ import type { AttackPhase } from './attackFrames';
 export interface ReadonlyFighter {
   readonly config: FighterConfig;
   readonly health: number;
+  readonly specialMeter: number;
   readonly maxHealth: number;
   readonly position: Readonly<Vec2>;
   readonly velocity: Readonly<Vec2>;

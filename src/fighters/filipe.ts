@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -126,11 +127,40 @@ export const filipe: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // Filipe triggers a Mindhub AI agent: a long digital discharge in front of him.
+      id: 'filipe.mindhubAgent',
+      displayName: STRINGS.specialMindhubAgent,
+      state: 'special',
+      level: 'mid',
+      meterCost: 35,
+      groundOnly: true,
+      // He plants his feet and casts: no forward travel.
+      advanceSpeed: 0,
+      damage: 18,
+      chipDamage: 2,
+      // Slower than his kick (11f) so it can be seen and reacted to...
+      startupFrames: 15,
+      activeFrames: 6,
+      // ...and clearly punishable when blocked (24f recovery vs 16f blockstun).
+      recoveryFrames: 24,
+      // Reach 170 px (his kick: 110), torso to head; far short of the 760 px max separation.
+      hitbox: { x: 30, y: -132, width: 140, height: 76 },
+      hitstunFrames: 24,
+      blockstunFrames: 16,
+      knockback: 8.5,
+      blockPushback: 6,
+      hitstopFrames: 12,
+    },
+  ],
   palette: { body: 0x153869, accent: 0x25bad0, skin: 0xb57952, outline: 0x080b12 },
   assets: {
     portrait: 'fighters/filipe/portrait.png',
     pixelArt: true,
+    specialEffects: {
+      'filipe.mindhubAgent': { style: 'agentNetwork', label: STRINGS.specialMindhubAgent },
+    },
     sprite: {
       sheet: {
         key: 'filipe-sheet',
@@ -151,6 +181,8 @@ export const filipe: FighterConfig = {
         crouchKick: { frames: [23, 24, 25], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         airPunch: { frames: [26, 27, 28], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         airKick: { frames: [29, 30, 31], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        // State mapping only (no new art): the agent is cast with the punch reach frames.
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         block: { frames: [32] },
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },

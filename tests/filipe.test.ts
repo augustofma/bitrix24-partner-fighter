@@ -17,7 +17,7 @@ import {
 import { collectFighterAssets } from '../src/render/assets/fighterAssets';
 import { selectSpriteAssets } from '../src/render/sprite/spriteValidation';
 import { partnerArena } from '../src/stages/partnerArena';
-import { ATTACK_STATES } from '../src/types/fighter';
+import { NORMAL_ATTACK_STATES as ATTACK_STATES } from '../src/types/fighter';
 import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
 
 function createSim(timeFrames = FAST_TIMING.timeFrames): FightSimulation {
@@ -54,7 +54,7 @@ describe('Filipe roster and data', () => {
     expect(pickCpuOpponent(fighterB.id)).not.toBe(fighterB);
     expect(filipe.description).toBe('Arrecife Digital');
     expect(filipe.stats.maxHealth).toBe(100);
-    expect(filipe.specials).toEqual([]);
+    expect(filipe.specials.map((move) => move.id)).toEqual(['filipe.mindhubAgent']);
     expect(Object.keys(filipe.attacks).sort()).toEqual([...ATTACK_STATES].sort());
   });
 
@@ -108,9 +108,13 @@ describe('Filipe roster and data', () => {
     expect(selectSpriteAssets(filipe, 40)).toBe(filipe.assets.sprite);
     expect(selectSpriteAssets(filipe, 39)).toBeNull();
     const animations = filipe.assets.sprite!.animations;
-    expect(Object.values(animations).flatMap((animation) => animation.frames)).toEqual(
-      Array.from({ length: 40 }, (_, index) => index),
-    );
+    // Base states use each of the 40 frames once; the special only maps existing frames.
+    expect(
+      Object.entries(animations)
+        .filter(([state]) => state !== 'special')
+        .flatMap(([, animation]) => animation.frames),
+    ).toEqual(Array.from({ length: 40 }, (_, index) => index));
+    expect(animations.special?.frames).toEqual(animations.punch?.frames);
     for (const slot of ATTACK_STATES) {
       expect(animations[slot]?.attackPhases).toEqual({ startup: 1, active: 1, recovery: 1 });
     }

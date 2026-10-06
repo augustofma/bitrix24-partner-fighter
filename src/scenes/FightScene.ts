@@ -19,6 +19,7 @@ import { FightCamera } from '../render/FightCamera';
 import type { FighterView } from '../render/FighterView';
 import { HitEffects } from '../render/HitEffects';
 import { StageView } from '../render/StageView';
+import { SpecialEffects } from '../render/SpecialEffects';
 import { getStageConfig } from '../stages/stageRegistry';
 import type { InputSource } from '../types/input';
 import type { MatchResult, MatchSetup } from '../types/match';
@@ -43,6 +44,7 @@ export class FightScene extends Phaser.Scene {
   private hud!: FightHud;
   private announcer!: Announcer;
   private effects!: HitEffects;
+  private specialEffects!: SpecialEffects;
   private debugOverlay!: DebugOverlay;
   private accumulatorMs = 0;
 
@@ -68,6 +70,7 @@ export class FightScene extends Phaser.Scene {
     this.fightCamera = new FightCamera(this.cameras.main, stage);
     this.fightCamera.follow(fighters, true);
     this.effects = new HitEffects(this);
+    this.specialEffects = new SpecialEffects(this);
     this.hud = new FightHud(this, fighters);
     this.announcer = new Announcer(this);
     this.controllers = [
@@ -156,6 +159,7 @@ export class FightScene extends Phaser.Scene {
   private renderFrame(timeMs: number): void {
     const fighters = this.simulation.fighters;
     fighters.forEach((fighter, i) => this.views[i]?.sync(fighter, timeMs));
+    this.specialEffects.sync(fighters);
     this.fightCamera.follow(fighters);
     this.hud.update(fighters, this.simulation.round.secondsRemaining);
     this.debugOverlay.draw(fighters);

@@ -37,6 +37,7 @@ const LAYOUT: readonly ButtonLayout[] = [
   { action: 'punch', label: STRINGS.touchPunch, x: ACTION_X - 80, y: ACTION_Y + 20 },
   { action: 'kick', label: STRINGS.touchKick, x: ACTION_X + 10, y: ACTION_Y - 40 },
   { action: 'block', label: STRINGS.touchBlock, x: ACTION_X + 80, y: ACTION_Y + 40 },
+  { action: 'special', label: STRINGS.touchSpecial, x: ACTION_X + 80, y: ACTION_Y - 140 },
 ];
 
 /**

@@ -16,7 +16,7 @@ import {
 import { collectFighterAssets } from '../src/render/assets/fighterAssets';
 import { selectSpriteAssets } from '../src/render/sprite/spriteValidation';
 import { partnerArena } from '../src/stages/partnerArena';
-import { ATTACK_STATES } from '../src/types/fighter';
+import { NORMAL_ATTACK_STATES as ATTACK_STATES } from '../src/types/fighter';
 import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
 
 function createSim(timeFrames = FAST_TIMING.timeFrames): FightSimulation {
@@ -39,7 +39,7 @@ describe('Augusto roster and data', () => {
     expect(pickCpuOpponent(fighterB.id)).not.toBe(fighterB);
     expect(augusto.description).toBe('Arrecife Digital');
     expect(augusto.stats.maxHealth).toBe(100);
-    expect(augusto.specials).toEqual([]);
+    expect(augusto.specials).toHaveLength(1);
     expect(Object.keys(augusto.attacks).sort()).toEqual([...ATTACK_STATES].sort());
   });
 
@@ -93,9 +93,11 @@ describe('Augusto roster and data', () => {
     expect(selectSpriteAssets(augusto, 40)).toBe(augusto.assets.sprite);
     expect(selectSpriteAssets(augusto, 39)).toBeNull();
     const animations = augusto.assets.sprite!.animations;
-    expect(Object.values(animations).flatMap((animation) => animation.frames)).toEqual(
-      Array.from({ length: 40 }, (_, index) => index),
-    );
+    expect(
+      Object.entries(animations)
+        .filter(([state]) => state !== 'special')
+        .flatMap(([, animation]) => animation.frames),
+    ).toEqual(Array.from({ length: 40 }, (_, index) => index));
     for (const slot of ATTACK_STATES) {
       expect(animations[slot]?.attackPhases).toEqual({ startup: 1, active: 1, recovery: 1 });
     }

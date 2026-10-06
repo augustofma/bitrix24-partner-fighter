@@ -46,6 +46,8 @@ src/
     FightSimulation.ts    Orquestra um frame da luta
     fighter/Fighter.ts    Entidade lutador: state machine + física + caixas
     fighter/attackFrames.ts  Fases de ataque (startup/active/recovery)
+    fighter/AttackInputBuffer.ts  Borda e expiração do buffer de normais/especiais
+    fighter/fighterPhysics.ts Integração de gravidade, landing e atrito
     fighter/fighterStates.ts Regras puras: grupos de estados, botão → slot (e o inverso),
                              postura baixa, hurtbox/pushbox
     fighter/attackGeometry.ts "Este golpe acertaria agora?" (alcance + altura), usado pela IA
@@ -84,10 +86,12 @@ src/
     StageView.ts          Cenário procedural com parallax
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
     HitEffects.ts         Faíscas de impacto
+    SpecialEffects.ts     VFX procedural por configuração, sincronizado a stateFrame
     DebugOverlay.ts       Hitboxes/hurtboxes (F2)
     PortraitView.ts       Card de personagem (seleção/VS/vitória)
   ui/                     Interface fixa na tela (Phaser)
     FightHud.ts, HealthBar.ts, Announcer.ts, TouchControls.ts,
+    SpecialMeterBar.ts,
     MenuButton.ts, ArcadeBackground.ts, theme.ts
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
@@ -165,7 +169,7 @@ Toque   ─ TouchControls ───────┼─ PlayerController ─┐
                 (futuro) NetworkController / ReplayController
 ```
 
-- `InputAction` = `left | right | up | down | punch | kick | block`. As direções são **absolutas**
+- `InputAction` = `left | right | up | down | punch | kick | block | special`. As direções são **absolutas**
   (tela); o `Fighter` converte em frente/trás conforme o lado para onde está virado.
 - `InputSource.read()` devolve as ações seguradas. Toques e teclas muito curtos (menos de um
   frame) ficam retidos (latch), então nunca se perdem.
@@ -242,6 +246,37 @@ condicionais por golpe.
   descartado. Como a física roda antes do combate no mesmo frame, **nenhuma hitbox aérea existe
   no frame do landing nem depois**. No frame seguinte o lutador age normalmente.
 - Se o recovery do ataque aéreo acabar no ar, o lutador volta para `jump` (sem novo ataque).
+
+### Especiais por configuração
+
+SpecialMoveConfig estende AttackConfig: state special, meterCost, groundOnly e advanceSpeed.
+F executa o primeiro especial elegível e acessível na ordem de FighterConfig.specials.
+Cada entrada inclui id/displayName, dano/chip, frame data, hitbox, stun, knockback/pushback e
+hitstop. O core não lê assets nem IDs de personagem. Um novo lutador precisa apenas preencher
+specials; a CPU continua enviando somente inputs normais.
+
+AttackInputBuffer mantém a borda por 6 frames para normais e especiais. Fighter verifica postura
+quando livre, consome a energia e usa o mesmo ciclo de ataque. fighterPhysics integra gravidade,
+landing e atrito; ataques aéreos, inclusive especiais configurados com groundOnly false,
+encerram no landing. Não há cancelamentos ou repetição automática.
+
+specialMeter é somente leitura para render/IA e começa em zero. changeSpecialMeter aplica clamp;
+CombatSystem concede os valores de config/special.ts uma vez por contato normal. O tipo do
+ataque vem do contato coletado, preservando a classificação mesmo em trades que interrompam o
+atacante. Um especial nunca gera meter para quem o executa; receber dano (de golpe normal ou
+especial) sempre rende +5 ao defensor.
+
+Nesta versão cada execução tem um contato, inclusive o especial. Um futuro multi-hit deve
+estender a linha do tempo de AttackConfig e o controle de contatos por índice/janela em
+Fighter/CombatSystem; não simular hits via timers do renderer ou condicionais por personagem.
+
+SpecialMeterBar desenha as barras do HUD e prontidão pelo custo configurado. SpecialEffects lê
+assets.specialEffects[activeAttack.id] (`{ style, label }`), stateFrame e posição e despacha
+para o desenhista do estilo: `digital` (pacotes de dados, 24ZAP) ou `agentNetwork` (rede de
+agentes de IA com nós, conexões, pulsos e feixe, MINDHUB AGENT). Tudo é derivado do
+stateFrame, sem aleatoriedade, então congela durante hitstop e some se o golpe for
+interrompido. Um estilo novo é uma função a mais na tabela STYLES, escolhida por configuração. assets.sprite.animations.special reaproveita o pipeline de fases;
+a ausência usa punch como fallback. Não há alterações nos PNGs.
 
 ### Cross-up (passar por cima)
 
@@ -346,7 +381,7 @@ export const augusto: FighterConfig = {
   stats: { maxHealth, walkSpeed, backWalkSpeed, jumpForce, jumpHorizontalSpeed },
   boxes: STANDARD_BODY,                 // ou caixas próprias
   attacks: { punch, kick, crouchPunch, crouchKick, airPunch, airKick },  // frame data + level
-  specials: [],                         // reservado (SpecialMoveConfig)
+  specials: [],                         // SpecialMoveConfig: ataques especiais opcionais
   palette: {...},                       // cores do placeholder (e dos cards)
   assets: { portrait, sprite: { sheet, animations, visual }, pixelArt },  // opcional
 };
@@ -363,17 +398,15 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro                  | Onde encaixa                                                                                                                          |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Golpes especiais        | `SpecialMoveConfig` em `types/fighter.ts`; detector de sequência no `InputTracker`; novo estado de ataque reutilizando `AttackConfig` |
-| Alto / baixo / overhead | `AttackConfig.level` já existe; falta comparar com a guarda em `isAttackBlocked` (`CombatSystem`)                                     |
-| Barra de especial       | Campo novo no `Fighter` + evento no `CombatSystem` + barra no HUD                                                                     |
-| Combos                  | Contador no `CombatSystem` (já é uma classe com estado)                                                                               |
-| Vários cenários         | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                                                     |
-| Som, música e falas     | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                                                       |
-| Melhor de 3 rounds      | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                                               |
-| Multiplayer online      | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos                                |
-| Torneio e ranking       | Novas cenas consumindo `MatchResult`                                                                                                  |
+| Futuro                  | Onde encaixa                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------ |
+| Alto / baixo / overhead | `AttackConfig.level` já existe; falta comparar com a guarda em `isAttackBlocked` (`CombatSystem`)      |
+| Combos                  | Contador no `CombatSystem` (já é uma classe com estado)                                                |
+| Vários cenários         | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                      |
+| Som, música e falas     | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                        |
+| Melhor de 3 rounds      | Um `MatchSystem` acima do `RoundSystem` (`ROUND_NUMBER` está em config)                                |
+| Multiplayer online      | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos |
+| Torneio e ranking       | Novas cenas consumindo `MatchResult`                                                                   |
 
 ## Decisões técnicas
 

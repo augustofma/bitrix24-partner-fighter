@@ -29,7 +29,7 @@ Menu → Seleção de personagem → Tela VS → Luta (1 round) → KO / Tempo �
 ### AUGUSTO
 
 **Arrecife Digital.** Lutador móvel e ofensivo, voltado à pressão curta/média. Configuração
-própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte pixel-art e nenhum especial.
+própria em `src/fighters/augusto.ts`; corpo padrão compartilhado, arte pixel-art e o especial 24ZAP COMBO.
 
 | Estatística                   | Valor         |
 | ----------------------------- | ------------- |
@@ -220,6 +220,40 @@ Prioridade de input quando livre no chão:
 > apertar A/S sai o golpe agachado assim que o lutador estiver livre (o buffer guarda o aperto
 > feito no fim do blockstun); terminado o golpe, ele volta à defesa agachada.
 
+## Especiais e energia
+
+F no teclado ou ESP no touch. A barra de cada lutador começa em 0, limitada a 100.
+Acertar um normal dá +10 ao atacante e, havendo dano, +5 ao defensor. Um normal bloqueado
+rende +3 ao atacante (chip não gera energia para o defensor). **Receber dano** rende +5 ao
+defensor, venha o dano de um golpe normal ou de um especial. Um especial, bloqueado ou não,
+não dá energia a nenhum participante. Errar não rende energia.
+
+O especial tem prioridade sobre A/S quando apertados juntos. Usa borda e buffer de 6 frames:
+um aperto no fim de recovery ou stun pode sair quando o lutador ficar livre, sem cancelar
+ataque, hurt ou blockstun. Segurar F nunca renova o buffer. Sem energia, o comando é descartado
+sem custo. No ar, um especial groundOnly é descartado. KO e vitória nunca aceitam golpes.
+A barra fica verde com PRONTO quando há energia para algum especial configurado.
+
+**24ZAP COMBO:** custo 30 descontado no primeiro frame, somente no chão, dano 18, chip 2,
+startup 9 / ativo 5 / recovery 28, hitstun 24, blockstun 14, knockback 8, pushback 5 e hitstop 10.
+Hitbox (24, -126, 108, 56): alcance frontal de 132 px. Avança 5 px/frame no startup/ativo
+(até 70 px sem obstáculos); para no recovery. Facing travado, sem invulnerabilidade.
+Tem um único contato por execução. Contra o chute normal (11 de dano, 10/4/16), ganha dano,
+alcance e avanço, mas fica exposto por 28 frames se errar e pode ser punido ao ser bloqueado.
+A sequência visual reaproveita os sprites, acompanhada de mensagens digitais azul/verde.
+
+**MINDHUB AGENT (Filipe):** Filipe ativa um agente de IA que dispara uma descarga digital à
+frente. Custo 35 (descontado no primeiro frame, mesmo se errar), somente no chão, nível `mid`,
+dano 18, chip 2, startup 15 / ativo 6 / recovery 24, hitstun 24, blockstun 16, knockback 8,5,
+pushback 6 e hitstop 12. Hitbox (30, -132, 140, 76): alcance frontal de 170 px, contra 110 do
+chute dele, mas longe de cobrir a tela. Não avança (ele "conjura" parado), um único contato.
+Comparado ao chute (10 de dano, 11/4/18), é bem mais forte e longo, porém lento o bastante para
+ser visto e, bloqueado, deixa Filipe em desvantagem (24 de recovery contra 16 de blockstun).
+Visual: reaproveita os frames do soco; os agentes orbitam a mão, uma rede de nós se forma no
+alcance do golpe e descarrega um feixe azul/ciano/verde com pulsos e partículas (procedural,
+sem logos nem imagens externas).
+A CPU não usa especiais, mas reage, bloqueia e recebe seus impactos pelas regras existentes.
+
 ## CPU (FIGHTER_B)
 
 State machine simples (sem aprendizado de máquina), com modos: `approach`, `retreat`, `attack`,
@@ -266,6 +300,7 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 | Agachar            | ↓                                          | ▼                      |
 | Soco               | A                                          | SOCO (direita da tela) |
 | Chute              | S                                          | CHUTE                  |
+| Especial           | F                                          | ESP                    |
 | Defender           | D                                          | DEF                    |
 | Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | ▲, depois SOCO / CHUTE |
 | Defesa agachada    | ↓ + D                                      | ▼ + DEF                |
