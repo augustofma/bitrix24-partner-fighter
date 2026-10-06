@@ -16,11 +16,16 @@ Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitóri
 ```
 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
-2. **Seleção:** cards gerados pelo roster, em páginas de até quatro. Augusto é a seleção
-   inicial; FILIPE e FIGHTER_A também são selecionáveis. FIGHTER_B aparece com a marca "CPU".
-   ← → ou botões laterais percorrem os selecionáveis; tocar um card seleciona e tocar
-   novamente confirma. O adversário prioriza os personagens reservados à CPU. Abaixo, o
-   seletor "DIFICULDADE < FÁCIL | NORMAL | DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
+2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelo roster (3 × 2 por
+   página; slots "EM BREVE" completam a página). Augusto é a seleção inicial; FILIPE e
+   FIGHTER_A também são selecionáveis. FIGHTER_B aparece esmaecido com a marca "CPU". O card
+   escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
+   destaque mostra retrato ampliado, nome, descrição e barras PODER / VELOCIDADE / ALCANCE
+   (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
+   há várias páginas) percorrem os selecionáveis; tocar um card seleciona e tocar de novo
+   confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. O selo "VS ..."
+   mostra o adversário, que prioriza os personagens reservados à CPU. Abaixo da grade, o
+   painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.

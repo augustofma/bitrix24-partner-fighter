@@ -90,11 +90,19 @@ src/
     HitEffects.ts         Faíscas de impacto
     SpecialEffects.ts     VFX procedural por configuração, sincronizado a stateFrame
     DebugOverlay.ts       Hitboxes/hurtboxes (F2)
-    PortraitView.ts       Card de personagem (seleção/VS/vitória)
+    PortraitView.ts       Card de personagem (seleção/VS/vitória); `framed: false` só a arte
   ui/                     Interface fixa na tela (Phaser)
     FightHud.ts, HealthBar.ts, Announcer.ts, TouchControls.ts,
-    SpecialMeterBar.ts, DifficultySelector.ts (seletor < FÁCIL | NORMAL | DIFÍCIL >),
+    SpecialMeterBar.ts, DifficultySelector.ts (painel < FÁCIL | NORMAL | DIFÍCIL >),
     MenuButton.ts, ArcadeBackground.ts, theme.ts
+    select/               Visual da seleção de personagem (Phaser, exceto os módulos puros)
+      selectLayout.ts     PURO: geometria da tela, posição de cada card, páginas e slots vazios
+      fighterRatings.ts   PURO: barras PODER/VELOCIDADE/ALCANCE derivadas do FighterConfig
+      SelectBackground.ts Mapa pixel-art procedural (gerado uma vez como textura) + nuvens
+      arcadeFrame.ts      Moldura pixel-art (contorno, borda dupla, cantos em degrau)
+      ArcadeButton.ts     Botão arcade (primário/secundário, hover, pressão, pulso)
+      RosterCard.ts       Card da grade (retrato, nome, P1, brilho, CPU, "EM BREVE")
+      HeroPanel.ts        Painel de destaque do lutador selecionado
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
     transitions.ts        Fade entre cenas
@@ -128,9 +136,13 @@ Os dados passam pelo `scene.start(key, data)`:
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
-A seleção deriva os cards do `ROSTER`, com até quatro por página; navegar troca a página
-automaticamente e os cards ocultos não recebem input. Há botões laterais para touch quando
-há mais de uma página, mantendo o layout utilizável com 8–16 personagens.
+A seleção deriva os cards do `ROSTER`, numa grade 3 × 2 por página (`selectLayout.ts`);
+navegar troca a página automaticamente, os cards ocultos não recebem input e slots vazios
+completam a última página. Com mais de uma página aparecem ◀ ▶ e o indicador de página no
+topo (no lugar do selo do adversário), mantendo o layout utilizável com 8–16 personagens.
+Toda a apresentação fica em `src/ui/select/`; a cena só orquestra seleção, teclado e
+`MatchSetup`. Nada ali usa imagens novas: fundo, molduras e botões são desenhados em código,
+e os retratos vêm de `createPortrait` (o mesmo caminho de VS e vitória).
 `pickCpuOpponent` prioriza um personagem não selecionável diferente do jogador e, na ausência
 dele, usa o primeiro diferente. As cenas continuam recebendo apenas `MatchSetup`.
 

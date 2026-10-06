@@ -17,6 +17,12 @@ export const COLORS = {
   hitSpark: 0xfff3b0,
   blockSpark: 0x7fe7ff,
   koSpark: 0xff3e3e,
+  // Character select: Brazilian arcade palette (petrol blue / teal / gold / orange).
+  petrol: 0x062a33,
+  teal: 0x0d5c66,
+  tealLight: 0x37c4b4,
+  orange: 0xff8a1f,
+  sand: 0xe6c27a,
 } as const;
 
 export const FONT_FAMILY = '"Arial Black", Impact, "Trebuchet MS", sans-serif';

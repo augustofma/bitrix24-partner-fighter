@@ -1,46 +1,47 @@
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
-import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
+import { GAME_WIDTH } from '../config/display';
 import { DEFAULT_AI_DIFFICULTY } from '../config/match';
 import { RegistryKeys } from '../config/registryKeys';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { ROSTER, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
-import { createPortrait } from '../render/PortraitView';
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import { isAIDifficulty, type AIDifficulty, type MatchSetup } from '../types/match';
-import { createArcadeBackground } from '../ui/ArcadeBackground';
 import { DifficultySelector } from '../ui/DifficultySelector';
-import { MenuButton } from '../ui/MenuButton';
+import { ArcadeButton } from '../ui/select/ArcadeButton';
+import { drawArcadeFrame } from '../ui/select/arcadeFrame';
+import { HeroPanel } from '../ui/select/HeroPanel';
+import { RosterCard } from '../ui/select/RosterCard';
+import { createSelectBackground } from '../ui/select/SelectBackground';
+import {
+  CARDS_PER_PAGE,
+  SELECT_LAYOUT,
+  cardSlot,
+  fillerSlots,
+  pageCount,
+} from '../ui/select/selectLayout';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
-const CARD_WIDTH = 160;
-const CARD_HEIGHT = 210;
-const CARD_GAP = 36;
-const CARDS_Y = 232;
-const CARDS_PER_PAGE = 4;
-const PAGE_BUTTON_INSET = 30;
-const PAGE_BUTTON_STYLE = { width: 44, height: 60, fontSize: 24 };
-const CURSOR_PADDING = 10;
-const INFO_NAME_Y = 358;
-const INFO_DESCRIPTION_Y = 388;
-const DIFFICULTY_Y = 434;
-const CONFIRM_Y = 486;
-const CONFIRM_STYLE = { width: 220, height: 46, fontSize: 24 };
+const TITLE_SHINE_MS = 1400;
+const TITLE_SHINE_DELAY_MS = 2200;
+const FOOTER_HEIGHT = 28;
 
 /**
- * Character grid built from ROSTER. Works for any number of fighters; non-selectable
- * ones are shown locked (CPU only in v0.1).
+ * Arcade roster screen built from ROSTER: illustrated map background, a paged grid of fighter
+ * cards, a hero panel for the highlighted fighter, the CPU difficulty and a SELECIONAR button.
+ * Works for any roster size; non-selectable fighters are shown locked (CPU only).
  */
 export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
-  private cards: Phaser.GameObjects.Container[] = [];
-  private cursor!: Phaser.GameObjects.Rectangle;
-  private infoName!: Phaser.GameObjects.Text;
-  private infoDescription!: Phaser.GameObjects.Text;
+  private cards: RosterCard[] = [];
+  private hero!: HeroPanel;
   private difficulty!: DifficultySelector;
+  private selectButton!: ArcadeButton;
+  private pageLabel: Phaser.GameObjects.Text | null = null;
+  private opponentLabel: Phaser.GameObjects.Text | null = null;
 
   constructor() {
     super(SceneKeys.CharacterSelect);
@@ -48,113 +49,151 @@ export class CharacterSelectScene extends Phaser.Scene {
 
   create(): void {
     fadeIn(this);
-    createArcadeBackground(this);
-    const centerX = GAME_WIDTH / 2;
-    this.add.text(centerX, 52, STRINGS.selectTitle, arcadeText(36, COLORS.gold)).setOrigin(0.5);
+    createSelectBackground(this);
 
     this.selectedIndex = ROSTER.findIndex((fighter) => fighter.selectable);
     if (this.selectedIndex < 0) throw new Error('The roster has no selectable fighter.');
 
-    this.cursor = this.add
-      .rectangle(0, CARDS_Y, CARD_WIDTH + CURSOR_PADDING, CARD_HEIGHT + CURSOR_PADDING)
-      .setStrokeStyle(5, COLORS.gold);
-    this.tweens.add({ targets: this.cursor, alpha: 0.4, duration: 400, yoyo: true, repeat: -1 });
+    this.createTopBar();
     this.cards = [];
     this.createCards();
-    if (ROSTER.length > CARDS_PER_PAGE) {
-      new MenuButton(
-        this,
-        PAGE_BUTTON_INSET,
-        CARDS_Y,
-        STRINGS.previousFighter,
-        () => this.moveSelection(-1),
-        PAGE_BUTTON_STYLE,
-      );
-      new MenuButton(
-        this,
-        GAME_WIDTH - PAGE_BUTTON_INSET,
-        CARDS_Y,
-        STRINGS.nextFighter,
-        () => this.moveSelection(1),
-        PAGE_BUTTON_STYLE,
-      );
-    }
+    this.hero = new HeroPanel(this, ROSTER);
 
-    this.infoName = this.add
-      .text(centerX, INFO_NAME_Y, '', arcadeText(26, COLORS.cyan))
-      .setOrigin(0.5);
-    this.infoDescription = this.add
-      .text(centerX, INFO_DESCRIPTION_Y, '', bodyText(16, COLORS.white))
-      .setOrigin(0.5);
-
+    const { difficulty, selectButton, footerY } = SELECT_LAYOUT;
     this.difficulty = new DifficultySelector(
       this,
-      centerX,
-      DIFFICULTY_Y,
+      difficulty.x,
+      difficulty.y,
+      difficulty.width,
+      difficulty.height,
       this.savedDifficulty(),
-      (difficulty) => this.registry.set(RegistryKeys.aiDifficulty, difficulty),
+      (value) => this.registry.set(RegistryKeys.aiDifficulty, value),
     );
-    new MenuButton(this, centerX, CONFIRM_Y, STRINGS.confirm, () => this.confirm(), CONFIRM_STYLE);
+    this.selectButton = new ArcadeButton(
+      this,
+      selectButton.x,
+      selectButton.y,
+      STRINGS.selectButton,
+      () => this.confirm(),
+      { width: selectButton.width, height: selectButton.height, fontSize: 28, pulse: true },
+    );
+
     this.add
-      .text(centerX, GAME_HEIGHT - 18, STRINGS.selectHint, bodyText(13, COLORS.white))
+      .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.ink, 0.75)
+      .setStrokeStyle(2, COLORS.teal);
+    this.add
+      .text(GAME_WIDTH / 2, footerY, STRINGS.selectHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
-      .setAlpha(0.7);
+      .setAlpha(0.85);
 
     onKeys(this, ['LEFT'], () => this.moveSelection(-1));
     onKeys(this, ['RIGHT'], () => this.moveSelection(1));
     onKeys(this, ['UP'], () => this.difficulty.step(1));
     onKeys(this, ['DOWN'], () => this.difficulty.step(-1));
-    onKeys(this, MENU_CONFIRM_KEYS, () => this.confirm());
-    onKeys(this, MENU_BACK_KEYS, () => goToScene(this, SceneKeys.Menu));
+    onKeys(this, MENU_CONFIRM_KEYS, () => {
+      this.selectButton.flash();
+      this.confirm();
+    });
+    onKeys(this, MENU_BACK_KEYS, () => this.back());
 
     this.refreshSelection();
+  }
+
+  /** VOLTAR, the framed title (with a periodic shine), then the pager or the CPU opponent. */
+  private createTopBar(): void {
+    const { topBarY, backButton, title, pager, opponentBadge } = SELECT_LAYOUT;
+    new ArcadeButton(this, backButton.x, topBarY, STRINGS.back, () => this.back(), {
+      width: backButton.width,
+      height: backButton.height,
+      fontSize: 18,
+      variant: 'secondary',
+    });
+
+    const left = title.x - title.width / 2;
+    const top = topBarY - title.height / 2;
+    const banner = this.add.graphics();
+    drawArcadeFrame(banner, left, top, title.width, title.height, {
+      fill: COLORS.teal,
+      border: COLORS.gold,
+      inner: COLORS.orange,
+      shadow: 5,
+    });
+    // The shine travels inside the banner, so no mask is needed.
+    const shine = this.add.rectangle(left + 16, topBarY, 12, title.height - 16, COLORS.white, 0.22);
+    this.tweens.add({
+      targets: shine,
+      x: left + title.width - 16,
+      duration: TITLE_SHINE_MS,
+      delay: TITLE_SHINE_DELAY_MS,
+      repeatDelay: TITLE_SHINE_DELAY_MS,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+    this.add
+      .text(title.x, topBarY, STRINGS.selectTitle, arcadeText(30, COLORS.gold))
+      .setOrigin(0.5);
+
+    if (pageCount(ROSTER.length) > 1) {
+      const style = { width: pager.buttonWidth, height: pager.height, fontSize: 20 } as const;
+      new ArcadeButton(
+        this,
+        pager.x - pager.gap,
+        topBarY,
+        STRINGS.previousFighter,
+        () => this.moveSelection(-1),
+        { ...style, variant: 'secondary' },
+      );
+      new ArcadeButton(
+        this,
+        pager.x + pager.gap,
+        topBarY,
+        STRINGS.nextFighter,
+        () => this.moveSelection(1),
+        { ...style, variant: 'secondary' },
+      );
+      this.pageLabel = this.add
+        .text(pager.x, topBarY, '', arcadeText(16, COLORS.white))
+        .setOrigin(0.5);
+    } else {
+      const badge = this.add.graphics();
+      drawArcadeFrame(
+        badge,
+        opponentBadge.x - opponentBadge.width / 2,
+        topBarY - opponentBadge.height / 2,
+        opponentBadge.width,
+        opponentBadge.height,
+        { fill: COLORS.ink, fillAlpha: 0.85, border: COLORS.red, inner: COLORS.petrol },
+      );
+      this.opponentLabel = this.add
+        .text(opponentBadge.x, topBarY, '', arcadeText(17, COLORS.white))
+        .setOrigin(0.5);
+    }
+  }
+
+  private createCards(): void {
+    ROSTER.forEach((config, index) => {
+      const { x, y } = cardSlot(index);
+      this.cards.push(
+        new RosterCard(this, x, y, config, () => {
+          // First tap selects, a tap on the selected card confirms.
+          if (this.selectedIndex === index) this.confirm();
+          else {
+            this.selectedIndex = index;
+            this.refreshSelection();
+          }
+        }),
+      );
+    });
+    for (let filler = 0; filler < fillerSlots(ROSTER.length); filler++) {
+      const { x, y } = cardSlot(ROSTER.length + filler);
+      this.cards.push(new RosterCard(this, x, y, null, () => undefined));
+    }
   }
 
   /** Last difficulty chosen in this session (game registry), or the default. */
   private savedDifficulty(): AIDifficulty {
     const saved: unknown = this.registry.get(RegistryKeys.aiDifficulty);
     return isAIDifficulty(saved) ? saved : DEFAULT_AI_DIFFICULTY;
-  }
-
-  private cardX(index: number): number {
-    const pageStart = Math.floor(index / CARDS_PER_PAGE) * CARDS_PER_PAGE;
-    const count = Math.min(CARDS_PER_PAGE, ROSTER.length - pageStart);
-    const totalWidth = count * CARD_WIDTH + (count - 1) * CARD_GAP;
-    return (
-      (GAME_WIDTH - totalWidth) / 2 + CARD_WIDTH / 2 + (index - pageStart) * (CARD_WIDTH + CARD_GAP)
-    );
-  }
-
-  private createCards(): void {
-    ROSTER.forEach((config, index) => {
-      const card = createPortrait(this, this.cardX(index), CARDS_Y, config, {
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
-      });
-      this.cards.push(card);
-      if (!config.selectable) {
-        card.setAlpha(0.55);
-        const tag = this.add
-          .text(
-            CARD_WIDTH / 2 - 8,
-            -CARD_HEIGHT / 2 + 8,
-            STRINGS.cpuOnly,
-            arcadeText(16, COLORS.red),
-          )
-          .setOrigin(1, 0);
-        card.add(tag);
-        return;
-      }
-      card.setSize(CARD_WIDTH, CARD_HEIGHT).setInteractive({ useHandCursor: true });
-      // First tap selects, a tap on the selected card confirms.
-      card.on('pointerup', () => {
-        if (this.selectedIndex === index) this.confirm();
-        else {
-          this.selectedIndex = index;
-          this.refreshSelection();
-        }
-      });
-    });
   }
 
   private moveSelection(step: number): void {
@@ -174,13 +213,16 @@ export class CharacterSelectScene extends Phaser.Scene {
     if (!fighter) return;
     const page = Math.floor(this.selectedIndex / CARDS_PER_PAGE);
     this.cards.forEach((card, index) => {
-      const visible = Math.floor(index / CARDS_PER_PAGE) === page;
-      card.setVisible(visible);
-      if (card.input) card.input.enabled = visible;
+      card.setShown(cardSlot(index).page === page);
+      card.setSelected(index === this.selectedIndex);
     });
-    this.cursor.setX(this.cardX(this.selectedIndex));
-    this.infoName.setText(fighter.displayName);
-    this.infoDescription.setText(fighter.description);
+    this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(ROSTER.length)));
+    this.opponentLabel?.setText(STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName));
+    this.hero.show(fighter);
+  }
+
+  private back(): void {
+    goToScene(this, SceneKeys.Menu);
   }
 
   private confirm(): void {

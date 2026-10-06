@@ -13,6 +13,8 @@ export interface PortraitOptions {
   /** Face left (used for the right-hand side of the VS screen). */
   mirrored?: boolean;
   showName?: boolean;
+  /** Draw the card background and glow (false when the caller provides its own frame). */
+  framed?: boolean;
 }
 
 /** Height of the placeholder figure (feet to top of head) used to fit it in the card. */
@@ -39,26 +41,29 @@ export function createPortrait(
   config: FighterConfig,
   options: PortraitOptions,
 ): Phaser.GameObjects.Container {
-  const { width, height, mirrored = false, showName = true } = options;
+  const { width, height, mirrored = false, showName = true, framed = true } = options;
   const container = scene.add.container(x, y);
 
-  const background = scene.add
-    .rectangle(0, 0, width, height, COLORS.panel, 1)
-    .setStrokeStyle(4, config.palette.body);
-  const glow = scene.add.ellipse(
-    0,
-    height * 0.1,
-    width * 0.9,
-    height * 0.7,
-    config.palette.body,
-    0.25,
-  );
-  container.add([background, glow]);
+  if (framed) {
+    const background = scene.add
+      .rectangle(0, 0, width, height, COLORS.panel, 1)
+      .setStrokeStyle(4, config.palette.body);
+    const glow = scene.add.ellipse(
+      0,
+      height * 0.1,
+      width * 0.9,
+      height * 0.7,
+      config.palette.body,
+      0.25,
+    );
+    container.add([background, glow]);
+  }
 
+  const padding = framed ? CARD_PADDING : 0;
   const area: ArtArea = {
-    width: width - CARD_PADDING * 2,
-    height: height - (showName ? NAME_BAR_HEIGHT : 0) - CARD_PADDING * 2,
-    bottom: height / 2 - (showName ? NAME_BAR_HEIGHT : 0) - CARD_PADDING,
+    width: width - padding * 2,
+    height: height - (showName ? NAME_BAR_HEIGHT : 0) - padding * 2,
+    bottom: height / 2 - (showName ? NAME_BAR_HEIGHT : 0) - padding,
   };
   const portraitKey = config.assets.portrait ? portraitTextureKey(config.assets.portrait) : null;
   if (portraitKey && scene.textures.exists(portraitKey)) {

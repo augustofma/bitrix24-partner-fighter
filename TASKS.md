@@ -171,6 +171,17 @@ sem pedido explícito.**
       por nível, reação nunca antecipada, determinismo e CPU x CPU com dano por dificuldade
 - [x] Simulação CPU x CPU (20 partidas por par): DIFÍCIL > NORMAL > FÁCIL em todas
 
+## DONE (v0.13: redesign da seleção, branch `feature/character-select-redesign`)
+
+- [x] Fundo pixel-art procedural (litoral tropical, vila colorida, coqueiros, nuvens em parallax)
+- [x] Topo com VOLTAR, título "ESCOLHA SEU PARCEIRO" em moldura dupla com brilho e selo do adversário
+- [x] Grade 3 × 2 paginada, cards com retrato, nome, P1, brilho pulsante, CPU e "EM BREVE"
+- [x] Painel de destaque com retrato ampliado, descrição e barras derivadas do config (só visual)
+- [x] Botão SELECIONAR arcade com pulso/hover; dificuldade num painel próprio (teclado e toque)
+- [x] Sem mudanças em simulação, combate, roster, FighterConfig ou regras de seleção
+- [x] Testes de layout, barras e da cena (seleção, toque, confirmar, voltar, paginação, dificuldade)
+- [x] Validado no Chromium headless: desktop 1280×720 e mobile landscape 844×390 com toque
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

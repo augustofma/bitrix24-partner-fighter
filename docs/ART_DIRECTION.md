@@ -242,6 +242,30 @@ reposicionado 8 px para baixo. F2 confirmou correspondência aproximada às caix
 gameplay. Seleção, VS, HUD, controles, flipX, cross-up e resultados por KO foram validados no
 Chrome. As poses de guarda/hurt dobram o corpo dentro da hurtbox padrão; arte não muda colisão.
 
+## Interface da seleção de personagem
+
+Visual de fliperama brasileiro, sem assets de imagem novos: tudo é desenhado em código em
+`src/ui/select/`.
+
+- **Fundo:** mapa pixel-art procedural de um litoral tropical ao entardecer (mar petróleo,
+  praias, mata, morros arredondados, rio, vila colorida no morro, coqueiros e veleiros), em
+  "pixels" de 6 px, gerado de forma determinística e escurecido para não competir com a UI.
+  Nuvens translúcidas fazem um parallax lento.
+- **Paleta:** petróleo, teal, dourado, amarelo e laranja (`COLORS.petrol`, `teal`,
+  `tealLight`, `gold`, `orange`) com contorno escuro (`ink`).
+- **Molduras:** `drawArcadeFrame`, com contorno, borda colorida, linha interna (contorno
+  duplo), brilho no topo e cantos em degrau, só com retângulos alinhados (nítido em qualquer
+  escala).
+- **Cards:** retrato existente sobre faixas na cor do personagem e plaqueta de nome. O card
+  selecionado tem borda dourada, brilho pulsante, leve zoom e marcador P1.
+- **Painel de destaque:** retrato ampliado sob um "holofote" na cor do personagem, faixa
+  com o nome, descrição e barras em blocos.
+- **Botões:** SELECIONAR amarelo/dourado com pulso; VOLTAR e setas em teal. Hover clareia e
+  pressionar afunda o texto.
+
+Inspirada na linguagem de telas de seleção de fliperama, sem copiar logos, textos,
+personagens ou artes de outros jogos.
+
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,

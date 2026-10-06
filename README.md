@@ -18,8 +18,10 @@ especial) e +3 quando o normal é bloqueado. Especiais nunca geram energia para 
 o custo é descontado ao iniciar, mesmo errando; segurar F não repete. A barra é mantida entre
 os rounds e zera numa nova partida.
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
-A seleção pagina automaticamente a cada quatro cards quando o roster cresce; setas do teclado
-ou botões laterais percorrem os selecionáveis. Não há posições específicas por personagem.
+A seleção tem visual de fliperama brasileiro: mapa pixel-art procedural ao fundo, grade de
+cards (3 × 2 por página, com paginação automática quando o roster cresce), painel de destaque
+com retrato ampliado e barras de PODER / VELOCIDADE / ALCANCE derivadas do config, botões
+VOLTAR e SELECIONAR. Não há posições específicas por personagem.
 Na mesma tela escolhe-se a dificuldade da CPU (FÁCIL, NORMAL ou DIFÍCIL; padrão NORMAL, a
 última escolha é lembrada durante a sessão). As lutas são em melhor de 3 rounds e a defesa
 depende do nível do golpe: rasteira só se defende agachado e golpes aéreos só em pé
