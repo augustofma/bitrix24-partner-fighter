@@ -561,7 +561,7 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
 ## Música
 
 Cada tela tem trilha própria, original: tema de abertura no menu, faixa mais rápida na seleção,
-tema de aventura no mapa do Brasil (inclusive durante o voo) e a faixa do cenário na luta
+tema de mapa de arcade de luta no mapa (inclusive durante o voo) e a faixa do cenário na luta
 (`StageConfig.music`; hoje `partner-summit-theme`). O VS mantém a música da tela anterior. Quando
 a partida termina a música da luta some e toca uma fanfarra curta (5 s) na vitória; depois,
 silêncio. Trocas sempre com fade. A música só começa depois da primeira interação (exigência dos

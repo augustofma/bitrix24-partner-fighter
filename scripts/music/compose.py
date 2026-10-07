@@ -616,38 +616,86 @@ def partner_summit_theme() -> Track:
 
 
 def story_map_theme() -> Track:
-    """Brazil travel map: adventure, lighter rhythm. D major, 120 BPM, 16 bars."""
-    t = Track(bpm=120, bars=16)
-    prog = ["D", "A", "Bm", "G", "D", "C", "G", "A", "D", "A", "Bm", "G", "Em", "G", "A", "A"]
-    pads(t, prog, octave=4, velocity=0.75)
-    arpeggio(t, "pluck", prog, 0, [0, 2, 3, 2, 1, 2, 4, 2], 0.5, octave=5, velocity=0.65)
-    bassline(t, prog, 0, [(0, 1, 0), (1.5, 0.5, 0), (2, 1, 7), (3, 1, 12)])
-    melody(t, "lead", 0, [
-        [("F#5", 1), ("A5", 0.5), ("D6", 0.5), ("C#6", 1), ("A5", 1)],
-        [("E5", 1), ("A5", 1), ("C#6", 1.5), ("B5", 0.5)],
-        [("D6", 1), ("B5", 0.5), ("F#5", 0.5), ("B5", 1), ("D6", 1)],
-        [("E6", 1.5), ("D6", 0.5), ("B5", 1), ("G5", 1)],
-        [("A5", 1), ("F#5", 0.5), ("A5", 0.5), ("D6", 1), ("F#6", 1)],
-        [("E6", 1), ("C6", 1), ("G5", 1), ("E5", 1)],
-        [("D6", 1), ("B5", 0.5), ("G5", 0.5), ("B5", 1), ("D6", 1)],
-        [("C#6", 2), ("A5", 1), ("E5", 1)],
-    ], velocity=0.85)
-    melody(t, "lead", 12, [
-        [("G5", 1), ("B5", 1), ("E6", 1.5), ("D6", 0.5)],
-        [("D6", 1), ("B5", 1), ("G5", 1), ("B5", 1)],
-        [("C#6", 1), ("E6", 1), ("A6", 1.5), ("G6", 0.5)],
-        [("E6", 2), ("C#6", 1), ("A5", 1)],
-    ], velocity=0.85)
-    melody(t, "chip", 8, [
-        [("A6", 0.5), (None, 1.5), ("F#6", 0.5), (None, 1.5)],
-        [("E6", 0.5), (None, 1.5), ("C#6", 0.5), (None, 1.5)],
-        [("D6", 0.5), (None, 1.5), ("F#6", 0.5), (None, 1.5)],
-        [("G6", 0.5), (None, 1.5), ("D6", 0.5), (None, 1.5)],
-    ], velocity=0.5)
-    drums(t, 0, 16, {"kick": [0, 2.5], "clap": [1, 3], "hat": EIGHTHS}, velocity=0.85)
-    drums(t, 0, 16, {"hat": OFFBEATS}, velocity=0.5)
-    for bar in (0, 8):
-        t.hit(bar * 4, "crash", 0.7)
+    """Story map and travel flight: arcade-fighter "world map" energy. D minor, 138 BPM, 24
+    bars. Original melody in the genre's language: a funky octave-popping bass in sixteenths,
+    orchestra hits and brass stabs on the off-beats, a heroic horn theme (A), the same theme
+    doubled by the synth lead and turning to the relative major (A'), a soaring lead bridge
+    over strings (B) and a hit-and-snare-roll turnaround back to the top."""
+    t = Track(bpm=138, bars=24, reverb=0.12, reverb_seconds=1.5)
+    a1 = ["Dm", "Dm", "Bb", "C", "Dm", "Dm", "Gm", "A"]
+    a2 = ["Dm", "Dm", "Bb", "C", "Dm", "Dm", "Bb", "C"]
+    b = ["Bb", "C", "Am", "Dm", "Gm", "C", "F", "A"]
+    prog = a1 + a2 + b
+
+    def hit(beat: float, name: str, octave: int = 4, velocity: float = 1.0) -> None:
+        _, tones = chord(name, octave)
+        for tone in tones + [tones[0] + 12]:
+            t.add("stab", beat, 0.5, tone, velocity)
+
+    # Strings bed and the funky bass under everything.
+    for bar, name in enumerate(prog):
+        for tone in chord(name, 4)[1]:
+            t.add("strings", bar * 4, 4, tone, 0.55 if bar < 16 else 0.75)
+    bassline(t, prog, 0, [(0, 0.45, 0), (0.5, 0.2, 0), (0.75, 0.2, 12), (1.5, 0.45, 0),
+                          (2, 0.2, 0), (2.5, 0.2, 12), (2.75, 0.2, 10), (3, 0.45, 7), (3.5, 0.45, 12)])
+    for note in t.voices["bass"]:
+        note.velocity = 0.7  # leave room for the horns
+
+    # Orchestra hits opening each phrase, brass stabs on the off-beats in between.
+    for bar, name in enumerate(prog):
+        if bar % 2 == 0:
+            hit(bar * 4, name, velocity=0.55)
+        for beat in (1.5, 3.5) if bar < 16 else (2.5,):
+            for tone in chord(name, 4)[1]:
+                t.add("horn", bar * 4 + beat, 0.3, tone, 0.35)
+
+    theme = [
+        [("D5", 0.75), ("E5", 0.75), ("F5", 0.5), ("A5", 2)],
+        [("G5", 0.5), ("F5", 0.5), ("E5", 0.5), ("F5", 0.5), ("D5", 2)],
+        [("D5", 0.75), ("F5", 0.75), ("Bb5", 0.5), ("A5", 1), ("G5", 1)],
+        [("G5", 0.75), ("A5", 0.75), ("C6", 0.5), ("G5", 2)],
+        [("A5", 0.75), ("G5", 0.75), ("F5", 0.5), ("D6", 2)],
+        [("C6", 0.5), ("A5", 0.5), ("F5", 0.5), ("G5", 0.5), ("A5", 2)],
+    ]
+    a1_end = [
+        [("Bb5", 0.75), ("A5", 0.75), ("G5", 0.5), ("D6", 1), ("Bb5", 1)],
+        [("A5", 1.5), ("G5", 0.25), ("F5", 0.25), ("E5", 1), ("C#5", 1)],
+    ]
+    a2_end = [
+        [("D6", 0.75), ("C6", 0.75), ("Bb5", 0.5), ("F5", 1), ("G5", 1)],
+        [("C6", 0.75), ("D6", 0.75), ("E6", 0.5), ("G6", 2)],
+    ]
+    melody(t, "horn", 0, theme + a1_end, velocity=0.9)
+    melody(t, "horn", 8, theme + a2_end, velocity=0.9)
+    melody(t, "lead", 8, theme + a2_end, velocity=0.45)  # the synth lead joins the second pass
+    bridge = [
+        [("F5", 1), ("Bb5", 1), ("D6", 1.5), ("C6", 0.5)],
+        [("E6", 1), ("D6", 0.5), ("C6", 0.5), ("G5", 2)],
+        [("A5", 0.75), ("C6", 0.75), ("E6", 0.5), ("A6", 2)],
+        [("G6", 0.5), ("F6", 0.5), ("E6", 0.5), ("D6", 0.5), ("A5", 2)],
+        [("Bb5", 1), ("D6", 1), ("G6", 1.5), ("F6", 0.5)],
+        [("E6", 0.75), ("F6", 0.75), ("G6", 0.5), ("C6", 2)],
+        [("A5", 0.5), ("C6", 0.5), ("F6", 1), ("A6", 1), ("G6", 1)],
+        [("A6", 1.5), ("G6", 0.25), ("F6", 0.25), ("E6", 1), ("C#6", 1)],
+    ]
+    melody(t, "lead", 16, bridge, velocity=0.85)
+    melody(t, "horn", 16, [[(n and n[:-1] + str(int(n[-1]) - 1), d) for n, d in bar] for bar in bridge],
+           velocity=0.5)  # horns an octave below the lead
+
+    # Drums: driving groove, fills into each section, crashes on the downbeats.
+    drums(t, 0, 24, {"kick": [0, 1.5, 2, 2.75], "snare": [1, 3]}, velocity=0.85)
+    drums(t, 0, 24, {"hat": SIXTEENTHS}, velocity=0.55)
+    drums(t, 0, 24, {"ohat": OFFBEATS}, velocity=0.4)
+    drums(t, 7, 1, {"tom": [3, 3.25, 3.5, 3.75]}, velocity=0.75)
+    drums(t, 15, 1, {"snare": [3, 3.25, 3.5, 3.75]}, velocity=0.8)
+    for bar in (0, 8, 16):
+        t.hit(bar * 4, "crash", 0.8)
+        t.add("timpani", bar * 4, 1, chord(prog[bar], 2)[0], 0.5)
+    # Turnaround: A-major hits on the push, then a snare roll back to the top of the loop.
+    for beat in (0.75, 1.5):
+        hit(23 * 4 + beat, "A", velocity=0.6)
+    for i in range(8):
+        t.hit(23 * 4 + 2 + i / 4, "snare", 0.3 + 0.5 * i / 7)
     return t
 
 
