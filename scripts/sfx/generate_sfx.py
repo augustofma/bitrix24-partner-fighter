@@ -131,15 +131,16 @@ def sfx_air_kick(rng):
 
 
 def sfx_block(rng):
-    """Energetic/metallic guard: inharmonic ringing partials, a click and a short zap."""
-    t = seconds(0.22)
-    partials = [(820, 1.0, 26), (1345, 0.7, 30), (2210, 0.5, 38), (3190, 0.35, 46), (4470, 0.2, 60)]
-    ring = sum(a * np.sin(2 * np.pi * f * t) * np.exp(-t * r) for f, a, r in partials)
-    click = highpass(rng.uniform(-1, 1, int(0.012 * SR)), 3000) * decay(0.012, 300)
-    zap = square(sweep(520, 1500, 0.06), 5) * decay(0.06, 40) * 0.25
-    body = np.sin(sweep(180, 120, 0.06)) * decay(0.06, 50) * 0.6
-    # Compressed so the guard reads as clearly as a hit, despite its sparse ringing.
-    return np.tanh(2.6 * mix(ring * 0.5, click * 0.8, zap, body))
+    """Forearm guard: a padded, muffled thud of the blow landing on the arm, the skin-and-sleeve
+    slap on contact, a short cloth rustle as the arm absorbs it. No ringing, no pitch: a dull
+    body sound, lighter and shorter than a clean hit."""
+    thud = np.sin(sweep(150, 78, 0.12, curve=2.0)) * decay(0.12, 30) * 0.55
+    knock = lowpass(rng.uniform(-1, 1, int(0.06 * SR)), 700) * decay(0.06, 55) * 0.9
+    slap = bandpass(rng.uniform(-1, 1, int(0.045 * SR)), 600, 3200) * decay(0.045, 75) * 2.2
+    # The arm gives a little: a second, softer contact a few milliseconds later.
+    give = at(bandpass(rng.uniform(-1, 1, int(0.03 * SR)), 400, 2000) * decay(0.03, 110) * 0.9, 0.009)
+    rustle = at(bandpass(rng.uniform(-1, 1, int(0.08 * SR)), 1500, 5000) * decay(0.08, 38) * 0.45, 0.012)
+    return np.tanh(1.8 * mix(attack(thud, 1.0), attack(knock, 0.6), attack(slap, 0.3), give, rustle))
 
 
 def sfx_hurt(rng):

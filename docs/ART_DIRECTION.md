@@ -489,7 +489,7 @@ Volume da música 0,55 (ganho por faixa para igualar). Arquivos em `public/audio
 
 Efeitos **originais** de fliperama de luta, sintetizados por
 [scripts/sfx/generate_sfx.py](../scripts/sfx/README.md) (osciladores, ruído, varreduras de pitch,
-envelopes, filtros): impactos secos, chutes mais graves, bloqueio metálico/energético, pulo curto,
+envelopes, filtros): impactos secos, chutes mais graves, bloqueio abafado de antebraço, pulo curto,
 aterrissagem discreta, K.O. forte, especial tecnológico e UI arcade. Nada copiado de outros jogos.
 Os níveis (golpes 0,62-0,75, defesa 0,60, K.O. e especial 0,85, pulo 0,35, aterrissagem 0,40, UI
 0,45) ficam acima da música (0,47-0,55) e foram conferidos em playtest. Impactos, defesa, dano,

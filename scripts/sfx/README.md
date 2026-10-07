@@ -21,7 +21,7 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `crouch-kick`   | Rasteira conecta                        | Impacto grave com raspado                   | 0,72   |
 | `air-punch`     | Soco aéreo conecta                      | Impacto brilhante                           | 0,65   |
 | `air-kick`      | Chute aéreo conecta                     | Impacto grave com estalo agudo              | 0,75   |
-| `block`         | Golpe defendido                         | Metálico/energético (parciais inarmônicos)  | 0,60   |
+| `block`         | Golpe defendido                         | Baque abafado de antebraço + tapa e tecido  | 0,60   |
 | `hurt`          | Quem apanha (junto do impacto)          | Baque corporal com formante, sem voz        | 0,65   |
 | `jump`          | O pulo sai do chão                      | Swoosh curto para cima                      | 0,35   |
 | `landing`       | Contato real com o chão                 | Baque grave discreto                        | 0,40   |
