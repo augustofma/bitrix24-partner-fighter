@@ -1,6 +1,7 @@
 import type { StoryLocation, StoryProgress } from '../types/story';
 import { locationToMap, type MapPoint, type MapRect } from './brazilMap';
 import { getStoryLocation } from './locations';
+import { isInternationalTrip, mapViewForTrip, type MapView, type MapViewId } from './mapViews';
 
 /** How far the arc bulges sideways, relative to the trip's length. */
 const ARC_BULGE = 0.28;
@@ -46,13 +47,34 @@ export function flightPath(from: MapPoint, to: MapPoint): FlightPath {
   };
 }
 
-/** The trip the map must animate for a campaign about to travel (null when not traveling). */
+/** Everything the travel map needs to animate one trip. */
+export interface Trip {
+  from: StoryLocation;
+  to: StoryLocation;
+  /** Brazil view for domestic trips, world view when the trip leaves the country. */
+  view: MapView;
+  /** Screen rectangle of that view. */
+  rect: MapRect;
+  path: FlightPath;
+  international: boolean;
+}
+
+/**
+ * The trip the map must animate for a campaign about to travel (null when not traveling).
+ * It always leaves from `progress.currentLocation`, where the campaign really is.
+ */
 export function tripForProgress(
   progress: StoryProgress,
-  rect: MapRect,
-): { from: StoryLocation; to: StoryLocation; path: FlightPath } | null {
+  rects: Readonly<Record<MapViewId, MapRect>>,
+): Trip | null {
   if (progress.phase !== 'travel' || !progress.nextLocation) return null;
   const from = getStoryLocation(progress.currentLocation);
   const to = getStoryLocation(progress.nextLocation);
-  return { from, to, path: flightPath(locationToMap(from, rect), locationToMap(to, rect)) };
+  const view = mapViewForTrip(from, to);
+  const rect = rects[view.id];
+  const path = flightPath(
+    locationToMap(from, rect, view.bounds),
+    locationToMap(to, rect, view.bounds),
+  );
+  return { from, to, view, rect, path, international: isInternationalTrip(from, to) };
 }

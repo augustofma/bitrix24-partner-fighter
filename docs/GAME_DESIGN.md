@@ -445,19 +445,26 @@ alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 
 ## Modo História
 
-Uma turnê pelo Brasil contra rivais de outras cidades, usando as mesmas lutas da luta rápida.
+Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da luta rápida.
 
 - **Seleção ("MODO HISTÓRIA"):** só lutadores com campanha podem ser escolhidos (hoje Augusto e
   Filipe, de **Recife - PE**); João e Romualdo aparecem como **RIVAL**. O selo mostra a origem
   ("ORIGEM RECIFE - PE"); a dificuldade da CPU vale para a campanha toda.
-- **Rota de Augusto e Filipe:** etapa 1, Recife → São Paulo contra **João Guiotti** (São Paulo -
-  SP); etapa 2, São Paulo → Joinville contra **Romualdo** (Joinville - SC).
-- **Mapa:** Brasil em pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do
-  Equador e do Trópico de Capricórnio). O avião decola da cidade atual e voa em curva até a
-  próxima (cerca de 3 s), com rastro pontilhado; o título mostra "RECIFE → SÃO PAULO" e
-  "ETAPA 1/2". Ao pousar: "PRÓXIMO DESAFIO", retrato, nome e cidade do rival e CONTINUAR.
-  Enter / toque pulam o voo ou continuam; sem ação, segue sozinho após ~4 s. Esc sai.
-- **VS:** cidade/UF abaixo de cada retrato e "ETAPA n/t" no topo.
+- **Origem × local do confronto:** a origem oficial de cada lutador não muda (Filipe e Augusto
+  de Recife - PE, João de São Paulo - SP, Romualdo de Joinville - SC), mas a campanha pode
+  enfrentá-lo em outro lugar: **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
+  Joinville.
+- **Rota de Augusto:** Recife → **Portugal** (Filipe) → **Rússia** (João Guiotti) → Joinville
+  (Romualdo). **Rota de Filipe:** Recife → Rússia (João Guiotti) → Joinville (Romualdo). Cada
+  viagem parte de onde a campanha está (o lugar da luta anterior).
+- **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
+  dos trópicos). Viagens dentro do Brasil usam o mapa do Brasil (voo de ~3 s); viagens ao
+  exterior usam um mapa-múndi estilizado com o Brasil destacado em dourado (voo de ~4,4 s, em
+  curva longa sobre o Atlântico). O título mostra "RECIFE → PORTUGAL" e "ETAPA 1/3"; durante o
+  voo, "PRÓXIMO DESTINO" e o lugar; ao pousar, "PRÓXIMO DESAFIO", retrato, nome e local do rival
+  e CONTINUAR. Enter / toque pulam o voo ou continuam; sem ação, segue sozinho após ~4 s. Esc sai.
+- **VS:** origem oficial abaixo de cada retrato, **local da luta** abaixo do "VS" (ex.: PORTUGAL)
+  e "ETAPA n/t" no topo.
 - **Luta:** melhor de 3, regras normais.
 - **Vitória:** CONTINUAR leva à próxima viagem. **Derrota:** TENTAR NOVAMENTE repete só aquela
   luta (mesmo rival, cenário e dificuldade); SAIR PARA O MENU encerra a campanha.

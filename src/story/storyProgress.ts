@@ -1,7 +1,7 @@
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { AIDifficulty, MatchSetup } from '../types/match';
 import type { StoryLeg, StoryProgress } from '../types/story';
-import { storyRouteFor } from './storyProfiles';
+import { legDeparture, storyRouteFor } from './storyProfiles';
 
 /*
  * Campaign progression as pure functions over an immutable StoryProgress. The scenes only
@@ -23,7 +23,7 @@ function atLeg(fighterId: string, stage: number, completed: readonly number[]): 
     return {
       selectedFighter: fighterId,
       currentStage: route.length,
-      currentLocation: last.to,
+      currentLocation: last.destination,
       nextLocation: null,
       opponent: null,
       completedStages: completed,
@@ -33,15 +33,16 @@ function atLeg(fighterId: string, stage: number, completed: readonly number[]): 
   return {
     selectedFighter: fighterId,
     currentStage: stage,
-    currentLocation: leg.from,
-    nextLocation: leg.to,
+    // Always from where the campaign is: home, or the previous fight's place.
+    currentLocation: legDeparture(fighterId, stage),
+    nextLocation: leg.destination,
     opponent: leg.opponent,
     completedStages: completed,
     phase: 'travel',
   };
 }
 
-/** A new campaign for the chosen fighter: first trip from its first leg's city. */
+/** A new campaign for the chosen fighter: the first trip leaves from its home. */
 export function startStory(fighterId: string): StoryProgress {
   return atLeg(fighterId, 0, []);
 }
@@ -85,8 +86,8 @@ export function storyMatchSetup(progress: StoryProgress, difficulty: AIDifficult
   };
 }
 
-/** Every city of the campaign in order (home first), e.g. for the completion screen. */
+/** Every place of the campaign in order (home first), e.g. for the completion screen. */
 export function routeCities(fighterId: string): string[] {
   const route = routeOf(fighterId);
-  return [route[0]?.from ?? '', ...route.map((leg) => leg.to)];
+  return [legDeparture(fighterId, 0), ...route.map((leg) => leg.destination)];
 }

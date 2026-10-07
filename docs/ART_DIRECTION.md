@@ -335,10 +335,15 @@ personagens ou artes de outros jogos.
 
 Tudo é desenhado em código, sem imagens novas, na paleta da seleção e da tela inicial:
 
-- **Mapa:** o contorno do Brasil (`src/story/brazilMap.ts`, lon/lat simplificado) é
-  rasterizado em células de 5 px: terra em azul escuro com pontilhado de ruído, costa em ciano
-  neon, oceano com pontinhos e um brilho suave atrás. Linhas tracejadas magenta discretas
-  marcam o Equador e o Trópico de Capricórnio. É gerado uma vez e reaproveitado como textura.
+- **Mapa:** contornos lon/lat simplificados (`src/story/brazilMap.ts` e `worldOutlines.ts`)
+  rasterizados em células de 5 px: terra em azul escuro com pontilhado de ruído, costa em ciano
+  neon, oceano com pontinhos e um brilho suave atrás; linhas tracejadas magenta discretas marcam
+  o Equador e os trópicos. Duas vistas: o Brasil sozinho (viagens nacionais) e um mapa-múndi
+  estilizado (viagens ao exterior), onde os outros continentes têm costa ciano mais apagada e o
+  Brasil fica mais claro, contornado em dourado e com o nome "BRASIL". Geradas uma vez e
+  reaproveitadas como textura.
+- **Países:** marcados num ponto central reconhecível (Rússia perto de Moscou), com rótulo só
+  com o nome ("PORTUGAL", "RÚSSIA").
 - **Cidades:** ponto com anel pulsante e rótulo "CIDADE - UF" em fonte PIXEL. Dourado = cidade
   atual, magenta = destino, ciano = já visitada, branco = outras.
 - **Rotas:** curva (Bezier quadrática) para o lado de dentro do país; etapas vencidas ficam

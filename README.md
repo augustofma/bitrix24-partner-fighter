@@ -51,11 +51,16 @@ dimensões, alpha e margens das 40 células. As fontes geradas e os prompts est�
 
 No menu, **JOGAR** abre **HISTÓRIA** e **LUTA RÁPIDA** (a luta rápida é a de sempre).
 Na história escolhe-se um lutador com campanha (hoje AUGUSTO e FILIPE, ambos de Recife - PE) e a
-dificuldade da CPU. A campanha é uma turnê pelo Brasil:
+dificuldade da CPU. A campanha de Augusto é uma turnê pelo mundo (as viagens ao exterior usam
+um mapa-múndi pixel-art; as nacionais, o mapa do Brasil):
 
-1. **Recife → São Paulo:** viagem de avião no mapa e luta contra **JOÃO GUIOTTI** (São Paulo - SP).
-2. **São Paulo → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
-3. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
+1. **Recife → Portugal:** luta contra **FILIPE** (de Recife - PE, enfrentado em Portugal).
+2. **Portugal → Rússia:** luta contra **JOÃO GUIOTTI** (de São Paulo - SP, enfrentado na Rússia).
+3. **Rússia → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
+4. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
+
+Filipe joga Recife → Rússia (João Guiotti) → Joinville (Romualdo). Cada viagem sai de onde a
+campanha está; o VS mostra o lugar da luta.
 
 Cada luta é melhor de 3, no mesmo motor da luta rápida. Ao perder: TENTAR NOVAMENTE (repete só
 aquela luta) ou SAIR PARA O MENU. No mapa, Enter / toque pula o voo ou continua; Esc sai.

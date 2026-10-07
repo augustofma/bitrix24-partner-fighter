@@ -9,7 +9,7 @@ import { getFighterConfig } from '../../fighters/roster';
 import { onKeys } from '../../input/menuKeys';
 import { VICTORY_ART } from '../../render/assets/victoryAssets';
 import { createPortrait } from '../../render/PortraitView';
-import { getStoryLocation } from '../../story/locations';
+import { getStoryLocation, isHomeCountry, locationName } from '../../story/locations';
 import { routeCities } from '../../story/storyProgress';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
@@ -61,9 +61,17 @@ export class CampaignCompleteScene extends Phaser.Scene {
       ? new VictoryCard(this, VICTORY_ART.cardFrame.key, [champion], champion.displayName).container
       : createPortrait(this, card.x, card.y, champion, FALLBACK_PORTRAIT);
     const title = createVictoryTitle(this, STRINGS.campaignComplete);
-    const cities = routeCities(champion.id).map((id) => getStoryLocation(id).city.toUpperCase());
+    const placesAbroad = routeCities(champion.id).some(
+      (id) => !isHomeCountry(getStoryLocation(id)),
+    );
+    const cities = routeCities(champion.id).map((id) => locationName(getStoryLocation(id)));
     const cheer = createResultLine(this, hasArt ? VICTORY_ART.resultPanel.key : null, [
-      { text: STRINGS.campaignCheer, tone: 'win' },
+      {
+        // A campaign that went abroad conquered more than Brazil.
+        text:
+          cities.length > 0 && placesAbroad ? STRINGS.campaignCheerWorld : STRINGS.campaignCheer,
+        tone: 'win',
+      },
       { text: STRINGS.campaignRoute(cities), tone: 'neutral' },
     ]);
 

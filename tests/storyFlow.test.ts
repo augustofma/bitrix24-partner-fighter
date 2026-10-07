@@ -14,6 +14,7 @@ import {
   quitStory,
   retryStoryFight,
 } from '../src/scenes/story/storyFlow';
+import { WORLD_TOUR } from '../src/story/storyProfiles';
 import type { MatchResult, MatchSetup } from '../src/types/match';
 
 /** A stand-in scene: only the game registry matters to the story glue. */
@@ -71,7 +72,7 @@ describe('story flow between the existing scenes', () => {
     retryStoryFight(scene);
     expect(lastNavigation()).toEqual([SceneKeys.Versus, setup]);
     const won = finishStoryMatch(scene, result(setup, 0));
-    expect(won).toMatchObject({ phase: 'travel', currentStage: 1, opponent: 'romualdo' });
+    expect(won).toMatchObject({ phase: 'travel', currentStage: 1, opponent: 'joao-guiotti' });
     // The same result reported twice never advances twice.
     expect(finishStoryMatch(scene, result(setup, 0))).toEqual(won);
     continueStory(scene);
@@ -81,7 +82,7 @@ describe('story flow between the existing scenes', () => {
   it('the last win leads to the campaign ending; quitting clears the campaign', () => {
     const scene = fakeScene();
     beginStory(scene, 'augusto');
-    for (let leg = 0; leg < 2; leg++) {
+    for (let leg = 0; leg < WORLD_TOUR.length; leg++) {
       arriveAndFight(scene);
       finishStoryMatch(scene, result(lastNavigation()?.[1] as MatchSetup, 0));
     }

@@ -1,31 +1,58 @@
-import type { StoryCharacterProfile, StoryLocation, StoryRoute } from '../types/story';
+import type { StoryCharacterProfile, StoryLeg, StoryLocation, StoryRoute } from '../types/story';
 import { getStoryLocation } from './locations';
 
-/**
- * The first campaign: from the Northeast to the South, through the partners' rivals.
- * A route is plain data: another character can reuse it or get a completely different one.
+/*
+ * Origins, encounter places and campaigns: plain configuration. A fighter's `home` is where
+ * they are from; `encounter` is where campaigns challenge them (it may be abroad). Routes list
+ * the rivals in order, each leg flying to that rival's encounter place.
  */
-export const PARTNER_TOUR: StoryRoute = [
-  { from: 'recife', to: 'sao-paulo', opponent: 'joao-guiotti' },
-  { from: 'sao-paulo', to: 'joinville', opponent: 'romualdo' },
+
+/** Rivals only: home and where they are met. */
+const RIVALS: readonly StoryCharacterProfile[] = [
+  // Filipe is from Recife, but the campaign meets him in Portugal.
+  { fighterId: 'filipe', home: 'recife', encounter: 'portugal' },
+  // João Guiotti is from São Paulo, but the campaign meets him in Russia.
+  { fighterId: 'joao-guiotti', home: 'sao-paulo', encounter: 'russia' },
+  { fighterId: 'romualdo', home: 'joinville' },
 ];
 
+/** Where a campaign fights this rival: its `encounter` place, or its home. */
+export function encounterLocationId(fighterId: string): string {
+  const profile = RIVALS.find((rival) => rival.fighterId === fighterId);
+  if (!profile) throw new Error(`"${fighterId}" is not a story rival.`);
+  return profile.encounter ?? profile.home;
+}
+
+/** A leg against `opponent`, at that rival's encounter place. */
+export function rivalLeg(opponent: string): StoryLeg {
+  return { opponent, destination: encounterLocationId(opponent) };
+}
+
+/** Augusto's world tour: Portugal (Filipe), Russia (João Guiotti), back home to Joinville. */
+export const WORLD_TOUR: StoryRoute = [
+  rivalLeg('filipe'),
+  rivalLeg('joao-guiotti'),
+  rivalLeg('romualdo'),
+];
+
+/** Filipe cannot face himself: Russia (João Guiotti), then Joinville (Romualdo). */
+export const FILIPE_TOUR: StoryRoute = [rivalLeg('joao-guiotti'), rivalLeg('romualdo')];
+
 /**
- * Origin of every story fighter and the campaign of the playable ones. Adding a partner:
- * an entry here (home city; plus `storyRoute` to make them playable in story mode).
+ * Every story fighter. Adding a partner: an entry here (home; `encounter` if campaigns meet
+ * them elsewhere; `storyRoute` to make them playable in story mode).
  */
 export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
-  { fighterId: 'augusto', home: 'recife', storyRoute: PARTNER_TOUR },
-  { fighterId: 'filipe', home: 'recife', storyRoute: PARTNER_TOUR },
-  { fighterId: 'joao-guiotti', home: 'sao-paulo' },
-  { fighterId: 'romualdo', home: 'joinville' },
+  { fighterId: 'augusto', home: 'recife', storyRoute: WORLD_TOUR },
+  { ...(RIVALS[0] as StoryCharacterProfile), storyRoute: FILIPE_TOUR },
+  ...RIVALS.slice(1),
 ];
 
 export function getStoryProfile(fighterId: string): StoryCharacterProfile | undefined {
   return STORY_PROFILES.find((profile) => profile.fighterId === fighterId);
 }
 
-/** Home city of a fighter (undefined for fighters outside the story). */
+/** Official home of a fighter (undefined for fighters outside the story). */
 export function fighterOrigin(fighterId: string): StoryLocation | undefined {
   const profile = getStoryProfile(fighterId);
   return profile ? getStoryLocation(profile.home) : undefined;
@@ -46,4 +73,14 @@ export function isStoryRival(fighterId: string): boolean {
   return STORY_PROFILES.some((profile) =>
     (profile.storyRoute ?? []).some((leg) => leg.opponent === fighterId),
   );
+}
+
+/** Where leg `stage` departs from: the previous leg's destination, or the fighter's home. */
+export function legDeparture(fighterId: string, stage: number): string {
+  const route = storyRouteFor(fighterId) ?? [];
+  const previous = route[stage - 1];
+  if (stage > 0 && previous) return previous.destination;
+  const home = getStoryProfile(fighterId)?.home;
+  if (!home) throw new Error(`"${fighterId}" has no home location.`);
+  return home;
 }

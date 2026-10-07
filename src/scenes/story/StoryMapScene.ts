@@ -8,15 +8,22 @@ import { STRINGS } from '../../config/strings';
 import { getFighterConfig } from '../../fighters/roster';
 import { onKeys } from '../../input/menuKeys';
 import { createPortrait } from '../../render/PortraitView';
-import { locationToMap, type MapPoint } from '../../story/brazilMap';
-import { flightPath, tripForProgress, type FlightPath } from '../../story/flightPath';
-import { STORY_LOCATIONS, getStoryLocation, locationLabel } from '../../story/locations';
+import { locationToMap, projectToMap, type MapPoint } from '../../story/brazilMap';
+import { flightPath, tripForProgress, type FlightPath, type Trip } from '../../story/flightPath';
+import {
+  HOME_COUNTRY,
+  STORY_LOCATIONS,
+  getStoryLocation,
+  locationLabel,
+  locationName,
+} from '../../story/locations';
+import { viewShows } from '../../story/mapViews';
 import { currentLeg } from '../../story/storyProgress';
-import { storyRouteFor } from '../../story/storyProfiles';
+import { legDeparture, storyRouteFor } from '../../story/storyProfiles';
 import type { StoryProgress } from '../../types/story';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
-import { createBrazilMap } from '../../ui/story/BrazilMapView';
+import { createStoryMap } from '../../ui/story/StoryMapView';
 import { planeTexture } from '../../ui/story/planeTexture';
 import { STORY_MAP_LAYOUT } from '../../ui/story/storyMapLayout';
 import { COLORS, arcadeText, pixelText } from '../../ui/theme';
@@ -26,7 +33,6 @@ import { arriveAndFight, getStoryProgress, quitStory } from './storyFlow';
 
 /** Pause on the map before take-off, then the flight itself (ms). */
 const TAKEOFF_DELAY_MS = 650;
-const FLIGHT_MS = 3000;
 /** Trail dots dropped every this share of the trip. */
 const TRAIL_STEP = 0.028;
 const PLANE_SCALE = 1.25;
@@ -39,6 +45,10 @@ const CITY_DOT_RADIUS = 5;
 const CITY_RING_RADIUS = 11;
 /** City names stay readable above the plane and its trail. */
 const LABEL_DEPTH = 3;
+/** Where the world map writes the home country's name (inside Brazil). */
+const HOME_COUNTRY_LABEL_AT = { latitude: -10, longitude: -52 } as const;
+/** "PRÓXIMO DESTINO" card: shown while flying, swapped for the rival card on landing. */
+const DESTINATION_OUT_MS = 180;
 
 type CityRole = 'current' | 'destination' | 'visited' | 'other';
 const CITY_COLORS: Record<CityRole, number> = {
@@ -49,16 +59,19 @@ const CITY_COLORS: Record<CityRole, number> = {
 };
 
 /**
- * Travel screen between story fights: the Brazil map with the campaign's cities, the
- * previous legs drawn as dotted gold routes, and a pixel plane flying along a curve from the
- * current city to the next. On landing it presents the next rival, then continues to the VS
- * screen (button, Enter/Space, touch, or automatically).
+ * Travel screen between story fights: the map (Brazil for domestic trips, the world for trips
+ * abroad) with the campaign's places, the previous legs drawn as dotted gold routes, and a
+ * pixel plane flying along a curve from where the campaign is to the next fight's place.
+ * While flying it announces the destination; on landing it presents the rival, then
+ * continues to the VS screen (button, Enter/Space, touch, or automatically).
  */
 export class StoryMapScene extends Phaser.Scene {
   private progress!: StoryProgress;
   private landed = false;
   private leaving = false;
   private flight: Phaser.Tweens.Tween | null = null;
+  private trip!: Trip;
+  private destinationCard: Phaser.GameObjects.GameObject[] = [];
 
   constructor() {
     super(SceneKeys.StoryMap);
@@ -69,21 +82,22 @@ export class StoryMapScene extends Phaser.Scene {
     // The map theme keeps going during the whole flight and the rival card.
     gameMusic(this).play(SCENE_MUSIC.storyMap);
     const progress = getStoryProgress(this);
-    const map = STORY_MAP_LAYOUT.map;
-    const trip = progress ? tripForProgress(progress, map) : null;
+    const trip = progress ? tripForProgress(progress, STORY_MAP_LAYOUT.maps) : null;
     if (!progress || !trip) {
       quitStory(this);
       return;
     }
     this.progress = progress;
+    this.trip = trip;
     this.landed = false;
     this.leaving = false;
 
     createArcadeBackground(this, COLORS.navyDeep, COLORS.navy);
-    createBrazilMap(this, map);
+    createStoryMap(this, trip.view, trip.rect);
     this.drawFlownLegs();
-    this.drawCities(trip.from.id, trip.to.id);
-    this.createRouteHeader(trip.from.city, trip.to.city);
+    this.drawPlaces(trip.from.id, trip.to.id);
+    this.createRouteHeader(locationName(trip.from), locationName(trip.to));
+    this.showDestination();
 
     const plane = this.createPlane(trip.path.from);
     this.time.delayedCall(TAKEOFF_DELAY_MS, () => this.fly(plane, trip.path));
@@ -114,12 +128,7 @@ export class StoryMapScene extends Phaser.Scene {
 
   private createRouteHeader(from: string, to: string): void {
     const { panel, routeTitle, leg } = STORY_MAP_LAYOUT;
-    const title = createFightTitle(
-      this,
-      panel.x,
-      routeTitle.y,
-      STRINGS.storyTrip(from.toUpperCase(), to.toUpperCase()),
-    );
+    const title = createFightTitle(this, panel.x, routeTitle.y, STRINGS.storyTrip(from, to));
     title.setScale(title.scaleX * fitTitleScale(title.displayWidth, routeTitle.maxWidth));
     const route = storyRouteFor(this.progress.selectedFighter) ?? [];
     this.add
@@ -132,17 +141,22 @@ export class StoryMapScene extends Phaser.Scene {
       .setOrigin(0.5);
   }
 
-  /** Every campaign city: role-colored dot with a pulsing ring and its name + UF. */
-  private drawCities(fromId: string, toId: string): void {
-    const route = storyRouteFor(this.progress.selectedFighter) ?? [];
+  /**
+   * Every place the current map shows: role-colored dot with a pulsing ring and its label.
+   * On the world map only the trip's ends and visited places are labeled (the Brazilian cities
+   * sit close together there) and Brazil gets its country name.
+   */
+  private drawPlaces(fromId: string, toId: string): void {
+    const { view, rect } = this.trip;
     const visited = new Set(
       this.progress.completedStages.flatMap((stage) => {
-        const leg = route[stage];
-        return leg ? [leg.from, leg.to] : [];
+        const leg = storyRouteFor(this.progress.selectedFighter)?.[stage];
+        return leg ? [legDeparture(this.progress.selectedFighter, stage), leg.destination] : [];
       }),
     );
-    const map = STORY_MAP_LAYOUT.map;
+    const world = view.id === 'world';
     for (const location of STORY_LOCATIONS) {
+      if (!viewShows(view, location)) continue;
       const role: CityRole =
         location.id === fromId
           ? 'current'
@@ -152,7 +166,7 @@ export class StoryMapScene extends Phaser.Scene {
               ? 'visited'
               : 'other';
       const color = CITY_COLORS[role];
-      const { x, y } = locationToMap(location, map);
+      const { x, y } = locationToMap(location, rect, view.bounds);
       const ring = this.add.circle(x, y, CITY_RING_RADIUS).setStrokeStyle(2, color, 0.9);
       this.tweens.add({
         targets: ring,
@@ -162,27 +176,40 @@ export class StoryMapScene extends Phaser.Scene {
         repeat: -1,
       });
       this.add.circle(x, y, CITY_DOT_RADIUS, color).setStrokeStyle(2, COLORS.ink);
-      // Labels go inland (left) for cities on the east half of the map.
-      const left = x > map.x + map.width * 0.5;
+      if (world && role === 'other') continue;
+      // Labels go inland (left) for places on the east half of the map.
+      const left = x > rect.x + rect.width * 0.5;
       this.add
         .text(x + (left ? -14 : 14), y, locationLabel(location), pixelText(13, color))
         .setOrigin(left ? 1 : 0, 0.5)
         .setDepth(LABEL_DEPTH);
+    }
+    if (world) {
+      const at = HOME_COUNTRY_LABEL_AT;
+      const { x, y } = projectToMap(at.latitude, at.longitude, rect, view.bounds);
+      this.add
+        .text(x, y, HOME_COUNTRY.toUpperCase(), pixelText(12, COLORS.gold))
+        .setOrigin(0.5)
+        .setAlpha(0.85);
     }
   }
 
   /** Legs already won, as dotted gold routes. */
   private drawFlownLegs(): void {
     const route = storyRouteFor(this.progress.selectedFighter) ?? [];
-    const map = STORY_MAP_LAYOUT.map;
+    const { view, rect } = this.trip;
     const g = this.add.graphics();
     g.fillStyle(COLORS.gold, 0.75);
     for (const stage of this.progress.completedStages) {
       const leg = route[stage];
       if (!leg) continue;
+      const from = getStoryLocation(legDeparture(this.progress.selectedFighter, stage));
+      const to = getStoryLocation(leg.destination);
+      // A leg that left this map's frame (e.g. abroad, on the Brazil map) is not drawn.
+      if (!viewShows(view, from) || !viewShows(view, to)) continue;
       const path = flightPath(
-        locationToMap(getStoryLocation(leg.from), map),
-        locationToMap(getStoryLocation(leg.to), map),
+        locationToMap(from, rect, view.bounds),
+        locationToMap(to, rect, view.bounds),
       );
       for (let t = 0; t <= 1; t += TRAIL_STEP) {
         const p = path.pointAt(t);
@@ -223,7 +250,8 @@ export class StoryMapScene extends Phaser.Scene {
     this.flight = this.tweens.add({
       targets: state,
       t: 1,
-      duration: FLIGHT_MS,
+      // Trips abroad fly a little longer than domestic ones.
+      duration: this.trip.view.flightMs,
       ease: 'Sine.easeInOut',
       onUpdate: place,
       onComplete: () => {
@@ -241,11 +269,55 @@ export class StoryMapScene extends Phaser.Scene {
     this.tweens.add({ targets: plane, scale: PLANE_SCALE * 1.25, duration: 140, yoyo: true });
     const burst = this.add.circle(at.x, at.y, CITY_RING_RADIUS).setStrokeStyle(3, COLORS.magenta);
     this.tweens.add({ targets: burst, scale: 3, alpha: 0, duration: 600 });
-    this.showChallenge();
+    this.hideDestination();
+    this.time.delayedCall(DESTINATION_OUT_MS, () => this.showChallenge());
     this.time.delayedCall(AUTO_CONTINUE_MS, () => this.proceed(false));
   }
 
-  /** "PRÓXIMO DESAFIO": the rival's card, name and city, and CONTINUAR. */
+  /** "PRÓXIMO DESTINO" and the place's name, shown during the flight. */
+  private showDestination(): void {
+    const { panel, challenge, portrait } = STORY_MAP_LAYOUT;
+    const heading = this.add
+      .text(panel.x, challenge.y, STRINGS.storyNextDestination, arcadeText(22, COLORS.gold))
+      .setOrigin(0.5);
+    const place = this.add
+      .text(panel.x, portrait.y - 20, locationName(this.trip.to), arcadeText(44, COLORS.white))
+      .setOrigin(0.5);
+    const detail = this.add
+      .text(panel.x, portrait.y + 30, locationLabel(this.trip.to), pixelText(18, COLORS.neon))
+      .setOrigin(0.5);
+    // A country names itself: the second line would only repeat it.
+    detail.setVisible(this.trip.to.kind === 'city');
+    this.destinationCard = [heading, place, detail];
+    this.destinationCard.forEach((item, i) => {
+      const text = item as Phaser.GameObjects.Text;
+      text.setAlpha(0);
+      this.tweens.add({ targets: text, alpha: 1, duration: PANEL_MS, delay: 200 + i * 90 });
+    });
+    this.tweens.add({
+      targets: place,
+      scale: { from: 1.08, to: 1 },
+      duration: 900,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+  }
+
+  private hideDestination(): void {
+    for (const item of this.destinationCard) {
+      this.tweens.killTweensOf(item);
+      this.tweens.add({
+        targets: item,
+        alpha: 0,
+        duration: DESTINATION_OUT_MS,
+        onComplete: () => item.destroy(),
+      });
+    }
+    this.destinationCard = [];
+  }
+
+  /** "PRÓXIMO DESAFIO": the rival's card, name and fight place, and CONTINUAR. */
   private showChallenge(): void {
     const leg = currentLeg(this.progress);
     if (!leg) return;
@@ -267,7 +339,7 @@ export class StoryMapScene extends Phaser.Scene {
         .text(
           panel.x,
           origin.y,
-          locationLabel(getStoryLocation(leg.to)),
+          locationLabel(getStoryLocation(leg.destination)),
           pixelText(18, COLORS.neon),
         )
         .setOrigin(0.5),

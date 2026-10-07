@@ -8,7 +8,8 @@ import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { createPortrait } from '../render/PortraitView';
 import { getStageConfig } from '../stages/stageRegistry';
-import { locationLabel } from '../story/locations';
+import { getStoryLocation, locationLabel, locationName } from '../story/locations';
+import { currentLeg } from '../story/storyProgress';
 import { fighterOrigin, storyRouteFor } from '../story/storyProfiles';
 import type { MatchSetup } from '../types/match';
 import { getStoryProgress } from './story/storyFlow';
@@ -25,6 +26,8 @@ const SPLIT_SKEW = 120;
 const PORTRAIT_SIDE_X = 220;
 const ORIGIN_Y = 462;
 const STAGE_LABEL_Y = 40;
+/** Story fights: where the fight happens, under the VS. */
+const PLACE_Y = 352;
 
 /**
  * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where
@@ -109,7 +112,10 @@ export class VersusScene extends Phaser.Scene {
     onKeys(this, MENU_CONFIRM_KEYS, skip);
   }
 
-  /** Story fights: each fighter's city and UF under the portraits, and the campaign stage. */
+  /**
+   * Story fights: each fighter's official origin under the portraits, the place of this fight
+   * under the VS (it may differ from the rival's origin, e.g. abroad) and the campaign stage.
+   */
   private addStoryDetails(setup: MatchSetup): void {
     const sides = [
       { id: setup.playerFighterId, x: PORTRAIT_SIDE_X },
@@ -126,6 +132,19 @@ export class VersusScene extends Phaser.Scene {
     }
     const progress = getStoryProgress(this);
     const route = storyRouteFor(setup.playerFighterId);
+    const leg = progress ? currentLeg(progress) : undefined;
+    if (leg) {
+      const place = this.add
+        .text(
+          GAME_WIDTH / 2,
+          PLACE_Y,
+          locationName(getStoryLocation(leg.destination)),
+          arcadeText(28, COLORS.gold),
+        )
+        .setOrigin(0.5)
+        .setAlpha(0);
+      this.tweens.add({ targets: place, alpha: 1, delay: SLIDE_MS + 100, duration: 300 });
+    }
     if (progress && route) {
       this.add
         .text(

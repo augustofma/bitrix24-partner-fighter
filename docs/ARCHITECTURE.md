@@ -80,7 +80,9 @@ src/
     locations.ts          Cidades (lat/lon, UF) e rótulo "RECIFE - PE"
     storyProfiles.ts      Origem e storyRoute de cada lutador (sem if por ID nas cenas)
     storyProgress.ts      Progresso imutável: início, chegada, resultado, MatchSetup da etapa
-    brazilMap.ts          Contorno do Brasil (lon/lat) e projeção para o retângulo do mapa
+    brazilMap.ts          Contorno do Brasil (lon/lat) e projeção equiretangular por vista
+    worldOutlines.ts      Contornos estilizados dos continentes (vista mundial)
+    mapViews.ts           Vistas do mapa (Brasil / mundo), escolha pela viagem, duração do voo
     flightPath.ts         Curva do voo (Bezier quadrática), ponto e direção em t
   audio/                  Música
     MusicManager.ts       PURO: faixa atual, crossfade, sting, volume, mute, espera do unlock
@@ -127,7 +129,7 @@ src/
     hud/specialReady.ts   PURO: limiar do SPECIAL READY (especial mais barato), transições, estilo do ESP
     hud/SpecialReadyEffect.ts Glow, brilho, raios procedurais e faíscas da barra (objetos reutilizados)
     ModeMenu.ts           HISTÓRIA / LUTA RÁPIDA no lugar do JOGAR
-    story/                Mapa do Brasil (BrazilMapView), avião (planeTexture), layout do mapa
+    story/                Mapa pixel-art por vista (StoryMapView), avião (planeTexture), layout
     ArtButton.ts          Botão feito de arte (JOGAR, VOLTAR AO MENU): hover 1,03 + brilho, press 0,97
     victory/              Tela de vitória
       victoryContent.ts   PURO: título, retratos, nome e linha de resultado a partir do MatchResult
@@ -259,11 +261,18 @@ sistema de combate. A única diferença de uma luta da história é `MatchSetup.
 
 **Dados (puros, em `src/story/`):**
 
-- `STORY_LOCATIONS`: cidades com `city`, `state`, `stateCode`, `latitude`, `longitude`.
-- `STORY_PROFILES`: para cada lutador, `home` (cidade de origem) e, opcionalmente,
-  `storyRoute` (lista de `StoryLeg { from, to, opponent, stageId? }`). Só quem tem rota é
-  jogável na história; quem só tem `home` aparece como rival. Augusto e Filipe compartilham
-  a rota `PARTNER_TOUR`: Recife → São Paulo (João Guiotti) → São Paulo → Joinville (Romualdo).
+- `STORY_LOCATIONS`: lugares do mapa, `{ id, kind: 'city' | 'country', name, country, region?,
+regionCode?, latitude, longitude }`. Cidades brasileiras (Recife, São Paulo, Joinville) e
+  países (Portugal, Rússia). `locationLabel` dá "RECIFE - PE" para cidades e "PORTUGAL" para
+  países.
+- `STORY_PROFILES`: para cada lutador, `home` (**origem oficial**, mostrada na seleção e no
+  VS), `encounter` opcional (**onde as campanhas o enfrentam**; padrão = `home`) e, para os
+  jogáveis, `storyRoute` (lista de `StoryLeg { opponent, destination, stageId? }`). As etapas
+  são montadas com `rivalLeg(opponent)`, que usa o `encounter` do rival: Filipe (de Recife) é
+  enfrentado em **Portugal**, João Guiotti (de São Paulo) na **Rússia**, Romualdo em Joinville.
+  A etapa não guarda a partida: ela é sempre o destino da etapa anterior (ou o `home` na
+  primeira), então o avião sai de onde a campanha está. Rotas: Augusto `WORLD_TOUR` (Recife →
+  Portugal → Rússia → Joinville); Filipe `FILIPE_TOUR` (Recife → Rússia → Joinville).
 - `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
   `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
   (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo
@@ -273,22 +282,30 @@ sistema de combate. A única diferença de uma luta da história é `MatchSetup.
 **Cenas (`src/scenes/story/`):** `storyFlow.ts` guarda o progresso no registry
 (`RegistryKeys.storyProgress`, validado ao ler) e faz as transições. A `VictoryScene` só chama
 `finishStoryMatch` quando o `MatchResult` é de história, então a luta rápida nunca altera a
-campanha. A `StoryMapScene` projeta lat/lon no retângulo do mapa (equiretangular), desenha o
-Brasil rasterizado em células de 5 px (uma textura em cache) e anima o avião por
-`flightPath(from, to)`: 650 ms parado, 3 s de voo com easing, rotação pela tangente,
-balanço leve e rastro pontilhado; ao pousar, o card "PRÓXIMO DESAFIO" e CONTINUAR (Enter,
-toque ou automático após 4,2 s). No mapa não existem controles de luta.
+campanha. A `StoryMapScene` pede `tripForProgress(progress, rects)`, que parte sempre de
+`progress.currentLocation` e escolhe a **vista** do mapa (`src/story/mapViews.ts`): viagens
+dentro do Brasil usam a vista `brazil` (o mapa detalhado de antes); qualquer viagem que toque
+um lugar fora do Brasil usa a vista `world` (Américas, Europa, África e oeste da Ásia, com o
+Brasil mais claro e contornado em dourado). Cada vista é um retângulo lat/lon projetado de forma
+equiretangular com a mesma escala nos dois eixos, rasterizado em células de 5 px numa textura
+em cache (`StoryMapView`, contornos em `brazilMap.ts` e `worldOutlines.ts`). O avião segue
+`flightPath(from, to)`: 650 ms parado, voo com easing (3 s no Brasil, 4,4 s no exterior),
+rotação pela tangente, balanço leve e rastro pontilhado. Durante o voo o painel mostra
+"PRÓXIMO DESTINO" e o lugar; ao pousar, "PRÓXIMO DESAFIO" com o rival e CONTINUAR (Enter, toque
+ou automático após 4,2 s). No mapa não existem controles de luta. O VS mostra o lugar da luta
+abaixo do "VS" (as origens oficiais continuam sob os retratos).
 
-**Como adicionar uma cidade:** inclua um `StoryLocation` em `src/story/locations.ts` com
-latitude/longitude reais (negativas no Brasil). Ela aparece no mapa automaticamente; os testes
-conferem que fica dentro do contorno.
+**Como adicionar um lugar:** inclua um `StoryLocation` em `src/story/locations.ts` com
+latitude/longitude reais (`kind: 'city'` com `regionCode` para cidades, `kind: 'country'` para
+países). Ele aparece na vista que o enquadra; cidades do Brasil ficam nas duas. Um país fora de
+`WORLD_BOUNDS` pede ampliar a vista (e os contornos em `worldOutlines.ts`).
 
 **Como adicionar um rival:** crie o lutador como qualquer outro (`src/fighters/<id>.ts` +
-`ROSTER`) e adicione `{ fighterId, home: '<cidade>' }` em `STORY_PROFILES`. Use o id dele como
-`opponent` numa etapa.
+`ROSTER`) e adicione `{ fighterId, home: '<origem>', encounter?: '<onde é enfrentado>' }` nos
+rivais de `storyProfiles.ts`. Use `rivalLeg('<id>')` numa rota.
 
-**Como adicionar uma campanha:** defina uma `StoryRoute` (lista de etapas; cada `from` deve ser
-o `to` da anterior) e coloque-a em `storyRoute` do perfil do lutador. A seleção passa a
+**Como adicionar uma campanha:** defina uma `StoryRoute` (lista de `rivalLeg(...)` em ordem; a
+partida de cada etapa é o destino da anterior) e coloque-a em `storyRoute` do perfil. A seleção passa a
 liberá-lo na história, sem nenhuma mudança nas cenas. `stageId` por etapa permite cenários
 próprios por cidade quando existirem.
 

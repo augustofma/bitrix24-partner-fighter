@@ -13,8 +13,16 @@ export interface MapPoint {
   y: number;
 }
 
+/** A latitude/longitude box framed by a map view. */
+export interface GeoBounds {
+  north: number;
+  south: number;
+  west: number;
+  east: number;
+}
+
 /** Latitude/longitude box that frames Brazil on the map. */
-export const BRAZIL_BOUNDS = { north: 5.6, south: -34.2, west: -74.2, east: -34.4 } as const;
+export const BRAZIL_BOUNDS: GeoBounds = { north: 5.6, south: -34.2, west: -74.2, east: -34.4 };
 
 /**
  * Simplified outline of Brazil as [longitude, latitude] vertices, clockwise from Roraima.
@@ -76,22 +84,40 @@ export const BRAZIL_OUTLINE: readonly (readonly [number, number])[] = [
 ];
 
 /** Equirectangular projection of a latitude/longitude into the map rectangle. */
-export function projectToMap(latitude: number, longitude: number, rect: MapRect): MapPoint {
-  const { north, south, west, east } = BRAZIL_BOUNDS;
+export function projectToMap(
+  latitude: number,
+  longitude: number,
+  rect: MapRect,
+  bounds: GeoBounds = BRAZIL_BOUNDS,
+): MapPoint {
+  const { north, south, west, east } = bounds;
   return {
     x: rect.x + ((longitude - west) / (east - west)) * rect.width,
     y: rect.y + ((north - latitude) / (north - south)) * rect.height,
   };
 }
 
-/** Screen position of a city on the map. */
-export function locationToMap(location: StoryLocation, rect: MapRect): MapPoint {
-  return projectToMap(location.latitude, location.longitude, rect);
+/** Screen position of a place on the map. */
+export function locationToMap(
+  location: StoryLocation,
+  rect: MapRect,
+  bounds: GeoBounds = BRAZIL_BOUNDS,
+): MapPoint {
+  return projectToMap(location.latitude, location.longitude, rect, bounds);
+}
+
+/** Any [longitude, latitude] outline in screen coordinates. */
+export function projectOutline(
+  outline: readonly (readonly [number, number])[],
+  rect: MapRect,
+  bounds: GeoBounds = BRAZIL_BOUNDS,
+): MapPoint[] {
+  return outline.map(([longitude, latitude]) => projectToMap(latitude, longitude, rect, bounds));
 }
 
 /** Brazil's outline in screen coordinates. */
-export function brazilOutline(rect: MapRect): MapPoint[] {
-  return BRAZIL_OUTLINE.map(([longitude, latitude]) => projectToMap(latitude, longitude, rect));
+export function brazilOutline(rect: MapRect, bounds: GeoBounds = BRAZIL_BOUNDS): MapPoint[] {
+  return projectOutline(BRAZIL_OUTLINE, rect, bounds);
 }
 
 /** Even-odd point-in-polygon test (used to rasterize the pixel-art land). */

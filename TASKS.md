@@ -284,6 +284,16 @@ sem pedido explícito.**
 - [x] Testes de KO/tempo com HP cheio, dano, chip, defesa, CPU, rounds independentes, empate e
       determinismo; playtest Round 1, Final Round, Player e CPU
 
+## DONE (v0.24: viagens internacionais no Modo História, branch `feature/international-story-travel`)
+
+- [x] `StoryLocation` genérico (cidade ou país; nome, país, UF opcional) com Portugal e Rússia
+- [x] Origem oficial × local do confronto (`encounter`): Filipe em Portugal, João na Rússia
+- [x] Rotas como `{ opponent, destination }`; a partida é sempre onde a campanha está
+- [x] Mapa-múndi pixel-art para viagens ao exterior (Brasil destacado), mapa do Brasil mantido
+      para as nacionais; voo mais longo no exterior; "PRÓXIMO DESTINO"; local da luta no VS
+- [x] Testes de encontros, origens, rotas, partida, coordenadas, vistas e determinismo;
+      playtest desktop e mobile com derrota + retry
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
