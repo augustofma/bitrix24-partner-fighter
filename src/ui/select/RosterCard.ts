@@ -39,7 +39,7 @@ export class RosterCard {
     /** Whether this mode lets the player pick it, and the tag shown when it does not. */
     options: { selectable?: boolean; lockedTag?: string } = {},
   ) {
-    this.selectable = options.selectable ?? config?.selectable ?? false;
+    this.selectable = options.selectable ?? config?.playable ?? false;
     this.container = scene.add.container(x, y);
     this.glow = scene.add
       .rectangle(0, 0, WIDTH + GLOW_PAD * 2, HEIGHT + GLOW_PAD * 2, COLORS.neon, 0.6)

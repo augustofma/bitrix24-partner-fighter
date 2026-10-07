@@ -251,8 +251,11 @@ export interface FighterConfig {
   /** Name shown in UI. */
   displayName: string;
   description: string;
-  /** Whether the player can pick this fighter in character select. */
-  selectable: boolean;
+  /**
+   * A complete fighter offered to players: shown on Character Select (every mode) and used by
+   * the CPU as an opponent. Test/demo placeholders set false (they stay usable in code/tests).
+   */
+  playable: boolean;
   stats: FighterStats;
   boxes: FighterBoxes;
   /** Standing, crouching and air normals. Each AttackConfig.state should match its slot. */

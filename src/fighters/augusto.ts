@@ -8,7 +8,7 @@ export const augusto: FighterConfig = {
   name: 'augusto',
   displayName: 'AUGUSTO',
   description: 'Arrecife Digital',
-  selectable: true,
+  playable: true,
   stats: {
     maxHealth: 100,
     walkSpeed: 3.45,

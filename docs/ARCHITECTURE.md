@@ -227,7 +227,7 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
 - **Qual cenário:** o lugar decide, nunca o lutador. `StoryLocation.stageId` diz o cenário das
   lutas naquele lugar (`recife` → `'recife'`); na história, `legStageId(leg)` usa o `stageId`
   da etapa ou o do destino. Na luta rápida, `quickFightStageId` usa o cenário da cidade do rival
-  ou, se ele não tiver cidade (FIGHTER_B), a do jogador; lugares sem cenário usam o padrão.
+  ou, se ele não tiver cidade, a do jogador; lugares sem cenário usam o padrão.
 
 ## Tela de vitória (VictoryScene)
 
@@ -270,15 +270,20 @@ Os dados passam pelo `scene.start(key, data)`:
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
-A seleção deriva os cards do `ROSTER`, numa grade 3 × 2 por página (`selectLayout.ts`);
+A seleção deriva os cards de `getPlayableFighters()` (o `ROSTER` filtrado por
+`FighterConfig.playable`), nos dois modos, numa grade 3 × 2 por página (`selectLayout.ts`);
 navegar troca a página automaticamente, os cards ocultos não recebem input e slots vazios
 completam a última página. Com mais de uma página aparecem ◀ ▶ e o indicador de página no
 topo (no lugar do selo do adversário), mantendo o layout utilizável com 8–16 personagens.
 Toda a apresentação fica em `src/ui/select/`; a cena só orquestra seleção, teclado e
 `MatchSetup`. Nada ali usa imagens novas: fundo, molduras e botões são desenhados em código,
 e os retratos vêm de `createPortrait` (o mesmo caminho de VS e vitória).
-`pickCpuOpponent` prioriza um personagem não selecionável diferente do jogador e, na ausência
-dele, usa o primeiro diferente. As cenas continuam recebendo apenas `MatchSetup`.
+`pickCpuOpponent` (luta rápida) devolve o próximo jogável depois do jogador na ordem do roster
+(circular), então todo jogável também é adversário da CPU; com um único jogável, usa o primeiro
+lutador diferente. Na história, um jogável é escolhível se tiver perfil de história
+(`isStoryEligible`); os outros cards aparecem bloqueados ("EM BREVE"). Placeholders de teste
+(`playable: false`, hoje FIGHTER_A e FIGHTER_B) ficam no roster para testes e ferramentas, mas
+nunca aparecem. As cenas continuam recebendo apenas `MatchSetup`.
 
 A seleção também escolhe a dificuldade da CPU (`DifficultySelector`: ↑/↓, botões `<` `>` ou
 toque na opção) e a grava em `MatchSetup.difficulty`. A última escolha fica no registry do
@@ -734,7 +739,7 @@ Um personagem é **só dados**: um `FighterConfig` em `src/fighters/<id>.ts`.
 ```ts
 export const augusto: FighterConfig = {
   id: 'augusto', name: 'augusto', displayName: 'AUGUSTO',
-  description: '...', selectable: true,
+  description: '...', playable: true,   // false: placeholder fora da seleção (testes/demo)
   stats: { maxHealth, walkSpeed, backWalkSpeed, jumpForce, jumpHorizontalSpeed },
   boxes: STANDARD_BODY,                 // ou caixas próprias
   attacks: { punch, kick, crouchPunch, crouchKick, airPunch, airKick },  // frame data + level
@@ -747,7 +752,9 @@ export const augusto: FighterConfig = {
 Para adicionar um personagem:
 
 1. Copie `src/fighters/fighterA.ts` para `src/fighters/<id>.ts` e ajuste os valores.
-2. Adicione-o em `ROSTER` (`src/fighters/roster.ts`).
+2. Adicione-o em `ROSTER` (`src/fighters/roster.ts`) com `playable: true` (aparece na seleção e
+   como CPU; sem arte usa retrato e boneco procedurais). Para a história, um perfil em
+   `STORY_PROFILES` (`src/story/storyProfiles.ts`).
 3. (Opcional) Coloque a arte em `public/fighters/<id>/` e preencha `assets`
    (passo a passo em [ART_DIRECTION.md](ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador)).
 

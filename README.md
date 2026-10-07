@@ -7,10 +7,11 @@ A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema 
 ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
-`FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
-desenvolvimento. Na LUTA RÁPIDA a seleção começa em Augusto e permite escolher FILIPE, JOÃO GUIOTTI, ROMUALDO
-e FIGHTER_A; todos enfrentam FIGHTER_B pela regra genérica do roster que prioriza personagens
-reservados à CPU.
+Todo lutador completo do roster (`playable: true`) é jogável em todos os modos: hoje AUGUSTO,
+FILIPE, JOÃO GUIOTTI e ROMUALDO. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
+enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Augusto). `FIGHTER_A` (sprite
+demo) e `FIGHTER_B` (placeholder) continuam no código para testes e desenvolvimento, com
+`playable: false`, e não aparecem na seleção.
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
 por recuperações maiores nos chutes. Possui seis ataques normais e o especial **24ZAP COMBO** (F / ESP, custo 30).

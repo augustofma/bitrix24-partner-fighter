@@ -8,7 +8,7 @@ export const filipe: FighterConfig = {
   name: 'filipe',
   displayName: 'FILIPE',
   description: 'Arrecife Digital',
-  selectable: true,
+  playable: true,
   stats: {
     maxHealth: 100,
     walkSpeed: 3.25,

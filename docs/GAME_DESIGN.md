@@ -7,8 +7,8 @@ lateral; vence quem zerar a vida do oponente (KO) ou tiver mais vida quando o te
 
 Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossistema Bitrix24
 (parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
-`AUGUSTO`, `FILIPE`, `JOÃO GUIOTTI`, `ROMUALDO` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B`
-reservado à CPU.
+`AUGUSTO`, `FILIPE`, `JOÃO GUIOTTI` e `ROMUALDO` jogáveis (`playable: true`); `FIGHTER_A` e
+`FIGHTER_B` são placeholders de desenvolvimento (`playable: false`), fora da seleção.
 
 ## Game loop
 
@@ -20,20 +20,21 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque), que abre HISTÓRIA e LUTA
    RÁPIDA (← → escolhem, Enter confirma, Esc fecha). Os passos abaixo são da luta rápida; o
    Modo História tem seção própria.
-2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelo roster (3 × 2 por
-   página; slots "EM BREVE" completam a página). Augusto é a seleção inicial; FILIPE e
-   FIGHTER_A também são selecionáveis. FIGHTER_B aparece esmaecido com a marca "CPU". O card
+2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelos lutadores jogáveis
+   (roster filtrado por `playable`; 3 × 2 por página, com paginação ◀ ▶ quando passam de 6;
+   slots "EM BREVE" completam a página). Augusto é a seleção inicial; todos os jogáveis podem
+   ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
    destaque mostra retrato ampliado, nome, descrição e barras PODER / VELOCIDADE / ALCANCE
    (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
-   há várias páginas) percorrem os selecionáveis; tocar um card seleciona e tocar de novo
+   há várias páginas) percorrem os jogáveis; tocar um card seleciona e tocar de novo
    confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. O selo "VS ..."
-   mostra o adversário, que prioriza os personagens reservados à CPU. Abaixo da grade, o
+   mostra o adversário: o próximo jogável do roster (circular). Abaixo da grade, o
    painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
    O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
    Zero** (RECIFE); os demais, no **Bitrix24 Partner Summit**. Na luta rápida vale a cidade do
-   rival ou, se ele não tiver (FIGHTER_B), a do jogador; na história, o destino da etapa. O VS
+   rival ou, se ele não tiver cidade, a do jogador; na história, o destino da etapa. O VS
    mostra o nome do cenário e o lugar ("MARCO ZERO - RECIFE, PE").
    - **Partner Summit:** o público pula em onda e comemora mais rápido quando um round tem
      vencedor; o presidente, sentado no palco, olha ao redor e gesticula (e acena ao fim do
@@ -375,7 +376,9 @@ nunca ficam READY. A restrição `groundOnly` não entra na conta, para o HUD n�
 - **Mobile:** o botão ESP ganha borda ciano e um anel dourado pulsando enquanto o especial do
   jogador estiver disponível.
 
-## CPU (FIGHTER_B)
+## CPU
+
+A mesma IA genérica controla qualquer lutador (lê só o `FighterConfig` e o estado da luta).
 
 State machine simples (sem aprendizado de máquina), com modos: `approach`, `retreat`, `attack`,
 `guard`, `jump`, `wait`.

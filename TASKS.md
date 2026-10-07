@@ -347,6 +347,17 @@ sem pedido explícito.**
       personagem; os 4 personagens são jogáveis; "PONTO DE PARTIDA" no mapa; Recife vira destino
       (cenário Marco Zero) para quem não começa lá
 
+## DONE (v0.29: todos os lutadores jogáveis, branch `feature/all-fighters-playable`)
+
+- [x] `FighterConfig.playable` (evolução de `selectable`): a seleção usa o roster filtrado por
+      `playable` nos dois modos; FIGHTER_A e FIGHTER_B ficam `playable: false` (fora da tela)
+- [x] Luta rápida: CPU = próximo jogável do roster (circular), sem placeholder
+- [x] História: jogável com perfil de história (`isStoryEligible`) escolhível; adversários só
+      entre os elegíveis
+- [x] Testes: filtro, 4 lutadores na seleção, VS/CPU, campanhas pela seleção, IA genérica em
+      todos os pares, sem lista fixa de ids, grade com 4–12 lutadores; playtest 1280×720,
+      1920×1080 (mouse) e 844×390 (toque)
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

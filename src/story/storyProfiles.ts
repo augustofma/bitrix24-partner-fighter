@@ -1,3 +1,4 @@
+import { ROSTER } from '../fighters/roster';
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { StoryCharacterProfile, StoryLeg, StoryLocation, StoryRoute } from '../types/story';
 import { getStoryLocation, stageIdForLocation } from './locations';
@@ -47,11 +48,20 @@ export function campaignStartLocation(fighterId: string): string {
   return storyLocationId(fighterId);
 }
 
-/** The rivals of a campaign, in order: every other story character (never the fighter itself). */
+/** A playable fighter (FighterConfig.playable) that has a story profile. */
+export function isStoryEligible(fighterId: string): boolean {
+  const fighter = ROSTER.find((config) => config.id === fighterId);
+  return fighter?.playable === true && getStoryProfile(fighterId) !== undefined;
+}
+
+/**
+ * The rivals of a campaign, in order: every other story-eligible fighter (never the fighter
+ * itself, never a non-playable placeholder).
+ */
 export function campaignOpponents(fighterId: string): string[] {
   const profile = requireProfile(fighterId);
   const order = profile.opponentOrder ?? STORY_PROFILES.map((p) => p.fighterId);
-  return order.filter((id) => id !== fighterId && getStoryProfile(id) !== undefined);
+  return order.filter((id) => id !== fighterId && isStoryEligible(id));
 }
 
 /** A leg against `opponent`, at that rival's place in the story. */
@@ -61,7 +71,7 @@ export function rivalLeg(opponent: string): StoryLeg {
 
 /** The campaign of a fighter (generated), or undefined when it has none. */
 export function storyRouteFor(fighterId: string): StoryRoute | undefined {
-  if (!getStoryProfile(fighterId)) return undefined;
+  if (!isStoryEligible(fighterId)) return undefined;
   const route = campaignOpponents(fighterId).map(rivalLeg);
   return route.length > 0 ? route : undefined;
 }
@@ -94,7 +104,7 @@ export function legDeparture(fighterId: string, stage: number): string {
 
 /**
  * Arena of a quick fight: the home stage of the rival, or of the player when the rival has
- * none (e.g. FIGHTER_B), so a fight "at home" happens in that city. Decided by places only,
+ * none, so a fight "at home" happens in that city. Decided by places only,
  * through the same location -> stage table as the story; places without a stage use the
  * default.
  */

@@ -11,7 +11,7 @@ export const joaoGuiotti: FighterConfig = {
   name: 'joao_guiotti',
   displayName: 'JOÃO GUIOTTI',
   description: 'São Paulo - SP',
-  selectable: true,
+  playable: true,
   stats: {
     maxHealth: 100,
     walkSpeed: 3.3,

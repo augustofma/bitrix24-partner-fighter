@@ -10,7 +10,8 @@ export const fighterA: FighterConfig = {
   name: 'fighter_a',
   displayName: 'FIGHTER_A',
   description: 'Lutador equilibrado e rápido.',
-  selectable: true,
+  // Demo fighter for tests and the art pipeline: not offered to players.
+  playable: false,
   stats: {
     maxHealth: 100,
     walkSpeed: 3.2,
