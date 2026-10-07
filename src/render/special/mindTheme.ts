@@ -1,6 +1,7 @@
 import type { ImpactFrame, MoveFrame, SpecialTheme } from './specialTheme';
 import {
   clamp01,
+  disc,
   easeOutBack,
   easeOutCubic,
   hash01,
@@ -61,7 +62,7 @@ function drawMove(f: MoveFrame): void {
 
   if (phase === 'startup') {
     const grow = easeOutBack(clamp01(t / 0.7));
-    g.fillStyle(NAVY, 0.75 * t).fillCircle(hand.x, hand.y, 24 * grow);
+    disc(g, hand.x, hand.y, 24 * grow, NAVY, 0.75 * t);
     tickRing(glow, hand.x, hand.y, 28 * grow, 8, frame * 0.14, 3, CYAN, 0.9 * t);
     tickRing(glow, hand.x, hand.y, 36 * grow, 12, -frame * 0.09, 2, BLUE, 0.6 * t);
     // Data bits converging into the sigil.
@@ -80,7 +81,7 @@ function drawMove(f: MoveFrame): void {
     // Circuit traces being drawn toward the target.
     TRACES.forEach((_, i) => {
       const tip = partialPath(glow, trace(f, i), t, 2, CYAN, 0.75);
-      if (tip) glow.fillStyle(WHITE, 0.9).fillCircle(tip.x, tip.y, 3);
+      if (tip) disc(glow, tip.x, tip.y, 3, WHITE, 0.9);
     });
     f.glyph.show({ x: hand.x, y: hand.y, scale: 0.9 * grow, alpha: t, tint: CYAN, glow: true });
     f.glyph.show({ x: hand.x, y: hand.y, scale: 0.9 * grow, alpha: t });
@@ -149,8 +150,8 @@ function drawMesh(
           .lineBetween(node.x, node.y, link.x, link.y);
     }
     const pulse = 0.5 + 0.5 * Math.sin(frame * 0.6 + i);
-    glow.fillStyle(CYAN, 0.35 * alpha).fillCircle(node.x, node.y, 7 + 3 * pulse);
-    g.fillStyle(WHITE, alpha).fillCircle(node.x, node.y, 3);
+    disc(glow, node.x, node.y, 7 + 3 * pulse, CYAN, 0.35 * alpha);
+    disc(g, node.x, node.y, 3, WHITE, alpha);
   });
 }
 
@@ -159,7 +160,7 @@ function drawImpact(f: ImpactFrame): void {
   const out = easeOutCubic(t);
   const fade = 1 - t;
   const size = blocked ? 0.6 : 1;
-  if (t < 0.12) glow.fillStyle(WHITE, 0.9 * (1 - t / 0.12)).fillCircle(x, y, 28 * size);
+  if (t < 0.12) disc(glow, x, y, 28 * size, WHITE, 0.9 * (1 - t / 0.12));
   // Square digital shockwave: a diamond and a square, growing apart.
   const diamond = (12 + 84 * out) * size;
   glow.lineStyle(4, CYAN, 0.9 * fade);
@@ -184,7 +185,7 @@ function drawImpact(f: ImpactFrame): void {
     const end = { x: elbow.x - Math.sin(angle) * turn, y: elbow.y + Math.cos(angle) * turn };
     glow.lineStyle(2, i % 2 ? BLUE : CYAN, fade).lineBetween(x, y, elbow.x, elbow.y);
     glow.lineBetween(elbow.x, elbow.y, end.x, end.y);
-    g.fillStyle(WHITE, fade).fillCircle(end.x, end.y, 3);
+    disc(g, end.x, end.y, 3, WHITE, fade);
   }
   // Binary bits flying off.
   for (let i = 0; i < (blocked ? 6 : 14); i++) {

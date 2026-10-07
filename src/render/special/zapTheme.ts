@@ -1,6 +1,7 @@
 import type { ImpactFrame, MoveFrame, SpecialTheme } from './specialTheme';
 import {
   chatBubble,
+  disc,
   clamp01,
   easeOutBack,
   easeOutCubic,
@@ -47,7 +48,7 @@ function drawMove(f: MoveFrame): void {
       const radius = 8 + 38 * (1 - p);
       glow.lineStyle(3, LIGHT, 0.7 * p).strokeCircle(hand.x, hand.y, radius);
     }
-    glow.fillStyle(GREEN, 0.35 + 0.3 * t).fillCircle(hand.x, hand.y, 10 + 10 * t);
+    disc(glow, hand.x, hand.y, 10 + 10 * t, GREEN, 0.35 + 0.3 * t);
     // "typing..." bubbles popping up around the fighter.
     TYPING_SPOTS.forEach((spot, i) => {
       const appear = clamp01((t - i * 0.22) / 0.3);
@@ -96,9 +97,9 @@ function drawMove(f: MoveFrame): void {
     }
     // Trail of the sent emblem, then the emblem itself at the head.
     for (let k = 1; k <= 3; k++) {
-      glow.fillStyle(GREEN, 0.18 * (4 - k)).fillCircle(head.x - dir * k * 14, head.y, 16 - k * 3);
+      disc(glow, head.x - dir * k * 14, head.y, 16 - k * 3, GREEN, 0.18 * (4 - k));
     }
-    glow.fillStyle(WHITE, 0.5 * (1 - t)).fillCircle(hand.x, hand.y, 22 * (1 - t) + 6);
+    disc(glow, hand.x, hand.y, 22 * (1 - t) + 6, WHITE, 0.5 * (1 - t));
     if (!f.impacting)
       f.emblem.show({ x: head.x, y: head.y, scale: 1.05 + 0.1 * Math.sin(frame), alpha: 1 });
     return;
@@ -127,7 +128,7 @@ function drawImpact(f: ImpactFrame): void {
   const out = easeOutCubic(t);
   const fade = 1 - t;
   const size = blocked ? 0.6 : 1;
-  if (t < 0.14) glow.fillStyle(WHITE, 0.9 * (1 - t / 0.14)).fillCircle(x, y, 30 * size);
+  if (t < 0.14) disc(glow, x, y, 30 * size, WHITE, 0.9 * (1 - t / 0.14));
   // Shockwave: a green ring and a thinner white one.
   glow.lineStyle(5, blocked ? DARK : GREEN, 0.9 * fade).strokeCircle(x, y, (12 + 86 * out) * size);
   glow.lineStyle(2, WHITE, 0.8 * fade).strokeCircle(x, y, (8 + 58 * out) * size);

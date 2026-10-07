@@ -143,6 +143,7 @@ src/
       fightTitle.ts       Letreiro de jogo de luta gerado num canvas a partir de qualquer texto
                           (fonte, inclinação, degradê, contornos, pincel, sombra; ajuste de largura)
       victoryText.ts      Título (fightTitle + brilho) e linha de resultado sobre o painel
+                          (estilo por papel: veredito / detalhe / placar, ver resultRole)
       VictoryEffects.ts   Confete pixelado, quadradinhos subindo e brilhos (partículas leves)
     select/               Visual da seleção de personagem (Phaser, exceto os módulos puros)
       selectLayout.ts     PURO: geometria da tela, posição de cada card, páginas e slots vazios
@@ -566,7 +567,13 @@ então congela no hitstop e some no instante em que o golpe acaba ou é interrom
 (chamado pela `FightScene` nos eventos `hit` / `koHit` / `block` de especiais) é curto e por
 tempo, então toca durante o hitstop. Tudo é criado no construtor (2 Graphics, rótulos e alguns
 `Image` reaproveitados) e destruído com a cena: nada é criado por frame. Um tema novo é um
-objeto `SpecialTheme` registrado na tabela `THEMES`. assets.sprite.animations.special reaproveita o pipeline de fases;
+objeto `SpecialTheme` registrado na tabela `THEMES`. Desempenho: os temas desenham só
+retângulos, triângulos e traços (`vfxShapes.ts`: `pixelBox`, `disc`, `chatBubble`), nunca
+`fillRoundedRect` / `fillCircle` / `fillPath`, que passam pela triangulação (earcut) do Phaser; um
+balão com tamanho negativo no pop-in (o `easeOutBack` passava de 0 para baixo) custava centenas
+de ms e travava o primeiro especial. Formas abaixo de 3 px não são desenhadas e `easeOutBack`
+nunca é negativo. Emblemas são carregados no boot com o roster; durante o especial nada é
+carregado nem criado (`tests/specialStutter.test.ts`). assets.sprite.animations.special reaproveita o pipeline de fases;
 a ausência usa punch como fallback. Não há alterações nos PNGs.
 
 ### Cross-up (passar por cima)

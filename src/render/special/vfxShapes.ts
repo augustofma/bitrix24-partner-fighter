@@ -16,11 +16,59 @@ export function hash01(a: number, b = 0): number {
 export const clamp01 = (t: number): number => Math.min(1, Math.max(0, t));
 export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
 export const easeOutCubic = (t: number): number => 1 - (1 - clamp01(t)) ** 3;
-/** Overshoots a little before settling: the arcade "pop". */
+/**
+ * Overshoots a little before settling: the arcade "pop". Never below 0 (the raw curve dips
+ * slightly negative near t = 0, which turned sizes into negative, degenerate shapes).
+ */
 export function easeOutBack(t: number): number {
   const c = 1.9;
   const x = clamp01(t) - 1;
-  return 1 + (c + 1) * x ** 3 + c * x ** 2;
+  return Math.max(0, 1 + (c + 1) * x ** 3 + c * x ** 2);
+}
+
+/** Shapes smaller than this are not drawn (nothing visible, and no degenerate geometry). */
+const MIN_SHAPE = 3;
+
+/**
+ * Pixel-art rounded box from two rectangles (notched corners, like pixel art). Only rectangles:
+ * no path triangulation (earcut), so it costs the same at any size, every frame. A rounded
+ * path with a negative or tiny size made Phaser's triangulation explode (hundreds of ms).
+ */
+export function pixelBox(
+  g: Graphics,
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+  color: number,
+  alpha: number,
+): void {
+  if (width < MIN_SHAPE || height < MIN_SHAPE) return;
+  const notch = Math.min(2, Math.floor(Math.min(width, height) / 4));
+  g.fillStyle(color, alpha);
+  g.fillRect(left + notch, top, width - notch * 2, height);
+  g.fillRect(left, top + notch, width, height - notch * 2);
+}
+
+/**
+ * Pixel-art disc (an octagon of three rectangles) in place of fillCircle: circles are filled as
+ * triangulated paths, rectangles are not, so a burst of glows stays cheap on every frame.
+ */
+export function disc(
+  g: Graphics,
+  x: number,
+  y: number,
+  radius: number,
+  color: number,
+  alpha: number,
+): void {
+  if (radius < 1 || alpha <= 0) return;
+  const inner = radius * 0.42;
+  g.fillStyle(color, alpha);
+  g.fillRect(x - inner, y - radius, inner * 2, radius * 2);
+  g.fillRect(x - radius, y - inner, radius * 2, inner * 2);
+  const corner = radius * 0.78;
+  g.fillRect(x - corner, y - corner, corner * 2, corner * 2);
 }
 
 /**
@@ -44,11 +92,14 @@ export function chatBubble(
   },
 ): void {
   const { fill, alpha, tail, content = 'lines', contentColor = 0xffffff, dots = 3 } = options;
+  // Bubbles still popping in from scale 0 (or fully faded) are skipped.
+  if (width < MIN_SHAPE * 3 || height < MIN_SHAPE * 2 || alpha <= 0) return;
   const left = x - width / 2;
   const top = y - height / 2;
-  g.fillStyle(0x061018, alpha * 0.85).fillRoundedRect(left - 1, top - 1, width + 2, height + 2, 4);
-  g.fillStyle(fill, alpha).fillRoundedRect(left, top, width, height, 3);
+  pixelBox(g, left - 1, top - 1, width + 2, height + 2, 0x061018, alpha * 0.85);
+  pixelBox(g, left, top, width, height, fill, alpha);
   const tx = x + (tail * width) / 2 - tail * 4;
+  g.fillStyle(fill, alpha);
   g.fillTriangle(
     tx,
     top + height - 1,
