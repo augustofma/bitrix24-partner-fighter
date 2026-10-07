@@ -161,7 +161,8 @@ src/
 tests/                    Vitest: lutador, combate, arena, round, partida, IA, dificuldade da CPU,
                           ataques aéreos e agachados, níveis de ataque × guarda, cross-up,
                           especiais, determinismo, seleção, animação/assets de sprite
-scripts/                  Ferramentas Node (ex.: gerador da arte demo do FIGHTER_A)
+scripts/                  Ferramentas offline de preparação de assets
+  joao-guiotti-art/        Fontes originais e normalização reproduzível da arte de João
   prepare-augusto-art.ps1 Montagem/validação offline do atlas do Augusto (Windows/System.Drawing)
   augusto-art/            Fontes ImageGen e prompts; não publicados no build
   prepare-filipe-art.ps1  Recortes e normalização offline do atlas/portrait de Filipe

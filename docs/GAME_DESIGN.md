@@ -112,7 +112,7 @@ defesa como nos demais personagens. Guardas, cross-up, KO e vitória usam o moto
 
 **João Guiotti — São Paulo - SP.** Técnico e equilibrado: o jab mais rápido do elenco
 (startup 4) e boa mobilidade. Vida 100; caminhada 3,3/2,7 px/frame; pulo 16,8 com 4,1 px/frame
-no ar. Corpo padrão, visual genérico (boneco) com paleta roxa e ciano, **sem especiais** por
+no ar. Corpo padrão, arte pixel-art própria com óculos, blazer preto e camiseta branca, **sem especiais** por
 enquanto (a barra enche normalmente).
 
 ### ROMUALDO

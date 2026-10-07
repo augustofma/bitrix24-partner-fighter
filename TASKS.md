@@ -311,6 +311,13 @@ sem pedido explícito.**
 - [x] Sons próprios de início (`special-zap`, `special-mind`); testes de fases, limpeza e
       reaproveitamento de objetos; playtest desktop e mobile (inclusive KO por especial)
 
+## DONE (arte do João Guiotti)
+
+- [x] Sheet original 1536×1120, 40 frames 192×224 e portrait 240×300, RGBA
+- [x] Config existente integrado ao pipeline, fases 1/1/1, fontes/prompts/preparo reproduzíveis
+- [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
+- [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
@@ -328,7 +335,7 @@ sem pedido explícito.**
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
 11. [ ] CI (GitHub Actions) rodando `npm run check`.
-12. [ ] Arte própria (sprite + retrato) para JOÃO GUIOTTI e ROMUALDO, e especiais para eles.
+12. [ ] Arte própria (sprite + retrato) para ROMUALDO, e especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
 15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).

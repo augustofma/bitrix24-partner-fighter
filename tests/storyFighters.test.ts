@@ -27,14 +27,15 @@ describe('João Guiotti and Romualdo', () => {
     expect(romualdo.description).toBe('Joinville - SC');
   });
 
-  it('are complete fighters: six normals, no specials yet, own palette, generic visuals', () => {
+  it('are complete fighters: six normals, no specials yet, own palette, independent visuals', () => {
     for (const config of NEW_FIGHTERS) {
       expect(Object.keys(config.attacks).sort()).toEqual(
         ['airKick', 'airPunch', 'crouchKick', 'crouchPunch', 'kick', 'punch'].sort(),
       );
       expect(config.specials).toEqual([]);
-      expect(config.assets.sprite).toBeUndefined(); // placeholder renderer, no copied PNG
     }
+    expect(joaoGuiotti.assets.sprite).toBeDefined();
+    expect(romualdo.assets.sprite).toBeUndefined();
     const palettes = ROSTER.map((config) => config.palette.body);
     expect(new Set(palettes).size).toBe(palettes.length);
   });
