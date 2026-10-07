@@ -243,6 +243,16 @@ reposicionado 8 px para baixo. F2 confirmou correspondência aproximada às caix
 gameplay. Seleção, VS, HUD, controles, flipX, cross-up e resultados por KO foram validados no
 Chrome. As poses de guarda/hurt dobram o corpo dentro da hurtbox padrão; arte não muda colisão.
 
+## JOÃO GUIOTTI
+
+Arte original produzida com ImageGen integrado a partir das fotos e pôster aprovados: pele
+clara, cabelo castanho para cima, barba aparada, óculos, blazer preto, camiseta branca, calça
+preta e tênis brancos. Linguagem pixel-art do elenco, proporções naturais e poses para a direita.
+Atlas RGBA 1536×1120, 40 células 192×224; portrait RGBA 240×300. Scale 1, offsets 0/8.
+Baseline 216 e margens mínimas 4 px, com elevação aérea. Fases de pulo e ataques 1/1/1.
+[Prompts, fontes e montagem reproduzível](../scripts/joao-guiotti-art/README.md).
+Arte original do projeto, sem assets de terceiros; nenhuma mudança de gameplay.
+
 ## Tela inicial
 
 Arte ilustrada aprovada (arena noturna com holofotes, globo, torcida e dois lutadores
@@ -359,8 +369,7 @@ Tudo é desenhado em código, sem imagens novas, na paleta da seleção e da tel
   magenta e ciano, sombra deslocada, gira pela direção da curva e balança levemente.
 - **Tela final:** fundo e efeitos da vitória, card do lutador e o letreiro "CAMPANHA CONCLUÍDA".
 
-Os rivais JOÃO GUIOTTI (roxo + ciano) e ROMUALDO (verde + laranja) usam o boneco procedural
-com paleta própria até ganharem arte (siga "Como adicionar arte de um novo lutador").
+ROMUALDO (verde + laranja) mantém o boneco procedural; JOÃO GUIOTTI usa arte própria.
 
 ## Tipografia
 
@@ -416,6 +425,7 @@ registrada aqui:
 | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `public/fighters/fighter-a/*.png` (demo)                                          | Gerado por `scripts/generate-demo-fighter-art.mjs`                                        | Original do projeto                                               |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros      |
+| `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`           | ImageGen integrado, referências autorizadas pelo usuário; montagem local                  | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros      |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                            |
@@ -428,7 +438,7 @@ registrada aqui:
 | `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                            | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                   | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
-| JOÃO GUIOTTI e ROMUALDO (boneco genérico)                                         | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
+| ROMUALDO (boneco genérico)                                                        | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                            |
 
 ## VFX dos especiais (temas dos apps)

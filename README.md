@@ -68,8 +68,10 @@ O progresso vale para a sessão. Rotas, cidades e rivais são configuração
 ([ARCHITECTURE.md](docs/ARCHITECTURE.md#modo-história)); regras em
 [GAME_DESIGN.md](docs/GAME_DESIGN.md#modo-história).
 
-João Guiotti (técnico, equilibrado) e Romualdo (pesado, golpes fortes e lentos) usam o visual
-genérico com paletas próprias e ainda não têm especiais.
+João Guiotti (técnico, equilibrado) usa arte pixel-art própria, com óculos, blazer preto e
+camiseta/tênis brancos. Atlas 1536×1120 (40 células 192×224), retrato 240×300 e alpha real.
+[Fontes e preparo](scripts/joao-guiotti-art/README.md). Romualdo mantém o visual genérico.
+Ambos ainda não têm especiais.
 
 ## Stack
 

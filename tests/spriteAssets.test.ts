@@ -166,6 +166,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/joao-guiotti/portrait.png'),
+        path: 'fighters/joao-guiotti/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'joao-guiotti-sheet',
+        path: 'fighters/joao-guiotti/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/fighter-a/portrait.png'),
         path: 'fighters/fighter-a/portrait.png',
       },
@@ -193,6 +205,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       [
         'augusto-sheet',
         'filipe-sheet',
+        'joao-guiotti-sheet',
+        portraitTextureKey('fighters/joao-guiotti/portrait.png'),
         portraitTextureKey('fighters/filipe/portrait.png'),
         portraitTextureKey('fighters/augusto/portrait.png'),
         'fighter-a-demo-sheet',
