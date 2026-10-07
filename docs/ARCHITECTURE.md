@@ -74,11 +74,12 @@ src/
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
     partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
+    recife.ts             RECIFE (Marco Zero): mesma arena, público em grupos, avião com faixa
     partnerArena.ts       Cenário procedural (também é o fallback visual)
     stageRegistry.ts
   story/                  MODO HISTÓRIA, PURO (sem Phaser; o ESLint garante)
     locations.ts          Cidades (lat/lon, UF) e rótulo "RECIFE - PE"
-    storyProfiles.ts      Origem e storyRoute de cada lutador (sem if por ID nas cenas)
+    storyProfiles.ts      Perfis (origem, lugar na história) e o gerador genérico de campanhas
     storyProgress.ts      Progresso imutável: início, chegada, resultado, MatchSetup da etapa
     brazilMap.ts          Contorno do Brasil (lon/lat) e projeção equiretangular por vista
     worldOutlines.ts      Contornos estilizados dos continentes (vista mundial)
@@ -114,6 +115,10 @@ src/
       createStageView.ts  Arte ilustrada se as texturas carregaram; senão o procedural
       IllustratedStageView.ts Fundo + público em colunas + recortes animados (cabeça, mão)
       StageView.ts        Cenário procedural com parallax
+      IllustratedStageView.ts  Cenário da arte: fundo, público (onda ou grupos), flashes, recortes
+      StageFlyoverView.ts Avião que cruza o céu rebocando a faixa (tiras que ondulam)
+      stageMotion.ts      Matemática pura dos loops (público, presidente, avião, faixa)
+      crowdReaction.ts    Evento da simulação -> reação do público (só leitura)
       stageMotion.ts      PURO: ritmos e poses dos loops (público, cabeça, mão) por animação
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
     HitEffects.ts         Faíscas de impacto
@@ -203,6 +208,32 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   `roundStart`. Nada de lógica de fim de luta duplicada. A empolgação vai de 0 a 1 em
   ~0,4 s e mistura os ritmos `CALM_MOTION` e `CHEER_MOTION`. As fases avançam por
   `ritmo × dt` no tempo de render, então mudar a velocidade nunca faz uma camada pular.
+- **Vitória da partida e reações:** no `victoryPose`, se o round também decide a partida
+  (`MatchSystem.wouldWinMatch`, só leitura) o humor é `'victory'` (empolgação 1,5, além do
+  `CHEER_MOTION`). Golpes fortes (dano ≥ 10), especiais, KO e PERFECT chamam
+  `stageView.react(...)` (`crowdReaction(event)` mapeia os eventos): um pico de empolgação que
+  decai sozinho (~0,6/s). Tudo é apresentação: nada volta para a simulação.
+- **Público em grupos (`crowd.style: 'groups'`):** cada coluna recebe de um hash fixo do índice
+  o seu loop (`hop`, `bob`, `sway`, `burst`), velocidade, tamanho e atraso; cerca de um terço só
+  entra na empolgação a partir de um limiar. Flashes de celular (`crowd.flashes`) são um pool
+  fixo desenhado num único Graphics, mais frequentes quando a torcida se empolga.
+- **Avião (`art.flyover`):** `StageFlyoverView` cria uma vez o avião, a hélice, a faixa
+  cortada em tiras (`setCrop`) e as cordas (Graphics) e os reaproveita a cada voo: fora da tela
+  → cruza da direita para a esquerda (como o avião aponta na arte) → sai → pausa sorteada por um
+  gerador visual com semente (`visualRng`, nunca `Math.random` nem a simulação) → de novo. A
+  faixa ondula por tira (`bannerWave`: parada junto às cordas, mais solta na cauda) e segue o
+  balanço do avião com atraso. O grupo tem parallax próprio, distante (`scrollFactor`), e
+  `scale` (menor = mais longe).
+- **Profundidade do céu:** ordem de desenho (mesma `DEPTH.stage`, ordem de criação): fundo →
+  avião e faixa → `flyover.skyline` (topo do fundo com o céu transparente, gerado uma vez no
+  preparo da arte, com o parallax do fundo) → público e grade → lutadores → HUD. Assim
+  prédios, cúpulas e palmeiras ficam na frente do avião sem máscara por frame.
+- **Ciclo de vida:** cada view guarda o que cria; `destroy()` é chamado no `shutdown` da
+  `FightScene`. Nada é criado por frame (testes contam objetos com uma cena falsa).
+- **Qual cenário:** o lugar decide, nunca o lutador. `StoryLocation.stageId` diz o cenário das
+  lutas naquele lugar (`recife` → `'recife'`); na história, `legStageId(leg)` usa o `stageId`
+  da etapa ou o do destino. Na luta rápida, `quickFightStageId` usa o cenário da cidade do rival
+  ou, se ele não tiver cidade, a do jogador; lugares sem cenário usam o padrão.
 
 ## Tela de vitória (VictoryScene)
 
@@ -245,15 +276,20 @@ Os dados passam pelo `scene.start(key, data)`:
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
-A seleção deriva os cards do `ROSTER`, numa grade 3 × 2 por página (`selectLayout.ts`);
+A seleção deriva os cards de `getPlayableFighters()` (o `ROSTER` filtrado por
+`FighterConfig.playable`), nos dois modos, numa grade 3 × 2 por página (`selectLayout.ts`);
 navegar troca a página automaticamente, os cards ocultos não recebem input e slots vazios
 completam a última página. Com mais de uma página aparecem ◀ ▶ e o indicador de página no
 topo (no lugar do selo do adversário), mantendo o layout utilizável com 8–16 personagens.
 Toda a apresentação fica em `src/ui/select/`; a cena só orquestra seleção, teclado e
 `MatchSetup`. Nada ali usa imagens novas: fundo, molduras e botões são desenhados em código,
 e os retratos vêm de `createPortrait` (o mesmo caminho de VS e vitória).
-`pickCpuOpponent` prioriza um personagem não selecionável diferente do jogador e, na ausência
-dele, usa o primeiro diferente. As cenas continuam recebendo apenas `MatchSetup`.
+`pickCpuOpponent` (luta rápida) devolve o próximo jogável depois do jogador na ordem do roster
+(circular), então todo jogável também é adversário da CPU; com um único jogável, usa o primeiro
+lutador diferente. Na história, um jogável é escolhível se tiver perfil de história
+(`isStoryEligible`); os outros cards aparecem bloqueados ("EM BREVE"). Placeholders de teste
+(`playable: false`, hoje FIGHTER_A e FIGHTER_B) ficam no roster para testes e ferramentas, mas
+nunca aparecem. As cenas continuam recebendo apenas `MatchSetup`.
 
 A seleção também escolhe a dificuldade da CPU (`DifficultySelector`: ↑/↓, botões `<` `>` ou
 toque na opção) e a grava em `MatchSetup.difficulty`. A última escolha fica no registry do
@@ -273,14 +309,21 @@ sistema de combate. A única diferença de uma luta da história é `MatchSetup.
 regionCode?, latitude, longitude }`. Cidades brasileiras (Recife, São Paulo, Joinville) e
   países (Portugal, Rússia). `locationLabel` dá "RECIFE - PE" para cidades e "PORTUGAL" para
   países.
-- `STORY_PROFILES`: para cada lutador, `home` (**origem oficial**, mostrada na seleção e no
-  VS), `encounter` opcional (**onde as campanhas o enfrentam**; padrão = `home`) e, para os
-  jogáveis, `storyRoute` (lista de `StoryLeg { opponent, destination, stageId? }`). As etapas
-  são montadas com `rivalLeg(opponent)`, que usa o `encounter` do rival: Filipe (de Recife) é
-  enfrentado em **Portugal**, João Guiotti (de São Paulo) na **Rússia**, Romualdo em Joinville.
-  A etapa não guarda a partida: ela é sempre o destino da etapa anterior (ou o `home` na
-  primeira), então o avião sai de onde a campanha está. Rotas: Augusto `WORLD_TOUR` (Recife →
-  Portugal → Rússia → Joinville); Filipe `FILIPE_TOUR` (Recife → Rússia → Joinville).
+- `STORY_PROFILES`: para cada personagem da história, `home` (**origem oficial**, mostrada sob
+  os retratos na seleção e no VS) e `encounter` opcional: **o lugar do personagem no mundo da
+  história** (padrão = `home`), lido por `storyLocationId(id)`. É dali que a campanha dele
+  COMEÇA e é ali que as outras campanhas o ENFRENTAM. Hoje: Augusto em Recife, Filipe em
+  Portugal (é de Recife), João Guiotti na Rússia (é de São Paulo), Romualdo em Joinville.
+- **Campanhas geradas (nada escrito por personagem):** `storyRouteFor(id)` =
+  `campaignOpponents(id)` (todos os outros personagens da história, na ordem de
+  `STORY_PROFILES`, ou na `opponentOrder` opcional do perfil; nunca o próprio) mapeados por
+  `rivalLeg(rival)` = `{ opponent, destination: storyLocationId(rival) }`. O início é
+  `campaignStartLocation(id)` = `storyLocationId(id)`, que vira o `currentLocation` inicial. A
+  etapa não guarda a partida: é o destino da etapa anterior (ou o início, na primeira), então o
+  avião sai sempre de onde a campanha está. Exemplos: Augusto Recife → Portugal (Filipe) →
+  Rússia (João) → Joinville (Romualdo); João Rússia → Recife (Augusto) → Portugal (Filipe) →
+  Joinville (Romualdo); Romualdo Joinville → Recife → Portugal → Rússia. Recife vira destino
+  para todos que não começam lá.
 - `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
   `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
   (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo
@@ -297,7 +340,8 @@ um lugar fora do Brasil usa a vista `world` (Américas, Europa, África e oeste 
 Brasil mais claro e contornado em dourado). Cada vista é um retângulo lat/lon projetado de forma
 equiretangular com a mesma escala nos dois eixos, rasterizado em células de 5 px numa textura
 em cache (`StoryMapView`, contornos em `brazilMap.ts` e `worldOutlines.ts`). O avião segue
-`flightPath(from, to)`: 650 ms parado, voo com easing (3 s no Brasil, 4,4 s no exterior),
+`flightPath(from, to)`: 650 ms parado (na primeira viagem, antes disso o painel mostra
+"PONTO DE PARTIDA" com o lutador escolhido e o lugar onde a campanha começa, por 1,7 s), voo com easing (3 s no Brasil, 4,4 s no exterior),
 rotação pela tangente, balanço leve e rastro pontilhado. Durante o voo o painel mostra
 "PRÓXIMO DESTINO" e o lugar; ao pousar, "PRÓXIMO DESAFIO" com o rival e CONTINUAR (Enter, toque
 ou automático após 4,2 s). No mapa não existem controles de luta. O VS mostra o lugar da luta
@@ -308,14 +352,16 @@ latitude/longitude reais (`kind: 'city'` com `regionCode` para cidades, `kind: '
 países). Ele aparece na vista que o enquadra; cidades do Brasil ficam nas duas. Um país fora de
 `WORLD_BOUNDS` pede ampliar a vista (e os contornos em `worldOutlines.ts`).
 
-**Como adicionar um rival:** crie o lutador como qualquer outro (`src/fighters/<id>.ts` +
-`ROSTER`) e adicione `{ fighterId, home: '<origem>', encounter?: '<onde é enfrentado>' }` nos
-rivais de `storyProfiles.ts`. Use `rivalLeg('<id>')` numa rota.
+**Como adicionar um personagem à história:** crie o lutador como qualquer outro
+(`src/fighters/<id>.ts` + `ROSTER`) e adicione `{ fighterId, home: '<origem>', encounter?:
+'<lugar na história>' }` em `STORY_PROFILES`. Ele passa a ser jogável na história (começando no
+seu lugar) e rival nas outras campanhas, sem nenhuma mudança nas cenas. A posição no array é a
+ordem padrão em que as campanhas enfrentam os rivais; `opponentOrder` muda a ordem de uma
+campanha específica.
 
-**Como adicionar uma campanha:** defina uma `StoryRoute` (lista de `rivalLeg(...)` em ordem; a
-partida de cada etapa é o destino da anterior) e coloque-a em `storyRoute` do perfil. A seleção passa a
-liberá-lo na história, sem nenhuma mudança nas cenas. `stageId` por etapa permite cenários
-próprios por cidade quando existirem.
+**Como associar um encontro a um cenário:** dê `stageId` ao lugar em `locations.ts` (ex.:
+`recife` tem `stageId: 'recife'`): toda luta com `destination` nesse lugar usa esse cenário.
+Para uma exceção, ponha `stageId` na própria `StoryLeg`. Nenhum código de cena muda.
 
 ## Música (MusicManager)
 
@@ -699,7 +745,7 @@ Um personagem é **só dados**: um `FighterConfig` em `src/fighters/<id>.ts`.
 ```ts
 export const augusto: FighterConfig = {
   id: 'augusto', name: 'augusto', displayName: 'AUGUSTO',
-  description: '...', selectable: true,
+  description: '...', playable: true,   // false: placeholder fora da seleção (testes/demo)
   stats: { maxHealth, walkSpeed, backWalkSpeed, jumpForce, jumpHorizontalSpeed },
   boxes: STANDARD_BODY,                 // ou caixas próprias
   attacks: { punch, kick, crouchPunch, crouchKick, airPunch, airKick },  // frame data + level
@@ -712,7 +758,9 @@ export const augusto: FighterConfig = {
 Para adicionar um personagem:
 
 1. Copie `src/fighters/fighterA.ts` para `src/fighters/<id>.ts` e ajuste os valores.
-2. Adicione-o em `ROSTER` (`src/fighters/roster.ts`).
+2. Adicione-o em `ROSTER` (`src/fighters/roster.ts`) com `playable: true` (aparece na seleção e
+   como CPU; sem arte usa retrato e boneco procedurais). Para a história, um perfil em
+   `STORY_PROFILES` (`src/story/storyProfiles.ts`).
 3. (Opcional) Coloque a arte em `public/fighters/<id>/` e preencha `assets`
    (passo a passo em [ART_DIRECTION.md](ART_DIRECTION.md#como-adicionar-arte-de-um-novo-lutador)).
 
@@ -720,13 +768,13 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro              | Onde encaixa                                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                       |
-| Vários cenários     | Novo `StageConfig` (com `art` opcional) em `stages/` + registrar em `stageRegistry.ts`; falta a escolha na UI |
-| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                               |
-| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos        |
-| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                          |
+| Futuro              | Onde encaixa                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                     |
+| Vários cenários     | Novo `StageConfig` (com `art` opcional) em `stages/` + registrar em `stageRegistry.ts` + `stageId` no lugar |
+| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                             |
+| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos      |
+| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                        |
 
 ## Decisões técnicas
 

@@ -108,7 +108,7 @@ describe('Partner Summit art', () => {
 
 describe('stage motion', () => {
   it('celebrating is faster and bigger than fighting', () => {
-    expect(MOOD_EXCITEMENT).toEqual({ fight: 0, celebrate: 1 });
+    expect(MOOD_EXCITEMENT).toEqual({ fight: 0, celebrate: 1, victory: 1.5 });
     expect(motionRates(0)).toEqual(CALM_MOTION);
     expect(motionRates(1)).toEqual(CHEER_MOTION);
     for (const key of Object.keys(CALM_MOTION) as (keyof typeof CALM_MOTION)[]) {

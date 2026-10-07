@@ -7,10 +7,11 @@ A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema 
 ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
-`FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
-desenvolvimento. Na LUTA RÁPIDA a seleção começa em Augusto e permite escolher FILIPE, JOÃO GUIOTTI, ROMUALDO
-e FIGHTER_A; todos enfrentam FIGHTER_B pela regra genérica do roster que prioriza personagens
-reservados à CPU.
+Todo lutador completo do roster (`playable: true`) é jogável em todos os modos: hoje AUGUSTO,
+FILIPE, JOÃO GUIOTTI e ROMUALDO. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
+enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Augusto). `FIGHTER_A` (sprite
+demo) e `FIGHTER_B` (placeholder) continuam no código para testes e desenvolvimento, com
+`playable: false`, e não aparecem na seleção.
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
 por recuperações maiores nos chutes. Possui seis ataques normais e o especial **24ZAP COMBO** (F / ESP, custo 30).
@@ -50,17 +51,18 @@ dimensões, alpha e margens das 40 células. As fontes geradas e os prompts est�
 ## Modo História
 
 No menu, **JOGAR** abre **HISTÓRIA** e **LUTA RÁPIDA** (a luta rápida é a de sempre).
-Na história escolhe-se um lutador com campanha (hoje AUGUSTO e FILIPE, ambos de Recife - PE) e a
-dificuldade da CPU. A campanha de Augusto é uma turnê pelo mundo (as viagens ao exterior usam
-um mapa-múndi pixel-art; as nacionais, o mapa do Brasil):
+Na história escolhe-se um personagem (AUGUSTO, FILIPE, JOÃO GUIOTTI ou ROMUALDO) e a dificuldade
+da CPU. A campanha **começa no lugar do escolhido** (Augusto em Recife, Filipe em Portugal, João
+na Rússia, Romualdo em Joinville) e viaja até cada um dos outros, no lugar deles (as viagens ao
+exterior usam um mapa-múndi pixel-art; as nacionais, o mapa do Brasil). Com Augusto:
 
 1. **Recife → Portugal:** luta contra **FILIPE** (de Recife - PE, enfrentado em Portugal).
 2. **Portugal → Rússia:** luta contra **JOÃO GUIOTTI** (de São Paulo - SP, enfrentado na Rússia).
 3. **Rússia → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
 4. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
 
-Filipe joga Recife → Rússia (João Guiotti) → Joinville (Romualdo). Cada viagem sai de onde a
-campanha está; o VS mostra o lugar da luta.
+Com João: Rússia → **Recife** (Augusto, no cenário Marco Zero) → Portugal (Filipe) → Joinville
+(Romualdo). Cada viagem sai de onde a campanha está; o VS mostra o lugar da luta.
 
 Cada luta é melhor de 3, no mesmo motor da luta rápida. Ao perder: TENTAR NOVAMENTE (repete só
 aquela luta) ou SAIR PARA O MENU. No mapa, Enter / toque pula o voo ou continua; Esc sai.

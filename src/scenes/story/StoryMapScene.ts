@@ -16,6 +16,7 @@ import {
   getStoryLocation,
   locationLabel,
   locationName,
+  locationWithCountry,
 } from '../../story/locations';
 import { viewShows } from '../../story/mapViews';
 import { currentLeg } from '../../story/storyProgress';
@@ -49,6 +50,8 @@ const LABEL_DEPTH = 3;
 const HOME_COUNTRY_LABEL_AT = { latitude: -10, longitude: -52 } as const;
 /** "PRÓXIMO DESTINO" card: shown while flying, swapped for the rival card on landing. */
 const DESTINATION_OUT_MS = 180;
+/** First trip of a campaign: the fighter at its starting point, before taking off. */
+const START_CARD_MS = 1700;
 
 type CityRole = 'current' | 'destination' | 'visited' | 'other';
 const CITY_COLORS: Record<CityRole, number> = {
@@ -97,10 +100,21 @@ export class StoryMapScene extends Phaser.Scene {
     this.drawFlownLegs();
     this.drawPlaces(trip.from.id, trip.to.id);
     this.createRouteHeader(locationName(trip.from), locationName(trip.to));
-    this.showDestination();
 
+    // The plane waits where the campaign is (on the first trip: the fighter's own place).
     const plane = this.createPlane(trip.path.from);
-    this.time.delayedCall(TAKEOFF_DELAY_MS, () => this.fly(plane, trip.path));
+    let takeoffMs = TAKEOFF_DELAY_MS;
+    if (progress.currentStage === 0 && progress.completedStages.length === 0) {
+      const start = this.showStart();
+      takeoffMs += START_CARD_MS;
+      this.time.delayedCall(START_CARD_MS, () => {
+        this.hideCard(start);
+        this.time.delayedCall(DESTINATION_OUT_MS, () => this.showDestination());
+      });
+    } else {
+      this.showDestination();
+    }
+    this.time.delayedCall(takeoffMs, () => this.fly(plane, trip.path));
 
     const proceed = () => this.proceed();
     onKeys(this, MENU_CONFIRM_KEYS, proceed);
@@ -274,6 +288,33 @@ export class StoryMapScene extends Phaser.Scene {
     this.time.delayedCall(AUTO_CONTINUE_MS, () => this.proceed(false));
   }
 
+  /** "PONTO DE PARTIDA": the chosen fighter and the place its campaign starts from. */
+  private showStart(): Phaser.GameObjects.GameObject[] {
+    const fighter = getFighterConfig(this.progress.selectedFighter);
+    const { panel, challenge, portrait, name, origin } = STORY_MAP_LAYOUT;
+    const items: (Phaser.GameObjects.Text | Phaser.GameObjects.Container)[] = [
+      this.add
+        .text(panel.x, challenge.y, STRINGS.storyStartingPoint, arcadeText(22, COLORS.gold))
+        .setOrigin(0.5),
+      createPortrait(this, panel.x, portrait.y, fighter, {
+        width: portrait.width,
+        height: portrait.height,
+        showName: false,
+      }),
+      this.add
+        .text(panel.x, name.y, fighter.displayName, arcadeText(26, COLORS.white))
+        .setOrigin(0.5),
+      this.add
+        .text(panel.x, origin.y, locationWithCountry(this.trip.from), pixelText(18, COLORS.neon))
+        .setOrigin(0.5),
+    ];
+    items.forEach((item, i) => {
+      item.setAlpha(0);
+      this.tweens.add({ targets: item, alpha: 1, duration: PANEL_MS, delay: 120 + i * 80 });
+    });
+    return items;
+  }
+
   /** "PRÓXIMO DESTINO" and the place's name, shown during the flight. */
   private showDestination(): void {
     const { panel, challenge, portrait } = STORY_MAP_LAYOUT;
@@ -305,7 +346,12 @@ export class StoryMapScene extends Phaser.Scene {
   }
 
   private hideDestination(): void {
-    for (const item of this.destinationCard) {
+    this.hideCard(this.destinationCard);
+    this.destinationCard = [];
+  }
+
+  private hideCard(items: readonly Phaser.GameObjects.GameObject[]): void {
+    for (const item of items) {
       this.tweens.killTweensOf(item);
       this.tweens.add({
         targets: item,
@@ -314,7 +360,6 @@ export class StoryMapScene extends Phaser.Scene {
         onComplete: () => item.destroy(),
       });
     }
-    this.destinationCard = [];
   }
 
   /** "PRÓXIMO DESAFIO": the rival's card, name and fight place, and CONTINUAR. */

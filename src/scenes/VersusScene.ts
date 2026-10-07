@@ -94,8 +94,14 @@ export class VersusScene extends Phaser.Scene {
     });
 
     this.add
-      .text(half, GAME_HEIGHT - 70, stage.displayName, arcadeText(22, COLORS.cyan))
+      .text(half, GAME_HEIGHT - 74, stage.displayName, arcadeText(22, COLORS.cyan))
       .setOrigin(0.5);
+    if (stage.location) {
+      this.add
+        .text(half, GAME_HEIGHT - 52, stage.location, arcadeText(14, COLORS.white))
+        .setOrigin(0.5)
+        .setAlpha(0.85);
+    }
     if (setup.mode === 'story') this.addStoryDetails(setup);
     this.add
       .text(half, GAME_HEIGHT - 30, STRINGS.vsSkipHint, bodyText(13, COLORS.white))

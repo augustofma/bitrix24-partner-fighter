@@ -22,6 +22,7 @@ import type { FighterView } from '../render/FighterView';
 import { HitEffects } from '../render/HitEffects';
 import { SpecialEffects } from '../render/special/SpecialEffects';
 import { createStageView } from '../render/stage/createStageView';
+import { crowdReaction } from '../render/stage/crowdReaction';
 import type { StageBackdrop } from '../render/stage/StageBackdrop';
 import { getStageConfig } from '../stages/stageRegistry';
 import type { InputSource } from '../types/input';
@@ -99,7 +100,10 @@ export class FightScene extends Phaser.Scene {
     ];
     this.setupDebugOverlay();
 
-    this.events.once('shutdown', () => this.controllers.forEach((c) => c.destroy?.()));
+    this.events.once('shutdown', () => {
+      this.controllers.forEach((c) => c.destroy?.());
+      this.stageView.destroy();
+    });
     this.announceRound();
     this.renderFrame(0);
   }
@@ -147,6 +151,9 @@ export class FightScene extends Phaser.Scene {
   private handleEvent(event: SimulationEvent): void {
     // Sounds follow real simulation events only (contacts, jumps, landings, KO...).
     gameSfx(this).playAll(combatSfx(event, this.simulation.fighters));
+    // The crowd cheers big moments (presentation only).
+    const reaction = crowdReaction(event);
+    if (reaction) this.stageView.react(reaction);
     switch (event.type) {
       case 'hit':
         this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
@@ -175,8 +182,11 @@ export class FightScene extends Phaser.Scene {
         this.schedulePerfect(event.result);
         return;
       case 'victoryPose':
-        // A round has a winner: the stage celebrates until the next round starts.
-        this.stageView.setMood('celebrate');
+        // A round has a winner: the stage celebrates until the next round starts, louder
+        // when that round also wins the match.
+        this.stageView.setMood(
+          this.simulation.match.wouldWinMatch(event.winnerIndex) ? 'victory' : 'celebrate',
+        );
         return;
       case 'roundOver':
         // The point is already scored: show it while the next round is being prepared.
@@ -226,6 +236,7 @@ export class FightScene extends Phaser.Scene {
       this.pendingPerfect = null;
       this.announcer.clear();
       this.perfectCall.show();
+      this.stageView.react('perfect');
       gameSfx(this).play('perfect');
     });
   }

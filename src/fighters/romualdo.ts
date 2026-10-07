@@ -11,7 +11,7 @@ export const romualdo: FighterConfig = {
   name: 'romualdo',
   displayName: 'ROMUALDO',
   description: 'Joinville - SC',
-  selectable: true,
+  playable: true,
   stats: {
     maxHealth: 100,
     walkSpeed: 2.85,

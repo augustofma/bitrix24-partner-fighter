@@ -7,7 +7,7 @@ export const fighterB: FighterConfig = {
   name: 'fighter_b',
   displayName: 'FIGHTER_B',
   description: 'Lutador pesado: mais lento, golpes mais fortes.',
-  selectable: false,
+  playable: false,
   stats: {
     maxHealth: 100,
     walkSpeed: 2.7,

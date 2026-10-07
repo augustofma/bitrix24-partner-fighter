@@ -318,6 +318,7 @@ sem pedido explícito.**
 - [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
 - [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
 
+
 ## DONE (v0.27: travamento do especial e fonte do resultado, branch `fix/special-vfx-stutter-and-victory-font`)
 
 - [x] Causa medida (perfil de CPU): balões do 24zap com tamanho negativo no pop-in iam para a
@@ -336,6 +337,36 @@ sem pedido explícito.**
 - [x] Fontes, prompts e preparação local reproduzível
 - [x] Testes de assets, frame map, roster e referências do Story
 - [x] Playtest F2, teclado, quatro confrontos, CPU, cross-up/flipX, Story/VS/Vitória e mobile emulado
+
+
+## DONE (v0.28: cenário RECIFE, branch `feature/recife-stage`)
+
+- [x] Arte oficial do Marco Zero como `StageConfig` `recife` (mesma arena), com preparo
+      reproduzível (`scripts/stage-art/recife/`): céu limpo, avião, hélice e faixa em camadas
+- [x] Cenário pelo lugar: `StoryLocation.stageId` (Recife → RECIFE), `legStageId` na história,
+      `quickFightStageId` (cidade do rival, senão do jogador) na luta rápida; VS mostra o lugar
+- [x] Torcida em grupos (loops, ritmos, alturas e atrasos próprios), flashes de celular,
+      reações a golpe forte/especial/KO/PERFECT, comemoração do round e maior na vitória
+- [x] Avião cruzando o céu (~15 s na tela, um voo a cada ~19-29 s, RNG visual com semente),
+      hélice girando, faixa em tiras ondulando com atraso; tudo criado uma vez e destruído no
+      `shutdown`
+- [x] Testes de config, assets, escolha por lugar, voo, reações e ciclo de vida; playtest
+      desktop, 1080p e mobile 844×390
+- [x] Story Mode com origem dinâmica: a campanha começa no lugar do escolhido
+      (`storyLocationId`) e é gerada (`campaignOpponents` + `rivalLeg`), sem rotas por
+      personagem; os 4 personagens são jogáveis; "PONTO DE PARTIDA" no mapa; Recife vira destino
+      (cenário Marco Zero) para quem não começa lá
+
+## DONE (v0.29: todos os lutadores jogáveis, branch `feature/all-fighters-playable`)
+
+- [x] `FighterConfig.playable` (evolução de `selectable`): a seleção usa o roster filtrado por
+      `playable` nos dois modos; FIGHTER_A e FIGHTER_B ficam `playable: false` (fora da tela)
+- [x] Luta rápida: CPU = próximo jogável do roster (circular), sem placeholder
+- [x] História: jogável com perfil de história (`isStoryEligible`) escolhível; adversários só
+      entre os elegíveis
+- [x] Testes: filtro, 4 lutadores na seleção, VS/CPU, campanhas pela seleção, IA genérica em
+      todos os pares, sem lista fixa de ids, grade com 4–12 lutadores; playtest 1280×720,
+      1920×1080 (mouse) e 844×390 (toque)
 
 ## NEXT (próximas tarefas recomendadas)
 
@@ -361,8 +392,9 @@ sem pedido explícito.**
 12. [ ] Especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).
-16. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
+15. [ ] Cenários próprios para os outros lugares (basta `stageId` no lugar; hoje só Recife tem).
+16. [ ] Som ambiente de torcida por cenário (ainda não existe sistema de áudio de ambiente).
+17. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
 
 ## FUTURE (não implementar agora)
 

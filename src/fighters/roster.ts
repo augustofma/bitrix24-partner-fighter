@@ -25,15 +25,25 @@ export function getFighterConfig(id: string): FighterConfig {
   return config;
 }
 
-export function getSelectableFighters(): FighterConfig[] {
-  return ROSTER.filter((fighter) => fighter.selectable);
+/** The fighters offered to players (Character Select in every mode, CPU opponents). */
+export function getPlayableFighters(): FighterConfig[] {
+  return ROSTER.filter((fighter) => fighter.playable);
 }
 
-/** Prefer CPU-only fighters, then fall back to the first different fighter. */
+/**
+ * Quick-fight CPU opponent: the next playable fighter after the player in roster order
+ * (wrapping around), so every playable fighter is also a CPU opponent. Falls back to any other
+ * fighter when the roster has a single playable one.
+ */
 export function pickCpuOpponent(playerFighterId: string): FighterConfig {
-  const opponent =
-    ROSTER.find((fighter) => !fighter.selectable && fighter.id !== playerFighterId) ??
-    ROSTER.find((fighter) => fighter.id !== playerFighterId);
-  if (!opponent) throw new Error('The roster needs at least two fighters.');
-  return opponent;
+  const playable = getPlayableFighters();
+  const at = playable.findIndex((fighter) => fighter.id === playerFighterId);
+  for (let step = 1; step <= playable.length; step++) {
+    // `at` is -1 when the player is not playable (tests): start from the first one.
+    const candidate = playable[(at + step) % playable.length];
+    if (candidate && candidate.id !== playerFighterId) return candidate;
+  }
+  const other = ROSTER.find((fighter) => fighter.id !== playerFighterId);
+  if (!other) throw new Error('The roster needs at least two fighters.');
+  return other;
 }

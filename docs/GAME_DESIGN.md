@@ -7,8 +7,8 @@ lateral; vence quem zerar a vida do oponente (KO) ou tiver mais vida quando o te
 
 Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossistema Bitrix24
 (parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
-`AUGUSTO`, `FILIPE`, `JOÃO GUIOTTI`, `ROMUALDO` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B`
-reservado à CPU.
+`AUGUSTO`, `FILIPE`, `JOÃO GUIOTTI` e `ROMUALDO` jogáveis (`playable: true`); `FIGHTER_A` e
+`FIGHTER_B` são placeholders de desenvolvimento (`playable: false`), fora da seleção.
 
 ## Game loop
 
@@ -20,20 +20,30 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
 1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque), que abre HISTÓRIA e LUTA
    RÁPIDA (← → escolhem, Enter confirma, Esc fecha). Os passos abaixo são da luta rápida; o
    Modo História tem seção própria.
-2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelo roster (3 × 2 por
-   página; slots "EM BREVE" completam a página). Augusto é a seleção inicial; FILIPE e
-   FIGHTER_A também são selecionáveis. FIGHTER_B aparece esmaecido com a marca "CPU". O card
+2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelos lutadores jogáveis
+   (roster filtrado por `playable`; 3 × 2 por página, com paginação ◀ ▶ quando passam de 6;
+   slots "EM BREVE" completam a página). Augusto é a seleção inicial; todos os jogáveis podem
+   ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
    destaque mostra retrato ampliado, nome, descrição e barras PODER / VELOCIDADE / ALCANCE
    (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
-   há várias páginas) percorrem os selecionáveis; tocar um card seleciona e tocar de novo
+   há várias páginas) percorrem os jogáveis; tocar um card seleciona e tocar de novo
    confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. O selo "VS ..."
-   mostra o adversário, que prioriza os personagens reservados à CPU. Abaixo da grade, o
+   mostra o adversário: o próximo jogável do roster (circular). Abaixo da grade, o
    painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
-   As lutas acontecem no **Bitrix24 Partner Summit**: o público pula em onda durante a luta e
-   comemora mais rápido quando um round tem vencedor; o presidente, sentado no palco, olha ao
-   redor e gesticula (e acena ao fim do round). É só visual: a arena é a mesma de antes.
+   O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
+   Zero** (RECIFE); os demais, no **Bitrix24 Partner Summit**. Na luta rápida vale a cidade do
+   rival ou, se ele não tiver cidade, a do jogador; na história, o destino da etapa. O VS
+   mostra o nome do cenário e o lugar ("MARCO ZERO - RECIFE, PE").
+   - **Partner Summit:** o público pula em onda e comemora mais rápido quando um round tem
+     vencedor; o presidente, sentado no palco, olha ao redor e gesticula (e acena ao fim do
+     round).
+   - **Recife:** a torcida atrás da grade se mexe em grupos (pulos, balanço, palmas em rajada,
+     flashes de celular), reage a golpes fortes, especiais, KO e PERFECT, comemora o fim do
+     round e mais ainda a vitória da partida. Um avião cruza o céu a cada ~20-30 s rebocando a
+     faixa "Arrecife Digital", que ondula como tecido.
+     É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do
@@ -367,7 +377,9 @@ nunca ficam READY. A restrição `groundOnly` não entra na conta, para o HUD n�
 - **Mobile:** o botão ESP ganha borda ciano e um anel dourado pulsando enquanto o especial do
   jogador estiver disponível.
 
-## CPU (FIGHTER_B)
+## CPU
+
+A mesma IA genérica controla qualquer lutador (lê só o `FighterConfig` e o estado da luta).
 
 State machine simples (sem aprendizado de máquina), com modos: `approach`, `retreat`, `attack`,
 `guard`, `jump`, `wait`.
@@ -489,16 +501,22 @@ sem uso ~78%, ~34% e ~14% do tempo.
 
 Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da luta rápida.
 
-- **Seleção ("MODO HISTÓRIA"):** só lutadores com campanha podem ser escolhidos (hoje Augusto e
-  Filipe, de **Recife - PE**); João e Romualdo aparecem como **RIVAL**. O selo mostra a origem
-  ("ORIGEM RECIFE - PE"); a dificuldade da CPU vale para a campanha toda.
-- **Origem × local do confronto:** a origem oficial de cada lutador não muda (Filipe e Augusto
-  de Recife - PE, João de São Paulo - SP, Romualdo de Joinville - SC), mas a campanha pode
-  enfrentá-lo em outro lugar: **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
-  Joinville.
-- **Rota de Augusto:** Recife → **Portugal** (Filipe) → **Rússia** (João Guiotti) → Joinville
-  (Romualdo). **Rota de Filipe:** Recife → Rússia (João Guiotti) → Joinville (Romualdo). Cada
-  viagem parte de onde a campanha está (o lugar da luta anterior).
+- **Seleção ("MODO HISTÓRIA"):** todo personagem da história pode ser escolhido (Augusto,
+  Filipe, João Guiotti, Romualdo). O selo mostra onde a campanha começa ("PARTIDA RÚSSIA"); a
+  dificuldade da CPU vale para a campanha toda.
+- **Origem × lugar na história:** a origem oficial não muda (Augusto e Filipe de Recife - PE,
+  João de São Paulo - SP, Romualdo de Joinville - SC), mas cada um tem um lugar na história:
+  Augusto em **Recife**, **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
+  **Joinville**. A campanha do escolhido **começa no lugar dele**, e os outros são enfrentados
+  nos lugares deles, um por um (nunca ele mesmo).
+- **Rotas (geradas):** Augusto: Recife → Portugal (Filipe) → Rússia (João) → Joinville
+  (Romualdo). Filipe: Portugal → Recife (Augusto) → Rússia (João) → Joinville (Romualdo).
+  João: Rússia → Recife (Augusto) → Portugal (Filipe) → Joinville (Romualdo). Romualdo:
+  Joinville → Recife (Augusto) → Portugal (Filipe) → Rússia (João). Cada viagem parte de onde a
+  campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário
+  RECIFE); os outros lugares usam o Partner Summit até terem cenário próprio.
+- **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
+  (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.
 - **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
   dos trópicos). Viagens dentro do Brasil usam o mapa do Brasil (voo de ~3 s); viagens ao
   exterior usam um mapa-múndi estilizado com o Brasil destacado em dourado (voo de ~4,4 s, em

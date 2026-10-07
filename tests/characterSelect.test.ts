@@ -116,12 +116,17 @@ import { RegistryKeys } from '../src/config/registryKeys';
 import { SceneKeys } from '../src/config/sceneKeys';
 import { STRINGS } from '../src/config/strings';
 import { augusto } from '../src/fighters/augusto';
+import { fighterA } from '../src/fighters/fighterA';
 import { fighterB } from '../src/fighters/fighterB';
-import { ROSTER } from '../src/fighters/roster';
+import { filipe } from '../src/fighters/filipe';
+import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
+import { ROSTER, getPlayableFighters } from '../src/fighters/roster';
+import { romualdo } from '../src/fighters/romualdo';
 import { CharacterSelectScene } from '../src/scenes/CharacterSelectScene';
-import { DEFAULT_STAGE_ID } from '../src/stages/stageRegistry';
 import type { RosterCard } from '../src/ui/select/RosterCard';
 import { CARDS_PER_PAGE, SELECT_LAYOUT } from '../src/ui/select/selectLayout';
+import { campaignOpponents, campaignStartLocation } from '../src/story/storyProfiles';
+import type { StoryProgress } from '../src/types/story';
 
 beforeEach(() => {
   ui.keys.clear();
@@ -134,9 +139,9 @@ beforeEach(() => {
   ui.playSfx.mockClear();
 });
 
-function openScene() {
+function openScene(mode: 'quick' | 'story' = 'quick') {
   const scene = new CharacterSelectScene();
-  scene.create();
+  scene.create({ mode });
   const cards = (scene as unknown as { cards: RosterCard[] }).cards;
   return { scene, cards };
 }
@@ -147,27 +152,60 @@ const lastHero = () => ui.hero.at(-1);
 const lastSetup = () => ui.goToScene.mock.lastCall?.[2] as { difficulty: string } | undefined;
 
 describe('CharacterSelectScene roster integration', () => {
-  it('builds a card per roster entry (portraits through the shared path) plus filler slots', () => {
+  it('builds a card per PLAYABLE fighter (roster filtered by `playable`) plus filler slots', () => {
     const { cards } = openScene();
-    expect(ui.portraits).toEqual(ROSTER);
+    const playable = ROSTER.filter((fighter) => fighter.playable);
+    expect(getPlayableFighters()).toEqual(playable);
+    expect(ui.portraits).toEqual(playable);
     expect(cards.map((card) => card.config)).toEqual([
-      ...ROSTER,
-      ...Array<null>(CARDS_PER_PAGE - ROSTER.length).fill(null),
+      ...playable,
+      ...Array<null>(CARDS_PER_PAGE - playable.length).fill(null),
     ]);
     expect(lastHero()).toBe(augusto);
-    expect(fake(cards[ROSTER.indexOf(fighterB)])?.input).toBeUndefined();
     expect(fake(cards.at(-1))?.input).toBeUndefined();
   });
 
+  it('offers Augusto, Filipe, João Guiotti and Romualdo; hides playable:false placeholders', () => {
+    const { cards } = openScene();
+    const shown = cards.map((card) => card.config).filter(Boolean);
+    for (const fighter of [augusto, filipe, joaoGuiotti, romualdo]) {
+      expect(fighter.playable).toBe(true);
+      expect(shown).toContain(fighter);
+      expect(fake(cards[shown.indexOf(fighter)])?.input?.enabled).toBe(true);
+    }
+    for (const placeholder of [fighterA, fighterB]) {
+      expect(placeholder.playable).toBe(false);
+      expect(shown).not.toContain(placeholder);
+    }
+  });
+
+  it.each([augusto, filipe, joaoGuiotti, romualdo])(
+    'quick fight with %s: VS with a playable CPU and the stage of the fighters’ city',
+    (fighter) => {
+      const { cards } = openScene();
+      const card = cards.find((c) => c.config === fighter);
+      fake(card)?.handlers.get('pointerup')?.();
+      fake(card)?.handlers.get('pointerup')?.();
+      const setup = ui.goToScene.mock.lastCall?.[2] as Record<string, string>;
+      expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.Versus);
+      expect(setup.playerFighterId).toBe(fighter.id);
+      const cpu = ROSTER.find((f) => f.id === setup.cpuFighterId);
+      expect(cpu?.playable).toBe(true);
+      expect(cpu?.id).not.toBe(fighter.id);
+    },
+  );
+
   it('first tap selects, a tap on the selected card confirms the right MatchSetup', () => {
     const { scene, cards } = openScene();
-    const card = cards[ROSTER.indexOf(augusto)];
+    const card = cards[getPlayableFighters().indexOf(augusto)];
     expect(fake(card)?.input?.enabled).toBe(true);
     fake(card)?.handlers.get('pointerup')?.();
     expect(ui.goToScene).toHaveBeenCalledWith(scene, SceneKeys.Versus, {
       playerFighterId: augusto.id,
-      cpuFighterId: fighterB.id,
-      stageId: DEFAULT_STAGE_ID,
+      // The CPU is the next playable fighter.
+      cpuFighterId: filipe.id,
+      // Filipe is from Recife: the fight happens at the Marco Zero.
+      stageId: 'recife',
       difficulty: 'normal',
     });
   });
@@ -176,7 +214,7 @@ describe('CharacterSelectScene roster integration', () => {
     const { cards } = openScene();
     fake(cards[1])?.handlers.get('pointerup')?.();
     expect(ui.goToScene).not.toHaveBeenCalled();
-    expect(lastHero()).toBe(ROSTER[1]);
+    expect(lastHero()).toBe(getPlayableFighters()[1]);
   });
 
   it('SELECIONAR and ENTER confirm; VOLTAR and ESC go back to the menu', () => {
@@ -208,23 +246,21 @@ describe('CharacterSelectScene roster integration', () => {
 
   it('shows the CPU opponent picked by the roster rule', () => {
     openScene();
-    expect(ui.texts.some((t) => t.text === STRINGS.selectOpponent(fighterB.displayName))).toBe(
-      true,
-    );
+    expect(ui.texts.some((t) => t.text === STRINGS.selectOpponent(filipe.displayName))).toBe(true);
   });
 
-  it.each([8, 16])('keeps %s roster entries reachable with hidden cards disabled', (count) => {
+  it.each([8, 16])('keeps %s playable fighters reachable with hidden cards disabled', (count) => {
     // The production roster is readonly; the fixture mutation is scoped and restored.
     const roster = ROSTER as FighterConfig[];
     const original = [...roster];
     try {
-      for (let index = roster.length; index < count; index++) {
+      for (let index = 0; getPlayableFighters().length < count; index++) {
         roster.push({ ...augusto, id: `test-${index}`, displayName: `TEST_${index}` });
       }
       const { cards } = openScene();
       const visited = new Set<FighterConfig>();
       const gridRight = SELECT_LAYOUT.hero.left;
-      for (let step = 0; step < count - 1; step++) {
+      for (let step = 0; step < count; step++) {
         const selected = lastHero();
         if (selected) visited.add(selected);
         const selectedCard = cards.find((card) => card.config === selected);
@@ -241,11 +277,40 @@ describe('CharacterSelectScene roster integration', () => {
         }
         ui.keys.get('RIGHT')?.();
       }
-      expect(visited.size).toBe(count - 1);
+      // Every playable fighter is reachable; placeholders never are.
+      expect(visited.size).toBe(count);
+      expect(visited.has(fighterA)).toBe(false);
       expect(visited.has(fighterB)).toBe(false);
     } finally {
       roster.splice(0, roster.length, ...original);
     }
+  });
+});
+
+describe('CharacterSelectScene story mode', () => {
+  it.each([augusto, filipe, joaoGuiotti, romualdo])(
+    '%s can start a campaign: correct fighter, start place and rivals',
+    (fighter) => {
+      const { cards } = openScene('story');
+      const card = cards.find((c) => c.config === fighter);
+      expect(fake(card)?.input?.enabled).toBe(true);
+      fake(card)?.handlers.get('pointerup')?.();
+      fake(card)?.handlers.get('pointerup')?.();
+      expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.StoryMap);
+      const progress = ui.registry.get(RegistryKeys.storyProgress) as StoryProgress;
+      expect(progress.selectedFighter).toBe(fighter.id);
+      expect(progress.currentLocation).toBe(campaignStartLocation(fighter.id));
+      expect(progress.opponent).toBe(campaignOpponents(fighter.id)[0]);
+      expect(campaignOpponents(fighter.id)).not.toContain(fighter.id);
+    },
+  );
+
+  it('offers the same playable cards as the quick fight (placeholders hidden)', () => {
+    const { cards } = openScene('story');
+    const shown = cards.map((card) => card.config).filter(Boolean);
+    expect(shown).toEqual(getPlayableFighters());
+    expect(shown).not.toContain(fighterA);
+    expect(shown).not.toContain(fighterB);
   });
 });
 

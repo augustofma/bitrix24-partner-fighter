@@ -19,36 +19,42 @@ export interface StoryLocation {
   regionCode?: string;
   latitude: number;
   longitude: number;
+  /** Arena of fights held here (a StageConfig id); the default stage when omitted. */
+  stageId?: string;
 }
 
 /**
- * One leg of a campaign: fly from where the campaign is now to `destination` and fight
- * `opponent` there. The departure is never stored: it is the previous leg's destination (or
+ * One leg of a campaign (generated): fly from where the campaign is now to `destination` and
+ * fight `opponent` there. The departure is never stored: it is the previous leg's destination (or
  * the fighter's home for the first leg), so the plane always leaves from where the story is.
  */
 export interface StoryLeg {
   opponent: string;
   /** Where this fight happens (a StoryLocation id); not necessarily the rival's home. */
   destination: string;
-  /** Arena of this fight (default stage when omitted). */
+  /** Arena of this fight; defaults to the destination's stage (StoryLocation.stageId). */
   stageId?: string;
 }
 
 /** Ordered legs of a campaign; the last leg's win completes it. */
 export type StoryRoute = readonly StoryLeg[];
 
-/** Where a fighter comes from and, for playable characters, their campaign. */
+/**
+ * A story character: where it is from and where it is in the story world. Campaigns are
+ * generated from these (src/story/storyProfiles.ts), never written per fighter.
+ */
 export interface StoryCharacterProfile {
   fighterId: string;
   /** Home (a StoryLocation id): the fighter's official origin, shown on select and VS. */
   home: string;
   /**
-   * Where campaigns meet this fighter as a rival (a StoryLocation id). Defaults to `home`;
-   * a rival can be from one place and be challenged in another (e.g. abroad).
+   * The fighter's place in the story world (a StoryLocation id); defaults to `home`. Its own
+   * campaign STARTS here (StoryProgress.currentLocation at the start), and the other campaigns
+   * MEET it here. A fighter can be from one place and be in another (e.g. abroad).
    */
   encounter?: string;
-  /** Campaign of this character; fighters without one are rivals only. */
-  storyRoute?: StoryRoute;
+  /** Order to meet the rivals in this fighter's campaign; default: the story roster's order. */
+  opponentOrder?: readonly string[];
 }
 
 export type StoryPhase = 'travel' | 'fight' | 'complete';

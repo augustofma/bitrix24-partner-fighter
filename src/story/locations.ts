@@ -1,3 +1,4 @@
+import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { StoryLocation } from '../types/story';
 
 /** Country of the campaigns' home cities: trips inside it use the detailed Brazil map. */
@@ -18,6 +19,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     regionCode: 'PE',
     latitude: -8.05,
     longitude: -34.9,
+    // Fights in Recife happen at the Marco Zero.
+    stageId: 'recife',
   },
   {
     id: 'sao-paulo',
@@ -65,12 +68,24 @@ export function getStoryLocation(id: string): StoryLocation {
   return location;
 }
 
+/** Stage of a fight held at this place: its own `stageId`, or the default stage. */
+export function stageIdForLocation(id: string): string {
+  return getStoryLocation(id).stageId ?? DEFAULT_STAGE_ID;
+}
+
 /** Short label for the map, select and VS screens: "RECIFE - PE", "PORTUGAL". */
 export function locationLabel(location: StoryLocation): string {
   const name = location.name.toUpperCase();
   return location.kind === 'city' && location.regionCode
     ? `${name} - ${location.regionCode}`
     : name;
+}
+
+/** Place with its country, for the campaign's starting point: "RECIFE - PE · BRASIL", "RÚSSIA". */
+export function locationWithCountry(location: StoryLocation): string {
+  return location.kind === 'city'
+    ? `${locationLabel(location)} · ${location.country.toUpperCase()}`
+    : locationLabel(location);
 }
 
 /** The place's name alone, in capitals ("RECIFE", "RÚSSIA"), for route titles. */

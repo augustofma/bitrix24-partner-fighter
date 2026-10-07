@@ -6,12 +6,13 @@ import { FightSimulation } from '../src/core/FightSimulation';
 import { attackWouldConnect } from '../src/core/fighter/attackGeometry';
 import { createRng } from '../src/core/random';
 import { filipe } from '../src/fighters/filipe';
+import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { augusto } from '../src/fighters/augusto';
 import { fighterA } from '../src/fighters/fighterA';
 import { fighterB } from '../src/fighters/fighterB';
 import {
   getFighterConfig,
-  getSelectableFighters,
+  getPlayableFighters,
   pickCpuOpponent,
   ROSTER,
 } from '../src/fighters/roster';
@@ -47,12 +48,14 @@ describe('Filipe roster and data', () => {
     }
     expect(filipe.attacks.kick.damage).toBeLessThan(augusto.attacks.kick.damage);
   });
-  it('is selectable and matches against the CPU-only fighter through roster rules', () => {
+  it('is playable and gets a playable CPU opponent through roster rules', () => {
     expect(getFighterConfig('filipe')).toBe(filipe);
-    expect(getSelectableFighters()).toContain(filipe);
+    expect(getPlayableFighters()).toContain(filipe);
     expect(ROSTER).toEqual(expect.arrayContaining([fighterA, fighterB, filipe]));
-    expect(pickCpuOpponent(filipe.id)).toBe(fighterB);
-    expect(pickCpuOpponent(fighterA.id)).toBe(fighterB);
+    // The quick-fight CPU is the next playable fighter (placeholders are never picked).
+    expect(pickCpuOpponent(filipe.id).id).toBe(joaoGuiotti.id);
+    expect(pickCpuOpponent(filipe.id).playable).toBe(true);
+    expect(pickCpuOpponent(fighterA.id).playable).toBe(true);
     expect(pickCpuOpponent(fighterB.id)).not.toBe(fighterB);
     expect(filipe.description).toBe('Arrecife Digital');
     expect(filipe.stats.maxHealth).toBe(100);

@@ -7,13 +7,17 @@ import { DEFAULT_AI_DIFFICULTY } from '../config/match';
 import { RegistryKeys } from '../config/registryKeys';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
-import { ROSTER, pickCpuOpponent } from '../fighters/roster';
+import { ROSTER, getPlayableFighters, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
-import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { FighterConfig } from '../types/fighter';
 import { isAIDifficulty, type AIDifficulty, type GameMode, type MatchSetup } from '../types/match';
-import { locationLabel } from '../story/locations';
-import { fighterOrigin, hasStoryCampaign, isStoryRival } from '../story/storyProfiles';
+import { getStoryLocation, locationLabel } from '../story/locations';
+import {
+  campaignStartLocation,
+  hasStoryCampaign,
+  isStoryRival,
+  quickFightStageId,
+} from '../story/storyProfiles';
 import { beginStory } from './story/storyFlow';
 import { DifficultySelector } from '../ui/DifficultySelector';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
@@ -37,19 +41,22 @@ const FOOTER_HEIGHT = 28;
 const TITLE_GLOW_BLUR = 10;
 
 /**
- * Arcade roster screen built from ROSTER: illustrated map background, a paged grid of fighter
- * cards, a hero panel for the highlighted fighter, the CPU difficulty and a SELECIONAR button.
- * Works for any roster size; non-selectable fighters are shown locked (CPU only).
+ * Arcade roster screen built from the playable fighters (ROSTER filtered by `playable`):
+ * illustrated map background, a paged grid of fighter cards, a hero panel for the highlighted
+ * fighter, the CPU difficulty and a SELECIONAR button. Works for any number of fighters (pages
+ * of CARDS_PER_PAGE); in story mode a playable fighter without a campaign is shown locked.
  */
 export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
+  /** What this screen offers: the playable fighters, in roster order. */
+  private fighters: readonly FighterConfig[] = [];
   private cards: RosterCard[] = [];
   private hero!: HeroPanel;
   private difficulty!: DifficultySelector;
   private selectButton!: ArcadeButton;
   private pageLabel: Phaser.GameObjects.Text | null = null;
   private opponentLabel: Phaser.GameObjects.Text | null = null;
-  /** Quick fight (any selectable fighter) or story (fighters with a campaign). */
+  /** Quick fight (any playable fighter) or story (playable fighters with a campaign). */
   private mode: GameMode = 'quick';
 
   constructor() {
@@ -62,8 +69,9 @@ export class CharacterSelectScene extends Phaser.Scene {
     gameMusic(this).play(SCENE_MUSIC.characterSelect);
     createSelectBackground(this);
 
-    this.selectedIndex = ROSTER.findIndex((fighter) => this.canPick(fighter));
-    if (this.selectedIndex < 0) throw new Error('The roster has no selectable fighter.');
+    this.fighters = getPlayableFighters();
+    this.selectedIndex = this.fighters.findIndex((fighter) => this.canPick(fighter));
+    if (this.selectedIndex < 0) throw new Error('The roster has no playable fighter.');
 
     this.createTopBar();
     this.cards = [];
@@ -154,7 +162,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setShadow(0, 0, css(COLORS.magenta), TITLE_GLOW_BLUR, true, true);
 
-    if (pageCount(ROSTER.length) > 1) {
+    if (pageCount(this.fighters.length) > 1) {
       const style = { width: pager.buttonWidth, height: pager.height, fontSize: 20 } as const;
       new ArcadeButton(
         this,
@@ -192,7 +200,7 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private createCards(): void {
-    ROSTER.forEach((config, index) => {
+    this.fighters.forEach((config, index) => {
       const { x, y } = cardSlot(index);
       this.cards.push(
         new RosterCard(
@@ -213,15 +221,15 @@ export class CharacterSelectScene extends Phaser.Scene {
         ),
       );
     });
-    for (let filler = 0; filler < fillerSlots(ROSTER.length); filler++) {
-      const { x, y } = cardSlot(ROSTER.length + filler);
+    for (let filler = 0; filler < fillerSlots(this.fighters.length); filler++) {
+      const { x, y } = cardSlot(this.fighters.length + filler);
       this.cards.push(new RosterCard(this, x, y, null, () => undefined));
     }
   }
 
-  /** In story mode only fighters with a campaign can be picked; otherwise `selectable`. */
+  /** Every card is a playable fighter; story mode also needs a campaign (a story profile). */
   private canPick(config: FighterConfig): boolean {
-    return this.mode === 'story' ? hasStoryCampaign(config.id) : config.selectable;
+    return this.mode === 'story' ? hasStoryCampaign(config.id) : config.playable;
   }
 
   private lockedTag(config: FighterConfig): string {
@@ -236,10 +244,10 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private moveSelection(step: number): void {
-    const count = ROSTER.length;
+    const count = this.fighters.length;
     for (let i = 1; i <= count; i++) {
       const candidate = (this.selectedIndex + step * i + count * i) % count;
-      const config = ROSTER[candidate];
+      const config = this.fighters[candidate];
       if (config && this.canPick(config)) {
         if (candidate !== this.selectedIndex) playSfx(this, 'menu-move');
         this.selectedIndex = candidate;
@@ -250,22 +258,24 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private refreshSelection(): void {
-    const fighter = ROSTER[this.selectedIndex];
+    const fighter = this.fighters[this.selectedIndex];
     if (!fighter) return;
     const page = Math.floor(this.selectedIndex / CARDS_PER_PAGE);
     this.cards.forEach((card, index) => {
       card.setShown(cardSlot(index).page === page);
       card.setSelected(index === this.selectedIndex);
     });
-    this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(ROSTER.length)));
+    this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(this.fighters.length)));
     this.opponentLabel?.setText(this.badgeText(fighter));
     this.hero.show(fighter);
   }
 
-  /** Quick fight: the CPU opponent. Story: where the campaign starts. */
+  /** Quick fight: the CPU opponent. Story: where the campaign starts (the fighter's place). */
   private badgeText(fighter: FighterConfig): string {
-    const origin = fighterOrigin(fighter.id);
-    if (this.mode === 'story' && origin) return STRINGS.storyOrigin(locationLabel(origin));
+    if (this.mode === 'story' && hasStoryCampaign(fighter.id)) {
+      const start = getStoryLocation(campaignStartLocation(fighter.id));
+      return STRINGS.storyStart(locationLabel(start));
+    }
     return STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName);
   }
 
@@ -275,7 +285,7 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private confirm(): void {
-    const player = ROSTER[this.selectedIndex];
+    const player = this.fighters[this.selectedIndex];
     if (!player || !this.canPick(player)) return;
     playSfx(this, 'menu-confirm');
     if (this.mode === 'story') {
@@ -284,10 +294,12 @@ export class CharacterSelectScene extends Phaser.Scene {
       beginStory(this, player.id);
       return;
     }
+    const cpu = pickCpuOpponent(player.id);
     const setup: MatchSetup = {
       playerFighterId: player.id,
-      cpuFighterId: pickCpuOpponent(player.id).id,
-      stageId: DEFAULT_STAGE_ID,
+      cpuFighterId: cpu.id,
+      // The fighters' home city picks the arena (e.g. Recife -> Marco Zero).
+      stageId: quickFightStageId(player.id, cpu.id),
       difficulty: this.difficulty.value,
     };
     this.cameras.main.flash(150, 255, 255, 255);
