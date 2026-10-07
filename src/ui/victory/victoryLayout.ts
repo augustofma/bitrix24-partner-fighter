@@ -3,7 +3,7 @@
  * scripts/victory-art/prepare_victory_art.py. Pure data.
  */
 export const VICTORY_LAYOUT = {
-  title: { x: 480, y: 89, maxWidth: 860 },
+  title: { x: 480, y: 76, maxWidth: 860 },
   card: { x: 480, y: 252.8 },
   /** Portrait window inside the card frame, and the name plate below it. */
   cardWindow: { x: 480.3, y: 235.6, width: 216, height: 194 },

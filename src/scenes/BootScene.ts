@@ -8,6 +8,7 @@ import {
 } from '../render/assets/fighterAssets';
 import { collectStageAssets } from '../render/assets/stageAssets';
 import { TITLE_ASSETS } from '../render/assets/titleAssets';
+import { FONT_ASSETS } from '../render/assets/fontAssets';
 import { VICTORY_ASSETS } from '../render/assets/victoryAssets';
 import { STAGES } from '../stages/stageRegistry';
 import { validateRosterAssets } from '../render/sprite/spriteValidation';
@@ -26,6 +27,7 @@ export class BootScene extends Phaser.Scene {
 
   preload(): void {
     const assets: AssetRequest[] = [
+      ...FONT_ASSETS,
       ...TITLE_ASSETS,
       ...VICTORY_ASSETS,
       ...collectStageAssets(STAGES),
@@ -35,6 +37,8 @@ export class BootScene extends Phaser.Scene {
       if (this.textures.exists(asset.key)) continue;
       if (asset.type === 'image') {
         this.load.image(asset.key, asset.path);
+      } else if (asset.type === 'font') {
+        this.load.font(asset.key, asset.path);
       } else {
         const { frameWidth, frameHeight } = asset;
         this.load.spritesheet(asset.key, asset.path, { frameWidth, frameHeight });

@@ -87,6 +87,7 @@ src/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
       titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
       victoryAssets.ts    PURO: camadas da tela de vitória (fundo, card, painel, botão)
+      fontAssets.ts       PURO: fontes incluídas no jogo (Bangers, título da vitória)
       stageAssets.ts      PURO: imagens declaradas em StageConfig.art (sem duplicatas)
       textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
@@ -110,7 +111,9 @@ src/
       victoryContent.ts   PURO: título, retratos, nome e linha de resultado a partir do MatchResult
       victoryLayout.ts    PURO: posições das camadas (saída do script de preparo)
       VictoryCard.ts      Card com retrato real, brilho da moldura, halo, flutuação e brilho varrendo
-      victoryText.ts      Título com neon piscando e linha de resultado sobre o painel
+      fightTitle.ts       Letreiro de jogo de luta gerado num canvas a partir de qualquer texto
+                          (fonte, inclinação, degradê, contornos, pincel, sombra; ajuste de largura)
+      victoryText.ts      Título (fightTitle + brilho) e linha de resultado sobre o painel
       VictoryEffects.ts   Confete pixelado, quadradinhos subindo e brilhos (partículas leves)
     select/               Visual da seleção de personagem (Phaser, exceto os módulos puros)
       selectLayout.ts     PURO: geometria da tela, posição de cada card, páginas e slots vazios

@@ -1,14 +1,12 @@
 import Phaser from 'phaser';
 import { STRINGS } from '../../config/strings';
-import { COLORS, arcadeText, bodyText, css } from '../theme';
+import { COLORS, bodyText } from '../theme';
+import { createFightTitle, fitTitleScale } from './fightTitle';
 import type { ResultSegment, ResultTone } from './victoryContent';
 import { VICTORY_LAYOUT } from './victoryLayout';
 
-const TITLE_FONT_SIZE = 56;
-const TITLE_STROKE = 9;
-const TITLE_GLOW_STROKE = 15;
-const TITLE_GLOW_ALPHA = 0.38;
-const TITLE_GLOW_MS = 700;
+const TITLE_GLOW_ALPHA = 0.16;
+const TITLE_GLOW_MS = 900;
 const RESULT_FONT_SIZE = 18;
 const RESULT_GAP = 16;
 const RESULT_PADDING = 36;
@@ -20,44 +18,29 @@ const TONE_COLOR: Record<ResultTone, number> = {
 };
 
 /**
- * "<NAME> VENCEU!": gold letters with a magenta outline, over a softly blinking neon copy of
- * the outline. Scaled down to fit long names.
+ * "<NAME> VENCEU!" in the fight title lettering (see fightTitle.ts), with a warm additive glow
+ * that breathes softly. Long names are fitted to the layout's width.
  */
 export function createVictoryTitle(
   scene: Phaser.Scene,
   text: string,
 ): Phaser.GameObjects.Container {
   const { x, y, maxWidth } = VICTORY_LAYOUT.title;
-  const glow = scene.add
-    .text(0, 0, text, {
-      ...arcadeText(TITLE_FONT_SIZE, COLORS.magenta, COLORS.magenta),
-      strokeThickness: TITLE_GLOW_STROKE,
-    })
-    .setOrigin(0.5)
+  const title = createFightTitle(scene, 0, 0, text);
+  const glow = createFightTitle(scene, 0, 0, text)
     .setBlendMode(Phaser.BlendModes.ADD)
     .setAlpha(TITLE_GLOW_ALPHA);
-  const title = scene.add
-    .text(0, 0, text, {
-      ...arcadeText(TITLE_FONT_SIZE, COLORS.gold, COLORS.magenta),
-      strokeThickness: TITLE_STROKE,
-    })
-    .setOrigin(0.5)
-    .setShadow(0, 5, css(COLORS.ink), 0, true, true);
-  const container = scene.add.container(x, y, [glow, title]);
-  if (title.width > maxWidth) {
-    const fit = maxWidth / title.width;
-    glow.setScale(fit);
-    title.setScale(fit);
-  }
+  const fit = fitTitleScale(title.displayWidth, maxWidth);
+  for (const image of [glow, title]) image.setScale(image.scaleX * fit);
   scene.tweens.add({
     targets: glow,
-    alpha: 0.08,
+    alpha: 0,
     duration: TITLE_GLOW_MS,
     yoyo: true,
     repeat: -1,
     ease: 'Sine.easeInOut',
   });
-  return container;
+  return scene.add.container(x, y, [title, glow]);
 }
 
 /** The result panel (art) with "VERDICT ■ Reason ■ score" centered on it. */

@@ -7,7 +7,9 @@ import type { FighterConfig } from '../../types/fighter';
 
 export type AssetRequest =
   | { type: 'image'; key: string; path: string }
-  | { type: 'spritesheet'; key: string; path: string; frameWidth: number; frameHeight: number };
+  | { type: 'spritesheet'; key: string; path: string; frameWidth: number; frameHeight: number }
+  /** A web font; `key` is the CSS font-family it registers. */
+  | { type: 'font'; key: string; path: string };
 
 /** Texture key of a portrait image (derived from its path, so it is unique and shareable). */
 export function portraitTextureKey(path: string): string {

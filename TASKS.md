@@ -227,6 +227,13 @@ sem pedido explícito.**
 - [x] Testes de direções, zona morta, ponteiros, pulo único, combos e determinismo
 - [x] Playtest com toques reais (CDP) em 844×390, 667×375, 915×412 e 1280×720, incluindo cross-up
 
+## DONE (v0.19: título da vitória padronizado, branch `feature/victory-title-font-standardization`)
+
+- [x] Letreiro de jogo de luta gerado em código para qualquer vencedor ("<NOME> VENCEU!")
+- [x] Fonte Bangers (OFL) incluída e carregada pela BootScene; fallback para a fonte arcade
+- [x] Degradê quente, contorno duplo, pincel seco, inclinação e sombra; nomes longos cabem
+- [x] Testes dos quatro vencedores, ajuste de largura e licença; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

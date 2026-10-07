@@ -264,8 +264,13 @@ confete, com o card do vencedor, o painel do resultado e o botão VOLTAR AO MENU
 `scripts/victory-art/source.png`; o preparo está em
 [scripts/victory-art/README.md](../scripts/victory-art/README.md).
 
-- **Título:** "<NOME> VENCEU!" (ou EMPATE) em dourado com contorno magenta, sobre uma cópia
-  neon do contorno que pisca devagar; entra com pop e bounce e depois flutua 3 px.
+- **Título:** "<NOME> VENCEU!" (ou EMPATE) com letreiro de jogo de luta gerado em código
+  (`src/ui/victory/fightTitle.ts`), igual para todo vencedor: fonte Bangers (OFL, incluída no
+  jogo), inclinada para a frente, degradê quente (vermelho no topo, laranja, amarelo e creme
+  embaixo), contorno escuro grosso com linha interna vermelho-escura, riscos de pincel seco
+  só sobre as letras e sombra projetada forte. Um brilho quente respira por cima. Nomes longos
+  são reduzidos para caber (até 860 px), sempre centralizados. Entra com pop e bounce e depois
+  flutua 3 px.
 - **Card:** moldura da arte sobre a janela azul-marinho com listras laterais; dentro, o retrato
   real do vencedor (os dois no empate) e o nome na plaqueta. A moldura pulsa um brilho ciano, um
   halo suave fica atrás, o card flutua 3 px e um brilho cruza a janela de tempos em tempos.
@@ -337,6 +342,7 @@ registrada aqui:
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                       |
 | `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                       |
+| `public/fonts/bangers/*` (fonte Bangers)                                          | The Bangers Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/bangers/OFL.txt`)   |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                       |
 
 ## VFX do especial (v0.8)

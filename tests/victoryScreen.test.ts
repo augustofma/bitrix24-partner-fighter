@@ -8,6 +8,7 @@ import { filipe } from '../src/fighters/filipe';
 import { VICTORY_ART, VICTORY_ASSETS } from '../src/render/assets/victoryAssets';
 import type { FighterConfig } from '../src/types/fighter';
 import type { MatchResult } from '../src/types/match';
+import { fitTitleScale, titleSeed } from '../src/ui/victory/fightTitle';
 import { victoryContent } from '../src/ui/victory/victoryContent';
 import { VICTORY_LAYOUT } from '../src/ui/victory/victoryLayout';
 import { jpegSize, readRgbaPng } from './png';
@@ -57,6 +58,39 @@ describe('victory screen content (from the real MatchResult)', () => {
     expect(content.featured).toEqual([filipe, fighterB]);
     expect(content.nameLabel).toBe(STRINGS.drawNames(filipe.displayName, fighterB.displayName));
     expect(texts(content)).toEqual([STRINGS.reasonMatchDraw, '4 x 4']);
+  });
+});
+
+describe('fight title lettering', () => {
+  it.each([
+    [augusto, 0, 'AUGUSTO VENCEU!'],
+    [filipe, 0, 'FILIPE VENCEU!'],
+    [fighterA, 0, 'FIGHTER_A VENCEU!'],
+    [augusto, 1, 'FIGHTER_B VENCEU!'],
+  ] as const)(
+    '%s / winner %s -> "%s" (from the real winner, never hardcoded)',
+    (player, winner, title) => {
+      const content = victoryContent(result(player, winner, 'ko', [2, 1]), [player, fighterB]);
+      expect(content.title).toBe(title);
+    },
+  );
+
+  it('long names are fitted to the layout width; short ones are never enlarged', () => {
+    const { maxWidth } = VICTORY_LAYOUT.title;
+    expect(fitTitleScale(400, maxWidth)).toBe(1);
+    expect(fitTitleScale(maxWidth, maxWidth)).toBe(1);
+    expect(fitTitleScale(maxWidth * 2, maxWidth)).toBeCloseTo(0.5);
+    expect(VICTORY_LAYOUT.title.x).toBe(480); // centered
+  });
+
+  it('brush streaks are deterministic per text (same title, same look)', () => {
+    expect(titleSeed('FILIPE VENCEU!')).toBe(titleSeed('FILIPE VENCEU!'));
+    expect(titleSeed('FILIPE VENCEU!')).not.toBe(titleSeed('AUGUSTO VENCEU!'));
+  });
+
+  it('the title font is bundled with its license', () => {
+    expect(existsSync('public/fonts/bangers/Bangers-Regular.ttf')).toBe(true);
+    expect(existsSync('public/fonts/bangers/OFL.txt')).toBe(true);
   });
 });
 
