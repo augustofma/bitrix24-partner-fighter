@@ -178,6 +178,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/romualdo/portrait.png'),
+        path: 'fighters/romualdo/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'romualdo-sheet',
+        path: 'fighters/romualdo/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/fighter-a/portrait.png'),
         path: 'fighters/fighter-a/portrait.png',
       },
@@ -206,6 +218,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'augusto-sheet',
         'filipe-sheet',
         'joao-guiotti-sheet',
+        'romualdo-sheet',
+        portraitTextureKey('fighters/romualdo/portrait.png'),
         portraitTextureKey('fighters/joao-guiotti/portrait.png'),
         portraitTextureKey('fighters/filipe/portrait.png'),
         portraitTextureKey('fighters/augusto/portrait.png'),

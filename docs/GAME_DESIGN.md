@@ -119,7 +119,8 @@ enquanto (a barra enche normalmente).
 
 **Romualdo — Joinville - SC.** Pesado: golpes mais fortes, mais knockback e recuperações
 maiores; o mais lento do elenco. Vida 100; caminhada 2,85/2,3 px/frame; pulo 16,2 com
-3,7 px/frame no ar. Visual genérico com paleta verde e laranja, **sem especiais** por enquanto.
+3,7 px/frame no ar. Arte pixel-art própria: cabeça raspada, óculos, barba grisalha e blazer azul-marinho.
+**Sem especiais** por enquanto.
 
 | Lutador  | Golpe         | Dano | Startup | Ativo | Recovery | Hitstun | Blockstun | Alcance |
 | -------- | ------------- | ---- | ------- | ----- | -------- | ------- | --------- | ------- |

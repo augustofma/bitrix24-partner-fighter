@@ -329,6 +329,14 @@ sem pedido explícito.**
 - [x] Resultado da vitória com papéis tipográficos: veredito (Russo One), detalhe e placar
       (Press Start 2P)
 
+## DONE (arte do Romualdo)
+
+- [x] Sheet RGBA 1536×1120 com 40 células 192×224 e portrait RGBA 240×300
+- [x] Config existente com animações completas e fases 1/1/1; gameplay preservado
+- [x] Fontes, prompts e preparação local reproduzível
+- [x] Testes de assets, frame map, roster e referências do Story
+- [x] Playtest F2, teclado, quatro confrontos, CPU, cross-up/flipX, Story/VS/Vitória e mobile emulado
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
@@ -350,7 +358,7 @@ sem pedido explícito.**
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
 11. [ ] CI (GitHub Actions) rodando `npm run check`.
-12. [ ] Arte própria (sprite + retrato) para ROMUALDO, e especiais para João e Romualdo.
+12. [ ] Especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
 15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).

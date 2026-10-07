@@ -253,6 +253,15 @@ Baseline 216 e margens mínimas 4 px, com elevação aérea. Fases de pulo e ata
 [Prompts, fontes e montagem reproduzível](../scripts/joao-guiotti-art/README.md).
 Arte original do projeto, sem assets de terceiros; nenhuma mudança de gameplay.
 
+## ROMUALDO
+
+Arte original gerada com ImageGen integrado a partir das fotos e do pôster aprovados. Cabeça
+raspada, óculos, barba grisalha curta, blazer azul-marinho, camiseta branca e calça escura.
+Atlas RGBA 1536×1120, grade 8×5 com 40 células 192×224; portrait RGBA 240×300. Scale 1,
+offsetX 0, offsetY 8; baseline 216 e margem mínima 4 px. Pulo e ataques com fases 1/1/1.
+[Fontes, prompts e preparação](../scripts/romualdo-art/README.md). Gameplay e identidade do
+config existente preservados.
+
 ## Tela inicial
 
 Arte ilustrada aprovada (arena noturna com holofotes, globo, torcida e dois lutadores
@@ -369,7 +378,7 @@ Tudo é desenhado em código, sem imagens novas, na paleta da seleção e da tel
   magenta e ciano, sombra deslocada, gira pela direção da curva e balança levemente.
 - **Tela final:** fundo e efeitos da vitória, card do lutador e o letreiro "CAMPANHA CONCLUÍDA".
 
-ROMUALDO (verde + laranja) mantém o boneco procedural; JOÃO GUIOTTI usa arte própria.
+ROMUALDO e JOÃO GUIOTTI usam sprites e retratos próprios pelo pipeline genérico.
 
 ## Tipografia
 
@@ -438,7 +447,7 @@ registrada aqui:
 | `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                            | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                   | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
-| ROMUALDO (boneco genérico)                                                        | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
+| `public/fighters/romualdo/*.png` e `scripts/romualdo-art/*.png`                   | ImageGen integrado, referências autorizadas pelo usuário; montagem local                  | Arte original gerada para o projeto; sem assets de terceiros      |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                            |
 
 ## VFX dos especiais (temas dos apps)

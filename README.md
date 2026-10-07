@@ -70,7 +70,8 @@ O progresso vale para a sessão. Rotas, cidades e rivais são configuração
 
 João Guiotti (técnico, equilibrado) usa arte pixel-art própria, com óculos, blazer preto e
 camiseta/tênis brancos. Atlas 1536×1120 (40 células 192×224), retrato 240×300 e alpha real.
-[Fontes e preparo](scripts/joao-guiotti-art/README.md). Romualdo mantém o visual genérico.
+[Fontes e preparo](scripts/joao-guiotti-art/README.md). Romualdo também usa arte própria: cabeça raspada, óculos, barba grisalha e blazer azul-marinho.
+[Fontes e preparo do Romualdo](scripts/romualdo-art/README.md).
 Ambos ainda não têm especiais.
 
 ## Stack

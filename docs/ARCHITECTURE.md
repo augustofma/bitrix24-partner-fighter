@@ -163,6 +163,7 @@ tests/                    Vitest: lutador, combate, arena, round, partida, IA, d
                           ataques aéreos e agachados, níveis de ataque × guarda, cross-up,
                           especiais, determinismo, seleção, animação/assets de sprite
 scripts/                  Ferramentas offline de preparação de assets
+  romualdo-art/            Fontes originais e normalização reproduzível da arte de Romualdo
   joao-guiotti-art/        Fontes originais e normalização reproduzível da arte de João
   prepare-augusto-art.ps1 Montagem/validação offline do atlas do Augusto (Windows/System.Drawing)
   augusto-art/            Fontes ImageGen e prompts; não publicados no build
