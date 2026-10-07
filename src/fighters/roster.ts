@@ -3,12 +3,21 @@ import { filipe } from './filipe';
 import { augusto } from './augusto';
 import { fighterA } from './fighterA';
 import { fighterB } from './fighterB';
+import { joaoGuiotti } from './joaoGuiotti';
+import { romualdo } from './romualdo';
 
 /**
  * Every fighter in the game, in character-select order.
  * Adding a character: create `src/fighters/<id>.ts` and append it here.
  */
-export const ROSTER: readonly FighterConfig[] = [augusto, filipe, fighterA, fighterB];
+export const ROSTER: readonly FighterConfig[] = [
+  augusto,
+  filipe,
+  joaoGuiotti,
+  romualdo,
+  fighterA,
+  fighterB,
+];
 
 export function getFighterConfig(id: string): FighterConfig {
   const config = ROSTER.find((fighter) => fighter.id === id);

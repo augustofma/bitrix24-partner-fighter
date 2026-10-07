@@ -3,6 +3,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from '../src/config/display';
 import { augusto } from '../src/fighters/augusto';
 import { fighterB } from '../src/fighters/fighterB';
 import { ROSTER } from '../src/fighters/roster';
+import { romualdo } from '../src/fighters/romualdo';
 import { RATING_MAX, RATING_MIN, rateFighter } from '../src/ui/select/fighterRatings';
 import {
   CARDS_PER_PAGE,
@@ -46,14 +47,14 @@ describe('select screen layout', () => {
 });
 
 describe('display-only fighter ratings', () => {
-  it('stay within the bar and follow the configs (FIGHTER_B hits hardest, Augusto is fastest)', () => {
+  it('stay within the bar and follow the configs (Romualdo hits hardest, Augusto is fastest)', () => {
     for (const fighter of ROSTER) {
       for (const value of Object.values(rateFighter(fighter, ROSTER))) {
         expect(value).toBeGreaterThanOrEqual(RATING_MIN);
         expect(value).toBeLessThanOrEqual(RATING_MAX);
       }
     }
-    expect(rateFighter(fighterB, ROSTER).power).toBe(RATING_MAX);
+    expect(rateFighter(romualdo, ROSTER).power).toBe(RATING_MAX);
     expect(rateFighter(augusto, ROSTER).speed).toBe(RATING_MAX);
     expect(rateFighter(fighterB, ROSTER).speed).toBe(RATING_MIN);
   });
