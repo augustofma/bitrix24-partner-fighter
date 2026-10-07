@@ -285,8 +285,15 @@ confete, com o card do vencedor, o painel do resultado e o botão VOLTAR AO MENU
 - **Card:** moldura da arte sobre a janela azul-marinho com listras laterais; dentro, o retrato
   real do vencedor (os dois no empate) e o nome na plaqueta. A moldura pulsa um brilho ciano, um
   halo suave fica atrás, o card flutua 3 px e um brilho cruza a janela de tempos em tempos.
-- **Resultado:** "VOCÊ VENCEU!" em dourado (ou "VOCÊ PERDEU" em magenta), motivo e placar,
-  separados por quadradinhos ciano.
+- **Resultado:** três papéis tipográficos (`ResultRole`, em `victoryText.ts`), todos com fontes
+  do jogo e renderizados em 2x para ficarem nítidos pequenos:
+  - **veredito** ("VOCÊ VENCEU!" dourado / "VOCÊ PERDEU" magenta): Russo One 20 px, contorno
+    escuro, sombra dura e espaçamento de 1,5 px, o maior destaque;
+  - **detalhe** (motivo, ou a rota na campanha concluída): Russo One 14 px, branco-azulado
+    (#D9E4FF), contorno fino, mais neutro;
+  - **placar** ("2 x 0"): Press Start 2P 15 px dourado com contorno, os dígitos de placar do HUD;
+  - separados por quadradinhos ciano. Textos longos são reduzidos para caber no painel (com 36 px
+    de margem), nunca cortados.
 - **Botão:** a arte do VOLTAR AO MENU, com hover 1,03 e brilho, pressionado 0,97.
 - **Detalhes:** confete pixelado caindo, quadradinhos neon subindo e brilhos, sempre atrás do
   card e dos textos.
@@ -454,3 +461,9 @@ como imagem lisa.
 
 Os efeitos ficam em volta dos lutadores e nunca cobrem barras de vida, barra de especial ou
 controles touch.
+
+As formas são "pixel-art" feitas só de retângulos (balão com cantos chanfrados, disco como
+octógono de três retângulos), triângulos e traços: nada de `fillRoundedRect` / `fillCircle`. Além
+de combinar com o estilo, isso evita a triangulação de caminhos do Phaser (earcut), que custava
+centenas de ms com balões de tamanho negativo ou minúsculo no pop-in e travava o jogo ~1 s no
+especial (corrigido; teste em `tests/specialStutter.test.ts`).

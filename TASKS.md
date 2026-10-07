@@ -318,7 +318,22 @@ sem pedido explícito.**
 - [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
 - [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
 
+## DONE (v0.27: travamento do especial e fonte do resultado, branch `fix/special-vfx-stutter-and-victory-font`)
+
+- [x] Causa medida (perfil de CPU): balões do 24zap com tamanho negativo no pop-in iam para a
+      triangulação de caminhos do Phaser (earcut), centenas de ms no frame do especial
+- [x] VFX só com retângulos/triângulos/traços (`pixelBox`, `disc`), `easeOutBack` nunca
+      negativo, formas minúsculas ignoradas; mesmo visual, sem mudar gameplay
+- [x] Testes: emblemas no carregamento do roster, nada carregado/criado durante o especial,
+      10 usos seguidos com o mesmo fluxo, custo de meter e dano inalterados
+- [x] Resultado da vitória com papéis tipográficos: veredito (Russo One), detalhe e placar
+      (Press Start 2P)
+
 ## NEXT (próximas tarefas recomendadas)
+
+0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
+       cada frame (~4% da CPU num celular lento, sem relação com especiais); trocar por
+       textura gerada uma vez.
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
        (`EASY_AI`, `NORMAL_AI`, `HARD_AI`) com pessoas reais; a FÁCIL ainda pode estar difícil

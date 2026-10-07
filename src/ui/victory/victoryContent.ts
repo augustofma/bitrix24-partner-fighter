@@ -3,11 +3,22 @@ import type { FighterConfig } from '../../types/fighter';
 import type { MatchResult } from '../../types/match';
 
 export type ResultTone = 'win' | 'lose' | 'neutral';
+/**
+ * Typographic role in the result line: the verdict leads, the detail (reason, route) is quieter
+ * and the score is a heavy scoreboard figure. See createResultLine.
+ */
+export type ResultRole = 'verdict' | 'detail' | 'score';
 
 /** One piece of the result line ("VOCÊ VENCEU!", "Vitória por nocaute", "2 x 0"). */
 export interface ResultSegment {
   text: string;
   tone: ResultTone;
+  /** Defaults to the tone: colored segments are verdicts, neutral ones details. */
+  role?: ResultRole;
+}
+
+export function resultRole(segment: ResultSegment): ResultRole {
+  return segment.role ?? (segment.tone === 'neutral' ? 'detail' : 'verdict');
 }
 
 export interface VictoryContent {
@@ -31,6 +42,7 @@ export function victoryContent(
   const score: ResultSegment = {
     text: STRINGS.matchScore(roundWins[0], roundWins[1]),
     tone: 'neutral',
+    role: 'score',
   };
   if (winnerIndex === null) {
     return {

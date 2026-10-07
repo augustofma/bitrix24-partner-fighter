@@ -1,15 +1,19 @@
 import Phaser from 'phaser';
 import { STRINGS } from '../../config/strings';
-import { COLORS, bodyText } from '../theme';
+import { COLORS, arcadeText, hudText } from '../theme';
 import { createFightTitle, fitTitleScale } from './fightTitle';
-import type { ResultSegment, ResultTone } from './victoryContent';
+import { resultRole } from './victoryContent';
+import type { ResultRole, ResultSegment, ResultTone } from './victoryContent';
 import { VICTORY_LAYOUT } from './victoryLayout';
 
 const TITLE_GLOW_ALPHA = 0.16;
 const TITLE_GLOW_MS = 900;
-const RESULT_FONT_SIZE = 18;
-const RESULT_GAP = 16;
+const RESULT_GAP = 14;
 const RESULT_PADDING = 36;
+/** Rendered at 2x so the small arcade lettering stays crisp when the canvas is scaled up. */
+const RESULT_RESOLUTION = 2;
+/** Neutral detail ("Vitória por nocaute"): a cool off-white, quieter than the verdict. */
+const DETAIL_COLOR = 0xd9e4ff;
 
 const TONE_COLOR: Record<ResultTone, number> = {
   win: COLORS.gold,
@@ -43,6 +47,29 @@ export function createVictoryTitle(
   return scene.add.container(x, y, [title, glow]);
 }
 
+/**
+ * Lettering of each role, in the game's own families (see config/fonts.ts): the verdict in the
+ * arcade face (Russo One) with outline, shadow and tracking; the detail smaller and plainer in
+ * the same face; the score in the HUD scoreboard digits (Press Start 2P), gold like the timer.
+ */
+function resultStyle(role: ResultRole, tone: ResultTone): Phaser.Types.GameObjects.Text.TextStyle {
+  switch (role) {
+    case 'verdict':
+      return { ...arcadeText(20, TONE_COLOR[tone]), resolution: RESULT_RESOLUTION };
+    case 'detail':
+      return {
+        ...arcadeText(14, tone === 'neutral' ? DETAIL_COLOR : TONE_COLOR[tone]),
+        strokeThickness: 3,
+        shadow: { offsetX: 0, offsetY: 1, color: '#000000', blur: 0, fill: true },
+        resolution: RESULT_RESOLUTION,
+      };
+    case 'score':
+      return { ...hudText(15, COLORS.gold), resolution: RESULT_RESOLUTION };
+  }
+}
+
+const LETTER_SPACING: Record<ResultRole, number> = { verdict: 1.5, detail: 0.5, score: 1 };
+
 /** The result panel (art, when loaded) with "VERDICT ■ Reason ■ score" centered on it. */
 export function createResultLine(
   scene: Phaser.Scene,
@@ -54,14 +81,22 @@ export function createResultLine(
   const parts: Phaser.GameObjects.Text[] = [];
   segments.forEach((segment, i) => {
     if (i > 0) {
-      parts.push(scene.add.text(0, 0, STRINGS.resultSeparator, bodyText(10, COLORS.neon)));
+      parts.push(
+        scene.add
+          .text(0, 0, STRINGS.resultSeparator, {
+            // Neon square from the arcade stack's fallback (Russo One has no "■").
+            ...arcadeText(9, COLORS.neon),
+            strokeThickness: 2,
+            resolution: RESULT_RESOLUTION,
+          })
+          .setAlpha(0.85),
+      );
     }
-    const strong = segment.tone !== 'neutral' || i === segments.length - 1;
+    const role = resultRole(segment);
     parts.push(
-      scene.add.text(0, 0, segment.text, {
-        ...bodyText(RESULT_FONT_SIZE, TONE_COLOR[segment.tone]),
-        fontStyle: strong ? 'bold' : 'normal',
-      }),
+      scene.add
+        .text(0, 0, segment.text, resultStyle(role, segment.tone))
+        .setLetterSpacing(LETTER_SPACING[role]),
     );
   });
   const total = parts.reduce((sum, part) => sum + part.width, 0) + RESULT_GAP * (parts.length - 1);
