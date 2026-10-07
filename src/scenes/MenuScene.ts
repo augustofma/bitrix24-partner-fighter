@@ -46,12 +46,13 @@ export class MenuScene extends Phaser.Scene {
   create(): void {
     fadeIn(this);
     const startMode = (mode: GameMode) => goToScene(this, SceneKeys.CharacterSelect, { mode });
+    const hasArt = Object.values(TITLE_ART).every(({ key }) => this.textures.exists(key));
+    const play = hasArt ? this.createIllustrated() : this.createProcedural();
+    // Created after the screen so the mode buttons draw on top of it.
     const modes = new ModeMenu(this, BUTTON_POSITION.x, BUTTON_POSITION.y, [
       { label: STRINGS.modeStory, onSelect: () => startMode('story') },
       { label: STRINGS.modeQuickFight, onSelect: () => startMode('quick') },
     ]);
-    const hasArt = Object.values(TITLE_ART).every(({ key }) => this.textures.exists(key));
-    const play = hasArt ? this.createIllustrated() : this.createProcedural();
     this.bindModeMenu(modes, play);
   }
 

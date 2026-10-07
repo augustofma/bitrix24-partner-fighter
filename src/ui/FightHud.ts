@@ -5,14 +5,16 @@ import { STRINGS } from '../config/strings';
 import type { ReadonlyFighter } from '../core/fighter/ReadonlyFighter';
 import { HealthBar } from './HealthBar';
 import { SpecialMeterBar } from './SpecialMeterBar';
-import { COLORS, DEPTH, arcadeText, css } from './theme';
+import { COLORS, DEPTH, arcadeText, css, hudText, pixelText } from './theme';
+import { timerLabel, timerStyle } from './timerStyle';
 
 const MARGIN_X = 36;
 const BAR_Y = 26;
 const BAR_HEIGHT = 24;
 const TIMER_BOX_WIDTH = 84;
 const BAR_WIDTH = (GAME_WIDTH - MARGIN_X * 2 - TIMER_BOX_WIDTH - 24) / 2;
-const LOW_TIME_SECONDS = 10;
+const TIMER_FONT_SIZE = 30;
+const TIMER_PULSE_MS = 240;
 const ROUND_LABEL_Y = BAR_Y + 64;
 /** Round-win markers beside the round label: one diamond per round needed, filled when won. */
 const MARKER_Y = ROUND_LABEL_Y + 9;
@@ -23,12 +25,14 @@ const MARKER_INNER_X = 74;
 /** Health bars, meters, names, clock, round label and round wins. Fixed to the screen. */
 export class FightHud {
   private readonly bars: readonly [HealthBar, HealthBar];
+  private readonly scene: Phaser.Scene;
   private readonly timerText: Phaser.GameObjects.Text;
   private readonly meters: readonly [SpecialMeterBar, SpecialMeterBar];
   private readonly roundLabel: Phaser.GameObjects.Text;
   private readonly markers: Phaser.GameObjects.Graphics;
 
   constructor(scene: Phaser.Scene, fighters: readonly [ReadonlyFighter, ReadonlyFighter]) {
+    this.scene = scene;
     const [left, right] = fighters;
     const rightBarX = GAME_WIDTH - MARGIN_X - BAR_WIDTH;
     this.bars = [
@@ -41,9 +45,9 @@ export class FightHud {
       new SpecialMeterBar(scene, rightBarX, BAR_Y + BAR_HEIGHT + 6, BAR_WIDTH, true),
     ];
     const nameY = BAR_Y + BAR_HEIGHT + 32;
-    const leftName = scene.add.text(MARGIN_X, nameY, left.config.displayName, arcadeText(18));
+    const leftName = scene.add.text(MARGIN_X, nameY, left.config.displayName, arcadeText(19));
     const rightName = scene.add
-      .text(GAME_WIDTH - MARGIN_X, nameY, right.config.displayName, arcadeText(18))
+      .text(GAME_WIDTH - MARGIN_X, nameY, right.config.displayName, arcadeText(19))
       .setOrigin(1, 0);
 
     const centerX = GAME_WIDTH / 2;
@@ -51,10 +55,10 @@ export class FightHud {
       .rectangle(centerX, BAR_Y + BAR_HEIGHT / 2 + 4, TIMER_BOX_WIDTH, 58, COLORS.ink, 0.9)
       .setStrokeStyle(3, COLORS.gold);
     this.timerText = scene.add
-      .text(centerX, BAR_Y + BAR_HEIGHT / 2 + 4, '', arcadeText(40, COLORS.gold))
+      .text(centerX, BAR_Y + BAR_HEIGHT / 2 + 6, '', hudText(TIMER_FONT_SIZE, COLORS.gold))
       .setOrigin(0.5);
     this.roundLabel = scene.add
-      .text(centerX, ROUND_LABEL_Y, STRINGS.round(1), arcadeText(14, COLORS.cyan))
+      .text(centerX, ROUND_LABEL_Y, STRINGS.round(1), pixelText(15, COLORS.cyan))
       .setOrigin(0.5, 0);
     this.markers = scene.add.graphics();
 
@@ -101,10 +105,20 @@ export class FightHud {
       bar.update();
       this.meters[i as 0 | 1].update(fighter);
     });
-    const label = String(Math.max(0, secondsRemaining)).padStart(2, '0');
-    if (this.timerText.text !== label) this.timerText.setText(label);
-    this.timerText.setColor(
-      css(secondsRemaining <= LOW_TIME_SECONDS ? COLORS.healthLow : COLORS.gold),
-    );
+    const label = timerLabel(secondsRemaining);
+    if (this.timerText.text === label) return;
+    this.timerText.setText(label);
+    const style = timerStyle(secondsRemaining);
+    this.timerText.setColor(css(style.color));
+    if (style.pulseScale > 1) {
+      this.scene.tweens.killTweensOf(this.timerText);
+      this.timerText.setScale(style.pulseScale);
+      this.scene.tweens.add({
+        targets: this.timerText,
+        scale: 1,
+        duration: TIMER_PULSE_MS,
+        ease: 'Quad.easeOut',
+      });
+    }
   }
 }

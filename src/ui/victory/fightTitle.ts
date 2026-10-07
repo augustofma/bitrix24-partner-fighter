@@ -1,6 +1,5 @@
 import type Phaser from 'phaser';
-import { TITLE_FONT } from '../../render/assets/fontAssets';
-import { FONT_FAMILY } from '../theme';
+import { GAME_FONTS } from '../../config/fonts';
 
 /*
  * "Fighting game" title lettering, generated from any text at runtime: a bundled brush-like
@@ -69,7 +68,7 @@ export function createFightTitle(
 
 function drawTitle(text: string): HTMLCanvasElement {
   const size = FIGHT_TITLE_FONT_SIZE * RESOLUTION;
-  const font = `${size}px "${TITLE_FONT.key}", ${FONT_FAMILY}`;
+  const font = `${size}px ${GAME_FONTS.TITLE}`;
   const canvas = document.createElement('canvas');
   const measure = canvas.getContext('2d');
   if (!measure) return canvas;

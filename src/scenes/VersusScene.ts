@@ -11,7 +11,7 @@ import { locationLabel } from '../story/locations';
 import { fighterOrigin, storyRouteFor } from '../story/storyProfiles';
 import type { MatchSetup } from '../types/match';
 import { getStoryProgress } from './story/storyFlow';
-import { COLORS, arcadeText, bodyText } from '../ui/theme';
+import { COLORS, arcadeText, bodyText, pixelText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
 const DURATION_MS = 2600;
@@ -114,7 +114,7 @@ export class VersusScene extends Phaser.Scene {
       const origin = fighterOrigin(id);
       if (!origin) continue;
       const label = this.add
-        .text(x, ORIGIN_Y, locationLabel(origin), arcadeText(16, COLORS.neon))
+        .text(x, ORIGIN_Y, locationLabel(origin), pixelText(19, COLORS.neon))
         .setOrigin(0.5)
         .setAlpha(0);
       this.tweens.add({ targets: label, alpha: 1, delay: SLIDE_MS, duration: 250 });
@@ -127,7 +127,7 @@ export class VersusScene extends Phaser.Scene {
           GAME_WIDTH / 2,
           STAGE_LABEL_Y,
           STRINGS.storyLeg(progress.currentStage + 1, route.length),
-          arcadeText(18, COLORS.gold),
+          pixelText(20, COLORS.gold),
         )
         .setOrigin(0.5);
     }

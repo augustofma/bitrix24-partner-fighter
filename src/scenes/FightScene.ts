@@ -139,7 +139,7 @@ export class FightScene extends Phaser.Scene {
         this.cameras.main.flash(120, 255, 255, 255);
         return;
       case 'ko':
-        this.announcer.show(STRINGS.ko, 1600, COLORS.red);
+        this.announcer.show(STRINGS.ko, 1600);
         return;
       case 'fightStart':
         this.announcer.show(STRINGS.fight, 700);

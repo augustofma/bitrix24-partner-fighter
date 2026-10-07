@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import { GAME_FONTS } from '../config/fonts';
 
 /** Shared look of the provisional arcade UI. Change here, not in scenes. */
 export const COLORS = {
@@ -29,7 +30,8 @@ export const COLORS = {
   orange: 0xff8a1f,
 } as const;
 
-export const FONT_FAMILY = '"Arial Black", Impact, "Trebuchet MS", sans-serif';
+/** Default UI family (arcade role); see config/fonts.ts for every role. */
+export const FONT_FAMILY = GAME_FONTS.ARCADE;
 
 export const DEPTH = {
   stage: 0,
@@ -70,9 +72,32 @@ export function bodyText(
   color: number = COLORS.white,
 ): Phaser.Types.GameObjects.Text.TextStyle {
   return {
-    fontFamily: 'system-ui, "Segoe UI", Roboto, sans-serif',
+    fontFamily: GAME_FONTS.BODY,
     fontSize: `${size}px`,
     color: css(color),
     align: 'center',
   };
+}
+
+/** HUD readouts (fight clock, counters): 8-bit arcade digits with a hard outline. */
+export function hudText(
+  size: number,
+  color: number = COLORS.white,
+  stroke: number = COLORS.ink,
+): Phaser.Types.GameObjects.Text.TextStyle {
+  return {
+    ...arcadeText(size, color, stroke),
+    fontFamily: GAME_FONTS.HUD,
+    strokeThickness: Math.max(3, Math.round(size / 5)),
+    shadow: { offsetX: 0, offsetY: Math.max(2, size / 8), color: '#000000', blur: 0, fill: true },
+  };
+}
+
+/** Small pixel-styled captions (map cities, stage counters). */
+export function pixelText(
+  size: number,
+  color: number = COLORS.white,
+  stroke: number = COLORS.ink,
+): Phaser.Types.GameObjects.Text.TextStyle {
+  return { ...arcadeText(size, color, stroke), fontFamily: GAME_FONTS.PIXEL, fontStyle: 'bold' };
 }

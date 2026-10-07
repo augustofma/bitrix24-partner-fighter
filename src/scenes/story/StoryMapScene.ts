@@ -17,7 +17,7 @@ import { ArcadeButton } from '../../ui/select/ArcadeButton';
 import { createBrazilMap } from '../../ui/story/BrazilMapView';
 import { planeTexture } from '../../ui/story/planeTexture';
 import { STORY_MAP_LAYOUT } from '../../ui/story/storyMapLayout';
-import { COLORS, arcadeText, bodyText } from '../../ui/theme';
+import { COLORS, arcadeText, pixelText } from '../../ui/theme';
 import { createFightTitle, fitTitleScale } from '../../ui/victory/fightTitle';
 import { fadeIn } from '../transitions';
 import { arriveAndFight, getStoryProgress, quitStory } from './storyFlow';
@@ -35,6 +35,8 @@ const PANEL_MS = 320;
 const AUTO_CONTINUE_MS = 4200;
 const CITY_DOT_RADIUS = 5;
 const CITY_RING_RADIUS = 11;
+/** City names stay readable above the plane and its trail. */
+const LABEL_DEPTH = 3;
 
 type CityRole = 'current' | 'destination' | 'visited' | 'other';
 const CITY_COLORS: Record<CityRole, number> = {
@@ -117,7 +119,7 @@ export class StoryMapScene extends Phaser.Scene {
         panel.x,
         leg.y,
         STRINGS.storyLeg(this.progress.currentStage + 1, route.length),
-        arcadeText(16, COLORS.neon),
+        pixelText(18, COLORS.neon),
       )
       .setOrigin(0.5);
   }
@@ -155,8 +157,9 @@ export class StoryMapScene extends Phaser.Scene {
       // Labels go inland (left) for cities on the east half of the map.
       const left = x > map.x + map.width * 0.5;
       this.add
-        .text(x + (left ? -14 : 14), y, locationLabel(location), arcadeText(11, color))
-        .setOrigin(left ? 1 : 0, 0.5);
+        .text(x + (left ? -14 : 14), y, locationLabel(location), pixelText(13, color))
+        .setOrigin(left ? 1 : 0, 0.5)
+        .setDepth(LABEL_DEPTH);
     }
   }
 
@@ -253,7 +256,12 @@ export class StoryMapScene extends Phaser.Scene {
         .text(panel.x, name.y, rival.displayName, arcadeText(26, COLORS.white))
         .setOrigin(0.5),
       this.add
-        .text(panel.x, origin.y, locationLabel(getStoryLocation(leg.to)), bodyText(16, COLORS.neon))
+        .text(
+          panel.x,
+          origin.y,
+          locationLabel(getStoryLocation(leg.to)),
+          pixelText(18, COLORS.neon),
+        )
         .setOrigin(0.5),
     ];
     const continueButton = new ArcadeButton(
