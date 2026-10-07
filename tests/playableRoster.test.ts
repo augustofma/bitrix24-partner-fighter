@@ -18,7 +18,13 @@ const playable = getPlayableFighters();
 describe('playable roster (data-driven)', () => {
   it('is the roster filtered by `playable`, and includes every complete fighter', () => {
     expect(playable).toEqual(ROSTER.filter((fighter) => fighter.playable));
-    expect(playable.map((f) => f.id)).toEqual(['augusto', 'filipe', 'joao-guiotti', 'romualdo']);
+    expect(playable.map((f) => f.id)).toEqual([
+      'augusto',
+      'filipe',
+      'joao-guiotti',
+      'romualdo',
+      'isaque-ferreira',
+    ]);
     // Test/demo placeholders stay in the roster (code and tests use them) but are not offered.
     expect(ROSTER.filter((f) => !f.playable).map((f) => f.id)).toEqual(['fighter-a', 'fighter-b']);
   });
@@ -37,12 +43,12 @@ describe('playable roster (data-driven)', () => {
   });
 
   it('story mode: every playable fighter with a story profile can start a campaign', () => {
-    for (const fighter of playable) {
+    for (const fighter of playable.filter((f) => isStoryEligible(f.id))) {
       expect(isStoryEligible(fighter.id)).toBe(true);
       expect(hasStoryCampaign(fighter.id)).toBe(true);
       expect(startStory(fighter.id).selectedFighter).toBe(fighter.id);
     }
-    for (const fighter of ROSTER.filter((f) => !f.playable)) {
+    for (const fighter of ROSTER.filter((f) => !isStoryEligible(f.id))) {
       expect(hasStoryCampaign(fighter.id)).toBe(false);
     }
   });

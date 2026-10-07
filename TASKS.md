@@ -311,6 +311,13 @@ sem pedido explícito.**
 - [x] Sons próprios de início (`special-zap`, `special-mind`); testes de fases, limpeza e
       reaproveitamento de objetos; playtest desktop e mobile (inclusive KO por especial)
 
+## DONE (arte do João Guiotti)
+
+- [x] Sheet original 1536×1120, 40 frames 192×224 e portrait 240×300, RGBA
+- [x] Config existente integrado ao pipeline, fases 1/1/1, fontes/prompts/preparo reproduzíveis
+- [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
+- [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
+
 ## DONE (v0.27: travamento do especial e fonte do resultado, branch `fix/special-vfx-stutter-and-victory-font`)
 
 - [x] Causa medida (perfil de CPU): balões do 24zap com tamanho negativo no pop-in iam para a
@@ -322,12 +329,13 @@ sem pedido explícito.**
 - [x] Resultado da vitória com papéis tipográficos: veredito (Russo One), detalhe e placar
       (Press Start 2P)
 
-## DONE (arte do João Guiotti)
+## DONE (arte do Romualdo)
 
-- [x] Sheet original 1536×1120, 40 frames 192×224 e portrait 240×300, RGBA
-- [x] Config existente integrado ao pipeline, fases 1/1/1, fontes/prompts/preparo reproduzíveis
-- [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
-- [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
+- [x] Sheet RGBA 1536×1120 com 40 células 192×224 e portrait RGBA 240×300
+- [x] Config existente com animações completas e fases 1/1/1; gameplay preservado
+- [x] Fontes, prompts e preparação local reproduzível
+- [x] Testes de assets, frame map, roster e referências do Story
+- [x] Playtest F2, teclado, quatro confrontos, CPU, cross-up/flipX, Story/VS/Vitória e mobile emulado
 
 ## DONE (v0.28: cenário RECIFE, branch `feature/recife-stage`)
 
@@ -358,7 +366,7 @@ sem pedido explícito.**
       todos os pares, sem lista fixa de ids, grade com 4–12 lutadores; playtest 1280×720,
       1920×1080 (mouse) e 844×390 (toque)
 
-## DONE (arte do Romualdo)
+## DONE (Isaque Ferreira)
 
 - [x] Sheet RGBA 1536×1120 com 40 células 192×224 e portrait RGBA 240×300
 - [x] Config existente com animações completas e fases 1/1/1; gameplay preservado
@@ -386,6 +394,12 @@ sem pedido explícito.**
       respirando, hover, clique e hit area maior; entrada em ~0,9 s
 - [x] Testes de camadas, layout e vento; playtest desktop/mobile, 70 s sem crescer objetos,
       tweens ou memória
+- [x] FighterConfig equilibrado, seis normais, roster e luta rápida; sem novo especial/campanha
+- [x] Sheet 1536×1120 RGBA, 40 células 192×224; portrait 240×300 RGBA
+- [x] Fontes, prompts e preparação reproduzível; animações e fases completas
+- [x] Testes de assets, seleção, CPU, simulação e determinismo
+- [x] Playtest desktop/debug contra quatro fighters, Isaque CPU e mobile emulado com multi-touch,
+      cross-up, flipX e vitória; 632 testes e check aprovados
 
 ## NEXT (próximas tarefas recomendadas)
 

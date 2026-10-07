@@ -262,6 +262,14 @@ offsetX 0, offsetY 8; baseline 216 e margem mínima 4 px. Pulo e ataques com fas
 [Fontes, prompts e preparação](../scripts/romualdo-art/README.md). Gameplay e identidade do
 config existente preservados.
 
+## ISAQUE FERREIRA
+
+Arte original ImageGen baseada nas fotos e pôster aprovados: cabeça raspada, barba escura,
+expressão sorridente, overshirt bege clara, camiseta/calça pretas, tênis brancos e relógio preto.
+Sem logos ou crachá. Sheet RGBA 1536×1120, 8×5 células 192×224; portrait RGBA 240×300.
+Scale 1, offsets 0/8, baseline 216 e margens mínimas 4 px; fases de ataques e pulo 1/1/1.
+[Fontes, prompts, mapa e preparação](../scripts/isaque-ferreira-art/README.md).
+
 ## Tela inicial
 
 Arte oficial aprovada: arena neon com globo, holofotes, troféu e telões, **João Guiotti** à
@@ -499,6 +507,27 @@ registrada aqui:
 | `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                               | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                      | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`    | Original do projeto                                               |
+| `public/fighters/romualdo/*.png` e `scripts/romualdo-art/*.png`                   | ImageGen integrado, referências autorizadas pelo usuário; montagem local                     | Arte original gerada para o projeto; sem assets de terceiros      |
+| `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`         | Arte do projeto, aprovada pelo usuário                            |
+| Asset                                                                             | Autor                                                                                        | Licença                                                           |
+| --------------------------------------------------------------------------------- | -----------------------------------------------------------------------------------------    | ----------------------------------------------------------------- |
+| `public/fighters/fighter-a/*.png` (demo)                                          | Gerado por `scripts/generate-demo-fighter-art.mjs`                                           | Original do projeto                                               |
+| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local       | Arte original gerada para o projeto; sem assets de terceiros      |
+| `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`           | ImageGen integrado, referências autorizadas pelo usuário; montagem local                     | Arte original gerada para o projeto; sem assets de terceiros      |
+| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local           | Arte original gerada para o projeto; sem assets de terceiros      |
+| `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`    | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py`    | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`       | Arte do projeto, aprovada pelo usuário                            |
+| `public/fonts/bangers/*` (fonte Bangers)                                          | The Bangers Project Authors (Google Fonts)                                                   | SIL Open Font License 1.1 (`public/fonts/bangers/OFL.txt`)        |
+| `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                               | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
+| `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                                | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
+| `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                             | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
+| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`                       | Logos dos apps 24zap e Mindhub, fornecidos pelo dono do projeto para uso no jogo             | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/*` (emblemas pixel-art)                                               | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                       | Uso autorizado pelo dono do projeto                               |
+| `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                               | Original do projeto                                               |
+| `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                      | Original do projeto                                               |
+| Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`    | Original do projeto                                               |
+| `public/fighters/isaque-ferreira/*.png` e `scripts/isaque-ferreira-art/*.png`     | ImageGen integrado com referências autorizadas pelo usuário; montagem local                  | Arte original do projeto; sem assets de terceiros                 |
 | `public/fighters/romualdo/*.png` e `scripts/romualdo-art/*.png`                   | ImageGen integrado, referências autorizadas pelo usuário; montagem local                     | Arte original gerada para o projeto; sem assets de terceiros      |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`         | Arte do projeto, aprovada pelo usuário                            |
 

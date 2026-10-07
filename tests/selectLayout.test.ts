@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { GAME_HEIGHT, GAME_WIDTH } from '../src/config/display';
 import { augusto } from '../src/fighters/augusto';
 import { fighterB } from '../src/fighters/fighterB';
-import { ROSTER } from '../src/fighters/roster';
+import { ROSTER, getPlayableFighters } from '../src/fighters/roster';
 import { romualdo } from '../src/fighters/romualdo';
 import { RATING_MAX, RATING_MIN, rateFighter } from '../src/ui/select/fighterRatings';
 import {
@@ -38,8 +38,10 @@ describe('select screen layout', () => {
 
   it('pages repeat the same positions and filler slots complete the last page', () => {
     expect(cardSlot(CARDS_PER_PAGE)).toEqual({ ...cardSlot(0), page: 1 });
-    expect(pageCount(ROSTER.length)).toBe(1);
-    expect(fillerSlots(ROSTER.length)).toBe(CARDS_PER_PAGE - ROSTER.length);
+    expect(pageCount(getPlayableFighters().length)).toBe(1);
+    expect(fillerSlots(getPlayableFighters().length)).toBe(
+      CARDS_PER_PAGE - getPlayableFighters().length,
+    );
     expect(pageCount(CARDS_PER_PAGE + 1)).toBe(2);
     expect(fillerSlots(CARDS_PER_PAGE)).toBe(0);
     expect(fillerSlots(0)).toBe(CARDS_PER_PAGE);

@@ -5,6 +5,7 @@ import { fighterA } from './fighterA';
 import { fighterB } from './fighterB';
 import { joaoGuiotti } from './joaoGuiotti';
 import { romualdo } from './romualdo';
+import { isaqueFerreira } from './isaqueFerreira';
 
 /**
  * Every fighter in the game, in character-select order.
@@ -15,6 +16,7 @@ export const ROSTER: readonly FighterConfig[] = [
   filipe,
   joaoGuiotti,
   romualdo,
+  isaqueFerreira,
   fighterA,
   fighterB,
 ];
