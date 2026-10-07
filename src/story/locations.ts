@@ -1,3 +1,4 @@
+import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { StoryLocation } from '../types/story';
 
 /** Country of the campaigns' home cities: trips inside it use the detailed Brazil map. */
@@ -18,6 +19,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     regionCode: 'PE',
     latitude: -8.05,
     longitude: -34.9,
+    // Fights in Recife happen at the Marco Zero.
+    stageId: 'recife',
   },
   {
     id: 'sao-paulo',
@@ -63,6 +66,11 @@ export function getStoryLocation(id: string): StoryLocation {
   const location = STORY_LOCATIONS.find((candidate) => candidate.id === id);
   if (!location) throw new Error(`Unknown story location: "${id}"`);
   return location;
+}
+
+/** Stage of a fight held at this place: its own `stageId`, or the default stage. */
+export function stageIdForLocation(id: string): string {
+  return getStoryLocation(id).stageId ?? DEFAULT_STAGE_ID;
 }
 
 /** Short label for the map, select and VS screens: "RECIFE - PE", "PORTUGAL". */

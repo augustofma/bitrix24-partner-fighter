@@ -9,11 +9,15 @@ import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { ROSTER, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
-import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { FighterConfig } from '../types/fighter';
 import { isAIDifficulty, type AIDifficulty, type GameMode, type MatchSetup } from '../types/match';
 import { locationLabel } from '../story/locations';
-import { fighterOrigin, hasStoryCampaign, isStoryRival } from '../story/storyProfiles';
+import {
+  fighterOrigin,
+  hasStoryCampaign,
+  isStoryRival,
+  quickFightStageId,
+} from '../story/storyProfiles';
 import { beginStory } from './story/storyFlow';
 import { DifficultySelector } from '../ui/DifficultySelector';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
@@ -284,10 +288,12 @@ export class CharacterSelectScene extends Phaser.Scene {
       beginStory(this, player.id);
       return;
     }
+    const cpu = pickCpuOpponent(player.id);
     const setup: MatchSetup = {
       playerFighterId: player.id,
-      cpuFighterId: pickCpuOpponent(player.id).id,
-      stageId: DEFAULT_STAGE_ID,
+      cpuFighterId: cpu.id,
+      // The fighters' home city picks the arena (e.g. Recife -> Marco Zero).
+      stageId: quickFightStageId(player.id, cpu.id),
       difficulty: this.difficulty.value,
     };
     this.cameras.main.flash(150, 255, 255, 255);

@@ -119,7 +119,6 @@ import { augusto } from '../src/fighters/augusto';
 import { fighterB } from '../src/fighters/fighterB';
 import { ROSTER } from '../src/fighters/roster';
 import { CharacterSelectScene } from '../src/scenes/CharacterSelectScene';
-import { DEFAULT_STAGE_ID } from '../src/stages/stageRegistry';
 import type { RosterCard } from '../src/ui/select/RosterCard';
 import { CARDS_PER_PAGE, SELECT_LAYOUT } from '../src/ui/select/selectLayout';
 
@@ -167,7 +166,8 @@ describe('CharacterSelectScene roster integration', () => {
     expect(ui.goToScene).toHaveBeenCalledWith(scene, SceneKeys.Versus, {
       playerFighterId: augusto.id,
       cpuFighterId: fighterB.id,
-      stageId: DEFAULT_STAGE_ID,
+      // Augusto is from Recife: his quick fights happen at the Marco Zero.
+      stageId: 'recife',
       difficulty: 'normal',
     });
   });

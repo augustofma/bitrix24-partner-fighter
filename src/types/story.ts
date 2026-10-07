@@ -19,6 +19,8 @@ export interface StoryLocation {
   regionCode?: string;
   latitude: number;
   longitude: number;
+  /** Arena of fights held here (a StageConfig id); the default stage when omitted. */
+  stageId?: string;
 }
 
 /**
@@ -30,7 +32,7 @@ export interface StoryLeg {
   opponent: string;
   /** Where this fight happens (a StoryLocation id); not necessarily the rival's home. */
   destination: string;
-  /** Arena of this fight (default stage when omitted). */
+  /** Arena of this fight; defaults to the destination's stage (StoryLocation.stageId). */
   stageId?: string;
 }
 

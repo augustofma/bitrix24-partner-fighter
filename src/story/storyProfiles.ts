@@ -1,5 +1,6 @@
 import type { StoryCharacterProfile, StoryLeg, StoryLocation, StoryRoute } from '../types/story';
-import { getStoryLocation } from './locations';
+import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
+import { getStoryLocation, stageIdForLocation } from './locations';
 
 /*
  * Origins, encounter places and campaigns: plain configuration. A fighter's `home` is where
@@ -83,4 +84,18 @@ export function legDeparture(fighterId: string, stage: number): string {
   const home = getStoryProfile(fighterId)?.home;
   if (!home) throw new Error(`"${fighterId}" has no home location.`);
   return home;
+}
+
+/**
+ * Arena of a quick fight: the home stage of the rival, or of the player when the rival has
+ * none (e.g. FIGHTER_B), so a fight "at home" happens in that city. Decided by places only:
+ * a fighter from Recife fights at the Marco Zero; places without a stage use the default.
+ */
+export function quickFightStageId(playerFighterId: string, cpuFighterId: string): string {
+  for (const fighterId of [cpuFighterId, playerFighterId]) {
+    const home = getStoryProfile(fighterId)?.home;
+    const stageId = home ? stageIdForLocation(home) : undefined;
+    if (stageId && stageId !== DEFAULT_STAGE_ID) return stageId;
+  }
+  return DEFAULT_STAGE_ID;
 }

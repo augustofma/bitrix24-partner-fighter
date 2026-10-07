@@ -1,6 +1,6 @@
-import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
 import type { AIDifficulty, MatchSetup } from '../types/match';
 import type { StoryLeg, StoryProgress } from '../types/story';
+import { stageIdForLocation } from './locations';
 import { legDeparture, storyRouteFor } from './storyProfiles';
 
 /*
@@ -73,6 +73,11 @@ export function recordStoryMatch(progress: StoryProgress, playerWon: boolean): S
   return atLeg(progress.selectedFighter, progress.currentStage + 1, completed);
 }
 
+/** Arena of a leg: the one it names, or the stage of the place where the fight happens. */
+export function legStageId(leg: StoryLeg): string {
+  return leg.stageId ?? stageIdForLocation(leg.destination);
+}
+
 /** The regular match for the current leg (same scenes, same rules as a quick fight). */
 export function storyMatchSetup(progress: StoryProgress, difficulty: AIDifficulty): MatchSetup {
   const leg = currentLeg(progress);
@@ -80,7 +85,7 @@ export function storyMatchSetup(progress: StoryProgress, difficulty: AIDifficult
   return {
     playerFighterId: progress.selectedFighter,
     cpuFighterId: leg.opponent,
-    stageId: leg.stageId ?? DEFAULT_STAGE_ID,
+    stageId: legStageId(leg),
     difficulty,
     mode: 'story',
   };
