@@ -31,13 +31,16 @@ describe('RoundSystem', () => {
   it('time over with equal health is a draw', () => {
     const round = new RoundSystem(timing);
     run(round, 200, [60, 60]);
-    expect(round.result).toEqual({ winnerIndex: null, reason: 'timeout' });
+    expect(round.result).toMatchObject({ winnerIndex: null, reason: 'timeout' });
   });
 
   it('KO ends the fight immediately', () => {
     const round = new RoundSystem(timing);
     run(round, 10, [100, 100]);
     const events = run(round, 1, [0, 40]);
-    expect(events).toContainEqual({ type: 'ko', result: { winnerIndex: 1, reason: 'ko' } });
+    expect(events).toContainEqual({
+      type: 'ko',
+      result: { winnerIndex: 1, reason: 'ko', perfect: false },
+    });
   });
 });

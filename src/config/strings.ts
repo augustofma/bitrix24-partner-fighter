@@ -56,6 +56,7 @@ export const STRINGS = {
   reasonMatchDraw: 'Partida empatada no limite de rounds',
   fight: 'FIGHT!',
   ko: 'K.O.',
+  perfect: 'PERFECT',
   timeOver: 'TIME OVER',
   draw: 'EMPATE',
   drawNames: (left: string, right: string) => `${left}  x  ${right}`,

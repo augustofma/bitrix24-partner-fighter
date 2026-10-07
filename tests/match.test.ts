@@ -8,8 +8,8 @@ import { partnerArena } from '../src/stages/partnerArena';
 import type { RoundResult } from '../src/types/match';
 import { FAST_TIMING, idle, placeAtDistance, press, stepFrames } from './helpers';
 
-const ko = (winnerIndex: 0 | 1): RoundResult => ({ winnerIndex, reason: 'ko' });
-const draw: RoundResult = { winnerIndex: null, reason: 'timeout' };
+const ko = (winnerIndex: 0 | 1): RoundResult => ({ winnerIndex, reason: 'ko', perfect: false });
+const draw: RoundResult = { winnerIndex: null, reason: 'timeout', perfect: false };
 
 describe('MatchSystem (best of three)', () => {
   it('2x0: two straight rounds win the match', () => {
@@ -33,7 +33,7 @@ describe('MatchSystem (best of three)', () => {
       { type: 'roundStart', roundNumber: 3, finalRound: true },
     ]);
     expect(match.isFinalRound).toBe(true);
-    const [over] = match.recordRound({ winnerIndex: 1, reason: 'timeout' });
+    const [over] = match.recordRound({ winnerIndex: 1, reason: 'timeout', perfect: false });
     expect(over).toMatchObject({
       outcome: { winnerIndex: 1, reason: 'timeout', roundWins: [1, 2], roundsPlayed: 3 },
     });
@@ -106,7 +106,7 @@ describe('best of three in FightSimulation', () => {
     expect(sim.match.isFinalRound).toBe(true);
     const r3 = winRoundByKo(sim, 0);
     const [over] = ofType(r3, 'matchOver');
-    expect(over?.outcome).toEqual({
+    expect(over?.outcome).toMatchObject({
       winnerIndex: 0,
       reason: 'ko',
       roundWins: [2, 1],
@@ -184,7 +184,10 @@ describe('best of three in FightSimulation', () => {
     placeAtDistance(sim, 80);
     sim.fighters[1].health = 50;
     const events = stepFrames(sim, 120);
-    expect(ofType(events, 'roundOver')[0]?.result).toEqual({ winnerIndex: 0, reason: 'timeout' });
+    expect(ofType(events, 'roundOver')[0]?.result).toMatchObject({
+      winnerIndex: 0,
+      reason: 'timeout',
+    });
     expect(sim.match.roundWins).toEqual([1, 0]);
   });
 

@@ -243,6 +243,21 @@ def sfx_victory(rng):
     return mix(arp, shimmer)
 
 
+def sfx_perfect(rng):
+    """PERFECT: bright rising fanfare, a held major chord with shimmer and a sparkle tail."""
+    rise = mix(*[at(note(f, 0.14, "square", 22) * 0.3, i * 0.06) for i, f in enumerate((784, 988, 1175, 1568))])
+    chord_len = 0.75
+    t = seconds(chord_len)
+    chord = sum(saw(2 * np.pi * f * t, 14) for f in (1047, 1319, 1568, 2093))
+    vibrato = 1 + 0.15 * np.sin(2 * np.pi * 7 * t)
+    chord = lowpass(chord, 5000) * np.exp(-t * 3.2) * vibrato * 0.28
+    sparkle_len = 0.6
+    sparkle = highpass(rng.uniform(-1, 1, int(sparkle_len * SR)), 7000) * decay(sparkle_len, 6)
+    sparkle *= rng.uniform(0, 1, len(sparkle)) > 0.9
+    boom = np.sin(sweep(120, 55, 0.25)) * decay(0.25, 12) * 0.6
+    return mix(rise, at(attack(chord, 4), 0.24), at(sparkle * 0.7, 0.26), at(boom, 0.24))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -263,6 +278,7 @@ EFFECTS = {
     "round-start": sfx_round_start,
     "fight": sfx_fight,
     "victory": sfx_victory,
+    "perfect": sfx_perfect,
 }
 
 

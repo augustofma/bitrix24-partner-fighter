@@ -11,6 +11,8 @@ export interface MatchOutcome {
   reason: RoundEndReason;
   roundWins: readonly [number, number];
   roundsPlayed: number;
+  /** PERFECT rounds won by each side. */
+  perfects: readonly [number, number];
 }
 
 export type MatchEvent =
@@ -37,6 +39,7 @@ export class MatchSystem {
   private readonly wins: [number, number] = [0, 0];
   private roundNumber = 1;
   private outcome: MatchOutcome | null = null;
+  private readonly perfectWins: [number, number] = [0, 0];
 
   constructor(private readonly rules: MatchRules = DEFAULT_MATCH_RULES) {}
 
@@ -68,7 +71,10 @@ export class MatchSystem {
     const events: MatchEvent[] = [];
     if (result.winnerIndex === null)
       events.push({ type: 'roundDraw', roundNumber: this.roundNumber });
-    else this.wins[result.winnerIndex]++;
+    else {
+      this.wins[result.winnerIndex]++;
+      if (result.perfect) this.perfectWins[result.winnerIndex]++;
+    }
 
     const decided = this.wins.some((w) => w >= this.rules.roundsToWin);
     if (decided || this.roundNumber >= this.rules.maxRounds) {
@@ -78,6 +84,7 @@ export class MatchSystem {
         reason: result.reason,
         roundWins: [a, b],
         roundsPlayed: this.roundNumber,
+        perfects: [this.perfectWins[0], this.perfectWins[1]],
       };
       events.push({ type: 'matchOver', outcome: this.outcome });
       return events;

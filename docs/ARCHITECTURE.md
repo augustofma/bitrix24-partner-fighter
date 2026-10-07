@@ -58,7 +58,8 @@ src/
     fighter/ReadonlyFighter.ts  Visão somente leitura (para IA e render)
     systems/CombatSystem.ts  Hitbox x hurtbox, dano, bloqueio, KO
     systems/ArenaSystem.ts   Paredes, colisão de corpos, distância máxima
-    systems/RoundSystem.ts   Um round: intro, cronômetro, KO, time over, fim do round
+    systems/RoundSystem.ts   Um round: intro, cronômetro, KO, time over, fim do round; PERFECT
+                             (vida de cada lado vigiada em todo frame do round)
     systems/MatchSystem.ts   Melhor de N: pontos por round, empate repetido, FINAL ROUND, fim
     input.ts              InputTracker (bordas "pressed"), merge de inputs
     geometry.ts, random.ts   Utilitários (RNG com seed)
@@ -332,6 +333,13 @@ Mesmo desenho da música: `gameAudio(scene)` cria **uma vez por jogo** o `MusicM
 seu). Cenas chamam `gameSfx(scene).play(id)` ou `playSfx(scene, id)`; nenhuma registra
 listeners, então reentrar numa cena não duplica nada. Cada `play` do Phaser cria uma instância
 curta que se destrói ao terminar.
+
+**PERFECT:** decidido na simulação, não no HUD. O `RoundSystem` recebe a vida máxima de cada lado
+(da `FightSimulation`) e, a cada frame do round, marca quem perdeu vida (marcação permanente
+até o fim do round). Ao terminar o round, `RoundResult.perfect = vencedor existe && vencedor nunca
+perdeu vida`. O `MatchSystem` soma `perfects` por lado no `MatchOutcome`. A `FightScene` só lê
+`event.result.perfect` nos eventos `ko` / `timeUp` e mostra o `PerfectCall` (`src/ui/PerfectCall.ts`)
+1,3 s depois, com o efeito `perfect`; um novo round cancela uma chamada pendente.
 
 **Combate (`combatSfx`):** a `FightScene` passa todo `SimulationEvent` por `combatSfx(event)`.
 Só eventos reais geram som: `hit`/`koHit` → impacto do golpe que conectou (`punch`, `kick`,

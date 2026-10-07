@@ -285,7 +285,7 @@ export class SpecialReadyEffect {
 }
 
 /** Small white square shared by every meter (tinted per particle). */
-function sparkTexture(scene: Phaser.Scene): string {
+export function sparkTexture(scene: Phaser.Scene): string {
   if (!scene.textures.exists(SPARK_TEXTURE)) {
     scene.make
       .graphics({}, false)

@@ -34,7 +34,8 @@ export type SfxId =
   | 'menu-back'
   | 'round-start'
   | 'fight'
-  | 'victory';
+  | 'victory'
+  | 'perfect';
 
 export interface SfxConfig {
   id: SfxId;

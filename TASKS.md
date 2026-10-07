@@ -275,6 +275,15 @@ sem pedido explícito.**
 - [x] Testes de impacto, whiff, defesa, pulo/aterrissagem, KO, especial, READY, menus, mute, volume
       e reentrada de cenas; playtest desktop e mobile
 
+## DONE (v0.23: PERFECT, branch `feature/perfect-round-result`)
+
+- [x] `RoundResult.perfect`: o vencedor não perdeu nenhum HP no round (chip damage anula; defesa
+      sem dano não); calculado no `RoundSystem`, por round, determinístico; `MatchOutcome.perfects`
+- [x] Chamada PERFECT dourada (letreiro do jogo, glow, faíscas, pop 0,5 → 1,15 → 1,0) depois de
+      K.O. / TIME OVER, com efeito sonoro original `perfect`
+- [x] Testes de KO/tempo com HP cheio, dano, chip, defesa, CPU, rounds independentes, empate e
+      determinismo; playtest Round 1, Final Round, Player e CPU
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

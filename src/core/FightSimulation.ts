@@ -59,6 +59,8 @@ export class FightSimulation {
   private hitstopFrames = 0;
   private pendingVictory: FighterIndex | null = null;
   private frameCount = 0;
+  /** Each fighter's full health: the reference for PERFECT rounds. */
+  private readonly fullHealth: readonly [number, number];
 
   constructor(options: FightSimulationOptions) {
     const { stage } = options;
@@ -66,7 +68,9 @@ export class FightSimulation {
     this.stage = stage;
     this.arena = new ArenaSystem(stage);
     this.roundTiming = options.roundTiming;
-    this.currentRound = new RoundSystem(options.roundTiming);
+    const [first, second] = options.fighters;
+    this.fullHealth = [first.stats.maxHealth, second.stats.maxHealth];
+    this.currentRound = new RoundSystem(options.roundTiming, this.fullHealth);
     this.match = new MatchSystem(options.matchRules);
     this.spawns = [
       { position: { x: centerX - SPAWN_OFFSET_X, y: stage.groundY }, direction: 1 },
@@ -138,7 +142,7 @@ export class FightSimulation {
       const spawn = this.spawns[i as FighterIndex];
       fighter.resetForRound(spawn.position, spawn.direction);
     });
-    this.currentRound = new RoundSystem(this.roundTiming);
+    this.currentRound = new RoundSystem(this.roundTiming, this.fullHealth);
     this.trackers = [new InputTracker(), new InputTracker()];
     this.hitstopFrames = 0;
     this.pendingVictory = null;

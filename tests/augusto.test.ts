@@ -198,7 +198,7 @@ describe('Augusto integration in FightSimulation', () => {
       );
       stepFrames(sim, 65);
     }
-    expect(sim.round.result).toEqual({ winnerIndex: winner, reason: 'ko' });
+    expect(sim.round.result).toMatchObject({ winnerIndex: winner, reason: 'ko' });
     expect(sim.fighters[winner === 0 ? 1 : 0].state).toBe('knockout');
     expect(sim.fighters[winner].state).toBe('victory');
   });
@@ -208,7 +208,7 @@ describe('Augusto integration in FightSimulation', () => {
     placeAtDistance(sim, 70);
     stepFrames(sim, 1, press({ punch: true }));
     stepFrames(sim, 180);
-    expect(sim.round.result).toEqual({ winnerIndex: 0, reason: 'timeout' });
+    expect(sim.round.result).toMatchObject({ winnerIndex: 0, reason: 'timeout' });
     expect(sim.fighters[0].state).toBe('victory');
   });
 

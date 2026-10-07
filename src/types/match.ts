@@ -26,11 +26,18 @@ export interface RoundResult {
   /** Index (0 = player side, 1 = CPU side) of the winner, or null for a draw. */
   winnerIndex: 0 | 1 | null;
   reason: RoundEndReason;
+  /**
+   * The winner never lost a single point of health in this round (any real HP loss, chip
+   * damage included, rules it out; blocking without losing HP does not). Never true on a draw.
+   */
+  perfect: boolean;
 }
 
 /** Final result of a best-of-N match, handed to the victory screen. */
-export interface MatchResult extends RoundResult {
+export interface MatchResult extends Omit<RoundResult, 'perfect'> {
   setup: MatchSetup;
   /** Rounds won by each side (0 = player, 1 = CPU). */
   roundWins: readonly [number, number];
+  /** PERFECT rounds won by each side. */
+  perfects?: readonly [number, number];
 }

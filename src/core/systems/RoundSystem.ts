@@ -5,7 +5,7 @@ import {
   VICTORY_POSE_DELAY_FRAMES,
 } from '../../config/match';
 import { SIMULATION_FPS } from '../../config/simulation';
-import type { RoundResult } from '../../types/match';
+import type { RoundEndReason, RoundResult } from '../../types/match';
 
 export type RoundPhase = 'intro' | 'fight' | 'ending' | 'finished';
 
@@ -39,9 +39,17 @@ export class RoundSystem {
   private framesInPhase = 0;
   private remainingFrames: number;
   private roundResult: RoundResult | null = null;
+  /** Each side's full health for this round (defaults to the health seen on the first step). */
+  private fullHealth: readonly [number, number] | null;
+  /** Sticky per side: lost any health at any moment of this round. */
+  private readonly hurt: [boolean, boolean] = [false, false];
 
-  constructor(private readonly timing: RoundTiming = DEFAULT_ROUND_TIMING) {
+  constructor(
+    private readonly timing: RoundTiming = DEFAULT_ROUND_TIMING,
+    maxHealth?: readonly [number, number],
+  ) {
     this.remainingFrames = timing.timeFrames;
+    this.fullHealth = maxHealth ?? null;
   }
 
   get phase(): RoundPhase {
@@ -59,6 +67,7 @@ export class RoundSystem {
 
   step(health: readonly [number, number]): RoundEvent[] {
     this.framesInPhase++;
+    this.trackDamage(health);
     switch (this.currentPhase) {
       case 'intro':
         if (this.framesInPhase < this.timing.introFrames) return [];
@@ -77,12 +86,12 @@ export class RoundSystem {
     const [p1, p2] = health;
     if (p1 <= 0 || p2 <= 0) {
       const winnerIndex = p1 <= 0 && p2 <= 0 ? null : p1 <= 0 ? 1 : 0;
-      return [{ type: 'ko', result: this.finishFight({ winnerIndex, reason: 'ko' }) }];
+      return [{ type: 'ko', result: this.finishFight(winnerIndex, 'ko') }];
     }
     this.remainingFrames--;
     if (this.remainingFrames > 0) return [];
     const winnerIndex = p1 === p2 ? null : p1 > p2 ? 0 : 1;
-    return [{ type: 'timeUp', result: this.finishFight({ winnerIndex, reason: 'timeout' }) }];
+    return [{ type: 'timeUp', result: this.finishFight(winnerIndex, 'timeout') }];
   }
 
   private stepEnding(): RoundEvent[] {
@@ -99,7 +108,21 @@ export class RoundSystem {
     return events;
   }
 
-  private finishFight(result: RoundResult): RoundResult {
+  /**
+   * PERFECT is decided only from this round: health resets every round, and every step of the
+   * round is watched, so a hit taken earlier in the round counts even with the same final HP.
+   */
+  private trackDamage(health: readonly [number, number]): void {
+    if (this.roundResult) return; // the result is final once the fight ends
+    this.fullHealth ??= [health[0], health[1]];
+    for (const side of [0, 1] as const) {
+      if (health[side] < this.fullHealth[side]) this.hurt[side] = true;
+    }
+  }
+
+  private finishFight(winnerIndex: 0 | 1 | null, reason: RoundEndReason): RoundResult {
+    const perfect = winnerIndex !== null && !this.hurt[winnerIndex];
+    const result: RoundResult = { winnerIndex, reason, perfect };
     this.roundResult = result;
     this.enterPhase('ending');
     return result;

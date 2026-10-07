@@ -426,6 +426,12 @@ alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 - **Tempo esgotado:** vence o round quem tiver mais vida.
 - **Empate no round** (vida exatamente igual no fim do tempo, ou duplo KO no mesmo frame):
   aparece **DRAW**, ninguém pontua e o round é **repetido**.
+- **PERFECT:** quem vence um round sem perder **nenhum** ponto de vida naquele round (por KO ou
+  por tempo, Player ou CPU) ganha a chamada **PERFECT**, em dourado, cerca de 1,3 s depois de
+  "K.O." / "TIME OVER" e antes do próximo round ou da tela de vitória. Qualquer perda real de HP no
+  round, inclusive chip damage de golpe defendido, anula; defender sem perder HP não anula. Empate
+  nunca é PERFECT. Vale por round (cada round começa do zero); a partida conta os PERFECTs de cada
+  lado (`MatchOutcome.perfects`).
 - Anúncio: "ROUND 1", "ROUND 2"... e **"FINAL ROUND"** quando os dois já têm 1 vitória.
 - HUD: abaixo do rótulo do round, dois losangos por lado (o jogador à esquerda, a CPU à
   direita) ficam dourados conforme os rounds vencidos.

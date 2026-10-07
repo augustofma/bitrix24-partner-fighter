@@ -25,13 +25,21 @@ import { createStageView } from '../render/stage/createStageView';
 import type { StageBackdrop } from '../render/stage/StageBackdrop';
 import { getStageConfig } from '../stages/stageRegistry';
 import type { InputSource } from '../types/input';
-import type { MatchResult, MatchSetup } from '../types/match';
+import type { MatchResult, MatchSetup, RoundResult } from '../types/match';
 import { Announcer } from '../ui/Announcer';
 import { FightHud } from '../ui/FightHud';
+import { PerfectCall } from '../ui/PerfectCall';
 import { COLORS, DEPTH, bodyText } from '../ui/theme';
 import { TouchControls } from '../ui/TouchControls';
 import { readUrlFlag, shouldShowTouchControls } from '../utils/device';
 import { goToScene, fadeIn } from './transitions';
+
+/**
+ * PERFECT comes this long after K.O. / TIME OVER, so both calls are read; with its ~1.6 s on
+ * screen it is over before the round outro (3.2 s) hands over to the next round or the
+ * victory screen.
+ */
+const PERFECT_DELAY_MS = 1300;
 
 /**
  * Glue between the pure FightSimulation and Phaser:
@@ -46,6 +54,9 @@ export class FightScene extends Phaser.Scene {
   private fightCamera!: FightCamera;
   private hud!: FightHud;
   private announcer!: Announcer;
+  private perfectCall!: PerfectCall;
+  /** PERFECT waiting for the K.O. / TIME OVER call to be read first. */
+  private pendingPerfect: Phaser.Time.TimerEvent | null = null;
   private effects!: HitEffects;
   private specialEffects!: SpecialEffects;
   private debugOverlay!: DebugOverlay;
@@ -80,6 +91,8 @@ export class FightScene extends Phaser.Scene {
     this.specialEffects = new SpecialEffects(this);
     this.hud = new FightHud(this, fighters, () => gameSfx(this).play('special-ready'));
     this.announcer = new Announcer(this);
+    this.perfectCall = new PerfectCall(this);
+    this.pendingPerfect = null;
     this.controllers = [
       new PlayerController(this.createPlayerInputSources()),
       new AIController(aiProfileFor(setup.difficulty)),
@@ -149,12 +162,14 @@ export class FightScene extends Phaser.Scene {
         return;
       case 'ko':
         this.announcer.show(STRINGS.ko, 1600);
+        this.schedulePerfect(event.result);
         return;
       case 'fightStart':
         this.announcer.show(STRINGS.fight, 700);
         return;
       case 'timeUp':
         this.announcer.show(STRINGS.timeOver, 1600);
+        this.schedulePerfect(event.result);
         return;
       case 'victoryPose':
         // A round has a winner: the stage celebrates until the next round starts.
@@ -173,8 +188,8 @@ export class FightScene extends Phaser.Scene {
       case 'matchOver': {
         // The fight music winds down; the victory screen plays the sting.
         gameMusic(this).stop(MUSIC_FADE.matchEndOutMs);
-        const { winnerIndex, reason, roundWins } = event.outcome;
-        const result: MatchResult = { winnerIndex, reason, roundWins, setup: this.setup };
+        const { winnerIndex, reason, roundWins, perfects } = event.outcome;
+        const result: MatchResult = { winnerIndex, reason, roundWins, perfects, setup: this.setup };
         goToScene(this, SceneKeys.Victory, result);
         return;
       }
@@ -197,8 +212,26 @@ export class FightScene extends Phaser.Scene {
     this.announceRound();
   }
 
+  /**
+   * After K.O. / TIME OVER has been read, a round won without losing any health gets the
+   * PERFECT call (decided by the simulation in RoundResult.perfect, never by the HUD).
+   */
+  private schedulePerfect(result: RoundResult): void {
+    if (!result.perfect) return;
+    this.pendingPerfect?.remove();
+    this.pendingPerfect = this.time.delayedCall(PERFECT_DELAY_MS, () => {
+      this.pendingPerfect = null;
+      this.announcer.clear();
+      this.perfectCall.show();
+      gameSfx(this).play('perfect');
+    });
+  }
+
   /** "ROUND n" / "FINAL ROUND": the call and its sound. */
   private announceRound(): void {
+    this.pendingPerfect?.remove();
+    this.pendingPerfect = null;
+    this.perfectCall.hide();
     this.announcer.show(this.roundLabel(), 1000);
     gameSfx(this).play('round-start');
   }

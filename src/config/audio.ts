@@ -85,6 +85,7 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'round-start': sfx('round-start', 0.7),
   fight: sfx('fight', 0.8),
   victory: sfx('victory', 0.7),
+  perfect: sfx('perfect', 0.85),
 };
 
 /** Variation range of `vary` effects: playback rate 1 ± this, level 1 - [0, this]. */

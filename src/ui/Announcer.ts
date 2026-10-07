@@ -17,6 +17,14 @@ export class Announcer {
 
   constructor(private readonly scene: Phaser.Scene) {}
 
+  /** Takes the current message off right away (a bigger call is coming). */
+  clear(): void {
+    if (!this.image) return;
+    this.scene.tweens.killTweensOf(this.image);
+    this.image.destroy();
+    this.image = null;
+  }
+
   /** Shows a message; `holdMs` = 0 keeps it on screen until the next one. */
   show(message: string, holdMs = 900): void {
     if (this.image) {

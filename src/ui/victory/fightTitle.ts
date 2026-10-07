@@ -20,15 +20,40 @@ const PADDING = 0.35;
 
 const SHADOW_COLOR = '#05030f';
 const OUTLINE_COLOR = '#130309';
-const INNER_LINE_COLOR = '#7a0d06';
-/** Top to bottom: red, orange, yellow, cream (classic arcade fire lettering). */
-const GRADIENT: readonly (readonly [number, string])[] = [
-  [0, '#c8160f'],
-  [0.32, '#ff3f12'],
-  [0.58, '#ff9a1f'],
-  [0.8, '#ffd23f'],
-  [1, '#fff3c4'],
-];
+/** Colors of the lettering: the default "fire" look, or gold for special calls (PERFECT). */
+export type FightTitlePalette = 'fire' | 'gold';
+
+interface PaletteColors {
+  innerLine: string;
+  /** Top to bottom. */
+  gradient: readonly (readonly [number, string])[];
+}
+
+const PALETTES: Readonly<Record<FightTitlePalette, PaletteColors>> = {
+  // Red at the top through orange and yellow to cream (classic arcade fire lettering).
+  fire: {
+    innerLine: '#7a0d06',
+    gradient: [
+      [0, '#c8160f'],
+      [0.32, '#ff3f12'],
+      [0.58, '#ff9a1f'],
+      [0.8, '#ffd23f'],
+      [1, '#fff3c4'],
+    ],
+  },
+  // Orange at the top through gold to near-white: a trophy shine.
+  gold: {
+    innerLine: '#7a3d06',
+    gradient: [
+      [0, '#ff7a12'],
+      [0.3, '#ffa31f'],
+      [0.55, '#ffd23f'],
+      [0.8, '#fff07a'],
+      [1, '#fffbe6'],
+    ],
+  },
+};
+
 /** Widths relative to the font size. */
 const SHADOW_OFFSET = { x: 0.07, y: 0.08 };
 const OUTLINE_WIDTH = 0.2;
@@ -60,13 +85,15 @@ export function createFightTitle(
   x: number,
   y: number,
   text: string,
+  palette: FightTitlePalette = 'fire',
 ): Phaser.GameObjects.Image {
-  const key = TEXTURE_PREFIX + text;
-  if (!scene.textures.exists(key)) scene.textures.addCanvas(key, drawTitle(text));
+  const key = `${TEXTURE_PREFIX}${palette === 'fire' ? '' : `${palette}:`}${text}`;
+  if (!scene.textures.exists(key))
+    scene.textures.addCanvas(key, drawTitle(text, PALETTES[palette]));
   return scene.add.image(x, y, key).setScale(1 / RESOLUTION);
 }
 
-function drawTitle(text: string): HTMLCanvasElement {
+function drawTitle(text: string, colors: PaletteColors): HTMLCanvasElement {
   const size = FIGHT_TITLE_FONT_SIZE * RESOLUTION;
   const font = `${size}px ${GAME_FONTS.TITLE}`;
   const canvas = document.createElement('canvas');
@@ -104,13 +131,13 @@ function drawTitle(text: string): HTMLCanvasElement {
     ctx.strokeStyle = OUTLINE_COLOR;
     ctx.lineWidth = size * OUTLINE_WIDTH;
     ctx.strokeText(text, 0, baseline);
-    ctx.strokeStyle = INNER_LINE_COLOR;
+    ctx.strokeStyle = colors.innerLine;
     ctx.lineWidth = size * INNER_LINE_WIDTH;
     ctx.strokeText(text, 0, baseline);
   });
   slanted(() => {
     const gradient = ctx.createLinearGradient(0, baseline - size * 0.78, 0, baseline);
-    for (const [stop, color] of GRADIENT) gradient.addColorStop(stop, color);
+    for (const [stop, color] of colors.gradient) gradient.addColorStop(stop, color);
     ctx.fillStyle = gradient;
     ctx.fillText(text, 0, baseline);
   });
