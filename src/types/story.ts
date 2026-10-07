@@ -62,6 +62,12 @@ export interface StoryCharacterProfile {
    * MEET it here. A fighter can be from one place and be in another (e.g. abroad).
    */
   encounter?: string;
+  /**
+   * Arena of the fights against this fighter in the campaigns (a StageConfig id). Overrides the
+   * place's own stage: the encounter, not the country, picks it, so one country can host
+   * several arenas. Default: the stage of the story place (StoryLocation.stageId).
+   */
+  encounterStageId?: string;
   /** Order to meet the rivals in this fighter's campaign; default: the story roster's order. */
   opponentOrder?: readonly string[];
 }

@@ -20,7 +20,13 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Filipe is from Recife, but in the story he is in Portugal.
   { fighterId: 'filipe', home: 'recife', encounter: 'portugal' },
   // João Guiotti is from São Paulo, but in the story he is in Russia.
-  { fighterId: 'joao-guiotti', home: 'sao-paulo', encounter: 'russia' },
+  // Met on Moscow's Red Square (the RUSSIA stage).
+  {
+    fighterId: 'joao-guiotti',
+    home: 'sao-paulo',
+    encounter: 'russia',
+    encounterStageId: 'russia',
+  },
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
   { fighterId: 'romualdo', home: 'joinville' },
@@ -68,9 +74,10 @@ export function campaignOpponents(fighterId: string): string[] {
   return order.filter((id) => id !== fighterId && isStoryEligible(id));
 }
 
-/** A leg against `opponent`, at that rival's place in the story. */
+/** A leg against `opponent`, at that rival's place in the story (and its encounter arena). */
 export function rivalLeg(opponent: string): StoryLeg {
-  return { opponent, destination: storyLocationId(opponent) };
+  const stageId = getStoryProfile(opponent)?.encounterStageId;
+  return { opponent, destination: storyLocationId(opponent), ...(stageId ? { stageId } : {}) };
 }
 
 /** The campaign of a fighter (generated), or undefined when it has none. */

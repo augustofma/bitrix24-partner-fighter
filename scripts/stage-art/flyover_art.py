@@ -49,6 +49,11 @@ class FlyoverStage:
     # Fill the enclosed holes again after `tail_mask` (a banner kept by colour loses its
     # lettering otherwise).
     refill_after_tail: bool = False
+    # Extra pixels (besides the clear blue) that count as sky, e.g. sunset clouds. Called with
+    # the source image (flying-group separation) or the display-size background (skyline).
+    extra_sky: Optional[Callable] = None
+    # Lowest source row of the plane (clouds right under its wheels are left in the sky).
+    plane_max_y: Optional[int] = None
     # (label, (x0, y0, x1, y1)) source boxes printed at display scale for the crowd config.
     crowd_boxes: tuple = field(default_factory=tuple)
 
@@ -121,7 +126,7 @@ def flood(mask, seeds, rows):
     return reach
 
 
-def skyline(background, rows):
+def skyline(background, rows, extra_sky=None):
     """The architecture against the sky: open sky and clouds are reached from the top edge;
     what is left and grows from the bottom of the band (buildings, domes, palms, poles) is
     opaque. Floating clouds stay transparent, so they never hide the banner."""
@@ -129,6 +134,8 @@ def skyline(background, rows):
     open_sky = ((hue > 185) & (hue < 240) & (sat > 0.3) & (val > 0.55)) | (
         (val > 0.78) & (sat < 0.38)
     )
+    if extra_sky is not None:
+        open_sky |= extra_sky(background)
     width = open_sky.shape[1]
     sky = flood(open_sky, [(0, x) for x in range(width)], rows)
     solid = ~sky
@@ -158,7 +165,10 @@ def prepare(stage):
     image = Image.open(SOURCE).convert('RGB')
     x0, y0, x1, y1 = SKY_BOX
     group = np.zeros(image.size[::-1], bool)
-    group[y0:y1, x0:x1] = ~sky_mask(image)[y0:y1, x0:x1]
+    sky = sky_mask(image)
+    if stage.extra_sky is not None:
+        sky |= stage.extra_sky(image)
+    group[y0:y1, x0:x1] = ~sky[y0:y1, x0:x1]
     group = fill_holes(group, SKY_BOX)
     if stage.tail_min_x is not None:
         tail = stage.tail_min_x
@@ -166,6 +176,8 @@ def prepare(stage):
         if stage.refill_after_tail:
             group = fill_holes(group, SKY_BOX)
 
+    if stage.plane_max_y is not None:
+        group[stage.plane_max_y :, x0:PLANE_MAX_X] = False
     whole_plane = large_components(split(group, x0, PLANE_MAX_X), 200)
     propeller = split(whole_plane, x0, PROPELLER_MAX_X)
     plane = split(whole_plane, PROPELLER_MAX_X, PLANE_MAX_X)
@@ -181,7 +193,7 @@ def prepare(stage):
     )
     print(f'background: {size[0]}x{size[1]}')
     # From the saved JPEG itself, so the occluder's pixels are exactly what is on screen.
-    skyline(Image.open(OUT / 'background.jpg').convert('RGB'), SKYLINE_ROWS).save(
+    skyline(Image.open(OUT / 'background.jpg').convert('RGB'), SKYLINE_ROWS, stage.extra_sky).save(
         OUT / 'skyline.png', optimize=True
     )
     print(f'skyline occluder: {size[0]}x{SKYLINE_ROWS}')

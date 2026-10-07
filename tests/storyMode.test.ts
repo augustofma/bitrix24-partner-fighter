@@ -95,7 +95,7 @@ describe('campaigns', () => {
   it('Augusto: Recife -> Portugal (Filipe) -> Russia (João Guiotti) -> Joinville (Romualdo)', () => {
     expect(storyRouteFor('augusto')).toEqual([
       { opponent: 'filipe', destination: 'portugal' },
-      { opponent: 'joao-guiotti', destination: 'russia' },
+      { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
     ]);
@@ -105,7 +105,7 @@ describe('campaigns', () => {
   it('Filipe (never against himself): Portugal -> Recife -> Russia -> Spain -> Joinville', () => {
     expect(storyRouteFor('filipe')).toEqual([
       { opponent: 'augusto', destination: 'recife' },
-      { opponent: 'joao-guiotti', destination: 'russia' },
+      { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
     ]);

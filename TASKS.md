@@ -410,6 +410,17 @@ sem pedido explícito.**
 - [x] Testes do lugar, rotas, voo a partir do `currentLocation`, chegada, VS, retry, vitória e
       fim de campanha na Espanha; playtest desktop, 1080p e mobile
 
+## DONE (v0.33: cenário RÚSSIA para o João Guiotti, branch `feature/russia-joao-stage`)
+
+- [x] Arte oficial da Praça Vermelha como `StageConfig` `russia` (mesma arena), torcida em
+      grupos, biplano com faixa Bitrix24 atrás das torres e cúpulas
+- [x] Cenário por encontro: `encounterStageId` no perfil do João → `StoryLeg.stageId`; o lugar
+      Rússia continua sem cenário próprio (país e arena separados)
+- [x] `flyover_art.py`: `extra_sky` (nuvens do pôr do sol) e `plane_max_y`; Recife e Joinville
+      idênticos
+- [x] Testes do cenário, do encontro, retry, rounds e luta rápida; playtest desktop, 1080p e
+      mobile (viagem → VS → luta, derrota → retry, FINAL ROUND)
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

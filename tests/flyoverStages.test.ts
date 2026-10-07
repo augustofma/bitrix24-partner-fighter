@@ -13,6 +13,7 @@ import { StageFlyoverView } from '../src/render/stage/StageFlyoverView';
 import { joinville } from '../src/stages/joinville';
 import { partnerArena } from '../src/stages/partnerArena';
 import { recife } from '../src/stages/recife';
+import { russia } from '../src/stages/russia';
 import { STAGES, getStageConfig } from '../src/stages/stageRegistry';
 import { stageIdForLocation } from '../src/story/locations';
 import { quickFightStageId } from '../src/story/storyProfiles';
@@ -33,7 +34,7 @@ import { jpegSize, readRgbaPng } from './png';
  */
 
 const publicPath = (path: string) => join(__dirname, '..', 'public', path);
-const FLYOVER_STAGES = [recife, joinville] as const;
+const FLYOVER_STAGES = [recife, joinville, russia] as const;
 
 function images(stage: StageConfig) {
   const art = stage.art!;

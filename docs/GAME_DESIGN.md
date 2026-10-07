@@ -44,6 +44,9 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
      flashes de celular), reage a golpes fortes, especiais, KO e PERFECT, comemora o fim do
      round e mais ainda a vitória da partida. Um avião cruza o céu a cada ~20-30 s rebocando a
      faixa "Arrecife Digital", que ondula como tecido.
+   - **Rússia (Praça Vermelha):** a luta contra João Guiotti no Modo História, com o Kremlin, a
+     Catedral de São Basílio ao pôr do sol, a mesma torcida animada e um biplano com a faixa
+     "Bitrix24" passando atrás das torres e cúpulas. Escolhido pelo encontro, não pelo país.
    - **Joinville:** a mesma torcida animada (dos dois lados do pórtico) e o mesmo voo, com a
      faixa "CRMThink" passando ao fundo, atrás do telhado e das palmeiras.
      É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.

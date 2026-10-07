@@ -3,8 +3,15 @@ import { partnerArena } from './partnerArena';
 import { partnerSummit } from './partnerSummit';
 import { joinville } from './joinville';
 import { recife } from './recife';
+import { russia } from './russia';
 
-export const STAGES: readonly StageConfig[] = [partnerSummit, recife, joinville, partnerArena];
+export const STAGES: readonly StageConfig[] = [
+  partnerSummit,
+  recife,
+  joinville,
+  russia,
+  partnerArena,
+];
 
 export const DEFAULT_STAGE_ID = partnerSummit.id;
 

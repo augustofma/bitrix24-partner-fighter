@@ -173,10 +173,13 @@ describe('RECIFE is picked by place, never by fighter', () => {
     ).toBe('partner-arena');
   });
 
-  it('every campaign fight takes its stage from where it happens', () => {
+  it('every campaign fight takes its stage from its encounter, else from where it happens', () => {
     for (const profile of STORY_PROFILES) {
       for (const leg of storyRouteFor(profile.fighterId) ?? []) {
-        expect(legStageId(leg)).toBe(stageIdForLocation(leg.destination));
+        const encounterStage = STORY_PROFILES.find(
+          (p) => p.fighterId === leg.opponent,
+        )?.encounterStageId;
+        expect(legStageId(leg)).toBe(encounterStage ?? stageIdForLocation(leg.destination));
       }
     }
   });

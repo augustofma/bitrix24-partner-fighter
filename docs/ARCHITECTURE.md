@@ -76,6 +76,7 @@ src/
     partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
     recife.ts             RECIFE (Marco Zero): mesma arena, público em grupos, avião com faixa
     joinville.ts          JOINVILLE (pórtico): mesma arena, mesmo público e avião (CRMThink)
+    russia.ts             RÚSSIA (Praça Vermelha): escolhido pelo encontro do João Guiotti
     partnerArena.ts       Cenário procedural (também é o fallback visual)
     stageRegistry.ts
   story/                  MODO HISTÓRIA, PURO (sem Phaser; o ESLint garante)
@@ -375,7 +376,11 @@ ordem padrão em que as campanhas enfrentam os rivais; `opponentOrder` muda a or
 campanha específica.
 
 **Cenários por lugar hoje:** Recife → `recife`, Joinville → `joinville`; os outros lugares
-usam o Partner Summit. Um cenário novo com avião: arte em `scripts/stage-art/<id>/`, um
+usam o Partner Summit. **Cenário por encontro:** `StoryCharacterProfile.encounterStageId`
+escolhe a arena das lutas contra aquele personagem, acima do cenário do lugar (`rivalLeg` o
+copia para `StoryLeg.stageId`; `legStageId` usa a etapa, senão o lugar). Assim o lugar
+(Rússia) e o cenário (Praça Vermelha, `russia`) ficam separados, e um país pode ter várias
+arenas. Hoje: João Guiotti → `russia`. Um cenário novo com avião: arte em `scripts/stage-art/<id>/`, um
 `prepare_<id>.py` que descreve a arte num `FlyoverStage` (`scripts/stage-art/flyover_art.py`
 gera fundo, avião, hélice, faixa e `skyline.png`), um `StageConfig` em `src/stages/` e o
 `stageId` no lugar.

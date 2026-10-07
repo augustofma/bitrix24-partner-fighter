@@ -383,6 +383,19 @@ ferramentas do Recife (`scripts/stage-art/flyover_art.py`).
   linhas). A faixa laranja ondula de leve e continua legível no céu aberto.
 - A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
 
+## Cenário: RÚSSIA (Praça Vermelha)
+
+Arte oficial fornecida pelo dono do projeto: a Praça Vermelha ao pôr do sol em pixel art, com a
+torre Spasskaya do Kremlin, a Catedral de São Basílio, tendas e grades da Bitrix24, a torcida e
+um biplano rebocando a faixa "Bitrix24". Arena da luta contra João Guiotti na história. O
+preparo ([scripts/stage-art/russia/README.md](../scripts/stage-art/russia/README.md)) usa as
+ferramentas compartilhadas (`scripts/stage-art/flyover_art.py`) com duas regras desta arte: as
+nuvens rosa/laranja/violeta do pôr do sol contam como céu (`extra_sky`) e as linhas abaixo das
+rodas do avião ficam fora dele (`plane_max_y`, uma nuvem violeta encosta nelas).
+
+- `top` −40 põe os pés no calçamento, à frente das grades. Torcida em grupos nas duas faixas
+  separadas pelo poste; avião a 0,62, atrás da torre Spasskaya, das cúpulas e dos postes.
+
 ## Interface da seleção de personagem
 
 Visual de fliperama, sem assets de imagem novos: tudo é desenhado em código em
@@ -494,6 +507,7 @@ registrada aqui:
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local       | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`           | ImageGen integrado, referências autorizadas pelo usuário; montagem local                     | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local           | Arte original gerada para o projeto; sem assets de terceiros      |
+| `scripts/stage-art/russia/source.png` e `public/stages/russia/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_russia.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/joinville/source.png` e `public/stages/joinville/*`            | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_joinville.py` | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py`    | Arte do projeto, aprovada pelo usuário                            |
