@@ -215,7 +215,7 @@ def inst_brass(note: Note, spb: float) -> np.ndarray:
     return sig * envelope(length, 0.03, 0.4, 0.8, 0.35, gate) * note.velocity * 0.35
 
 
-# --- Arcade-fighter fanfare instruments (victory sting) -------------------------------------
+# --- Arcade-fighter instruments (orchestral brass, strings, hits, timpani, bell; rock guitar) ---
 
 
 def glide_saw(freq: float, length: int, scoop: float = 0.0, scoop_s: float = 0.05,
@@ -289,13 +289,27 @@ def inst_timpani(note: Note, spb: float) -> np.ndarray:
 
 
 def inst_bell(note: Note, spb: float) -> np.ndarray:
-    """Glockenspiel-like FM bell for the final sparkle."""
+    """Glockenspiel-like FM bell for sparkles."""
     length = int(1.6 * SR)
     f = hz(note.pitch)
     t = np.arange(length) / SR
     index = 2.2 * np.exp(-t / 0.15)
     sig = np.sin(2 * np.pi * f * t + index * np.sin(2 * np.pi * f * 3.5 * t))
     return sig * np.exp(-t / 0.5) * np.clip(t / 0.002, 0, 1) * note.velocity * 0.22
+
+
+def inst_guitar(note: Note, spb: float) -> np.ndarray:
+    """Overdriven lead guitar: two saws that bend up into the note, hard clipping, a cabinet
+    filter and a wide vibrato on held notes."""
+    gate = int(note.length * spb * SR * 0.95)
+    length = gate + int(0.2 * SR)
+    f = hz(note.pitch)
+    held = note.length >= 1
+    bend = 0.06 if held else 0.02  # long notes are bent up into pitch
+    raw = sum(glide_saw(f * d, length, scoop=bend, scoop_s=0.07 if held else 0.02,
+                        vibrato=0.012 if held else 0.0) for d in (1.0, 1.003))
+    sig = lowpass(np.tanh(5.0 * lowpass(raw, 5000)), 3600)
+    return sig * envelope(length, 0.004, 0.3, 0.85, 0.12, gate) * note.velocity * 0.17
 
 
 INSTRUMENTS = {
@@ -311,6 +325,7 @@ INSTRUMENTS = {
     "stab": inst_stab,
     "timpani": inst_timpani,
     "bell": inst_bell,
+    "guitar": inst_guitar,
 }
 
 # Mix: (gain, pan -1..1, echo send)
@@ -327,6 +342,7 @@ MIX = {
     "stab": (0.9, 0.0, 0.2),
     "timpani": (0.85, -0.1, 0.0),
     "bell": (0.55, 0.3, 0.35),
+    "guitar": (1.1, 0.15, 0.22),
 }
 
 
@@ -760,67 +776,51 @@ def story_map_theme() -> Track:
 
 
 def victory_sting() -> Track:
-    """Arcade-fighter victory fanfare (about 5 s), B-flat major, 165 BPM. Original melody in
-    the genre's language: an orchestra hit on the downbeat, a triplet brass call doubled in
-    octaves over strings and a driving bass, IV-V lift with a snare roll and timpani, then a
-    held tonic chord with a bell sparkle and the hall ringing out."""
-    t = Track(bpm=165, bars=3, loop=False, reverb=0.28, reverb_seconds=2.2, tail_seconds=0.6)
+    """Arcade-fighter victory sting (about 5 s), hard rock with attitude. E minor, 165 BPM.
+    Original riff: palm-muted chugs on low E answered by G5-A5-Bb5 power chords (the blue
+    note), an overdriven lead guitar lick with bends, driving bass and drums with a tom fill,
+    then a big E5 chord rung out under a screaming held high E and a crash."""
+    t = Track(bpm=165, bars=3, loop=False, reverb=0.15, reverb_seconds=1.6, tail_seconds=0.6)
 
-    def hit(beat: float, names: list[str], velocity: float = 1.0) -> None:
-        for name in names:
-            t.add("stab", beat, 0.5, midi(name), velocity)
+    def power(beat: float, length: float, name: str, velocity: float = 1.0) -> None:
+        t.add("power", beat, length, chord(name + "5", 2)[0], velocity)
+        t.add("bass", beat, length * 0.9, chord(name, 1)[0] + 12, 0.45)
 
-    # Bar 1: hit, then the brass call (triplet pickup to a high F).
-    hit(0, ["Bb3", "D4", "F4", "Bb4", "D5", "F5"])
-    t.hit(0, "kick")
-    t.hit(0, "crash", 0.6)
-    t.add("timpani", 0, 1, midi("Bb1"), 0.55)
-    call = [("F4", 1, 1 / 3), ("Bb4", 4 / 3, 1 / 3), ("D5", 5 / 3, 1 / 3), ("F5", 2, 0.75),
-            ("Eb5", 2.75, 0.25), ("D5", 3, 0.5), ("Eb5", 3.5, 0.5)]
-    # Bar 2: IV then V, the line climbs; bar 3: the tonic, held.
-    call += [("G5", 4, 1.0), ("F5", 5, 0.5), ("Eb5", 5.5, 0.5), ("F5", 6, 1 / 3),
-             ("G5", 6 + 1 / 3, 1 / 3), ("A5", 6 + 2 / 3, 1 / 3), ("Bb5", 7, 0.5), ("C6", 7.5, 0.5)]
-    for name, beat, length in call:
-        t.add("horn", beat, length, midi(name))
-        t.add("horn", beat, length, midi(name) - 12, 0.75)  # octave doubling, like a section
-    for tone in ("D5", "F5", "Bb5", "D6"):
-        t.add("horn", 8, 4, midi(tone), 0.95)
-    t.add("horn", 8, 4, midi("Bb4"), 0.8)
+    riff = [(0, 0.25, "E", 1.0), (0.5, 0.25, "E", 0.6), (0.75, 0.25, "E", 0.6), (1, 0.5, "G", 0.95),
+            (1.5, 0.25, "E", 0.6), (2, 0.75, "A", 0.95), (2.75, 0.25, "E", 0.6), (3, 0.5, "Bb", 0.95),
+            (3.5, 0.5, "A", 0.9),
+            (4, 0.25, "E", 1.0), (4.5, 0.25, "E", 0.6), (4.75, 0.25, "E", 0.6), (5, 0.5, "G", 0.95),
+            (5.5, 0.25, "E", 0.6), (6, 0.5, "D", 0.95), (6.5, 0.25, "E", 0.6), (6.75, 0.25, "E", 0.6),
+            (7, 0.5, "G", 0.95), (7.5, 0.5, "A", 1.0)]
+    for beat, length, name, velocity in riff:
+        power(beat, length, name, velocity)
+    power(8, 3.5, "E", 1.0)
 
-    # Harmony: strings bed and brass chord stabs on the changes.
-    for beat, length, names in ((1, 3, ("Bb3", "D4", "F4")), (4, 2, ("Eb4", "G4", "Bb4")),
-                                (6, 2, ("F4", "A4", "C5")), (8, 4, ("Bb3", "D4", "F4", "Bb4"))):
-        for name in names:
-            t.add("strings", beat, length, midi(name), 0.9)
-    hit(4, ["Eb4", "G4", "Bb4", "Eb5"], 0.7)
-    hit(6, ["F4", "A4", "C5", "F5"], 0.75)
-    hit(8, ["Bb3", "D4", "F4", "Bb4", "D5", "F5"], 1.0)
+    lick = [("E5", 0, 1), ("G5", 1, 0.5), ("A5", 1.5, 0.5), ("B5", 2, 0.75), ("A5", 2.75, 0.25),
+            ("G5", 3, 0.5), ("E5", 3.5, 0.5),
+            ("E5", 4, 0.25), ("G5", 4.25, 0.25), ("A5", 4.5, 0.25), ("B5", 4.75, 0.25), ("D6", 5, 1),
+            ("B5", 6, 0.25), ("D6", 6.25, 0.25), ("E6", 6.5, 0.25), ("D6", 6.75, 0.25),
+            ("B5", 7, 0.25), ("A5", 7.25, 0.25), ("B5", 7.5, 0.25), ("D6", 7.75, 0.25),
+            ("E6", 8, 3.5)]
+    for name, beat, length in lick:
+        t.add("guitar", beat, length, midi(name))
+        t.add("guitar", beat, length, midi(name) - 12, 0.55)  # octave double for weight
 
-    # Driving bass in eighths, then the low tonic.
-    for beat, root in ((1, "Bb1"), (4, "Eb2"), (6, "F2")):
-        span = 3 if root == "Bb1" else 2
-        for i in range(int(span * 2)):
-            t.add("bass", beat + i / 2, 0.45, midi(root) + (12 if i % 2 else 0), 0.5)
-    t.add("bass", 8, 3.5, midi("Bb1"), 0.6)
-
-    # Drums: light backbeat, a snare roll crescendo into the last bar, timpani on the changes.
-    for beat in (1, 2, 3, 4, 5):
-        t.hit(beat, "kick", 0.45 if beat % 2 else 0.55)
-    for beat in (2, 4):
-        t.hit(beat, "snare", 0.6)
-    for i in range(16):
-        t.hit(6 + i / 8, "snare", 0.2 + 0.45 * i / 15)
-    t.add("timpani", 4, 1, midi("Eb2"), 0.45)
-    t.add("timpani", 6, 1, midi("F2"), 0.5)
-    for i in range(6):
-        t.add("timpani", 7 + i / 6, 0.2, midi("F2"), 0.22 + 0.05 * i)
+    # Drums: driving eighths, backbeat, a tom fill into the final hit.
+    for beat in (0, 0.75, 1.5, 2, 2.75, 3.5, 4, 4.75, 5.5, 6, 6.75):
+        t.hit(beat, "kick", 0.7)
+    for beat in (1, 3, 5):
+        t.hit(beat, "snare", 0.9)
+    for i in range(14):
+        t.hit(i * 0.5, "hat", 0.6)
+    for i, beat in enumerate((7, 7.25, 7.5, 7.75)):
+        t.hit(beat, "tom", 0.6 + 0.1 * i)
+    t.hit(7.5, "snare", 0.7)
+    t.hit(7.75, "snare", 0.85)
+    t.hit(0, "crash", 0.7)
     t.hit(8, "kick")
-    t.hit(8, "crash", 0.8)
-    t.add("timpani", 8, 1, midi("Bb1"), 0.6)
-
-    # Sparkle over the final chord.
-    for i, name in enumerate(("Bb5", "D6", "F6", "Bb6", "D7", "F7")):
-        t.add("bell", 8.25 + i * 0.25, 0.25, midi(name), 0.7 - 0.06 * i)
+    t.hit(8, "snare", 0.9)
+    t.hit(8, "crash", 0.9)
     return t
 
 
