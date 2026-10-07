@@ -5,3 +5,6 @@ coverage
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# Python bytecode from the offline art scripts
+__pycache__/

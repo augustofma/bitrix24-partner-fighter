@@ -257,6 +257,24 @@ em `scripts/title-art/source.webp`; `prepare_title_art.py` separa três camadas 
   são redesenhados pelo código.
 - Se a arte não carregar, a `MenuScene` volta ao visual procedural anterior.
 
+## Cenário: Bitrix24 Partner Summit
+
+Ilustração pixel-art aprovada de um auditório de evento: painel de LED "Bitrix24 Partner
+Summit", palco com poltronas, o presidente sentado ao centro, público com lightsticks e um chão
+de arena com reflexos. É o cenário padrão das lutas. A fonte fica em
+`scripts/stage-art/partner-summit/source.webp`; o preparo está em
+[scripts/stage-art/partner-summit/README.md](../scripts/stage-art/partner-summit/README.md).
+
+- A arte fica 12% maior que a tela e rola com parallax. O topo foi posicionado para o título
+  do painel aparecer logo abaixo do HUD, e os pés dos lutadores ficam no chão, entre a
+  barreira e a linha ciano.
+- **Público:** colunas de ~46 px pulam em onda: 1,5 px a 1,1 Hz durante a luta, 3,5 px a
+  2,6 Hz comemorando.
+- **Presidente:** a cabeça olha para um lado e para o outro (troca rápida com leve achatamento)
+  e acena levemente com a cabeça; a mão levantada balança como quem fala. Comemorando, ele olha
+  ao redor mais rápido e a mão vira um aceno amplo (±28°).
+- A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
+
 ## Interface da seleção de personagem
 
 Visual de fliperama, sem assets de imagem novos: tudo é desenhado em código em
@@ -294,12 +312,13 @@ personagens ou artes de outros jogos.
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
 registrada aqui:
 
-| Asset                                                         | Autor                                                                                  | Licença                                                      |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `public/fighters/fighter-a/*.png` (demo)                      | Gerado por `scripts/generate-demo-fighter-art.mjs`                                     | Original do projeto                                          |
-| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png` | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local | Arte original gerada para o projeto; sem assets de terceiros |
-| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`   | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local     | Arte original gerada para o projeto; sem assets de terceiros |
-| `scripts/title-art/source.webp` e `public/ui/title/*`         | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`   | Arte do projeto, aprovada pelo usuário                       |
+| Asset                                                                             | Autor                                                                                     | Licença                                                      |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `public/fighters/fighter-a/*.png` (demo)                                          | Gerado por `scripts/generate-demo-fighter-art.mjs`                                        | Original do projeto                                          |
+| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros |
+| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros |
+| `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                       |
+| `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                       |
 
 ## VFX do especial (v0.8)
 

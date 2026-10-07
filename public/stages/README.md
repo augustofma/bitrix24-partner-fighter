@@ -1,5 +1,10 @@
 # stages
 
-Uma pasta por cenário (ex.: `partner-arena/`) com as camadas de fundo. A v0.1 desenha o cenário em código.
+Uma pasta por cenário ilustrado, com as camadas de fundo declaradas em `StageConfig.art`.
+
+- `partner-summit/`: Bitrix24 Partner Summit (fundo e recortes do presidente), gerado por
+  [scripts/stage-art/partner-summit](../../scripts/stage-art/partner-summit/README.md).
+
+Cenários sem arte (ex.: PARTNER ARENA) são desenhados em código.
 
 Veja [docs/ART_DIRECTION.md](../../docs/ART_DIRECTION.md).

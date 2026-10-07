@@ -17,8 +17,9 @@ import { DebugOverlay } from '../render/DebugOverlay';
 import { FightCamera } from '../render/FightCamera';
 import type { FighterView } from '../render/FighterView';
 import { HitEffects } from '../render/HitEffects';
-import { StageView } from '../render/StageView';
 import { SpecialEffects } from '../render/SpecialEffects';
+import { createStageView } from '../render/stage/createStageView';
+import type { StageBackdrop } from '../render/stage/StageBackdrop';
 import { getStageConfig } from '../stages/stageRegistry';
 import type { InputSource } from '../types/input';
 import type { MatchResult, MatchSetup } from '../types/match';
@@ -45,6 +46,7 @@ export class FightScene extends Phaser.Scene {
   private effects!: HitEffects;
   private specialEffects!: SpecialEffects;
   private debugOverlay!: DebugOverlay;
+  private stageView!: StageBackdrop;
   private accumulatorMs = 0;
 
   constructor() {
@@ -64,7 +66,7 @@ export class FightScene extends Phaser.Scene {
     this.simulation = new FightSimulation({ fighters: configs, stage });
     const fighters = this.simulation.fighters;
 
-    new StageView(this, stage);
+    this.stageView = createStageView(this, stage);
     this.views = configs.map((config) => createFighterView(this, config, stage.groundY));
     this.fightCamera = new FightCamera(this.cameras.main, stage);
     this.fightCamera.follow(fighters, true);
@@ -146,6 +148,8 @@ export class FightScene extends Phaser.Scene {
         this.announcer.show(STRINGS.timeOver, 1600);
         return;
       case 'victoryPose':
+        // A round has a winner: the stage celebrates until the next round starts.
+        this.stageView.setMood('celebrate');
         return;
       case 'roundOver':
         // The point is already scored: show it while the next round is being prepared.
@@ -175,6 +179,7 @@ export class FightScene extends Phaser.Scene {
   /** The simulation already reset the fighters: reset what only the presentation holds. */
   private startRoundPresentation(): void {
     this.effects.clear();
+    this.stageView.setMood('fight');
     this.controllers.forEach((controller) => controller.reset?.());
     this.fightCamera.follow(this.simulation.fighters, true);
     this.hud.setRound(this.roundLabel(), this.simulation.match.roundWins);
@@ -183,6 +188,7 @@ export class FightScene extends Phaser.Scene {
 
   private renderFrame(timeMs: number): void {
     const fighters = this.simulation.fighters;
+    this.stageView.update(timeMs);
     fighters.forEach((fighter, i) => this.views[i]?.sync(fighter, timeMs));
     this.specialEffects.sync(fighters);
     this.fightCamera.follow(fighters);

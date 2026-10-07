@@ -198,6 +198,16 @@ sem pedido explícito.**
 - [x] Card selecionado com borda dourada e halo ciano; P1 magenta; barras ciano → dourado
 - [x] Layout, seleção, dificuldade e navegação inalterados; validado em desktop e mobile
 
+## DONE (v0.16: cenário Bitrix24 Partner Summit, branch `feature/partner-summit-stage-animation`)
+
+- [x] Cenário ilustrado padrão com a arte aprovada; arena idêntica à PARTNER ARENA (teste)
+- [x] `StageConfig.art` genérico (fundo, público, barreira, recortes com pivô) e fallback procedural
+- [x] Público em colunas que pulam em onda; acelera e pula mais alto quando há vencedor
+- [x] Presidente: cabeça olhando para os lados e acenando, mão gesticulando; aceno no fim do round
+- [x] Humor do cenário pelos eventos existentes (`victoryPose` / `roundStart`)
+- [x] Script reproduzível (`scripts/stage-art/`), helpers de imagem compartilhados (`scripts/art_tools.py`)
+- [x] Playtest no Chromium: desktop 1280×720 e mobile 844×390, sem erros
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

@@ -1,8 +1,9 @@
 import type Phaser from 'phaser';
-import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
-import { createRng, randomInt } from '../core/random';
-import type { StageConfig } from '../types/stage';
-import { COLORS, DEPTH, arcadeText } from '../ui/theme';
+import { GAME_HEIGHT, GAME_WIDTH } from '../../config/display';
+import { createRng, randomInt } from '../../core/random';
+import type { StageConfig, StageMood } from '../../types/stage';
+import { COLORS, DEPTH, arcadeText } from '../../ui/theme';
+import type { StageBackdrop } from './StageBackdrop';
 
 /** Parallax factors: 0 = glued to the screen, 1 = moves with the world. */
 const PARALLAX = { sky: 0, skyline: 0.35, banner: 0.6, crowd: 0.8 } as const;
@@ -15,12 +16,16 @@ const WALL_WIDTH = 26;
 const WALL_TOP_Y = 230;
 /** Fixed seed: the procedural stage looks the same every time. */
 const STAGE_SEED = 2024;
+/** Crowd bounce speed while celebrating, relative to the fight. */
+const CHEER_TIME_SCALE = 2.2;
 
 /**
- * Procedural placeholder for a stage (sky, skyline, banner, crowd, floor, walls).
- * Future: when `stage.backgroundAsset` exists, draw layered images instead.
+ * Procedural stage (sky, skyline, banner, crowd, floor, walls): used by stages without art,
+ * and as the fallback when a stage's art did not load (see createStageView).
  */
-export class StageView {
+export class StageView implements StageBackdrop {
+  private crowdTween: Phaser.Tweens.Tween | null = null;
+
   constructor(
     private readonly scene: Phaser.Scene,
     private readonly stage: StageConfig,
@@ -31,6 +36,14 @@ export class StageView {
     this.drawCrowd();
     this.drawFloor();
     this.drawWalls();
+  }
+
+  setMood(mood: StageMood): void {
+    if (this.crowdTween) this.crowdTween.timeScale = mood === 'celebrate' ? CHEER_TIME_SCALE : 1;
+  }
+
+  update(): void {
+    // Tweens animate this stage on their own.
   }
 
   /** World width a parallax layer must cover so it never shows an empty edge. */
@@ -93,7 +106,7 @@ export class StageView {
         g.fillCircle(x, baseY - 6, 7);
       }
     }
-    this.scene.tweens.add({
+    this.crowdTween = this.scene.tweens.add({
       targets: g,
       y: -3,
       duration: 420,

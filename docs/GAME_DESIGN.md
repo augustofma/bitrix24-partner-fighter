@@ -27,6 +27,9 @@ Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitóri
    mostra o adversário, que prioriza os personagens reservados à CPU. Abaixo da grade, o
    painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
+   As lutas acontecem no **Bitrix24 Partner Summit**: o público pula em onda durante a luta e
+   comemora mais rápido quando um round tem vencedor; o presidente, sentado no palco, olha ao
+   redor e gesticula (e acena ao fim do round). É só visual: a arena é a mesma de antes.
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** vencedor da partida, motivo do último round e placar (ex.: 2 x 1); botão

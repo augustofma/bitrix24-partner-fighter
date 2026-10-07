@@ -1,23 +1,9 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { TITLE_ART, TITLE_ASSETS } from '../src/render/assets/titleAssets';
-import { readRgbaPng } from './png';
+import { jpegSize, readRgbaPng } from './png';
 
 const publicPath = (path: string) => `public/${path}`;
-
-/** JPEG frame size from the first SOF marker. */
-function jpegSize(path: string): { width: number; height: number } {
-  const file = readFileSync(path);
-  for (let offset = 2; offset < file.length;) {
-    const marker = file[offset + 1]!;
-    const length = file.readUInt16BE(offset + 2);
-    if (marker >= 0xc0 && marker <= 0xc2) {
-      return { height: file.readUInt16BE(offset + 5), width: file.readUInt16BE(offset + 7) };
-    }
-    offset += 2 + length;
-  }
-  throw new Error('No SOF marker');
-}
 
 describe('title screen art', () => {
   it('declares the three layers with unique keys, all present on disk', () => {

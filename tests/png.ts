@@ -43,3 +43,17 @@ function paeth(a: number, b: number, c: number): number {
     pc = Math.abs(p - c);
   return pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
 }
+
+/** JPEG frame size from the first SOF marker. */
+export function jpegSize(path: string): { width: number; height: number } {
+  const file = readFileSync(path);
+  for (let offset = 2; offset < file.length;) {
+    const marker = file[offset + 1]!;
+    const length = file.readUInt16BE(offset + 2);
+    if (marker >= 0xc0 && marker <= 0xc2) {
+      return { height: file.readUInt16BE(offset + 5), width: file.readUInt16BE(offset + 7) };
+    }
+    offset += 2 + length;
+  }
+  throw new Error('No SOF marker');
+}

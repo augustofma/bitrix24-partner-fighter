@@ -41,7 +41,7 @@ src/
     fighter.ts            FighterConfig, AttackConfig, estados, assets
     input.ts              InputAction, InputState, InputSource
     geometry.ts           Vec2, Rect, LocalBox, Direction
-    stage.ts              StageConfig
+    stage.ts              StageConfig, StageArt (camadas ilustradas), StageMood
     match.ts              MatchSetup (com AIDifficulty), RoundResult, MatchResult
   core/                   SIMULAÇÃO PURA
     FightSimulation.ts    Orquestra um frame da luta
@@ -69,7 +69,9 @@ src/
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
-    partnerArena.ts, stageRegistry.ts
+    partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
+    partnerArena.ts       Cenário procedural (também é o fallback visual)
+    stageRegistry.ts
   input/                  Dispositivos (Phaser)
     KeyboardInputSource.ts, menuKeys.ts
   render/                 Desenho do mundo (Phaser)
@@ -84,9 +86,15 @@ src/
     assets/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
       titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
+      stageAssets.ts      PURO: imagens declaradas em StageConfig.art (sem duplicatas)
       textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
-    StageView.ts          Cenário procedural com parallax
+    stage/
+      StageBackdrop.ts    Interface do fundo: setMood('fight' | 'celebrate') e update(tempo)
+      createStageView.ts  Arte ilustrada se as texturas carregaram; senão o procedural
+      IllustratedStageView.ts Fundo + público em colunas + recortes animados (cabeça, mão)
+      StageView.ts        Cenário procedural com parallax
+      stageMotion.ts      PURO: ritmos e poses dos loops (público, cabeça, mão) por animação
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
     HitEffects.ts         Faíscas de impacto
     SpecialEffects.ts     VFX procedural por configuração, sincronizado a stateFrame
@@ -127,6 +135,29 @@ tweens de flutuação e escala, e o botão JOGAR como imagem interativa (hit are
 que o desenho, hover/press por escala e brilho aditivo). Clique, toque, Enter e Espaço usam o
 mesmo `start` (`goToScene` para a seleção, protegido contra chamada dupla). Sem as texturas,
 a cena usa o visual procedural anterior.
+
+## Cenários (StageConfig.art)
+
+`StageConfig` define a arena (largura, chão, paredes), que é gameplay, e opcionalmente `art`,
+que é só apresentação: imagem de fundo, `top` (Y do topo da arte), faixas do público com a
+barreira à frente e `performers` (recortes que giram em torno de um pivô, com o movimento
+`headLook` ou `handGesture`). A `BootScene` carrega `collectStageAssets(STAGES)`;
+`createStageView` usa a `IllustratedStageView` quando todas as texturas existem e cai no
+`StageView` procedural caso contrário.
+
+- **Parallax:** a arte é mais larga que a tela; o fator é `(largura da arte − 960) /
+(largura da arena − 960)`, então a borda da arte nunca aparece. Todas as camadas usam o
+  mesmo fator e ficam coladas ao fundo.
+- **Público:** colunas recortadas do próprio fundo (`setCrop`) pulam só para cima, em onda
+  (fase defasada por coluna). Uma cópia da barreira por cima esconde a base das colunas; um
+  teste garante que o pulo máximo nunca passa da barreira.
+- **Recortes:** cabeça e mão ficam sobre uma área limpa do fundo (preenchida no preparo da
+  arte), então girar ou virar não revela o original.
+- **Humor (`StageMood`):** a `FightScene` chama `setMood('celebrate')` no evento
+  `victoryPose`, que só existe quando o round tem vencedor, e `setMood('fight')` no
+  `roundStart`. Nada de lógica de fim de luta duplicada. A empolgação vai de 0 a 1 em
+  ~0,4 s e mistura os ritmos `CALM_MOTION` e `CHEER_MOTION`. As fases avançam por
+  `ritmo × dt` no tempo de render, então mudar a velocidade nunca faz uma camada pular.
 
 ## Fluxo entre cenas
 
@@ -449,13 +480,13 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro              | Onde encaixa                                                                                           |
-| ------------------- | ------------------------------------------------------------------------------------------------------ |
-| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                |
-| Vários cenários     | Novo `StageConfig` em `stages/` + registrar em `stageRegistry.ts`                                      |
-| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                        |
-| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos |
-| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                   |
+| Futuro              | Onde encaixa                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                       |
+| Vários cenários     | Novo `StageConfig` (com `art` opcional) em `stages/` + registrar em `stageRegistry.ts`; falta a escolha na UI |
+| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                               |
+| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos        |
+| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                          |
 
 ## Decisões técnicas
 

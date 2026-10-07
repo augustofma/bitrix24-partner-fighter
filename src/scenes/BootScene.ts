@@ -6,14 +6,16 @@ import {
   pixelArtTextureKeys,
   type AssetRequest,
 } from '../render/assets/fighterAssets';
+import { collectStageAssets } from '../render/assets/stageAssets';
 import { TITLE_ASSETS } from '../render/assets/titleAssets';
+import { STAGES } from '../stages/stageRegistry';
 import { validateRosterAssets } from '../render/sprite/spriteValidation';
 
 /**
- * First scene: loads the title screen art and every asset declared by the roster
+ * First scene: loads the title screen art, the stages' art and every asset declared by the roster
  * (FighterConfig.assets), with no per-fighter code. Missing or broken files are not fatal:
- * fighters fall back to the placeholder renderer (see createFighterView) and the title screen
- * to its procedural look (see MenuScene).
+ * fighters fall back to the placeholder renderer (see createFighterView), and the title screen
+ * and stages to their procedural look (see MenuScene, createStageView).
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -21,7 +23,11 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    const assets: AssetRequest[] = [...TITLE_ASSETS, ...collectFighterAssets(ROSTER)];
+    const assets: AssetRequest[] = [
+      ...TITLE_ASSETS,
+      ...collectStageAssets(STAGES),
+      ...collectFighterAssets(ROSTER),
+    ];
     for (const asset of assets) {
       if (this.textures.exists(asset.key)) continue;
       if (asset.type === 'image') {

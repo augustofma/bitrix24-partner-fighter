@@ -1,9 +1,10 @@
 import type { StageConfig } from '../types/stage';
 import { partnerArena } from './partnerArena';
+import { partnerSummit } from './partnerSummit';
 
-export const STAGES: readonly StageConfig[] = [partnerArena];
+export const STAGES: readonly StageConfig[] = [partnerSummit, partnerArena];
 
-export const DEFAULT_STAGE_ID = partnerArena.id;
+export const DEFAULT_STAGE_ID = partnerSummit.id;
 
 export function getStageConfig(id: string): StageConfig {
   const stage = STAGES.find((candidate) => candidate.id === id);
