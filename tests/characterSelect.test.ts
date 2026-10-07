@@ -122,6 +122,7 @@ import { filipe } from '../src/fighters/filipe';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { ROSTER, getPlayableFighters } from '../src/fighters/roster';
 import { romualdo } from '../src/fighters/romualdo';
+import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { CharacterSelectScene } from '../src/scenes/CharacterSelectScene';
 import type { RosterCard } from '../src/ui/select/RosterCard';
 import { CARDS_PER_PAGE, SELECT_LAYOUT } from '../src/ui/select/selectLayout';
@@ -165,10 +166,10 @@ describe('CharacterSelectScene roster integration', () => {
     expect(fake(cards.at(-1))?.input).toBeUndefined();
   });
 
-  it('offers Augusto, Filipe, João Guiotti and Romualdo; hides playable:false placeholders', () => {
+  it('offers all complete fighters; hides playable:false placeholders', () => {
     const { cards } = openScene();
     const shown = cards.map((card) => card.config).filter(Boolean);
-    for (const fighter of [augusto, filipe, joaoGuiotti, romualdo]) {
+    for (const fighter of getPlayableFighters()) {
       expect(fighter.playable).toBe(true);
       expect(shown).toContain(fighter);
       expect(fake(cards[shown.indexOf(fighter)])?.input?.enabled).toBe(true);
@@ -179,7 +180,7 @@ describe('CharacterSelectScene roster integration', () => {
     }
   });
 
-  it.each([augusto, filipe, joaoGuiotti, romualdo])(
+  it.each(getPlayableFighters())(
     'quick fight with %s: VS with a playable CPU and the stage of the fighters’ city',
     (fighter) => {
       const { cards } = openScene();
@@ -288,6 +289,12 @@ describe('CharacterSelectScene roster integration', () => {
 });
 
 describe('CharacterSelectScene story mode', () => {
+  it('keeps Isaque visible but locked until a story profile is configured', () => {
+    const { cards } = openScene('story');
+    const card = cards.find((c) => c.config === isaqueFerreira);
+    expect(card).toBeDefined();
+    expect(fake(card)?.input?.enabled).not.toBe(true);
+  });
   it.each([augusto, filipe, joaoGuiotti, romualdo])(
     '%s can start a campaign: correct fighter, start place and rivals',
     (fighter) => {

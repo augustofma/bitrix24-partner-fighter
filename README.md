@@ -7,9 +7,10 @@ A visão de longo prazo é ter personagens inspirados em pessoas do ecossistema 
 ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A versão atual é uma
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
-Todo lutador completo do roster (`playable: true`) é jogável em todos os modos: hoje AUGUSTO,
-FILIPE, JOÃO GUIOTTI e ROMUALDO. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
-enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Augusto). `FIGHTER_A` (sprite
+Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
+JOÃO GUIOTTI, ROMUALDO e ISAQUE FERREIRA. A história exige também um perfil de campanha;
+Isaque está disponível na luta rápida. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
+enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Isaque, Isaque enfrenta Augusto). `FIGHTER_A` (sprite
 demo) e `FIGHTER_B` (placeholder) continuam no código para testes e desenvolvimento, com
 `playable: false`, e não aparecem na seleção.
 
@@ -75,6 +76,11 @@ camiseta/tênis brancos. Atlas 1536×1120 (40 células 192×224), retrato 240×3
 [Fontes e preparo](scripts/joao-guiotti-art/README.md). Romualdo também usa arte própria: cabeça raspada, óculos, barba grisalha e blazer azul-marinho.
 [Fontes e preparo do Romualdo](scripts/romualdo-art/README.md).
 Ambos ainda não têm especiais.
+
+**ISAQUE FERREIRA** usa arte original com jaqueta bege, camiseta/calça pretas e tênis brancos.
+Perfil equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e deslocamento aéreo 3,9.
+Seis normais, sem especial e sem campanha própria nesta etapa.
+[Arte e preparo](scripts/isaque-ferreira-art/README.md).
 
 ## Stack
 

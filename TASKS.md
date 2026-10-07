@@ -318,7 +318,6 @@ sem pedido explícito.**
 - [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
 - [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
 
-
 ## DONE (v0.27: travamento do especial e fonte do resultado, branch `fix/special-vfx-stutter-and-victory-font`)
 
 - [x] Causa medida (perfil de CPU): balões do 24zap com tamanho negativo no pop-in iam para a
@@ -337,7 +336,6 @@ sem pedido explícito.**
 - [x] Fontes, prompts e preparação local reproduzível
 - [x] Testes de assets, frame map, roster e referências do Story
 - [x] Playtest F2, teclado, quatro confrontos, CPU, cross-up/flipX, Story/VS/Vitória e mobile emulado
-
 
 ## DONE (v0.28: cenário RECIFE, branch `feature/recife-stage`)
 
@@ -367,6 +365,15 @@ sem pedido explícito.**
 - [x] Testes: filtro, 4 lutadores na seleção, VS/CPU, campanhas pela seleção, IA genérica em
       todos os pares, sem lista fixa de ids, grade com 4–12 lutadores; playtest 1280×720,
       1920×1080 (mouse) e 844×390 (toque)
+
+## DONE (Isaque Ferreira)
+
+- [x] FighterConfig equilibrado, seis normais, roster e luta rápida; sem novo especial/campanha
+- [x] Sheet 1536×1120 RGBA, 40 células 192×224; portrait 240×300 RGBA
+- [x] Fontes, prompts e preparação reproduzível; animações e fases completas
+- [x] Testes de assets, seleção, CPU, simulação e determinismo
+- [x] Playtest desktop/debug contra quatro fighters, Isaque CPU e mobile emulado com multi-touch,
+      cross-up, flipX e vitória; 632 testes e check aprovados
 
 ## NEXT (próximas tarefas recomendadas)
 

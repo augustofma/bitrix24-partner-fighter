@@ -125,6 +125,24 @@ defesa como nos demais personagens. Guardas, cross-up, KO e vitória usam o moto
 no ar. Corpo padrão, arte pixel-art própria com óculos, blazer preto e camiseta branca, **sem especiais** por
 enquanto (a barra enche normalmente).
 
+### ISAQUE FERREIRA
+
+Perfil equilibrado, disponível na luta rápida e como CPU pelo roster genérico. Vida 100,
+caminhada 3,1 e recuo 2,5 px/frame, impulso de pulo 16,5 e velocidade aérea 3,9. Corpo padrão,
+sem especial. Sem perfil de campanha ou localização inventada; campanhas existentes preservadas.
+
+| Ataque      | Dano | Startup | Ativo | Recovery |
+| ----------- | ---- | ------- | ----- | -------- |
+| punch       | 7    | 5       | 3     | 11       |
+| kick        | 11   | 10      | 4     | 17       |
+| crouchPunch | 5    | 5       | 3     | 9        |
+| crouchKick  | 9    | 9       | 4     | 18       |
+| airPunch    | 7    | 5       | 6     | 10       |
+| airKick     | 10   | 8       | 8     | 14       |
+
+Alcance, stun e knockback seguem a referência intermediária de João; startup/recovery maiores
+e mobilidade menor compensam o dano um pouco maior. Não substitui a validação de equilíbrio com jogadores.
+
 ### ROMUALDO
 
 **Romualdo — Joinville - SC.** Pesado: golpes mais fortes, mais knockback e recuperações

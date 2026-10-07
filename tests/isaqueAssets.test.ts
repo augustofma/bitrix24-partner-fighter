@@ -1,8 +1,8 @@
 import { selectSpriteAssets, validateSpriteAssets } from '../src/render/sprite/spriteValidation';
 import { describe, expect, it } from 'vitest';
-import { romualdo } from '../src/fighters/romualdo';
+import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { ROSTER } from '../src/fighters/roster';
-import { storyRouteFor, fighterOrigin, storyLocationId } from '../src/story/storyProfiles';
+import { hasStoryCampaign } from '../src/story/storyProfiles';
 import {
   attackFrameIndex,
   jumpFrameIndex,
@@ -11,31 +11,29 @@ import {
 import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
-describe('Romualdo PNG assets', () => {
-  it('keeps one roster entry, his own portrait, origin and international story references', () => {
-    expect(ROSTER.filter((f) => f.id === 'romualdo')).toEqual([romualdo]);
-    expect(romualdo.assets.portrait).toBe('fighters/romualdo/portrait.png');
-    expect(fighterOrigin(romualdo.id)?.id).toBe('joinville');
-    expect(storyLocationId(romualdo.id)).toBe('joinville');
-    for (const id of ['augusto', 'filipe'])
-      expect(storyRouteFor(id)?.some((leg) => leg.opponent === romualdo.id)).toBe(true);
+describe('Isaque PNG assets', () => {
+  it('keeps one roster entry, his own portrait and quick-fight eligibility', () => {
+    expect(ROSTER.filter((f) => f.id === 'isaque-ferreira')).toEqual([isaqueFerreira]);
+    expect(isaqueFerreira.assets.portrait).toBe('fighters/isaque-ferreira/portrait.png');
+    expect(isaqueFerreira.playable).toBe(true);
+    expect(hasStoryCampaign(isaqueFerreira.id)).toBe(false);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
-    expect(validateSpriteAssets(romualdo, 40)).toEqual([]);
-    expect(selectSpriteAssets(romualdo, 40)).toBe(romualdo.assets.sprite);
-    const frames = Object.values(romualdo.assets.sprite!.animations).flatMap((a) => a.frames);
+    expect(validateSpriteAssets(isaqueFerreira, 40)).toEqual([]);
+    expect(selectSpriteAssets(isaqueFerreira, 40)).toBe(isaqueFerreira.assets.sprite);
+    const frames = Object.values(isaqueFerreira.assets.sprite!.animations).flatMap((a) => a.frames);
     expect(new Set(frames).size).toBe(40);
     expect(Math.min(...frames)).toBe(0);
     expect(Math.max(...frames)).toBe(39);
   });
   it('has a genuine transparent portrait at 240x300', () => {
-    const image = readRgbaPng(`public/${romualdo.assets.portrait}`);
+    const image = readRgbaPng(`public/${isaqueFerreira.assets.portrait}`);
     expect([image.width, image.height]).toEqual([240, 300]);
     expect(image.alpha(0, 0)).toBe(0);
     expect(image.alpha(120, 150)).toBeGreaterThan(0);
   });
   it('contains exactly 40 nonempty, isolated RGBA cells with safe margins', () => {
-    const sheet = romualdo.assets.sprite!.sheet;
+    const sheet = isaqueFerreira.assets.sprite!.sheet;
     const image = readRgbaPng(`public/${sheet.path}`);
     expect([image.width, image.height]).toEqual([1536, 1120]);
     expect([sheet.frameWidth, sheet.frameHeight]).toEqual([192, 224]);
@@ -60,7 +58,7 @@ describe('Romualdo PNG assets', () => {
   });
 });
 
-const animations = romualdo.assets.sprite!.animations;
+const animations = isaqueFerreira.assets.sprite!.animations;
 const FRAME_MAP: Partial<Record<FighterStateId, number[]>> = {
   idle: [0, 1, 2, 3],
   walk: [4, 5, 6, 7, 8, 9],
@@ -79,7 +77,7 @@ const FRAME_MAP: Partial<Record<FighterStateId, number[]>> = {
   victory: [39],
 };
 
-describe('Romualdo animation contract', () => {
+describe('Isaque animation contract', () => {
   it.each(Object.entries(FRAME_MAP))('%s uses the approved pose order', (state, frames) => {
     expect(animations[state as FighterStateId]?.frames).toEqual(frames);
   });
@@ -107,7 +105,7 @@ describe('Romualdo animation contract', () => {
       [-12, 0, 12].map((y) => animations.jump!.frames[jumpFrameIndex(animations.jump!, y, 60)]),
     ).toEqual([10, 11, 12]);
   });
-  it.each(Object.values(romualdo.attacks))(
+  it.each(Object.values(isaqueFerreira.attacks))(
     '$state shows extension only during the actual active window',
     (attack) => {
       const animation = animations[attack.state]!;
