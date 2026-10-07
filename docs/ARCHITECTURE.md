@@ -116,6 +116,8 @@ src/
     MenuButton.ts, ArcadeBackground.ts
     theme.ts              Cores e estilos de texto (arcadeText, hudText, pixelText, bodyText)
     timerStyle.ts         PURO: cor e pulso do cronômetro (últimos 10 s)
+    hud/specialReady.ts   PURO: limiar do SPECIAL READY (especial mais barato), transições, estilo do ESP
+    hud/SpecialReadyEffect.ts Glow, brilho, raios procedurais e faíscas da barra (objetos reutilizados)
     ModeMenu.ts           HISTÓRIA / LUTA RÁPIDA no lugar do JOGAR
     story/                Mapa do Brasil (BrazilMapView), avião (planeTexture), layout do mapa
     ArtButton.ts          Botão feito de arte (JOGAR, VOLTAR AO MENU): hover 1,03 + brilho, press 0,97

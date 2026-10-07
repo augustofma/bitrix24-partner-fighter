@@ -98,6 +98,11 @@ export class FightHud {
     }
   }
 
+  /** Whether a side's special meter is in the SPECIAL READY state (drives the touch ESP). */
+  specialReady(side: 0 | 1): boolean {
+    return this.meters[side].ready;
+  }
+
   update(fighters: readonly [ReadonlyFighter, ReadonlyFighter], secondsRemaining: number): void {
     fighters.forEach((fighter, i) => {
       const bar = this.bars[i as 0 | 1];

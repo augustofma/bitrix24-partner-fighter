@@ -10,6 +10,7 @@ import {
   type JoystickDirection,
 } from '../input/joystick';
 import type { InputAction, InputReadContext, InputSource, InputState } from '../types/input';
+import { specialButtonStyle } from './hud/specialReady';
 import { COLORS, DEPTH, arcadeText } from './theme';
 import { VirtualJoystick } from './VirtualJoystick';
 
@@ -31,6 +32,10 @@ const RADIUS = 36;
 const HIT_PADDING = 10;
 const IDLE_ALPHA = 0.3;
 const PRESSED_ALPHA = 0.7;
+/** SPECIAL READY on the ESP button: a ring just outside it that breathes (kept small). */
+const READY_RING_GAP = 5;
+const READY_RING_SCALE = 1.06;
+const READY_PULSE_MS = 800;
 
 /** Joystick center: bottom-left, clear of the HUD and of the action buttons. */
 const STICK_X = 126;
@@ -57,6 +62,8 @@ export class TouchControls implements InputSource {
   private readonly latched = new Set<InputAction>();
   private readonly joystick: VirtualJoystick;
   private readonly jumpLatch = new JumpLatch();
+  private specialReady = false;
+  private readyRing: Phaser.GameObjects.Arc | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
     for (const layout of LAYOUT) this.createButton(layout);
@@ -99,6 +106,49 @@ export class TouchControls implements InputSource {
 
   reset(): void {
     this.jumpLatch.reset();
+  }
+
+  /** Lights the ESP button while the player's special is available. Cheap to call per frame. */
+  setSpecialReady(ready: boolean): void {
+    if (ready === this.specialReady) return;
+    this.specialReady = ready;
+    const button = this.buttons.get('special');
+    if (!button) return;
+    const style = specialButtonStyle(ready);
+    button.circle.setStrokeStyle(style.strokeWidth, style.strokeColor, style.strokeAlpha);
+    const ring = this.ensureReadyRing(button.circle);
+    this.scene.tweens.killTweensOf(ring);
+    ring
+      .setVisible(style.glow)
+      .setScale(1)
+      .setAlpha(style.glow ? 0.9 : 0);
+    if (style.glow) {
+      this.scene.tweens.add({
+        targets: ring,
+        scale: READY_RING_SCALE,
+        alpha: 0.45,
+        duration: READY_PULSE_MS,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut',
+      });
+    }
+  }
+
+  get isSpecialReady(): boolean {
+    return this.specialReady;
+  }
+
+  private ensureReadyRing(circle: Phaser.GameObjects.Arc): Phaser.GameObjects.Arc {
+    if (!this.readyRing) {
+      this.readyRing = this.scene.add
+        .circle(circle.x, circle.y, RADIUS + READY_RING_GAP)
+        .setStrokeStyle(3, COLORS.gold, 1)
+        .setScrollFactor(0)
+        .setDepth(DEPTH.touch)
+        .setVisible(false);
+    }
+    return this.readyRing;
   }
 
   /** A direction entered between two frames still counts on the next one. */

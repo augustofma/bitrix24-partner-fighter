@@ -48,6 +48,8 @@ export class FightScene extends Phaser.Scene {
   private debugOverlay!: DebugOverlay;
   private stageView!: StageBackdrop;
   private accumulatorMs = 0;
+  /** On-screen controls, when shown: the ESP button mirrors the player's SPECIAL READY. */
+  private touch: TouchControls | null = null;
 
   constructor() {
     super(SceneKeys.Fight);
@@ -98,7 +100,8 @@ export class FightScene extends Phaser.Scene {
     const sources: InputSource[] = [];
     if (this.input.keyboard)
       sources.push(new KeyboardInputSource(this.input.keyboard, PLAYER_ONE_KEYS));
-    if (shouldShowTouchControls()) sources.push(new TouchControls(this));
+    this.touch = shouldShowTouchControls() ? new TouchControls(this) : null;
+    if (this.touch) sources.push(this.touch);
     return sources;
   }
 
@@ -193,6 +196,7 @@ export class FightScene extends Phaser.Scene {
     this.specialEffects.sync(fighters);
     this.fightCamera.follow(fighters);
     this.hud.update(fighters, this.simulation.round.secondsRemaining);
+    this.touch?.setSpecialReady(this.hud.specialReady(0));
     this.debugOverlay.draw(fighters);
   }
 }

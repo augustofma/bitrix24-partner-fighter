@@ -330,6 +330,24 @@ alcance do golpe e descarrega um feixe azul/ciano/verde com pulsos e partículas
 sem logos nem imagens externas).
 A CPU não usa especiais, mas reage, bloqueia e recebe seus impactos pelas regras existentes.
 
+### SPECIAL READY (só visual)
+
+A barra entra em **SPECIAL READY** quando a energia alcança o custo do especial **mais barato**
+configurado para aquele lutador (Augusto: 30; Filipe: 35), nunca "barra cheia". Especiais com
+custo acima do máximo da barra não contam; lutadores sem especial (João, Romualdo, FIGHTER_A/B)
+nunca ficam READY. A restrição `groundOnly` não entra na conta, para o HUD não piscar a cada pulo.
+
+- **READY:** preenchimento neon mais claro com destaque branco, moldura dourada, glow que
+  respira (≈1,8 s por ciclo), faixa de brilho correndo pela barra, raios curtos (ponta externa,
+  bordas da moldura e cortes rápidos no preenchimento) e faíscas leves. O rótulo vira
+  "ESP n/100 · PRONTO" em dourado. Nada sai da faixa da barra (vida, timer, nomes e losangos
+  ficam limpos).
+- **Ao ficar READY:** uma única explosão (flash, raios mais intensos por ~320 ms, faíscas).
+- **Ao gastar e cair abaixo do custo:** READY termina na hora, com descarga curta (flash, raios
+  saindo das pontas, glow apagando em ~180 ms). Se sobrar energia suficiente, continua READY.
+- **Mobile:** o botão ESP ganha borda ciano e um anel dourado pulsando enquanto o especial do
+  jogador estiver disponível.
+
 ## CPU (FIGHTER_B)
 
 State machine simples (sem aprendizado de máquina), com modos: `approach`, `retreat`, `attack`,
