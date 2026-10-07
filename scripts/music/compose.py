@@ -652,11 +652,11 @@ def story_map_theme() -> Track:
 
 
 def victory_sting() -> Track:
-    """Arcade-fighter victory fanfare (about 6.5 s), B-flat major, 150 BPM. Original melody in
+    """Arcade-fighter victory fanfare (about 5 s), B-flat major, 165 BPM. Original melody in
     the genre's language: an orchestra hit on the downbeat, a triplet brass call doubled in
     octaves over strings and a driving bass, IV-V lift with a snare roll and timpani, then a
     held tonic chord with a bell sparkle and the hall ringing out."""
-    t = Track(bpm=150, bars=3, loop=False, reverb=0.28, reverb_seconds=2.2, tail_seconds=1.9)
+    t = Track(bpm=165, bars=3, loop=False, reverb=0.28, reverb_seconds=2.2, tail_seconds=0.6)
 
     def hit(beat: float, names: list[str], velocity: float = 1.0) -> None:
         for name in names:

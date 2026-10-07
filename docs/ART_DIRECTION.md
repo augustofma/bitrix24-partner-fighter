@@ -481,7 +481,7 @@ ou trecho de outros jogos (Street Fighter, King of Fighters, Mortal Kombat, Tekk
 | Seleção (e VS)             | `character-select-theme` | 0,52           |
 | Mapa do Brasil (e VS)      | `story-map-theme`        | 0,55           |
 | Luta (`StageConfig.music`) | `partner-summit-theme`   | 0,47           |
-| Vitória / campanha         | `victory-sting` (6,7 s)  | 0,55           |
+| Vitória / campanha         | `victory-sting` (5 s)    | 0,55           |
 
 Volume da música 0,55 (ganho por faixa para igualar). Arquivos em `public/audio/music/`.
 
