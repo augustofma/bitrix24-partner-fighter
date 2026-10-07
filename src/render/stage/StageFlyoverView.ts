@@ -155,8 +155,9 @@ export class StageFlyoverView {
     const hookY = top + config.hook.y * scale;
     const edgeTop = bannerTop + bannerWave(seconds, 0, this.strips.length, config.waveAmplitude);
     this.lines.clear().lineStyle(1, TOW_LINE_COLOR, 0.9);
-    this.lines.lineBetween(hookX, hookY, bannerLeft + 1, edgeTop + 3 * scale);
-    this.lines.lineBetween(hookX, hookY, bannerLeft + 2, edgeTop + 44 * scale);
+    const [attachTop, attachBottom] = config.bannerAttach;
+    this.lines.lineBetween(hookX, hookY, bannerLeft + 1, edgeTop + attachTop * scale);
+    this.lines.lineBetween(hookX, hookY, bannerLeft + 2, edgeTop + attachBottom * scale);
   }
 
   private setVisible(visible: boolean): void {

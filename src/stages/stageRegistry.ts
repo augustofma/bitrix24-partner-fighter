@@ -1,9 +1,10 @@
 import type { StageConfig } from '../types/stage';
 import { partnerArena } from './partnerArena';
 import { partnerSummit } from './partnerSummit';
+import { joinville } from './joinville';
 import { recife } from './recife';
 
-export const STAGES: readonly StageConfig[] = [partnerSummit, recife, partnerArena];
+export const STAGES: readonly StageConfig[] = [partnerSummit, recife, joinville, partnerArena];
 
 export const DEFAULT_STAGE_ID = partnerSummit.id;
 

@@ -4,7 +4,9 @@
 palmeiras, bandeiras azuis da Arrecife Digital, a torcida atrás da grade, o piso de mosaico e
 um avião rebocando a faixa "Arrecife Digital".
 
-`prepare_recife.py` gera em `public/stages/recife/`:
+`prepare_recife.py` descreve a arte num `FlyoverStage` e usa o preparo compartilhado
+`scripts/stage-art/flyover_art.py` (também usado por Joinville), que gera em
+`public/stages/recife/`:
 
 | Arquivo          | Conteúdo                                                                                     |
 | ---------------- | -------------------------------------------------------------------------------------------- |

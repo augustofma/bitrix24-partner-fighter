@@ -41,6 +41,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     regionCode: 'SC',
     latitude: -26.3,
     longitude: -48.85,
+    // Fights in Joinville happen at the city's gate.
+    stageId: 'joinville',
   },
   // Countries are marked at a central, recognizable point (Russia: around Moscow, where the
   // European side meets the map's frame).

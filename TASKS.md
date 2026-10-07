@@ -366,6 +366,17 @@ sem pedido explícito.**
 - [x] Testes de assets, frame map, roster e referências do Story
 - [x] Playtest F2, teclado, quatro confrontos, CPU, cross-up/flipX, Story/VS/Vitória e mobile emulado
 
+## DONE (v0.30: cenário JOINVILLE, branch `feature/joinville-stage`)
+
+- [x] Arte oficial do pórtico de Joinville como `StageConfig` `joinville` (mesma arena), com
+      Joinville → `joinville` nos lugares (história e luta rápida do Romualdo)
+- [x] Torcida em grupos e reações iguais às do Recife; avião com a faixa CRMThink voando ao
+      fundo, atrás do telhado, palmeiras, bandeirinhas e postes (`skyline.png`)
+- [x] Preparo compartilhado `scripts/stage-art/flyover_art.py` (Recife idêntico byte a byte)
+- [x] Arte do Romualdo integrada (merge de `feature/romualdo-art`)
+- [x] Testes comuns aos cenários com avião (`tests/flyoverStages.test.ts`); playtest desktop
+      e mobile 844×390
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
@@ -390,7 +401,7 @@ sem pedido explícito.**
 12. [ ] Especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-15. [ ] Cenários próprios para os outros lugares (basta `stageId` no lugar; hoje só Recife tem).
+15. [ ] Cenários próprios para os outros lugares (basta `stageId` no lugar; hoje Recife e Joinville têm).
 16. [ ] Som ambiente de torcida por cenário (ainda não existe sistema de áudio de ambiente).
 17. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
 

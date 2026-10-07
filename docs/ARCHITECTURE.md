@@ -75,6 +75,7 @@ src/
   stages/                 CONTEÚDO: cenários
     partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
     recife.ts             RECIFE (Marco Zero): mesma arena, público em grupos, avião com faixa
+    joinville.ts          JOINVILLE (pórtico): mesma arena, mesmo público e avião (CRMThink)
     partnerArena.ts       Cenário procedural (também é o fallback visual)
     stageRegistry.ts
   story/                  MODO HISTÓRIA, PURO (sem Phaser; o ESLint garante)
@@ -358,6 +359,12 @@ países). Ele aparece na vista que o enquadra; cidades do Brasil ficam nas duas.
 seu lugar) e rival nas outras campanhas, sem nenhuma mudança nas cenas. A posição no array é a
 ordem padrão em que as campanhas enfrentam os rivais; `opponentOrder` muda a ordem de uma
 campanha específica.
+
+**Cenários por lugar hoje:** Recife → `recife`, Joinville → `joinville`; os outros lugares
+usam o Partner Summit. Um cenário novo com avião: arte em `scripts/stage-art/<id>/`, um
+`prepare_<id>.py` que descreve a arte num `FlyoverStage` (`scripts/stage-art/flyover_art.py`
+gera fundo, avião, hélice, faixa e `skyline.png`), um `StageConfig` em `src/stages/` e o
+`stageId` no lugar.
 
 **Como associar um encontro a um cenário:** dê `stageId` ao lugar em `locations.ts` (ex.:
 `recife` tem `stageId: 'recife'`): toda luta com `destination` nesse lugar usa esse cenário.

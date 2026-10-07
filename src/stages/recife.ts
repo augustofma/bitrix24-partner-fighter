@@ -56,6 +56,7 @@ export const recife: StageConfig = {
       // Smaller than in the art and high in the sky: far behind the buildings.
       scale: 0.62,
       hook: { x: 84, y: 31 },
+      bannerAttach: [3, 44],
       bannerGap: 23,
       bannerOffsetY: 2,
       y: 98,
