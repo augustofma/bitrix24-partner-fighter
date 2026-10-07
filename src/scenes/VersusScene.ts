@@ -1,3 +1,4 @@
+import { playSfx } from '../audio/gameAudio';
 import Phaser from 'phaser';
 import { MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
@@ -100,8 +101,12 @@ export class VersusScene extends Phaser.Scene {
 
     const start = () => goToScene(this, SceneKeys.Fight, setup);
     this.time.delayedCall(DURATION_MS, start);
-    this.input.once('pointerup', start);
-    onKeys(this, MENU_CONFIRM_KEYS, start);
+    const skip = () => {
+      playSfx(this, 'menu-confirm');
+      start();
+    };
+    this.input.once('pointerup', skip);
+    onKeys(this, MENU_CONFIRM_KEYS, skip);
   }
 
   /** Story fights: each fighter's city and UF under the portraits, and the campaign stage. */

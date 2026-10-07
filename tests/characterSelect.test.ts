@@ -51,6 +51,7 @@ const ui = vi.hoisted(() => {
     /** Stands in for the Phaser game registry, shared by every scene of the "session". */
     registry: new Map<string, unknown>(),
     goToScene: vi.fn(),
+    playSfx: vi.fn(),
   };
 });
 
@@ -95,8 +96,9 @@ vi.mock('../src/ui/select/HeroPanel', () => ({
   },
 }));
 vi.mock('../src/scenes/transitions', () => ({ fadeIn: vi.fn(), goToScene: ui.goToScene }));
-vi.mock('../src/audio/gameMusic', () => ({
+vi.mock('../src/audio/gameAudio', () => ({
   gameMusic: () => ({ play: vi.fn(), playSting: vi.fn(), stop: vi.fn() }),
+  playSfx: ui.playSfx,
 }));
 vi.mock('../src/input/menuKeys', () => ({
   onKeys: (_scene: unknown, names: string[], handler: () => void) => {
@@ -129,6 +131,7 @@ beforeEach(() => {
   ui.hero.length = 0;
   ui.registry.clear();
   ui.goToScene.mockClear();
+  ui.playSfx.mockClear();
 });
 
 function openScene() {
@@ -186,6 +189,21 @@ describe('CharacterSelectScene roster integration', () => {
     expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Menu);
     ui.keys.get('ESC')?.();
     expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Menu);
+  });
+
+  it('menu sounds: move on a real change, confirm on select, back on leave', () => {
+    const { scene } = openScene();
+    const sounds = () => ui.playSfx.mock.calls.map((call) => call[1]);
+    ui.keys.get('RIGHT')?.();
+    expect(sounds()).toEqual(['menu-move']);
+    ui.keys.get('UP')?.(); // difficulty NORMAL -> DIFÍCIL
+    ui.keys.get('UP')?.(); // already at the end: no change, no sound
+    expect(sounds()).toEqual(['menu-move', 'menu-move']);
+    ui.keys.get('ENTER')?.();
+    expect(sounds().at(-1)).toBe('menu-confirm');
+    ui.keys.get('ESC')?.();
+    expect(sounds().at(-1)).toBe('menu-back');
+    expect(ui.playSfx.mock.calls.every((call) => call[0] === scene)).toBe(true);
   });
 
   it('shows the CPU opponent picked by the roster rule', () => {

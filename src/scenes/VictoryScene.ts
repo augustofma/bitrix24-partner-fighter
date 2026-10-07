@@ -1,4 +1,4 @@
-import { gameMusic } from '../audio/gameMusic';
+import { gameMusic, playSfx } from '../audio/gameAudio';
 import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
@@ -78,10 +78,31 @@ export class VictoryScene extends Phaser.Scene {
       getFighterConfig(setup.cpuFighterId),
     ] as const;
     const content = victoryContent(result, sides);
-    const actions = setup.mode === 'story' ? this.storyActions(result) : this.quickActions();
+    const actions = this.withSounds(
+      setup.mode === 'story' ? this.storyActions(result) : this.quickActions(),
+    );
     const hasArt = Object.values(VICTORY_ART).every(({ key }) => this.textures.exists(key));
     if (hasArt) this.createIllustrated(content, actions);
     else this.createProcedural(content, actions);
+  }
+
+  /** Menu sounds on every way out: confirm for the main choices, back for leaving. */
+  private withSounds(actions: ScreenActions): ScreenActions {
+    const sounding = (action: () => void, id: 'menu-confirm' | 'menu-back') => () => {
+      playSfx(this, id);
+      action();
+    };
+    return {
+      buttons: actions.buttons.map((button) => ({
+        ...button,
+        onSelect: sounding(
+          button.onSelect,
+          button.onSelect === actions.cancel ? 'menu-back' : 'menu-confirm',
+        ),
+      })),
+      primary: sounding(actions.primary, 'menu-confirm'),
+      cancel: sounding(actions.cancel, 'menu-back'),
+    };
   }
 
   /** Quick fight: one way out, back to the menu (the art's own button). */

@@ -1,4 +1,4 @@
-import { gameMusic } from '../../audio/gameMusic';
+import { gameMusic, playSfx } from '../../audio/gameAudio';
 import { SCENE_MUSIC } from '../../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../../config/controls';
@@ -67,8 +67,14 @@ export class CampaignCompleteScene extends Phaser.Scene {
       { text: STRINGS.campaignRoute(cities), tone: 'neutral' },
     ]);
 
-    const playAgain = () => restartStory(this);
-    const menu = () => quitStory(this);
+    const playAgain = () => {
+      playSfx(this, 'menu-confirm');
+      restartStory(this);
+    };
+    const menu = () => {
+      playSfx(this, 'menu-back');
+      quitStory(this);
+    };
     const { button: at } = VICTORY_LAYOUT;
     const row = this.add.container(at.x, at.y);
     const span = BUTTON.width * 2 + BUTTON_GAP;

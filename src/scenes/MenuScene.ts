@@ -1,4 +1,4 @@
-import { gameMusic } from '../audio/gameMusic';
+import { gameMusic, playSfx } from '../audio/gameAudio';
 import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
@@ -66,6 +66,7 @@ export class MenuScene extends Phaser.Scene {
   private bindModeMenu(modes: ModeMenu, play: Phaser.GameObjects.Container): void {
     const open = () => {
       if (modes.isOpen) return;
+      playSfx(this, 'menu-confirm');
       play.setVisible(false);
       modes.open();
     };
@@ -81,6 +82,7 @@ export class MenuScene extends Phaser.Scene {
     onKeys(this, ['RIGHT', 'DOWN'], () => modes.isOpen && modes.move(1));
     onKeys(this, MENU_BACK_KEYS, () => {
       if (!modes.isOpen) return;
+      playSfx(this, 'menu-back');
       modes.close();
       play.setVisible(true);
     });

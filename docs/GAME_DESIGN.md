@@ -469,6 +469,17 @@ silêncio. Trocas sempre com fade. A música só começa depois da primeira inte
 navegadores) e **M** liga/desliga o som. Detalhes em
 [ART_DIRECTION.md](ART_DIRECTION.md#música).
 
+## Efeitos sonoros
+
+Sons originais de fliperama, sempre ligados a eventos reais da luta: o impacto só toca quando o
+golpe conecta (soco, chute, agachados e aéreos têm sons próprios; o chute é mais grave), errar
+não faz som de impacto, defesa tem som metálico próprio, quem apanha tem um baque de dano, o pulo
+toca ao sair do chão e a aterrissagem no contato com o chão. K.O. toca uma vez, o especial quando
+realmente começa e SPECIAL READY quando a barra fica pronta (não a cada frame). Anúncios ROUND e
+FIGHT!, a pose de vitória e os menus (mover, confirmar, voltar) também têm som. Os efeitos ficam
+acima da música; **M** silencia tudo. Lista e níveis em
+[scripts/sfx/README.md](../scripts/sfx/README.md).
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |

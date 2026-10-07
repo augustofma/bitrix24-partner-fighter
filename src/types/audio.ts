@@ -13,3 +13,33 @@ export interface MusicTrackConfig {
   /** Per-track level that evens out the tracks; multiplied by the music volume. */
   gain: number;
 }
+
+/** Every sound effect (files in public/audio/sfx/<id>.ogg / .mp3). */
+export type SfxId =
+  | 'punch'
+  | 'kick'
+  | 'crouch-punch'
+  | 'crouch-kick'
+  | 'air-punch'
+  | 'air-kick'
+  | 'block'
+  | 'hurt'
+  | 'jump'
+  | 'landing'
+  | 'ko'
+  | 'special'
+  | 'special-ready'
+  | 'menu-move'
+  | 'menu-confirm'
+  | 'menu-back'
+  | 'round-start'
+  | 'fight'
+  | 'victory';
+
+export interface SfxConfig {
+  id: SfxId;
+  /** Level of this effect (0..1), before the SFX master volume. */
+  volume: number;
+  /** Small random pitch/level change per play, so repeated hits do not sound robotic. */
+  vary: boolean;
+}

@@ -217,9 +217,13 @@ describe('music configuration', () => {
   });
 
   it('every track is loaded once: the menu at boot, the rest in the background', () => {
-    const keys = [...BOOT_AUDIO_ASSETS, ...BACKGROUND_AUDIO_ASSETS].map((a) => a.key);
-    expect(new Set(keys).size).toBe(Object.keys(MUSIC_TRACKS).length);
-    expect(BOOT_AUDIO_ASSETS.map((a) => a.key)).toEqual(['music:menu-theme']);
+    const music = [...BOOT_AUDIO_ASSETS, ...BACKGROUND_AUDIO_ASSETS]
+      .map((a) => a.key)
+      .filter((key) => key.startsWith('music:'));
+    expect(new Set(music).size).toBe(music.length);
+    expect(music).toHaveLength(Object.keys(MUSIC_TRACKS).length);
+    const bootMusic = BOOT_AUDIO_ASSETS.filter((a) => a.key.startsWith('music:'));
+    expect(bootMusic.map((a) => a.key)).toEqual(['music:menu-theme']);
   });
 });
 

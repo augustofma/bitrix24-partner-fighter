@@ -37,6 +37,8 @@ export default tseslint.config(
       'src/config/**/*.ts',
       'src/story/**/*.ts',
       'src/audio/MusicManager.ts',
+      'src/audio/SfxManager.ts',
+      'src/audio/combatSfx.ts',
     ],
     rules: {
       'no-restricted-imports': [

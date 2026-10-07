@@ -31,7 +31,12 @@ export class FightHud {
   private readonly roundLabel: Phaser.GameObjects.Text;
   private readonly markers: Phaser.GameObjects.Graphics;
 
-  constructor(scene: Phaser.Scene, fighters: readonly [ReadonlyFighter, ReadonlyFighter]) {
+  constructor(
+    scene: Phaser.Scene,
+    fighters: readonly [ReadonlyFighter, ReadonlyFighter],
+    /** A side's meter just became SPECIAL READY (once per crossing). */
+    onSpecialReady: (side: 0 | 1) => void = () => {},
+  ) {
     this.scene = scene;
     const [left, right] = fighters;
     const rightBarX = GAME_WIDTH - MARGIN_X - BAR_WIDTH;
@@ -41,8 +46,12 @@ export class FightHud {
     ];
 
     this.meters = [
-      new SpecialMeterBar(scene, MARGIN_X, BAR_Y + BAR_HEIGHT + 6, BAR_WIDTH, false),
-      new SpecialMeterBar(scene, rightBarX, BAR_Y + BAR_HEIGHT + 6, BAR_WIDTH, true),
+      new SpecialMeterBar(scene, MARGIN_X, BAR_Y + BAR_HEIGHT + 6, BAR_WIDTH, false, () =>
+        onSpecialReady(0),
+      ),
+      new SpecialMeterBar(scene, rightBarX, BAR_Y + BAR_HEIGHT + 6, BAR_WIDTH, true, () =>
+        onSpecialReady(1),
+      ),
     ];
     const nameY = BAR_Y + BAR_HEIGHT + 32;
     const leftName = scene.add.text(MARGIN_X, nameY, left.config.displayName, arcadeText(19));

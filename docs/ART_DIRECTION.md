@@ -382,8 +382,18 @@ ou trecho de outros jogos (Street Fighter, King of Fighters, Mortal Kombat, Tekk
 | Luta (`StageConfig.music`) | `partner-summit-theme`   | 0,47           |
 | Vitória / campanha         | `victory-sting` (4 s)    | 0,55           |
 
-Volume da música 0,55 (ganho por faixa para igualar); efeitos sonoros futuros ficam em 0,85,
-acima da música. Arquivos em `public/audio/music/` (efeitos futuros em `public/audio/sfx/`).
+Volume da música 0,55 (ganho por faixa para igualar). Arquivos em `public/audio/music/`.
+
+## Efeitos sonoros
+
+Efeitos **originais** de fliperama de luta, sintetizados por
+[scripts/sfx/generate_sfx.py](../scripts/sfx/README.md) (osciladores, ruído, varreduras de pitch,
+envelopes, filtros): impactos secos, chutes mais graves, bloqueio metálico/energético, pulo curto,
+aterrissagem discreta, K.O. forte, especial tecnológico e UI arcade. Nada copiado de outros jogos.
+Os níveis (golpes 0,62-0,75, defesa 0,60, K.O. e especial 0,85, pulo 0,35, aterrissagem 0,40, UI
+0,45) ficam acima da música (0,47-0,55) e foram conferidos em playtest. Impactos, defesa, dano,
+pulo e aterrissagem variam um pouco de pitch (±6%) e volume (até -10%) a cada vez, só na
+apresentação. Arquivos em `public/audio/sfx/` (`.ogg` e `.mp3`, mono, ~150 KB no total por formato).
 
 ## Registro de licenças
 
@@ -401,6 +411,7 @@ registrada aqui:
 | `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                            | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
 | `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                             | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
 | `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                          | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
+| `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                            | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                   | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
 | JOÃO GUIOTTI e ROMUALDO (boneco genérico)                                         | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |

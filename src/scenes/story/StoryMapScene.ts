@@ -1,4 +1,4 @@
-import { gameMusic } from '../../audio/gameMusic';
+import { gameMusic, playSfx } from '../../audio/gameAudio';
 import { SCENE_MUSIC } from '../../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../../config/controls';
@@ -90,7 +90,10 @@ export class StoryMapScene extends Phaser.Scene {
 
     const proceed = () => this.proceed();
     onKeys(this, MENU_CONFIRM_KEYS, proceed);
-    onKeys(this, MENU_BACK_KEYS, () => quitStory(this));
+    onKeys(this, MENU_BACK_KEYS, () => {
+      playSfx(this, 'menu-back');
+      quitStory(this);
+    });
     this.input.on('pointerup', (_: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
       // Taps on the map skip the flight; the CONTINUAR button handles itself.
       if (over.length === 0 && !this.landed) proceed();
@@ -98,7 +101,8 @@ export class StoryMapScene extends Phaser.Scene {
   }
 
   /** Enter/tap: skip the flight, or go on to the fight once landed. */
-  private proceed(): void {
+  private proceed(byPlayer = true): void {
+    if (byPlayer && !this.leaving) playSfx(this, 'menu-confirm');
     if (!this.landed) {
       this.flight?.complete();
       return;
@@ -238,7 +242,7 @@ export class StoryMapScene extends Phaser.Scene {
     const burst = this.add.circle(at.x, at.y, CITY_RING_RADIUS).setStrokeStyle(3, COLORS.magenta);
     this.tweens.add({ targets: burst, scale: 3, alpha: 0, duration: 600 });
     this.showChallenge();
-    this.time.delayedCall(AUTO_CONTINUE_MS, () => this.proceed());
+    this.time.delayedCall(AUTO_CONTINUE_MS, () => this.proceed(false));
   }
 
   /** "PRÓXIMO DESAFIO": the rival's card, name and city, and CONTINUAR. */

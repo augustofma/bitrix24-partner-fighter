@@ -3,14 +3,20 @@ import type { FighterConfig } from '../types/fighter';
 import type { Direction, Vec2 } from '../types/geometry';
 import type { InputState } from '../types/input';
 import type { StageConfig } from '../types/stage';
-import { Fighter } from './fighter/Fighter';
+import { Fighter, type FighterAction } from './fighter/Fighter';
 import { InputTracker, NEUTRAL_INPUT } from './input';
 import { ArenaSystem } from './systems/ArenaSystem';
 import { CombatSystem, type CombatEvent, type FighterIndex } from './systems/CombatSystem';
 import { MatchSystem, type MatchEvent, type MatchRules } from './systems/MatchSystem';
 import { RoundSystem, type RoundEvent, type RoundTiming } from './systems/RoundSystem';
 
-export type SimulationEvent = CombatEvent | RoundEvent | MatchEvent;
+/** A fighter jumped, touched the ground or started a special this frame (presentation only). */
+export interface FighterActionEvent {
+  type: FighterAction;
+  fighterIndex: FighterIndex;
+}
+
+export type SimulationEvent = FighterActionEvent | CombatEvent | RoundEvent | MatchEvent;
 
 export interface FightSimulationOptions {
   fighters: readonly [FighterConfig, FighterConfig];
@@ -99,9 +105,12 @@ export class FightSimulation {
     }
 
     const accept = this.acceptsInput;
+    const actionEvents: FighterActionEvent[] = [];
     this.fighters.forEach((fighter, i) => {
       const tracker = this.trackers[i as FighterIndex];
       fighter.update(tracker.next(accept ? inputs[i as FighterIndex] : NEUTRAL_INPUT));
+      for (const type of fighter.actions)
+        actionEvents.push({ type, fighterIndex: i as FighterIndex });
     });
 
     this.arena.resolve(this.fighters);
@@ -120,7 +129,7 @@ export class FightSimulation {
     this.tryVictoryPose();
     if (matchEvents.some((event) => event.type === 'roundStart')) this.startNextRound();
 
-    return [...combatEvents, ...roundEvents, ...matchEvents];
+    return [...actionEvents, ...combatEvents, ...roundEvents, ...matchEvents];
   }
 
   /** Fresh round: fighters back to spawn, timer and every transient value reset; meter kept. */

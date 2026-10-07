@@ -264,6 +264,17 @@ sem pedido explícito.**
       fanfarra de vitória; música por cenário em `StageConfig.music`
 - [x] Testes de READY, botão ESP, MusicManager, configuração e arquivos de áudio
 
+## DONE (v0.22: efeitos sonoros, branch `feature/arcade-sfx`)
+
+- [x] 19 efeitos originais sintetizados (`scripts/sfx/generate_sfx.py`): impactos por golpe,
+      defesa, dano, pulo, aterrissagem, K.O., especial, SPECIAL READY, menus, ROUND, FIGHT!, vitória
+- [x] `SfxManager` central junto do `MusicManager` (um AudioContext, volume, mute, deduplicação,
+      unlock com tolerância para o toque que desbloqueia, variação leve de pitch/volume)
+- [x] Sons só de eventos reais: contato (`hit`/`block`/`koHit`), ações do lutador (`jump`, `land`,
+      `specialStart`) emitidas pela simulação sem mudar gameplay, KO e anúncios
+- [x] Testes de impacto, whiff, defesa, pulo/aterrissagem, KO, especial, READY, menus, mute, volume
+      e reentrada de cenas; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
@@ -272,8 +283,7 @@ sem pedido explícito.**
 2. [ ] CPU usar especiais (decisão por `AIProfile`, só com meter disponível, sem ler o futuro).
 3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
-4. [ ] **Efeitos sonoros:** ouvir `SimulationEvent` (hit, block, KO, anúncios, SPECIAL READY)
-       com `SFX_VOLUME` e arquivos em `public/audio/sfx/` (a música já existe).
+4. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
        remapeamento de teclas salva em `localStorage`.
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
@@ -286,7 +296,7 @@ sem pedido explícito.**
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
 15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).
-16. [ ] Tela de opções com volume de música/efeitos (hoje só M para mutar).
+16. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
 
 ## FUTURE (não implementar agora)
 

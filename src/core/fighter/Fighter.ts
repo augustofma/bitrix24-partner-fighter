@@ -13,6 +13,13 @@ import type { InputFrame, InputState } from '../../types/input';
 import { toWorldRect } from '../geometry';
 import { horizontalAxis } from '../input';
 import { attackPhaseAt, totalAttackFrames, type AttackPhase } from './attackFrames';
+
+/**
+ * Moments of a fighter's own movement that presentation reacts to (sounds, dust): the jump
+ * leaving the ground, the real contact with the floor and a special actually starting.
+ * Recorded during update(); they never feed back into gameplay.
+ */
+export type FighterAction = 'jump' | 'land' | 'specialStart';
 import {
   ATTACK_SLOTS,
   ATTACK_STATE_SET,
@@ -49,6 +56,7 @@ export class Fighter implements ReadonlyFighter {
   private readonly inputBuffer = new AttackInputBuffer();
   /** One air attack per jump: no mid-air spam. Reset on landing. */
   private airAttackUsed = false;
+  private readonly pendingActions: FighterAction[] = [];
   private lastX: number;
   private readonly groundY: number;
 
@@ -132,6 +140,7 @@ export class Fighter implements ReadonlyFighter {
   // ---------------------------------------------------------------- simulation
 
   update(input: InputFrame): void {
+    this.pendingActions.length = 0;
     this.lastX = this.position.x;
     this.framesInState++;
     this.inputBuffer.update(input.pressed);
@@ -204,7 +213,13 @@ export class Fighter implements ReadonlyFighter {
    * Back to a fresh round: full health at the spawn point, idle, no velocity, stun, attack or
    * buffered input. The special meter is deliberately kept (it carries across rounds).
    */
+  /** What happened during the last update() (cleared at the start of the next one). */
+  get actions(): readonly FighterAction[] {
+    return this.pendingActions;
+  }
+
   resetForRound(spawn: Readonly<Vec2>, direction: Direction): void {
+    this.pendingActions.length = 0;
     this.health = this.config.stats.maxHealth;
     this.position.x = spawn.x;
     this.position.y = spawn.y;
@@ -303,6 +318,7 @@ export class Fighter implements ReadonlyFighter {
     if (held.up) {
       this.setState('jump');
       this.airAttackUsed = false;
+      this.pendingActions.push('jump');
       this.velocity.y = -this.config.stats.jumpForce;
       this.velocity.x = axis * this.config.stats.jumpHorizontalSpeed;
       return;
@@ -353,6 +369,7 @@ export class Fighter implements ReadonlyFighter {
     if (!move) return false;
     this.changeSpecialMeter(-move.meterCost);
     this.startAttack(move);
+    this.pendingActions.push('specialStart');
     if (!this.isAirborne) this.velocity.x = this.direction * move.advanceSpeed;
     return true;
   }
@@ -360,6 +377,8 @@ export class Fighter implements ReadonlyFighter {
   /** Touching the ground ends jumps and air attacks (and therefore their hitboxes). */
   private land(): void {
     this.airAttackUsed = false;
+    // Every real touchdown counts (jumps, air attacks, falling after a hit or a KO launch).
+    this.pendingActions.push('land');
     if (!LANDING_STATES.has(this.currentState) && this.currentState !== 'special') return;
     this.setState('idle');
     this.velocity.x = 0;

@@ -1,3 +1,4 @@
+import { playSfx } from '../audio/gameAudio';
 import type Phaser from 'phaser';
 import { ArcadeButton } from './select/ArcadeButton';
 
@@ -32,7 +33,10 @@ export class ModeMenu {
         x - span / 2 + BUTTON.width / 2 + i * (BUTTON.width + GAP),
         y,
         item.label,
-        () => item.onSelect(),
+        () => {
+          playSfx(scene, 'menu-confirm');
+          item.onSelect();
+        },
         BUTTON,
       )
         .setVisible(false)
@@ -67,11 +71,13 @@ export class ModeMenu {
 
   /** Keyboard: moves the highlighted option (wraps around). */
   move(step: number): void {
+    playSfx(this.scene, 'menu-move');
     const count = this.buttons.length;
     this.setFocus((this.focus + step + count) % count);
   }
 
   confirm(): void {
+    playSfx(this.scene, 'menu-confirm');
     this.buttons[this.focus]?.flash();
     this.items[this.focus]?.onSelect();
   }

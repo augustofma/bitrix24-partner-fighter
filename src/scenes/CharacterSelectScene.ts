@@ -1,4 +1,4 @@
-import { gameMusic } from '../audio/gameMusic';
+import { gameMusic, playSfx } from '../audio/gameAudio';
 import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
@@ -78,7 +78,10 @@ export class CharacterSelectScene extends Phaser.Scene {
       difficulty.width,
       difficulty.height,
       this.savedDifficulty(),
-      (value) => this.registry.set(RegistryKeys.aiDifficulty, value),
+      (value) => {
+        playSfx(this, 'menu-move');
+        this.registry.set(RegistryKeys.aiDifficulty, value);
+      },
     );
     this.selectButton = new ArcadeButton(
       this,
@@ -201,6 +204,7 @@ export class CharacterSelectScene extends Phaser.Scene {
             // First tap selects, a tap on the selected card confirms.
             if (this.selectedIndex === index) this.confirm();
             else {
+              playSfx(this, 'menu-move');
               this.selectedIndex = index;
               this.refreshSelection();
             }
@@ -237,6 +241,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       const candidate = (this.selectedIndex + step * i + count * i) % count;
       const config = ROSTER[candidate];
       if (config && this.canPick(config)) {
+        if (candidate !== this.selectedIndex) playSfx(this, 'menu-move');
         this.selectedIndex = candidate;
         this.refreshSelection();
         return;
@@ -265,12 +270,14 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private back(): void {
+    playSfx(this, 'menu-back');
     goToScene(this, SceneKeys.Menu);
   }
 
   private confirm(): void {
     const player = ROSTER[this.selectedIndex];
     if (!player || !this.canPick(player)) return;
+    playSfx(this, 'menu-confirm');
     if (this.mode === 'story') {
       this.registry.set(RegistryKeys.aiDifficulty, this.difficulty.value);
       this.cameras.main.flash(150, 255, 255, 255);

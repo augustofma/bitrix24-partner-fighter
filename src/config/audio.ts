@@ -1,4 +1,4 @@
-import type { MusicTrackConfig, MusicTrackId } from '../types/audio';
+import type { MusicTrackConfig, MusicTrackId, SfxConfig, SfxId } from '../types/audio';
 import type { StageConfig } from '../types/stage';
 
 /*
@@ -8,8 +8,8 @@ import type { StageConfig } from '../types/stage';
 
 /** Master music level: leaves room for hits, KO and announcer sounds on top. */
 export const MUSIC_VOLUME = 0.55;
-/** Reserved for sound effects (hits, KO, announcer) when they arrive. */
-export const SFX_VOLUME = 0.85;
+/** Master level of the sound effects: each effect's own volume (SFX) applies on top. */
+export const SFX_VOLUME = 1;
 
 export const MUSIC_TRACKS: Readonly<Record<MusicTrackId, MusicTrackConfig>> = {
   'menu-theme': { id: 'menu-theme', loop: true, gain: 1 },
@@ -57,4 +57,55 @@ export function musicFiles(id: MusicTrackId): string[] {
 
 export function musicKey(id: MusicTrackId): string {
   return `music:${id}`;
+}
+
+/*
+ * Sound effects. Levels were set by playtest so hits, blocks and KO stay clear over the music
+ * (music 0.47-0.55): hits 0.6-0.75, KO and special 0.85, movement and UI quieter.
+ */
+const sfx = (id: SfxId, volume: number, vary = false): SfxConfig => ({ id, volume, vary });
+
+export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
+  punch: sfx('punch', 0.65, true),
+  kick: sfx('kick', 0.75, true),
+  'crouch-punch': sfx('crouch-punch', 0.62, true),
+  'crouch-kick': sfx('crouch-kick', 0.72, true),
+  'air-punch': sfx('air-punch', 0.65, true),
+  'air-kick': sfx('air-kick', 0.75, true),
+  block: sfx('block', 0.6, true),
+  hurt: sfx('hurt', 0.65, true),
+  jump: sfx('jump', 0.35, true),
+  landing: sfx('landing', 0.4, true),
+  ko: sfx('ko', 0.85),
+  special: sfx('special', 0.85),
+  'special-ready': sfx('special-ready', 0.6),
+  'menu-move': sfx('menu-move', 0.45),
+  'menu-confirm': sfx('menu-confirm', 0.45),
+  'menu-back': sfx('menu-back', 0.45),
+  'round-start': sfx('round-start', 0.7),
+  fight: sfx('fight', 0.8),
+  victory: sfx('victory', 0.7),
+};
+
+/** Variation range of `vary` effects: playback rate 1 ± this, level 1 - [0, this]. */
+export const SFX_PITCH_VARIATION = 0.06;
+export const SFX_LEVEL_VARIATION = 0.1;
+/**
+ * The same effect asked for again within this window is ignored: a key and a tap landing in
+ * the same frame, or two systems reporting one moment, give one sound.
+ */
+export const SFX_DEDUP_MS = 50;
+/**
+ * The tap that unlocks audio is also a button press: an effect asked for this shortly before
+ * the unlock still plays (anything older is dropped, never played late).
+ */
+export const SFX_UNLOCK_GRACE_MS = 250;
+
+export function sfxFiles(id: SfxId): string[] {
+  // Ogg Vorbis first; MP3 for browsers without Vorbis (Safari).
+  return [`audio/sfx/${id}.ogg`, `audio/sfx/${id}.mp3`];
+}
+
+export function sfxKey(id: SfxId): string {
+  return `sfx:${id}`;
 }

@@ -83,8 +83,10 @@ src/
     flightPath.ts         Curva do voo (Bezier quadrática), ponto e direção em t
   audio/                  Música
     MusicManager.ts       PURO: faixa atual, crossfade, sting, volume, mute, espera do unlock
-    PhaserMusicBackend.ts Ponte para o sound manager do Phaser
-    gameMusic.ts          Um MusicManager por jogo; tempo dos fades, unlock, tecla M
+    SfxManager.ts         PURO: efeitos (volume, mute, deduplicação, unlock, variação)
+    combatSfx.ts          PURO: SimulationEvent -> efeitos (só eventos reais)
+    PhaserMusicBackend.ts, PhaserSfxBackend.ts  Pontes para o sound manager do Phaser
+    gameAudio.ts          Serviços de áudio por jogo (música + efeitos); fades, unlock, tecla M
   input/                  Dispositivos (Phaser)
     KeyboardInputSource.ts, menuKeys.ts
   render/                 Desenho do mundo (Phaser)
@@ -322,6 +324,38 @@ As cenas só dizem qual faixa querem; quem decide é o `MusicManager` (um por jo
 **Música de um cenário novo:** gere a faixa (adicione-a em `compose.py` e em `MusicTrackId`),
 registre em `MUSIC_TRACKS` e ponha `music: '<id>'` no `StageConfig`. Sem `music`, o cenário usa
 `DEFAULT_STAGE_MUSIC`.
+
+## Efeitos sonoros (SfxManager)
+
+Mesmo desenho da música: `gameAudio(scene)` cria **uma vez por jogo** o `MusicManager` e o
+`SfxManager`, ambos sobre o sound manager do Phaser (um único AudioContext; nenhum efeito cria o
+seu). Cenas chamam `gameSfx(scene).play(id)` ou `playSfx(scene, id)`; nenhuma registra
+listeners, então reentrar numa cena não duplica nada. Cada `play` do Phaser cria uma instância
+curta que se destrói ao terminar.
+
+**Combate (`combatSfx`):** a `FightScene` passa todo `SimulationEvent` por `combatSfx(event)`.
+Só eventos reais geram som: `hit`/`koHit` → impacto do golpe que conectou (`punch`, `kick`,
+`crouch-punch`, `crouch-kick`, `air-punch`, `air-kick`; especial usa `kick`) + `hurt`; `block`
+→ `block`; `ko` → `ko` (uma vez por round); `fightStart` → `fight`; `victoryPose` → `victory`.
+Um golpe no ar não gera evento de contato, então whiff nunca soa como impacto. Para pulo,
+aterrissagem e especial, o `Fighter` registra **ações** no próprio frame (`jump` ao sair do chão,
+`land` no contato real com o chão, `specialStart` quando o especial começa com a energia paga) e
+a `FightSimulation` as devolve como `FighterActionEvent` (`{ type, fighterIndex }`). São só
+informação: não mudam gameplay nem determinismo. `round-start` toca junto do anúncio
+"ROUND n" e `special-ready` vem do `SpecialMeterBar`, só na transição NOT READY → READY.
+
+**Menus:** os sons ficam nas ações que mudam estado (mover seleção, mudar dificuldade, abrir e
+confirmar modo, SELECIONAR, VOLTAR, pular o VS, botões da vitória e da campanha), não nas teclas;
+teclado e toque chegam na mesma ação. Mover sem mudar (ex.: dificuldade já no limite) não toca.
+
+**Regras do `SfxManager`:** o mesmo efeito dentro de 50 ms toca uma vez (tecla + toque no mesmo
+frame, ou dois sistemas no mesmo instante); com o áudio bloqueado nada toca, e só o último pedido
+dos 250 ms antes do desbloqueio (o toque que desbloqueia, ex.: JOGAR) é tocado; mute para efeitos
+novos; volume escala todos. A variação de pitch/volume usa `Math.random` só na apresentação: a
+simulação tem RNG próprio com semente e nunca vê o áudio.
+
+**Novo efeito:** adicione a síntese em `scripts/sfx/generate_sfx.py`, o id em `SfxId` e o nível
+em `SFX` (`config/audio.ts`); a `BootScene` já carrega todos.
 
 ## Tipografia
 

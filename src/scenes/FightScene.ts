@@ -1,4 +1,5 @@
-import { gameMusic } from '../audio/gameMusic';
+import { combatSfx } from '../audio/combatSfx';
+import { gameMusic, gameSfx } from '../audio/gameAudio';
 import { MUSIC_FADE, stageMusic } from '../config/audio';
 import Phaser from 'phaser';
 import { DEBUG_TOGGLE_KEY, PLAYER_ONE_KEYS } from '../config/controls';
@@ -77,7 +78,7 @@ export class FightScene extends Phaser.Scene {
     this.fightCamera.follow(fighters, true);
     this.effects = new HitEffects(this);
     this.specialEffects = new SpecialEffects(this);
-    this.hud = new FightHud(this, fighters);
+    this.hud = new FightHud(this, fighters, () => gameSfx(this).play('special-ready'));
     this.announcer = new Announcer(this);
     this.controllers = [
       new PlayerController(this.createPlayerInputSources()),
@@ -86,7 +87,7 @@ export class FightScene extends Phaser.Scene {
     this.setupDebugOverlay();
 
     this.events.once('shutdown', () => this.controllers.forEach((c) => c.destroy?.()));
-    this.announcer.show(this.roundLabel(), 1000);
+    this.announceRound();
     this.renderFrame(0);
   }
 
@@ -131,6 +132,8 @@ export class FightScene extends Phaser.Scene {
   }
 
   private handleEvent(event: SimulationEvent): void {
+    // Sounds follow real simulation events only (contacts, jumps, landings, KO...).
+    gameSfx(this).playAll(combatSfx(event));
     switch (event.type) {
       case 'hit':
         this.effects.spawn(event.point, 'hit');
@@ -191,7 +194,13 @@ export class FightScene extends Phaser.Scene {
     this.controllers.forEach((controller) => controller.reset?.());
     this.fightCamera.follow(this.simulation.fighters, true);
     this.hud.setRound(this.roundLabel(), this.simulation.match.roundWins);
+    this.announceRound();
+  }
+
+  /** "ROUND n" / "FINAL ROUND": the call and its sound. */
+  private announceRound(): void {
     this.announcer.show(this.roundLabel(), 1000);
+    gameSfx(this).play('round-start');
   }
 
   private renderFrame(timeMs: number): void {

@@ -30,6 +30,8 @@ export class SpecialMeterBar {
     private readonly y: number,
     private readonly width: number,
     private readonly mirrored: boolean,
+    /** Called once each time the meter crosses into SPECIAL READY (e.g. for its sound). */
+    private readonly onReady: () => void = () => {},
   ) {
     this.graphics = scene.add.graphics().setScrollFactor(0).setDepth(DEPTH.hud);
     this.label = scene.add
@@ -46,8 +48,10 @@ export class SpecialMeterBar {
 
   update(fighter: ReadonlyFighter): void {
     const change = this.tracker.update(isSpecialReady(fighter.config, fighter.specialMeter));
-    if (change === 'ready') this.effect.burst();
-    else if (change === 'discharged') this.effect.discharge();
+    if (change === 'ready') {
+      this.effect.burst();
+      this.onReady();
+    } else if (change === 'discharged') this.effect.discharge();
     const fill = this.fillRect(fighter.specialMeter);
     this.effect.update(fill);
     if (fighter.specialMeter === this.lastMeter && change === null) return;
