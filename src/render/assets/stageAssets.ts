@@ -29,6 +29,7 @@ function artImages(art: StageArt): StageImage[] {
           flyover.plane,
           { key: flyover.propeller.key, path: flyover.propeller.path },
           flyover.banner,
+          flyover.skyline,
         ]
       : []),
   ];

@@ -12,6 +12,7 @@ um avião rebocando a faixa "Arrecife Digital".
 | `plane.png`      | Corpo do avião, com alpha                                                                    |
 | `propeller.png`  | Pá da hélice, com alpha (gira em código)                                                     |
 | `banner.png`     | Faixa "Arrecife Digital", com alpha (cortada em tiras que ondulam em código)                 |
+| `skyline.png`    | 200 linhas do topo do fundo com céu e nuvens transparentes: prédios na frente do avião       |
 
 Como funciona:
 
@@ -23,7 +24,11 @@ Como funciona:
    arquivo: são redesenhadas em código para a faixa poder ondular.
 3. **Céu limpo:** o grupo, com 3 px de margem, é preenchido por difusão
    (`scripts/art_tools.py`) com o mesmo grão leve dos outros cenários.
-4. **Escala:** tudo é reduzido com Lanczos para o tamanho de exibição, e o script imprime as
+4. **Recorte do horizonte (`skyline.png`):** no fundo já reduzido, o céu (azul) e as nuvens
+   (claras, pouco saturadas) alcançados a partir da borda de cima ficam transparentes; do que
+   sobra, só o que nasce da base da faixa (prédios, cúpulas, palmeiras, antenas) fica opaco,
+   então nuvens soltas nunca escondem a faixa. Alpha duro: os pixels são os do próprio fundo.
+5. **Escala:** tudo é reduzido com Lanczos para o tamanho de exibição, e o script imprime as
    posições (hélice, faixa, gancho das cordas, faixas do público e grade) que vão para
    `src/stages/recife.ts`.
 

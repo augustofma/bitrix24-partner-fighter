@@ -215,8 +215,9 @@ export function visualRng(seed: number): () => number {
 
 /** Gentle cruise: a slow vertical bob and the matching small pitch (degrees). */
 export function planeBob(timeSeconds: number): { y: number; angle: number } {
-  const turn = 2 * Math.PI * timeSeconds * 0.35;
-  return { y: 2.5 * Math.sin(turn), angle: -1.5 * Math.cos(turn) };
+  // Slow and small: a distant plane barely drifts.
+  const turn = 2 * Math.PI * timeSeconds * 0.22;
+  return { y: 1.6 * Math.sin(turn), angle: -1 * Math.cos(turn) };
 }
 
 /**

@@ -221,7 +221,12 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   → cruza da direita para a esquerda (como o avião aponta na arte) → sai → pausa sorteada por um
   gerador visual com semente (`visualRng`, nunca `Math.random` nem a simulação) → de novo. A
   faixa ondula por tira (`bannerWave`: parada junto às cordas, mais solta na cauda) e segue o
-  balanço do avião com atraso. O grupo tem parallax próprio, distante (`scrollFactor`).
+  balanço do avião com atraso. O grupo tem parallax próprio, distante (`scrollFactor`), e
+  `scale` (menor = mais longe).
+- **Profundidade do céu:** ordem de desenho (mesma `DEPTH.stage`, ordem de criação): fundo →
+  avião e faixa → `flyover.skyline` (topo do fundo com o céu transparente, gerado uma vez no
+  preparo da arte, com o parallax do fundo) → público e grade → lutadores → HUD. Assim
+  prédios, cúpulas e palmeiras ficam na frente do avião sem máscara por frame.
 - **Ciclo de vida:** cada view guarda o que cria; `destroy()` é chamado no `shutdown` da
   `FightScene`. Nada é criado por frame (testes contam objetos com uma cena falsa).
 - **Qual cenário:** o lugar decide, nunca o lutador. `StoryLocation.stageId` diz o cenário das

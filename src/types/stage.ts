@@ -86,11 +86,19 @@ export interface StageFlyover {
   /** Spinning propeller drawn over the plane's nose (pivot = blade center). */
   propeller: StageImage & { x: number; y: number };
   banner: StageImage;
-  /** Where the tow lines leave the plane (relative to the plane's top-left). */
+  /**
+   * The architecture against the sky (top rows of the background, sky made transparent),
+   * drawn over the plane with the background's parallax: buildings, domes and palms pass in
+   * FRONT of it, so it flies behind them. Same pixels as the background, placed at its origin.
+   */
+  skyline: StageImage;
+  /** Size of the flying group (plane, banner, lines): below 1 it looks further away. */
+  scale: number;
+  /** Where the tow lines leave the plane (relative to the plane's top-left, unscaled art px). */
   hook: { x: number; y: number };
-  /** Gap between the plane's tail and the banner's left edge. */
+  /** Gap between the plane's tail and the banner's left edge (unscaled art px). */
   bannerGap: number;
-  /** Banner top relative to the plane's top. */
+  /** Banner top relative to the plane's top (unscaled art px). */
   bannerOffsetY: number;
   /** Plane's top edge on screen while cruising. */
   y: number;
@@ -102,7 +110,7 @@ export interface StageFlyover {
   firstDelayMs: number;
   /** Vertical strips the banner is cut into for its cloth wave. */
   bannerStrips: number;
-  /** Largest vertical wave of the banner's tail, in pixels (the edge by the lines barely moves). */
+  /** Largest vertical wave of the banner's tail, in screen px (the edge by the lines stays still). */
   waveAmplitude: number;
   /** Parallax of the sky group (0 = fixed to the screen, 1 = moves with the fighters). */
   scrollFactor: number;

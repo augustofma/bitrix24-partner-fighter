@@ -52,20 +52,23 @@ export class StageFlyoverView {
   ) {
     const depth = DEPTH.stage;
     const factor = config.scrollFactor;
+    const { scale } = config;
     this.random = visualRng(seedOf(stageId));
     this.lines = scene.add.graphics().setDepth(depth).setScrollFactor(factor);
     this.plane = scene.add
       .image(0, 0, config.plane.key)
       .setOrigin(0.5)
+      .setScale(scale)
       .setDepth(depth)
       .setScrollFactor(factor);
     this.propeller = scene.add
       .image(0, 0, config.propeller.key)
       .setOrigin(0.5)
+      .setScale(scale)
       .setDepth(depth)
       .setScrollFactor(factor);
     const banner = scene.textures.get(config.banner.key).getSourceImage();
-    this.bannerWidth = banner.width;
+    this.bannerWidth = banner.width * scale;
     this.stripWidth = Math.ceil(banner.width / config.bannerStrips);
     for (let i = 0; i < config.bannerStrips; i++) {
       const x = i * this.stripWidth;
@@ -74,12 +77,13 @@ export class StageFlyoverView {
           .image(0, 0, config.banner.key)
           .setOrigin(0)
           .setCrop(x, 0, Math.min(this.stripWidth, banner.width - x), banner.height)
+          .setScale(scale)
           .setDepth(depth)
           .setScrollFactor(factor),
       );
     }
     // From just past the right edge (at the camera's furthest scroll) to fully past the left.
-    const groupWidth = this.plane.width + config.bannerGap + this.bannerWidth;
+    const groupWidth = (this.plane.width + config.bannerGap) * scale + this.bannerWidth;
     this.startX = GAME_WIDTH + stageScroll * factor + MARGIN;
     this.endX = -groupWidth - MARGIN;
     this.setVisible(false);
@@ -125,20 +129,21 @@ export class StageFlyoverView {
 
   private place(left: number, seconds: number, dt: number): void {
     const { config } = this;
+    const { scale } = config;
     const bob = planeBob(seconds);
     const top = config.y + bob.y;
     this.plane
-      .setPosition(left + this.plane.width / 2, top + this.plane.height / 2)
+      .setPosition(left + (this.plane.width * scale) / 2, top + (this.plane.height * scale) / 2)
       .setAngle(bob.angle);
     const blade = PROPELLER_FRAMES[Math.floor(seconds * PROPELLER_FPS) % PROPELLER_FRAMES.length];
     this.propeller
-      .setPosition(left + config.propeller.x, top + config.propeller.y)
-      .setScale(1, blade ?? 1);
+      .setPosition(left + config.propeller.x * scale, top + config.propeller.y * scale)
+      .setScale(scale, scale * (blade ?? 1));
 
     // The banner trails: its height follows the plane's bob a moment later.
     this.bannerBob += (bob.y - this.bannerBob) * Math.min(1, dt * BANNER_FOLLOW);
-    const bannerLeft = left + this.plane.width + config.bannerGap;
-    const bannerTop = config.y + config.bannerOffsetY + this.bannerBob;
+    const bannerLeft = left + (this.plane.width + config.bannerGap) * scale;
+    const bannerTop = config.y + config.bannerOffsetY * scale + this.bannerBob;
     this.strips.forEach((strip, i) => {
       // Crops are in texture space, so every strip sits at the banner's own left edge.
       const wave = bannerWave(seconds, i, this.strips.length, config.waveAmplitude);
@@ -146,12 +151,12 @@ export class StageFlyoverView {
     });
 
     // Two tow lines from the plane's tail to the banner's leading edge (top and lower corner).
-    const hookX = left + config.hook.x;
-    const hookY = top + config.hook.y;
+    const hookX = left + config.hook.x * scale;
+    const hookY = top + config.hook.y * scale;
     const edgeTop = bannerTop + bannerWave(seconds, 0, this.strips.length, config.waveAmplitude);
     this.lines.clear().lineStyle(1, TOW_LINE_COLOR, 0.9);
-    this.lines.lineBetween(hookX, hookY, bannerLeft + 1, edgeTop + 3);
-    this.lines.lineBetween(hookX, hookY, bannerLeft + 2, edgeTop + 44);
+    this.lines.lineBetween(hookX, hookY, bannerLeft + 1, edgeTop + 3 * scale);
+    this.lines.lineBetween(hookX, hookY, bannerLeft + 2, edgeTop + 44 * scale);
   }
 
   private setVisible(visible: boolean): void {

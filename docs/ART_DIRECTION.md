@@ -331,12 +331,13 @@ as cordas e a faixa do céu (preenchido por difusão) para eles voarem como cama
 - **Torcida:** colunas de ~20 px (uma pessoa) em grupos com loops, ritmos, alturas e atrasos
   diferentes; ninguém pula em sincronia. Debaixo dos guarda-sóis a faixa começa abaixo das
   lonas, que nunca pulam. Flashes de celular em pixel (ponto branco com cruz curta).
-- **Avião:** voa da direita para a esquerda, como aponta na arte, a 110 px/s (~15 s na tela),
-  um pouco abaixo do HUD (y 100) e acima dos prédios centrais; balança 2,5 px e inclina ±1,5°;
-  a hélice gira em 4 quadros (blur de pixel). Cordas escuras de 1 px, visíveis no azul e nas
-  nuvens.
-- **Faixa:** 24 tiras que ondulam até 3 px, paradas junto às cordas e mais soltas na cauda,
-  seguindo o balanço do avião com atraso. O texto continua legível.
+- **Avião:** voa da direita para a esquerda, como aponta na arte, **atrás dos prédios**: uma
+  camada de recorte (`skyline.png`, o topo do próprio fundo com céu e nuvens transparentes) é
+  desenhada por cima dele, então torre, cúpulas, palmeiras e antenas passam na frente. Em
+  escala 0,62 (parece distante), alto no céu (y 98, logo abaixo do HUD), a 80 px/s (~18 s na
+  tela); balança 1,6 px e inclina ±1°; a hélice gira em 4 quadros. Cordas escuras de 1 px.
+- **Faixa:** 24 tiras que ondulam até 1,6 px, paradas junto às cordas e mais soltas na cauda,
+  seguindo o balanço do avião com atraso. O texto continua legível no céu aberto.
 - A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
 
 ## Interface da seleção de personagem

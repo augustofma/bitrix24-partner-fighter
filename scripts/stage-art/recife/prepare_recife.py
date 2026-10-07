@@ -7,6 +7,9 @@ Output: public/stages/recife/background.jpg  scaled to the stage's display size,
         public/stages/recife/plane.png       the plane's body with alpha
         public/stages/recife/propeller.png   its propeller blade (spun in code)
         public/stages/recife/banner.png      the banner with alpha (animated in strips)
+        public/stages/recife/skyline.png     the top of the background with the sky (and clouds)
+                                              made transparent: buildings, domes and palms drawn
+                                              OVER the plane so it flies behind them
 Prints the placements (stage image pixels) to copy into src/stages/recife.ts.
 
 The crowd needs no extra file: the stage view animates crops of the background itself.
@@ -43,6 +46,8 @@ PROPELLER_MAX_X = 775
 BANNER_MIN_X = 948
 # Past this x only the banner's red swallowtail is kept: clouds touch its notch.
 TAIL_MIN_X = 1583
+# Rows of the (display-size) background the skyline occluder covers: below the plane's path.
+SKYLINE_ROWS = 200
 # Sky removed around the group, larger than its anti-aliased edge.
 CLEAR_RING = 3
 
@@ -93,6 +98,41 @@ def fill_holes(mask, box):
     return filled
 
 
+def flood(mask, seeds, rows):
+    """Pixels of `mask` 4-connected to `seeds`, within the first `rows` rows."""
+    reach = np.zeros(mask.shape, bool)
+    queue = deque()
+    for seed in seeds:
+        if mask[seed]:
+            reach[seed] = True
+            queue.append(seed)
+    while queue:
+        y, x = queue.popleft()
+        for yn, xn in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+            if 0 <= yn < rows and 0 <= xn < mask.shape[1] and mask[yn, xn] and not reach[yn, xn]:
+                reach[yn, xn] = True
+                queue.append((yn, xn))
+    return reach
+
+
+def skyline(background):
+    """The architecture against the sky: open sky and clouds are reached from the top edge;
+    what is left and grows from the bottom of the band (buildings, domes, palms, poles) is
+    opaque. Floating clouds stay transparent, so they never hide the banner."""
+    hue, sat, val = hsv(background)
+    open_sky = ((hue > 185) & (hue < 240) & (sat > 0.3) & (val > 0.55)) | (
+        (val > 0.78) & (sat < 0.38)
+    )
+    width = open_sky.shape[1]
+    sky = flood(open_sky, [(0, x) for x in range(width)], SKYLINE_ROWS)
+    solid = ~sky
+    solid[SKYLINE_ROWS:] = False
+    occluder = flood(solid, [(SKYLINE_ROWS - 1, x) for x in range(width)], SKYLINE_ROWS)
+    rgba = np.dstack([np.asarray(background), (occluder * 255).astype(np.uint8)])
+    # Hard alpha: its pixels are the background's own, so its edges never show.
+    return Image.fromarray(rgba, 'RGBA').crop((0, 0, width, SKYLINE_ROWS))
+
+
 def split(mask, min_x, max_x):
     out = np.zeros(mask.shape, bool)
     out[:, min_x:max_x] = mask[:, min_x:max_x]
@@ -125,6 +165,11 @@ def main():
         OUT / 'background.jpg', quality=92, optimize=True
     )
     print(f'background: {size[0]}x{size[1]}')
+    # From the saved JPEG itself, so the occluder's pixels are exactly what is on screen.
+    skyline(Image.open(OUT / 'background.jpg').convert('RGB')).save(
+        OUT / 'skyline.png', optimize=True
+    )
+    print(f'skyline occluder: {size[0]}x{SKYLINE_ROWS}')
 
     boxes = {}
     for name, mask in (('plane', plane), ('propeller', propeller), ('banner', banner)):

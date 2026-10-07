@@ -40,7 +40,9 @@ const publicPath = (path: string) => join(__dirname, '..', 'public', path);
 /** Texture sizes the fake scene reports (the real files' sizes). */
 function textureSize(key: string): { width: number; height: number } {
   if (key === art.background.key) return jpegSize(publicPath(art.background.path));
-  const image = [flyover.plane, flyover.propeller, flyover.banner].find((i) => i.key === key);
+  const image = [flyover.plane, flyover.propeller, flyover.banner, flyover.skyline].find(
+    (i) => i.key === key,
+  );
   if (!image) return { width: 1, height: 1 };
   const png = readRgbaPng(publicPath(image.path));
   return { width: png.width, height: png.height };
@@ -48,7 +50,7 @@ function textureSize(key: string): { width: number; height: number } {
 
 /** A scene stand-in that records every game object created and destroyed. */
 function fakeScene() {
-  const stats = { created: 0, destroyed: 0 };
+  const stats = { created: 0, destroyed: 0, imageKeys: [] as string[] };
   const object = (key?: string): Record<string, unknown> => {
     const state: Record<string, unknown> = { visible: true, ...(key ? textureSize(key) : {}) };
     const proxy: Record<string, unknown> = new Proxy(state, {
@@ -67,7 +69,10 @@ function fakeScene() {
   };
   const scene = {
     add: {
-      image: (_x: number, _y: number, key: string) => object(key),
+      image: (_x: number, _y: number, key: string) => {
+        stats.imageKeys.push(key);
+        return object(key);
+      },
       graphics: () => object(),
     },
     textures: {
@@ -128,9 +133,13 @@ describe('RECIFE stage config', () => {
 
   it('loads every Recife image at boot (and needs them all to draw the art)', () => {
     const keys = collectStageAssets(STAGES).map((asset) => asset.key);
-    const expected = [art.background, flyover.plane, flyover.propeller, flyover.banner].map(
-      (image) => image.key,
-    );
+    const expected = [
+      art.background,
+      flyover.plane,
+      flyover.propeller,
+      flyover.banner,
+      flyover.skyline,
+    ].map((image) => image.key);
     for (const key of expected) expect(keys.filter((k) => k === key)).toHaveLength(1);
     expect(stageArtKeys(recife).sort()).toEqual([...expected].sort());
   });
@@ -254,6 +263,52 @@ describe('Recife crowd', () => {
     expect(match.wouldWinMatch(0)).toBe(true);
     expect(match.wouldWinMatch(1)).toBe(false);
     expect(match.roundWins).toEqual([1, 0]);
+  });
+});
+
+describe('Recife plane flies behind the buildings', () => {
+  const skyline = readRgbaPng(publicPath(flyover.skyline.path));
+
+  it('the skyline occluder is the top of the background: sky clear, architecture opaque', () => {
+    const background = jpegSize(publicPath(art.background.path));
+    expect(skyline.width).toBe(background.width);
+    // Open sky (top centre) is transparent...
+    expect(skyline.alpha(Math.floor(skyline.width / 2), 5)).toBe(0);
+    // ...the domes and palms (bottom of the band) are opaque, the clouds above are not.
+    let opaqueAtBottom = 0;
+    for (let x = 0; x < skyline.width; x++) {
+      if (skyline.alpha(x, skyline.height - 1) > 0) opaqueAtBottom++;
+    }
+    expect(opaqueAtBottom).toBeGreaterThan(skyline.width * 0.1);
+    expect(opaqueAtBottom).toBeLessThan(skyline.width * 0.9);
+  });
+
+  it('draw order: background < plane and banner < skyline occluder < crowd', () => {
+    const { scene, stats } = fakeScene();
+    new IllustratedStageView(scene, recife, art);
+    const order = stats.imageKeys;
+    const at = (key: string) => order.indexOf(key);
+    const lastFlyover = Math.max(
+      order.lastIndexOf(flyover.banner.key),
+      at(flyover.plane.key),
+      at(flyover.propeller.key),
+    );
+    expect(at(art.background.key)).toBe(0);
+    expect(at(flyover.plane.key)).toBeGreaterThan(0);
+    expect(at(flyover.skyline.key)).toBeGreaterThan(lastFlyover);
+    // The crowd columns are crops of the background added after the occluder.
+    expect(order.indexOf(art.background.key, at(flyover.skyline.key))).toBeGreaterThan(
+      at(flyover.skyline.key),
+    );
+  });
+
+  it('the whole flight stays inside the occluded band, small and high', () => {
+    const banner = readRgbaPng(publicPath(flyover.banner.path));
+    const lowest = flyover.y + (flyover.bannerOffsetY + banner.height) * flyover.scale + 4;
+    expect(lowest).toBeLessThan(art.top + skyline.height);
+    expect(flyover.scale).toBeLessThan(1);
+    // Under the HUD, never down at the fighters.
+    expect(flyover.y).toBeGreaterThan(90);
   });
 });
 

@@ -96,6 +96,15 @@ export class IllustratedStageView implements StageBackdrop {
     background.setScrollFactor(scrollFactor);
     if (art.flyover) {
       this.flyover = new StageFlyoverView(scene, art.flyover, stage.id, Math.max(0, travel));
+      // Skyline occluder, right after the plane: the buildings' tops are drawn again over it,
+      // glued to the background (same parallax), so the plane flies behind them.
+      this.track(
+        scene.add
+          .image(0, art.top, art.flyover.skyline.key)
+          .setOrigin(0)
+          .setDepth(DEPTH.stage)
+          .setScrollFactor(scrollFactor),
+      );
     }
     this.createCrowd(scrollFactor);
     if (art.crowd?.flashes) {
