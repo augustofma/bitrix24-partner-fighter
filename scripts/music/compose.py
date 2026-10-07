@@ -125,6 +125,11 @@ class Track:
     bars: int
     loop: bool = True
     beats_per_bar: int = 4
+    # Hall reverb (wet level, 0 = none) and its decay time in seconds.
+    reverb: float = 0.0
+    reverb_seconds: float = 1.8
+    # Seconds rendered after the last bar of a one-shot (releases, reverb); default below.
+    tail_seconds: float | None = None
     voices: dict[str, list[Note]] = field(default_factory=dict)
     drums: list[tuple[float, str, float]] = field(default_factory=list)
 
@@ -210,6 +215,89 @@ def inst_brass(note: Note, spb: float) -> np.ndarray:
     return sig * envelope(length, 0.03, 0.4, 0.8, 0.35, gate) * note.velocity * 0.35
 
 
+# --- Arcade-fighter fanfare instruments (victory sting) -------------------------------------
+
+
+def glide_saw(freq: float, length: int, scoop: float = 0.0, scoop_s: float = 0.05,
+              vibrato: float = 0.0, max_harmonics: int = 36) -> np.ndarray:
+    """Band-limited saw whose pitch can start a little flat and slide up ("scoop", like a
+    brass player hitting the note) and pick up a late vibrato."""
+    t = np.arange(length) / SR
+    bend = 1 - scoop * np.exp(-t / max(scoop_s, 1e-4))
+    if vibrato:
+        bend = bend * (1 + vibrato * np.clip(t / 0.3 - 0.5, 0, 1) * np.sin(2 * np.pi * 5.2 * t))
+    phase = 2 * np.pi * np.cumsum(freq * bend) / SR
+    out = np.zeros(length)
+    for k in range(1, max(1, min(max_harmonics, int(15000 / freq))) + 1):
+        out += np.sin(k * phase) / k
+    return out * 0.5
+
+
+def inst_horn(note: Note, spb: float) -> np.ndarray:
+    """Arcade brass section: three detuned saws (+ one an octave down) with a pitch scoop,
+    a "blat" filter that opens fast and settles, and a late vibrato on long notes."""
+    gate = int(note.length * spb * SR * 0.94)
+    length = gate + int(0.35 * SR)
+    f = hz(note.pitch)
+    vib = 0.006 if note.length >= 1 else 0.0
+    raw = sum(glide_saw(f * d, length, scoop=0.03, vibrato=vib) for d in (0.996, 1.0, 1.0045))
+    raw += 0.45 * glide_saw(f / 2, length, scoop=0.03, max_harmonics=20)
+    bright, dark = lowpass(raw, 6000), lowpass(raw, 1300)
+    t = np.arange(length) / SR
+    opening = np.clip(t / 0.025, 0, 1) * (0.55 + 0.45 * np.exp(-t / 0.18))
+    sig = np.tanh(1.4 * (dark + (bright - dark) * opening))
+    return sig * envelope(length, 0.012, 0.25, 0.82, 0.28, gate) * note.velocity * 0.2
+
+
+def inst_strings(note: Note, spb: float) -> np.ndarray:
+    """Ensemble strings: five detuned saws, vibrato, soft attack, airy filter."""
+    gate = int(note.length * spb * SR)
+    length = gate + int(0.7 * SR)
+    f = hz(note.pitch)
+    raw = sum(glide_saw(f * d, length, vibrato=0.004, max_harmonics=24)
+              for d in (0.991, 0.996, 1.0, 1.004, 1.009))
+    sig = lowpass(raw, 3200)
+    return sig * envelope(length, 0.09, 0.5, 0.85, 0.55, gate) * note.velocity * 0.09
+
+
+def inst_stab(note: Note, spb: float) -> np.ndarray:
+    """Orchestra hit layer: a short, bright, distorted brass+string chord tone with a noise
+    "air" burst (one note of the chord; the hit is the whole chord played together)."""
+    length = int(0.75 * SR)
+    f = hz(note.pitch)
+    t = np.arange(length) / SR
+    raw = sum(glide_saw(f * d, length, scoop=0.02, scoop_s=0.02) for d in (0.993, 1.0, 1.007))
+    raw += 0.5 * glide_saw(f * 2, length, max_harmonics=18)
+    sig = np.tanh(2.2 * lowpass(raw, 7000))
+    rng = np.random.default_rng(note.pitch)
+    sig += lowpass(rng.uniform(-1, 1, length), 3500) * 0.18 * np.exp(-t / 0.035)
+    return sig * np.exp(-t / 0.22) * np.clip(t / 0.003, 0, 1) * note.velocity * 0.16
+
+
+def inst_timpani(note: Note, spb: float) -> np.ndarray:
+    """Timpani: low membrane modes with a slight pitch drop and a felt-mallet thump."""
+    length = int(1.8 * SR)
+    f = hz(note.pitch)
+    t = np.arange(length) / SR
+    drop = 1 + 0.06 * np.exp(-t / 0.03)
+    phase = 2 * np.pi * np.cumsum(f * drop) / SR
+    sig = (np.sin(phase) + 0.5 * np.sin(1.5 * phase) * np.exp(-t / 0.25)
+           + 0.3 * np.sin(1.98 * phase) * np.exp(-t / 0.4))
+    rng = np.random.default_rng(note.pitch + 7)
+    sig += lowpass(rng.uniform(-1, 1, length), 900) * np.exp(-t / 0.02) * 0.8
+    return np.tanh(1.3 * sig) * np.exp(-t / 0.55) * note.velocity * 0.5
+
+
+def inst_bell(note: Note, spb: float) -> np.ndarray:
+    """Glockenspiel-like FM bell for the final sparkle."""
+    length = int(1.6 * SR)
+    f = hz(note.pitch)
+    t = np.arange(length) / SR
+    index = 2.2 * np.exp(-t / 0.15)
+    sig = np.sin(2 * np.pi * f * t + index * np.sin(2 * np.pi * f * 3.5 * t))
+    return sig * np.exp(-t / 0.5) * np.clip(t / 0.002, 0, 1) * note.velocity * 0.22
+
+
 INSTRUMENTS = {
     "lead": inst_lead,
     "chip": inst_chip,
@@ -218,6 +306,11 @@ INSTRUMENTS = {
     "bass": inst_bass,
     "power": inst_power,
     "brass": inst_brass,
+    "horn": inst_horn,
+    "strings": inst_strings,
+    "stab": inst_stab,
+    "timpani": inst_timpani,
+    "bell": inst_bell,
 }
 
 # Mix: (gain, pan -1..1, echo send)
@@ -229,6 +322,11 @@ MIX = {
     "bass": (0.68, 0.0, 0.0),
     "power": (0.62, -0.15, 0.05),
     "brass": (0.9, 0.0, 0.25),
+    "horn": (1.0, 0.08, 0.18),
+    "strings": (0.8, -0.2, 0.12),
+    "stab": (0.9, 0.0, 0.2),
+    "timpani": (0.85, -0.1, 0.0),
+    "bell": (0.55, 0.3, 0.35),
 }
 
 
@@ -292,6 +390,26 @@ def ping_pong(send: np.ndarray, delay: int, feedback: float = 0.38, repeats: int
     return lowpass_stereo(out, 4500)
 
 
+def hall_reverb(stereo: np.ndarray, seconds: float, rng: np.random.Generator) -> np.ndarray:
+    """Convolution with a decaying, darkening noise tail per channel (FFT): a smooth hall."""
+    length = int(seconds * SR)
+    t = np.arange(length) / SR
+    out = np.zeros_like(stereo)
+    n = len(stereo) + length
+    size = 1 << (n - 1).bit_length()
+    for ch in range(2):
+        tail = rng.normal(0, 1, length) * np.exp(-t * 6.9 / seconds)
+        tail = lowpass(tail, 5000) * np.clip(t / 0.02, 0, 1)
+        tail /= np.sqrt(np.sum(tail**2))
+        wet = np.fft.irfft(np.fft.rfft(stereo[:, ch], size) * np.fft.rfft(tail, size), size)
+        out[:, ch] = wet[: len(stereo)]
+    return highpass_stereo(out, 180)
+
+
+def highpass_stereo(stereo: np.ndarray, cutoff: float) -> np.ndarray:
+    return np.stack([highpass(stereo[:, 0], cutoff), highpass(stereo[:, 1], cutoff)], axis=1)
+
+
 def lowpass_stereo(stereo: np.ndarray, cutoff: float) -> np.ndarray:
     return np.stack([lowpass(stereo[:, 0], cutoff), lowpass(stereo[:, 1], cutoff)], axis=1)
 
@@ -300,7 +418,8 @@ def render(track: Track, seed: int) -> np.ndarray:
     rng = np.random.default_rng(seed)
     spb = track.spb
     length = int(track.bars * track.beats_per_bar * spb * SR)
-    total = length + int((TAIL_SECONDS if track.loop else ONE_SHOT_TAIL_SECONDS) * SR)
+    tail = TAIL_SECONDS if track.loop else (track.tail_seconds or ONE_SHOT_TAIL_SECONDS)
+    total = length + int(tail * SR)
     dry = np.zeros((total, 2))
     send = np.zeros((total, 2))
     for voice, notes in track.voices.items():
@@ -319,6 +438,8 @@ def render(track: Track, seed: int) -> np.ndarray:
         gain, pan = DRUM_MIX[drum]
         place(dry, kit[drum], int(beat * spb * SR), gain * velocity, pan)
     mix = dry + ping_pong(send, int(0.75 * spb * SR))
+    if track.reverb:
+        mix = mix + track.reverb * hall_reverb(mix, track.reverb_seconds, rng)
     if track.loop:
         # Fold the tail (releases, echoes, cymbals) back onto the start: seamless loop.
         mix[: total - length] += mix[length:]
@@ -531,28 +652,67 @@ def story_map_theme() -> Track:
 
 
 def victory_sting() -> Track:
-    """Short fanfare after the last KO (about 4 s). C major, 132 BPM."""
-    t = Track(bpm=132, bars=2, loop=False)
-    for i, name in enumerate(["G4", "C5", "E5"]):
-        t.add("brass", i / 3, 1 / 3, midi(name), 0.9)
-    t.add("brass", 1, 1, midi("G5"))
-    for beat, chord_name in ((2, "F"), (2.5, "G")):
-        for tone in chord(chord_name, 4)[1]:
-            t.add("brass", beat, 0.5, tone, 0.85)
-    for tone in [midi("C5"), midi("E5"), midi("G5"), midi("C6")]:
-        t.add("brass", 3, 3.4, tone)
-    t.add("pad", 3, 3.4, midi("C4"))
-    t.add("bass", 0, 1, midi("C2"))
-    t.add("bass", 2, 0.5, midi("F2"))
-    t.add("bass", 2.5, 0.5, midi("G2"))
-    t.add("bass", 3, 2.5, midi("C2"))
-    for beat in (0, 1, 2, 2.5):
-        t.hit(beat, "tom", 0.9)
-    t.hit(3, "kick")
-    t.hit(3, "crash", 1.2)
-    t.add("chip", 3, 0.25, midi("C7"), 0.5)
-    t.add("chip", 3.25, 0.25, midi("G6"), 0.5)
-    t.add("chip", 3.5, 0.25, midi("C7"), 0.5)
+    """Arcade-fighter victory fanfare (about 6.5 s), B-flat major, 150 BPM. Original melody in
+    the genre's language: an orchestra hit on the downbeat, a triplet brass call doubled in
+    octaves over strings and a driving bass, IV-V lift with a snare roll and timpani, then a
+    held tonic chord with a bell sparkle and the hall ringing out."""
+    t = Track(bpm=150, bars=3, loop=False, reverb=0.28, reverb_seconds=2.2, tail_seconds=1.9)
+
+    def hit(beat: float, names: list[str], velocity: float = 1.0) -> None:
+        for name in names:
+            t.add("stab", beat, 0.5, midi(name), velocity)
+
+    # Bar 1: hit, then the brass call (triplet pickup to a high F).
+    hit(0, ["Bb3", "D4", "F4", "Bb4", "D5", "F5"])
+    t.hit(0, "kick")
+    t.hit(0, "crash", 0.6)
+    t.add("timpani", 0, 1, midi("Bb1"), 0.55)
+    call = [("F4", 1, 1 / 3), ("Bb4", 4 / 3, 1 / 3), ("D5", 5 / 3, 1 / 3), ("F5", 2, 0.75),
+            ("Eb5", 2.75, 0.25), ("D5", 3, 0.5), ("Eb5", 3.5, 0.5)]
+    # Bar 2: IV then V, the line climbs; bar 3: the tonic, held.
+    call += [("G5", 4, 1.0), ("F5", 5, 0.5), ("Eb5", 5.5, 0.5), ("F5", 6, 1 / 3),
+             ("G5", 6 + 1 / 3, 1 / 3), ("A5", 6 + 2 / 3, 1 / 3), ("Bb5", 7, 0.5), ("C6", 7.5, 0.5)]
+    for name, beat, length in call:
+        t.add("horn", beat, length, midi(name))
+        t.add("horn", beat, length, midi(name) - 12, 0.75)  # octave doubling, like a section
+    for tone in ("D5", "F5", "Bb5", "D6"):
+        t.add("horn", 8, 4, midi(tone), 0.95)
+    t.add("horn", 8, 4, midi("Bb4"), 0.8)
+
+    # Harmony: strings bed and brass chord stabs on the changes.
+    for beat, length, names in ((1, 3, ("Bb3", "D4", "F4")), (4, 2, ("Eb4", "G4", "Bb4")),
+                                (6, 2, ("F4", "A4", "C5")), (8, 4, ("Bb3", "D4", "F4", "Bb4"))):
+        for name in names:
+            t.add("strings", beat, length, midi(name), 0.9)
+    hit(4, ["Eb4", "G4", "Bb4", "Eb5"], 0.7)
+    hit(6, ["F4", "A4", "C5", "F5"], 0.75)
+    hit(8, ["Bb3", "D4", "F4", "Bb4", "D5", "F5"], 1.0)
+
+    # Driving bass in eighths, then the low tonic.
+    for beat, root in ((1, "Bb1"), (4, "Eb2"), (6, "F2")):
+        span = 3 if root == "Bb1" else 2
+        for i in range(int(span * 2)):
+            t.add("bass", beat + i / 2, 0.45, midi(root) + (12 if i % 2 else 0), 0.5)
+    t.add("bass", 8, 3.5, midi("Bb1"), 0.6)
+
+    # Drums: light backbeat, a snare roll crescendo into the last bar, timpani on the changes.
+    for beat in (1, 2, 3, 4, 5):
+        t.hit(beat, "kick", 0.45 if beat % 2 else 0.55)
+    for beat in (2, 4):
+        t.hit(beat, "snare", 0.6)
+    for i in range(16):
+        t.hit(6 + i / 8, "snare", 0.2 + 0.45 * i / 15)
+    t.add("timpani", 4, 1, midi("Eb2"), 0.45)
+    t.add("timpani", 6, 1, midi("F2"), 0.5)
+    for i in range(6):
+        t.add("timpani", 7 + i / 6, 0.2, midi("F2"), 0.22 + 0.05 * i)
+    t.hit(8, "kick")
+    t.hit(8, "crash", 0.8)
+    t.add("timpani", 8, 1, midi("Bb1"), 0.6)
+
+    # Sparkle over the final chord.
+    for i, name in enumerate(("Bb5", "D6", "F6", "Bb6", "D7", "F7")):
+        t.add("bell", 8.25 + i * 0.25, 0.25, midi(name), 0.7 - 0.06 * i)
     return t
 
 

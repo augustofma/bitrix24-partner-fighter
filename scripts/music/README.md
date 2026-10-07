@@ -21,6 +21,14 @@ dobrada sobre o início, então repetem sem clique nem silêncio.
 | `character-select-theme` | Seleção e VS da luta rápida    | Mi menor 140 | 27 s    | Expectativa: four-on-the-floor, chiptune  |
 | `story-map-theme`        | Mapa do Modo História (e o VS) | Ré maior 120 | 32 s    | Aventura e viagem, pluck e lead brilhante |
 | `partner-summit-theme`   | Lutas no Partner Summit        | Lá menor 150 | 38 s    | Batalha: galope de power chords, lead     |
-| `victory-sting`          | Vitória e campanha concluída   | Dó maior 132 | 4 s     | Fanfarra curta, depois silêncio           |
+| `victory-sting`          | Vitória e campanha concluída   | Si♭ maior 150 | 6,7 s  | Fanfarra de arcade de luta (ver abaixo)   |
+
+**`victory-sting`:** fanfarra no estilo das vitórias de jogos de luta de arcade, com melodia
+original: orquestra hit no tempo forte, chamada de metais em tercina dobrada em oitavas (metais
+com "scoop" de afinação no ataque, filtro que abre e assenta e vibrato nas notas longas),
+cordas e baixo em colcheias, subida IV–V com rufo de caixa e tímpanos, acorde final sustentado
+com brilho de sinos e reverb de sala (convolução). Instrumentos próprios: `horn`, `strings`,
+`stab`, `timpani`, `bell`; reverb e cauda são opcionais por faixa (`reverb`, `tail_seconds`),
+então as outras faixas não mudam.
 
 Licença: original do projeto (mesma licença do repositório).
