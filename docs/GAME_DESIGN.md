@@ -7,15 +7,19 @@ lateral; vence quem zerar a vida do oponente (KO) ou tiver mais vida quando o te
 
 Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossistema Bitrix24
 (parceiros, CRM, automações, WhatsApp, IA, vendas), com golpes temáticos. O elenco atual tem
-`AUGUSTO`, `FILIPE` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B` reservado à CPU.
+`AUGUSTO`, `FILIPE`, `JOÃO GUIOTTI`, `ROMUALDO` e `FIGHTER_A` selecionáveis, além de `FIGHTER_B`
+reservado à CPU.
 
 ## Game loop
 
 ```
-Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitória → Menu
+LUTA RÁPIDA: Menu → Seleção → Tela VS → Luta (melhor de 3) → Tela de vitória → Menu
+HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória → Mapa ... → Campanha concluída
 ```
 
-1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque).
+1. **Menu:** título e botão JOGAR (Enter, Espaço, clique ou toque), que abre HISTÓRIA e LUTA
+   RÁPIDA (← → escolhem, Enter confirma, Esc fecha). Os passos abaixo são da luta rápida; o
+   Modo História tem seção própria.
 2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelo roster (3 × 2 por
    página; slots "EM BREVE" completam a página). Augusto é a seleção inicial; FILIPE e
    FIGHTER_A também são selecionáveis. FIGHTER_B aparece esmaecido com a marca "CPU". O card
@@ -103,6 +107,37 @@ todos os golpes cresce 2–3 frames. Não ganha vida nem invulnerabilidade para 
 
 Níveis: punch high; kick e crouchPunch mid; crouchKick low; aéreos overhead, aplicados na
 defesa como nos demais personagens. Guardas, cross-up, KO e vitória usam o motor compartilhado.
+
+### JOÃO GUIOTTI
+
+**João Guiotti — São Paulo - SP.** Técnico e equilibrado: o jab mais rápido do elenco
+(startup 4) e boa mobilidade. Vida 100; caminhada 3,3/2,7 px/frame; pulo 16,8 com 4,1 px/frame
+no ar. Corpo padrão, visual genérico (boneco) com paleta roxa e ciano, **sem especiais** por
+enquanto (a barra enche normalmente).
+
+### ROMUALDO
+
+**Romualdo — Joinville - SC.** Pesado: golpes mais fortes, mais knockback e recuperações
+maiores; o mais lento do elenco. Vida 100; caminhada 2,85/2,3 px/frame; pulo 16,2 com
+3,7 px/frame no ar. Visual genérico com paleta verde e laranja, **sem especiais** por enquanto.
+
+| Lutador  | Golpe         | Dano | Startup | Ativo | Recovery | Hitstun | Blockstun | Alcance |
+| -------- | ------------- | ---- | ------- | ----- | -------- | ------- | --------- | ------- |
+| JOÃO     | Soco          | 6    | 4       | 3     | 9        | 14      | 9         | 82      |
+| JOÃO     | Chute         | 10   | 9       | 4     | 15       | 18      | 12        | 100     |
+| JOÃO     | Soco agachado | 5    | 4       | 3     | 7        | 13      | 8         | 74      |
+| JOÃO     | Rasteira      | 8    | 8       | 4     | 16       | 16      | 11        | 112     |
+| JOÃO     | Soco aéreo    | 6    | 4       | 6     | 8        | 14      | 9         | 68      |
+| JOÃO     | Chute aéreo   | 9    | 7       | 8     | 12       | 17      | 12        | 78      |
+| ROMUALDO | Soco          | 8    | 6       | 3     | 12       | 15      | 9         | 80      |
+| ROMUALDO | Chute         | 13   | 11      | 4     | 19       | 19      | 12        | 98      |
+| ROMUALDO | Soco agachado | 6    | 5       | 3     | 10       | 13      | 8         | 72      |
+| ROMUALDO | Rasteira      | 11   | 10      | 4     | 20       | 17      | 11        | 110     |
+| ROMUALDO | Soco aéreo    | 8    | 5       | 5     | 10       | 15      | 9         | 68      |
+| ROMUALDO | Chute aéreo   | 12   | 9       | 8     | 15       | 18      | 12        | 76      |
+
+Simulação CPU × CPU (NORMAL, 30 partidas por par, só referência de equilíbrio): Augusto 16 × 14
+João e 16 × 14 Romualdo; Filipe 15 × 15 João e 20 × 10 Romualdo; João 12 × 18 Romualdo.
 
 ### Regras comuns
 
@@ -366,7 +401,9 @@ alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 ## Rounds e vitória (melhor de 3)
 
 - A partida é **melhor de 3**: o primeiro a vencer **2 rounds** vence. Ex.: 2 x 0 ou 2 x 1.
-- Cada round dura **99 segundos**. O timer fica laranja nos últimos 10 segundos.
+- Cada round dura **99 segundos**. O timer usa fonte arcade (Press Start 2P): dourado, depois
+  amarelo (10–7 s), laranja (6–4 s) e vermelho (3–0 s), com um pulso discreto a cada segundo.
+  É só visual: a duração do round não muda.
 - **KO:** vida 0 → "K.O." → o vencedor do round faz a pose de vitória e marca 1 ponto.
 - **Tempo esgotado:** vence o round quem tiver mais vida.
 - **Empate no round** (vida exatamente igual no fim do tempo, ou duplo KO no mesmo frame):
@@ -381,6 +418,28 @@ alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 - A tela de vitória só aparece quando alguém chega a 2 rounds.
 - Limite de segurança: no máximo 9 rounds por partida (empates repetidos). Atingido o limite,
   vence quem tiver mais rounds; com placar igual, a partida termina empatada.
+
+## Modo História
+
+Uma turnê pelo Brasil contra rivais de outras cidades, usando as mesmas lutas da luta rápida.
+
+- **Seleção ("MODO HISTÓRIA"):** só lutadores com campanha podem ser escolhidos (hoje Augusto e
+  Filipe, de **Recife - PE**); João e Romualdo aparecem como **RIVAL**. O selo mostra a origem
+  ("ORIGEM RECIFE - PE"); a dificuldade da CPU vale para a campanha toda.
+- **Rota de Augusto e Filipe:** etapa 1, Recife → São Paulo contra **João Guiotti** (São Paulo -
+  SP); etapa 2, São Paulo → Joinville contra **Romualdo** (Joinville - SC).
+- **Mapa:** Brasil em pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do
+  Equador e do Trópico de Capricórnio). O avião decola da cidade atual e voa em curva até a
+  próxima (cerca de 3 s), com rastro pontilhado; o título mostra "RECIFE → SÃO PAULO" e
+  "ETAPA 1/2". Ao pousar: "PRÓXIMO DESAFIO", retrato, nome e cidade do rival e CONTINUAR.
+  Enter / toque pulam o voo ou continuam; sem ação, segue sozinho após ~4 s. Esc sai.
+- **VS:** cidade/UF abaixo de cada retrato e "ETAPA n/t" no topo.
+- **Luta:** melhor de 3, regras normais.
+- **Vitória:** CONTINUAR leva à próxima viagem. **Derrota:** TENTAR NOVAMENTE repete só aquela
+  luta (mesmo rival, cenário e dificuldade); SAIR PARA O MENU encerra a campanha.
+- **Final:** "CAMPANHA CONCLUÍDA" com a rota percorrida, JOGAR NOVAMENTE (recomeça com o mesmo
+  lutador) ou VOLTAR AO MENU.
+- O progresso dura a sessão e é independente da luta rápida.
 
 ## Controles
 

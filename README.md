@@ -8,8 +8,9 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 `FIGHTER_A` (sprite demo) e `FIGHTER_B` (placeholder, CPU) continuam como personagens de
-desenvolvimento. A seleção começa em Augusto e permite escolher FILIPE e FIGHTER_A; todos enfrentam
-FIGHTER_B pela regra genérica do roster que prioriza personagens reservados à CPU.
+desenvolvimento. Na LUTA RÁPIDA a seleção começa em Augusto e permite escolher FILIPE, JOÃO GUIOTTI, ROMUALDO
+e FIGHTER_A; todos enfrentam FIGHTER_B pela regra genérica do roster que prioriza personagens
+reservados à CPU.
 
 Augusto tem 100 de vida, mobilidade um pouco maior e socos rápidos com menos dano, compensados
 por recuperações maiores nos chutes. Possui seis ataques normais e o especial **24ZAP COMBO** (F / ESP, custo 30).
@@ -45,6 +46,25 @@ dimensões, alpha e margens das 40 células. As fontes geradas e os prompts est�
 [scripts/augusto-art/README.md](scripts/augusto-art/README.md); não entram no build do jogo.
 
 > Projeto independente. Não usa logos oficiais nem assets de outras franquias.
+
+## Modo História
+
+No menu, **JOGAR** abre **HISTÓRIA** e **LUTA RÁPIDA** (a luta rápida é a de sempre).
+Na história escolhe-se um lutador com campanha (hoje AUGUSTO e FILIPE, ambos de Recife - PE) e a
+dificuldade da CPU. A campanha é uma turnê pelo Brasil:
+
+1. **Recife → São Paulo:** viagem de avião no mapa e luta contra **JOÃO GUIOTTI** (São Paulo - SP).
+2. **São Paulo → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
+3. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
+
+Cada luta é melhor de 3, no mesmo motor da luta rápida. Ao perder: TENTAR NOVAMENTE (repete só
+aquela luta) ou SAIR PARA O MENU. No mapa, Enter / toque pula o voo ou continua; Esc sai.
+O progresso vale para a sessão. Rotas, cidades e rivais são configuração
+([ARCHITECTURE.md](docs/ARCHITECTURE.md#modo-história)); regras em
+[GAME_DESIGN.md](docs/GAME_DESIGN.md#modo-história).
+
+João Guiotti (técnico, equilibrado) e Romualdo (pesado, golpes fortes e lentos) usam o visual
+genérico com paletas próprias e ainda não têm especiais.
 
 ## Stack
 
@@ -98,22 +118,22 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 
 **Teclado (Player 1)**
 
-| Ação               | Tecla                                        |
-| ------------------ | -------------------------------------------- |
-| Mover              | ← / →                                        |
-| Pular              | ↑                                            |
-| Agachar            | ↓                                            |
-| Soco               | A                                            |
-| Chute              | S                                            |
-| Especial           | F (gasta a barra de especial)                |
-| Defender           | D                                            |
-| Defesa agachada    | ↓ + D                                        |
-| Soco agachado      | ↓ + A                                        |
-| Rasteira           | ↓ + S                                        |
-| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal) |
-| Menus              | Enter / Espaço confirma, Esc volta           |
-| Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU      |
-| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)    |
+| Ação               | Tecla                                          |
+| ------------------ | ---------------------------------------------- |
+| Mover              | ← / →                                          |
+| Pular              | ↑                                              |
+| Agachar            | ↓                                              |
+| Soco               | A                                              |
+| Chute              | S                                              |
+| Especial           | F (gasta a barra de especial)                  |
+| Defender           | D                                              |
+| Defesa agachada    | ↓ + D                                          |
+| Soco agachado      | ↓ + A                                          |
+| Rasteira           | ↓ + S                                          |
+| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)   |
+| Menus              | Enter / Espaço confirma, ← / → modo, Esc volta |
+| Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU        |
+| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)      |
 
 **Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões
 SOCO / CHUTE / DEF / ESP à direita, com multi-touch (ex.: joystick ↗ + CHUTE; ↓ + DEF;

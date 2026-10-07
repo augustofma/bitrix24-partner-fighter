@@ -15,7 +15,8 @@
   WhatsApp, IA, vendas e parceiros.
 - **Identidade brasileira:** cores, humor, cenários e referências culturais do Brasil.
 - **Interface arcade:** barras de vida chamativas, tipografia grossa com contorno, anúncios
-  grandes ("ROUND 1", "FIGHT!", "K.O.").
+  grandes ("ROUND 1", "FIGHT!", "K.O.") no mesmo letreiro do título da vitória (veja
+  "Tipografia").
 - **Originalidade total:** nada copiado ou "inspirado de perto" em Street Fighter, Mortal Kombat,
   King of Fighters ou outras franquias. Sem logos oficiais (inclusive o do Bitrix24) até haver
   autorização e guia de marca.
@@ -330,20 +331,60 @@ Visual de fliperama, sem assets de imagem novos: tudo é desenhado em código em
 Inspirada na linguagem de telas de seleção de fliperama, sem copiar logos, textos,
 personagens ou artes de outros jogos.
 
+## Modo História: mapa e avião
+
+Tudo é desenhado em código, sem imagens novas, na paleta da seleção e da tela inicial:
+
+- **Mapa:** o contorno do Brasil (`src/story/brazilMap.ts`, lon/lat simplificado) é
+  rasterizado em células de 5 px: terra em azul escuro com pontilhado de ruído, costa em ciano
+  neon, oceano com pontinhos e um brilho suave atrás. Linhas tracejadas magenta discretas
+  marcam o Equador e o Trópico de Capricórnio. É gerado uma vez e reaproveitado como textura.
+- **Cidades:** ponto com anel pulsante e rótulo "CIDADE - UF" em fonte PIXEL. Dourado = cidade
+  atual, magenta = destino, ciano = já visitada, branco = outras.
+- **Rotas:** curva (Bezier quadrática) para o lado de dentro do país; etapas vencidas ficam
+  como pontilhado dourado; durante o voo o avião deixa o mesmo rastro.
+- **Avião:** pixel-art vista de cima (`src/ui/story/planeTexture.ts`), branco com detalhes
+  magenta e ciano, sombra deslocada, gira pela direção da curva e balança levemente.
+- **Tela final:** fundo e efeitos da vitória, card do lutador e o letreiro "CAMPANHA CONCLUÍDA".
+
+Os rivais JOÃO GUIOTTI (roxo + ciano) e ROMUALDO (verde + laranja) usam o boneco procedural
+com paleta própria até ganharem arte (siga "Como adicionar arte de um novo lutador").
+
+## Tipografia
+
+Todas as fontes são OFL, ficam em `public/fonts/` com a licença e são definidas em um só lugar
+(`GAME_FONTS`, `src/config/fonts.ts`):
+
+| Papel  | Fonte            | Uso                                                              |
+| ------ | ---------------- | ---------------------------------------------------------------- |
+| TITLE  | Bangers          | Letreiro de luta: "<NOME> VENCEU!", ROUND / FIGHT! / K.O., rotas |
+| ARCADE | Russo One        | Botões, nomes, títulos de tela, rótulos                          |
+| HUD    | Press Start 2P   | Cronômetro da luta                                               |
+| PIXEL  | Pixelify Sans    | Cidades do mapa, ETAPA n/t, origem no VS, rótulo do round no HUD |
+| BODY   | Fonte do sistema | Descrições e dicas (melhor leitura em qualquer tela)             |
+
+Textos grandes usam contorno escuro e sombra dura. Cenas nunca citam fontes: usam
+`arcadeText`, `hudText`, `pixelText`, `bodyText` ou `createFightTitle`.
+
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
 registrada aqui:
 
-| Asset                                                                             | Autor                                                                                     | Licença                                                      |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `public/fighters/fighter-a/*.png` (demo)                                          | Gerado por `scripts/generate-demo-fighter-art.mjs`                                        | Original do projeto                                          |
-| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros |
-| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros |
-| `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                       |
-| `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                       |
-| `public/fonts/bangers/*` (fonte Bangers)                                          | The Bangers Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/bangers/OFL.txt`)   |
-| `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                       |
+| Asset                                                                             | Autor                                                                                     | Licença                                                           |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `public/fighters/fighter-a/*.png` (demo)                                          | Gerado por `scripts/generate-demo-fighter-art.mjs`                                        | Original do projeto                                               |
+| `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros      |
+| `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros      |
+| `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                            |
+| `public/fonts/bangers/*` (fonte Bangers)                                          | The Bangers Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/bangers/OFL.txt`)        |
+| `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                            | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
+| `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                             | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
+| `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                          | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
+| Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
+| JOÃO GUIOTTI e ROMUALDO (boneco genérico)                                         | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
+| `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                            |
 
 ## VFX do especial (v0.8)
 

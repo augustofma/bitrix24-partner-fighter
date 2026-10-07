@@ -37,12 +37,14 @@ src/
     sceneKeys.ts          Nomes das cenas
     registryKeys.ts       Chaves do registry do Phaser (estado da sessão entre cenas)
     strings.ts            Todos os textos de UI (pronto para i18n)
+    fonts.ts              GAME_FONTS (TITLE, ARCADE, HUD, PIXEL, BODY) e os arquivos de fonte (OFL)
   types/                  Tipos compartilhados (sem lógica)
     fighter.ts            FighterConfig, AttackConfig, estados, assets
     input.ts              InputAction, InputState, InputSource
     geometry.ts           Vec2, Rect, LocalBox, Direction
     stage.ts              StageConfig, StageArt (camadas ilustradas), StageMood
-    match.ts              MatchSetup (com AIDifficulty), RoundResult, MatchResult
+    match.ts              MatchSetup (com AIDifficulty e GameMode), RoundResult, MatchResult
+    story.ts              StoryLocation, StoryLeg, StoryRoute, StoryCharacterProfile, StoryProgress
   core/                   SIMULAÇÃO PURA
     FightSimulation.ts    Orquestra um frame da luta
     fighter/Fighter.ts    Entidade lutador: state machine + física + caixas
@@ -65,13 +67,19 @@ src/
     AIController.ts       CPU (state machine), escolha de golpe consciente da postura
     aiProfiles.ts         AIProfile por dificuldade (EASY_AI, NORMAL_AI, HARD_AI, aiProfileFor)
   fighters/               CONTEÚDO: um arquivo por personagem
-    augusto.ts, filipe.ts, fighterA.ts, fighterB.ts
+    augusto.ts, filipe.ts, joaoGuiotti.ts, romualdo.ts, fighterA.ts, fighterB.ts
     shared/standardBody.ts  Hurtboxes padrão reutilizáveis
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
     partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
     partnerArena.ts       Cenário procedural (também é o fallback visual)
     stageRegistry.ts
+  story/                  MODO HISTÓRIA, PURO (sem Phaser; o ESLint garante)
+    locations.ts          Cidades (lat/lon, UF) e rótulo "RECIFE - PE"
+    storyProfiles.ts      Origem e storyRoute de cada lutador (sem if por ID nas cenas)
+    storyProgress.ts      Progresso imutável: início, chegada, resultado, MatchSetup da etapa
+    brazilMap.ts          Contorno do Brasil (lon/lat) e projeção para o retângulo do mapa
+    flightPath.ts         Curva do voo (Bezier quadrática), ponto e direção em t
   input/                  Dispositivos (Phaser)
     KeyboardInputSource.ts, menuKeys.ts
   render/                 Desenho do mundo (Phaser)
@@ -87,7 +95,7 @@ src/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
       titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
       victoryAssets.ts    PURO: camadas da tela de vitória (fundo, card, painel, botão)
-      fontAssets.ts       PURO: fontes incluídas no jogo (Bangers, título da vitória)
+      fontAssets.ts       PURO: FONT_ASSETS a partir de config/fonts.ts
       stageAssets.ts      PURO: imagens declaradas em StageConfig.art (sem duplicatas)
       textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
@@ -105,7 +113,11 @@ src/
   ui/                     Interface fixa na tela (Phaser)
     FightHud.ts, HealthBar.ts, Announcer.ts, TouchControls.ts,
     SpecialMeterBar.ts, DifficultySelector.ts (painel < FÁCIL | NORMAL | DIFÍCIL >),
-    MenuButton.ts, ArcadeBackground.ts, theme.ts
+    MenuButton.ts, ArcadeBackground.ts
+    theme.ts              Cores e estilos de texto (arcadeText, hudText, pixelText, bodyText)
+    timerStyle.ts         PURO: cor e pulso do cronômetro (últimos 10 s)
+    ModeMenu.ts           HISTÓRIA / LUTA RÁPIDA no lugar do JOGAR
+    story/                Mapa do Brasil (BrazilMapView), avião (planeTexture), layout do mapa
     ArtButton.ts          Botão feito de arte (JOGAR, VOLTAR AO MENU): hover 1,03 + brilho, press 0,97
     victory/              Tela de vitória
       victoryContent.ts   PURO: título, retratos, nome e linha de resultado a partir do MatchResult
@@ -125,6 +137,8 @@ src/
       HeroPanel.ts        Painel de destaque do lutador selecionado
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
+    story/                StoryMapScene, CampaignCompleteScene e storyFlow.ts (cola entre as
+                          cenas e o StoryProgress no registry)
     transitions.ts        Fade entre cenas
   utils/device.ts         Detecção de toque, flags de URL
 tests/                    Vitest: lutador, combate, arena, round, partida, IA, dificuldade da CPU,
@@ -175,7 +189,9 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
 Com as camadas de `VICTORY_ASSETS` carregadas, a cena monta: fundo da arena, efeitos (atrás de
 tudo), card do vencedor, título, linha de resultado e o botão `ArtButton`. Todo texto vem de
 `victoryContent(result, sides)`, que só lê o `MatchResult` real (vencedor, motivo do último
-round, placar) e é testado sem Phaser. Entrada em sequência (~1,1 s): título com pop e
+round, placar) e é testado sem Phaser. Os botões (`ArcadeButton`) dependem do modo: luta
+rápida tem VOLTAR AO MENU; na história, vitória mostra CONTINUAR e derrota mostra TENTAR
+NOVAMENTE e SAIR PARA O MENU. Entrada em sequência (~1,1 s): título com pop e
 bounce, card com fade e subida, resultado deslizando, botão por último. Clique, toque, Enter,
 Espaço, Esc e Backspace usam o mesmo `back` (`goToScene` para o menu). Sem a arte, a cena usa
 o visual procedural anterior.
@@ -183,9 +199,18 @@ o visual procedural anterior.
 ## Fluxo entre cenas
 
 ```
+LUTA RÁPIDA
 BootScene → MenuScene → CharacterSelectScene → VersusScene → FightScene → VictoryScene
                 ▲                                                              │
                 └──────────────────────────────────────────────────────────────┘
+
+HISTÓRIA
+MenuScene → CharacterSelectScene{mode: story} → StoryMapScene → VersusScene → FightScene
+                                                    ▲                              │
+                                    vitória (etapa) │        VictoryScene ◄────────┘
+                                                    └── CONTINUAR ◄─┤ derrota: TENTAR NOVAMENTE
+                                                                    │ (VersusScene, mesma luta)
+                                   CampaignCompleteScene ◄── última vitória
 ```
 
 Os dados passam pelo `scene.start(key, data)`:
@@ -195,6 +220,8 @@ Os dados passam pelo `scene.start(key, data)`:
 | CharacterSelect → Versus | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`, `difficulty`) |
 | Versus → Fight           | `MatchSetup`                                                              |
 | Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)                 |
+| Select → StoryMap        | nada: o `StoryProgress` fica no registry (`RegistryKeys.storyProgress`)   |
+| StoryMap → Versus        | `storyMatchSetup(progress, dificuldade)` (`mode: 'story'`)                |
 
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
@@ -214,6 +241,60 @@ Phaser (`this.registry`, chave `RegistryKeys.aiDifficulty`), que dura a sessão 
 compartilhado pelas cenas; não há variável global solta. Valor ausente ou inválido volta para
 `DEFAULT_AI_DIFFICULTY` (`normal`). A `FightScene` cria o `AIController` com
 `aiProfileFor(setup.difficulty)`.
+
+## Modo História
+
+A campanha reaproveita as cenas e o motor existentes: não há outra FightScene nem outro
+sistema de combate. A única diferença de uma luta da história é `MatchSetup.mode = 'story'`.
+
+**Dados (puros, em `src/story/`):**
+
+- `STORY_LOCATIONS`: cidades com `city`, `state`, `stateCode`, `latitude`, `longitude`.
+- `STORY_PROFILES`: para cada lutador, `home` (cidade de origem) e, opcionalmente,
+  `storyRoute` (lista de `StoryLeg { from, to, opponent, stageId? }`). Só quem tem rota é
+  jogável na história; quem só tem `home` aparece como rival. Augusto e Filipe compartilham
+  a rota `PARTNER_TOUR`: Recife → São Paulo (João Guiotti) → São Paulo → Joinville (Romualdo).
+- `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
+  `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
+  (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo
+  objeto; derrota não avança (o retry repete a mesma etapa); vitória vai para a próxima viagem
+  ou conclui a campanha.
+
+**Cenas (`src/scenes/story/`):** `storyFlow.ts` guarda o progresso no registry
+(`RegistryKeys.storyProgress`, validado ao ler) e faz as transições. A `VictoryScene` só chama
+`finishStoryMatch` quando o `MatchResult` é de história, então a luta rápida nunca altera a
+campanha. A `StoryMapScene` projeta lat/lon no retângulo do mapa (equiretangular), desenha o
+Brasil rasterizado em células de 5 px (uma textura em cache) e anima o avião por
+`flightPath(from, to)`: 650 ms parado, 3 s de voo com easing, rotação pela tangente,
+balanço leve e rastro pontilhado; ao pousar, o card "PRÓXIMO DESAFIO" e CONTINUAR (Enter,
+toque ou automático após 4,2 s). No mapa não existem controles de luta.
+
+**Como adicionar uma cidade:** inclua um `StoryLocation` em `src/story/locations.ts` com
+latitude/longitude reais (negativas no Brasil). Ela aparece no mapa automaticamente; os testes
+conferem que fica dentro do contorno.
+
+**Como adicionar um rival:** crie o lutador como qualquer outro (`src/fighters/<id>.ts` +
+`ROSTER`) e adicione `{ fighterId, home: '<cidade>' }` em `STORY_PROFILES`. Use o id dele como
+`opponent` numa etapa.
+
+**Como adicionar uma campanha:** defina uma `StoryRoute` (lista de etapas; cada `from` deve ser
+o `to` da anterior) e coloque-a em `storyRoute` do perfil do lutador. A seleção passa a
+liberá-lo na história, sem nenhuma mudança nas cenas. `stageId` por etapa permite cenários
+próprios por cidade quando existirem.
+
+## Tipografia
+
+`src/config/fonts.ts` define `GAME_FONTS` com cinco papéis: **TITLE** (Bangers: letreiro de
+luta da vitória, anúncios ROUND / FIGHT! / K.O. / TIME OVER e títulos de rota),
+**ARCADE** (Russo One: botões, nomes, rótulos), **HUD** (Press Start 2P: cronômetro),
+**PIXEL** (Pixelify Sans: cidades do mapa, ETAPA, origem no VS) e **BODY** (fonte do sistema,
+para textos corridos). Os arquivos ficam em `public/fonts/<nome>/` com o `OFL.txt` e são
+carregados pela `BootScene` (`FONT_ASSETS`). As cenas usam só os helpers do `theme.ts`; nenhuma
+cena escreve nome de fonte. Glifos ausentes (ex.: →) caem no fallback da pilha.
+
+O cronômetro (`timerStyle.ts`) é dourado até 11 s; de 10 a 7 fica amarelo, de 6 a 4 laranja e
+de 3 a 0 vermelho, com um pulso discreto (escala 1,08; 1,14 no final) a cada segundo. É só
+visual: o tempo do round continua vindo do `RoundSystem`.
 
 ## O frame da luta
 

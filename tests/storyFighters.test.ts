@@ -122,7 +122,7 @@ describe('João Guiotti and Romualdo', () => {
   });
 
   it.each(AI_DIFFICULTIES)(
-    'the CPU plays both on %s, best of three to the end, deterministically',
+    'the CPU plays both on %s, best of three to the end, meter charging, deterministically',
     (difficulty) => {
       const play = () => {
         const sim = new FightSimulation({
@@ -137,6 +137,7 @@ describe('João Guiotti and Romualdo', () => {
         const [a, b] = sim.fighters;
         const trace: string[] = [];
         let outcome = null;
+        let meterCharged = false;
         for (let f = 0; f < 60 * 60 * 8 && !outcome; f++) {
           for (const e of sim.step([
             ais[0]!.getInput({ self: a, opponent: b }),
@@ -145,16 +146,19 @@ describe('João Guiotti and Romualdo', () => {
             if (e.type === 'roundStart') ais.forEach((ai) => ai.reset());
             if (e.type === 'matchOver') outcome = e.outcome;
           }
+          meterCharged ||= a.specialMeter > 0 && b.specialMeter > 0;
           if (f % 30 === 0)
             trace.push(
               `${a.position.x},${a.health},${a.specialMeter}|${b.position.x},${b.health},${b.specialMeter}`,
             );
         }
-        return { trace, outcome };
+        return { trace, outcome, meterCharged };
       };
       const first = play();
       expect(first.outcome).not.toBeNull();
       expect(Math.max(...first.outcome!.roundWins)).toBeGreaterThanOrEqual(1);
+      // The special meter charges for both (they have no specials yet, but the meter works).
+      expect(first.meterCharged).toBe(true);
       expect(play()).toEqual(first);
     },
   );

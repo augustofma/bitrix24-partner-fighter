@@ -234,6 +234,25 @@ sem pedido explícito.**
 - [x] Degradê quente, contorno duplo, pincel seco, inclinação e sombra; nomes longos cabem
 - [x] Testes dos quatro vencedores, ajuste de largura e licença; playtest desktop e mobile
 
+## DONE (v0.20: Modo História, branch `feature/story-mode-major-update`)
+
+- [x] Menu JOGAR → HISTÓRIA / LUTA RÁPIDA (luta rápida inalterada)
+- [x] Novos lutadores **JOÃO GUIOTTI** (São Paulo - SP, técnico) e **ROMUALDO** (Joinville - SC,
+      pesado), com visual genérico, paletas próprias, todos os estados e sem especiais
+- [x] Perfis de história em config (`src/story/storyProfiles.ts`): origem e `storyRoute` por
+      lutador, sem `if` por ID nas cenas
+- [x] Campanha de Augusto e Filipe: Recife → São Paulo (João) → Joinville (Romualdo)
+- [x] `StoryProgress` puro e imutável; derrota oferece TENTAR NOVAMENTE (só aquela luta) ou SAIR;
+      luta rápida nunca toca a campanha
+- [x] `StoryMapScene`: mapa pixel-art do Brasil, cidades, avião em curva com rastro pontilhado,
+      "PRÓXIMO DESAFIO" e VS com cidade/UF; `CampaignCompleteScene` no final
+- [x] Tipografia central `GAME_FONTS` (TITLE / ARCADE / HUD / PIXEL / BODY) com fontes OFL
+      offline; anúncios ROUND / FIGHT! / K.O. com o letreiro da vitória
+- [x] Timer em fonte arcade; últimos 10 s em amarelo → laranja → vermelho com pulso discreto
+- [x] Testes de roster, origens, rotas, progresso, retry, isolamento da luta rápida, mapa,
+      voo, novos lutadores na simulação, CPU, melhor de 3, barra de especial, fontes e timer
+- [x] Playtest Augusto (com derrota + retry) e Filipe em 1280×720, 1920×1080 e 844×390
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
@@ -252,6 +271,10 @@ sem pedido explícito.**
 9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
 10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
 11. [ ] CI (GitHub Actions) rodando `npm run check`.
+12. [ ] Arte própria (sprite + retrato) para JOÃO GUIOTTI e ROMUALDO, e especiais para eles.
+13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
+14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
+15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).
 
 ## FUTURE (não implementar agora)
 
@@ -263,7 +286,7 @@ sem pedido explícito.**
 - Combos, contador de hits, cancelamentos
 - Vários cenários
 - Sons, músicas e falas dos personagens
-- Modo torneio / arcade com sequência de oponentes
+- Modo torneio / arcade com chaveamento (o Modo História já cobre a sequência de rivais)
 - Ranking
 - Multiplayer local (2 jogadores no mesmo teclado/gamepads)
 - Multiplayer online (rollback netcode sobre a simulação determinística)
