@@ -35,6 +35,7 @@ export default tseslint.config(
       'src/fighters/**/*.ts',
       'src/stages/**/*.ts',
       'src/config/**/*.ts',
+      'src/story/**/*.ts',
     ],
     rules: {
       'no-restricted-imports': [

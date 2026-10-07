@@ -6,6 +6,9 @@ export function isAIDifficulty(value: unknown): value is AIDifficulty {
   return AI_DIFFICULTIES.some((difficulty) => difficulty === value);
 }
 
+/** Quick fight (a single match) or a story campaign fight. */
+export type GameMode = 'quick' | 'story';
+
 /** What the scenes pass to each other to describe a match. */
 export interface MatchSetup {
   playerFighterId: string;
@@ -13,6 +16,8 @@ export interface MatchSetup {
   stageId: string;
   /** Picks the CPU's AIProfile; never changes fighter stats, damage or health. */
   difficulty: AIDifficulty;
+  /** Story fights get the campaign screens around them; omitted = quick fight. */
+  mode?: GameMode;
 }
 
 export type RoundEndReason = 'ko' | 'timeout';
