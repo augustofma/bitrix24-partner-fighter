@@ -17,11 +17,16 @@ dobrada sobre o início, então repetem sem clique nem silêncio.
 
 | Faixa                    | Onde toca                      | Tom / BPM     | Duração | Clima                                    |
 | ------------------------ | ------------------------------ | ------------- | ------- | ---------------------------------------- |
-| `menu-theme`             | Tela inicial                   | Ré menor 112  | 34 s    | Abertura épica, intro com pad e arpejo   |
+| `menu-theme`             | Tela inicial                   | Dó menor 132  | 44 s    | Abertura de arcade de luta (ver abaixo)  |
 | `character-select-theme` | Seleção e VS da luta rápida    | Mi menor 140  | 27 s    | Expectativa: four-on-the-floor, chiptune |
 | `story-map-theme`        | Mapa do Modo História (e o VS) | Ré menor 138  | 42 s    | Mapa de arcade de luta (ver abaixo)      |
 | `partner-summit-theme`   | Lutas no Partner Summit        | Lá menor 150  | 38 s    | Batalha: galope de power chords, lead    |
 | `victory-sting`          | Vitória e campanha concluída   | Si♭ maior 165 | 5 s     | Fanfarra de arcade de luta (ver abaixo)  |
+
+**`menu-theme`:** tema de abertura de arcade de luta, com melodia original: intro com orquestra
+hits sincopados, cordas, tímpanos e rufo de caixa; tema heroico nos metais sobre power chords e
+baixo em oitavas (A); refrão com o lead de synth no agudo e os metais uma oitava abaixo (B); e
+um final com acordes de metais sustentados e um hit a cada troca de acorde, que volta à intro no loop.
 
 **`story-map-theme`:** tema de "mapa-múndi" de arcade de luta, com melodia original: baixo
 funk em semicolcheias com oitavas, orquestra hits abrindo cada frase e stabs de metais nos
