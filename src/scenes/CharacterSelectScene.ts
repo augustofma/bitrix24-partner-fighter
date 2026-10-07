@@ -8,7 +8,11 @@ import { STRINGS } from '../config/strings';
 import { ROSTER, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
-import { isAIDifficulty, type AIDifficulty, type MatchSetup } from '../types/match';
+import type { FighterConfig } from '../types/fighter';
+import { isAIDifficulty, type AIDifficulty, type GameMode, type MatchSetup } from '../types/match';
+import { locationLabel } from '../story/locations';
+import { fighterOrigin, hasStoryCampaign, isStoryRival } from '../story/storyProfiles';
+import { beginStory } from './story/storyFlow';
 import { DifficultySelector } from '../ui/DifficultySelector';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
 import { drawArcadeFrame } from '../ui/select/arcadeFrame';
@@ -43,16 +47,19 @@ export class CharacterSelectScene extends Phaser.Scene {
   private selectButton!: ArcadeButton;
   private pageLabel: Phaser.GameObjects.Text | null = null;
   private opponentLabel: Phaser.GameObjects.Text | null = null;
+  /** Quick fight (any selectable fighter) or story (fighters with a campaign). */
+  private mode: GameMode = 'quick';
 
   constructor() {
     super(SceneKeys.CharacterSelect);
   }
 
-  create(): void {
+  create(data?: { mode?: GameMode }): void {
+    this.mode = data?.mode ?? 'quick';
     fadeIn(this);
     createSelectBackground(this);
 
-    this.selectedIndex = ROSTER.findIndex((fighter) => fighter.selectable);
+    this.selectedIndex = ROSTER.findIndex((fighter) => this.canPick(fighter));
     if (this.selectedIndex < 0) throw new Error('The roster has no selectable fighter.');
 
     this.createTopBar();
@@ -132,7 +139,12 @@ export class CharacterSelectScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
     this.add
-      .text(title.x, topBarY, STRINGS.selectTitle, arcadeText(30, COLORS.gold))
+      .text(
+        title.x,
+        topBarY,
+        this.mode === 'story' ? STRINGS.storySelectTitle : STRINGS.selectTitle,
+        arcadeText(30, COLORS.gold),
+      )
       .setOrigin(0.5)
       .setShadow(0, 0, css(COLORS.magenta), TITLE_GLOW_BLUR, true, true);
 
@@ -177,20 +189,37 @@ export class CharacterSelectScene extends Phaser.Scene {
     ROSTER.forEach((config, index) => {
       const { x, y } = cardSlot(index);
       this.cards.push(
-        new RosterCard(this, x, y, config, () => {
-          // First tap selects, a tap on the selected card confirms.
-          if (this.selectedIndex === index) this.confirm();
-          else {
-            this.selectedIndex = index;
-            this.refreshSelection();
-          }
-        }),
+        new RosterCard(
+          this,
+          x,
+          y,
+          config,
+          () => {
+            // First tap selects, a tap on the selected card confirms.
+            if (this.selectedIndex === index) this.confirm();
+            else {
+              this.selectedIndex = index;
+              this.refreshSelection();
+            }
+          },
+          { selectable: this.canPick(config), lockedTag: this.lockedTag(config) },
+        ),
       );
     });
     for (let filler = 0; filler < fillerSlots(ROSTER.length); filler++) {
       const { x, y } = cardSlot(ROSTER.length + filler);
       this.cards.push(new RosterCard(this, x, y, null, () => undefined));
     }
+  }
+
+  /** In story mode only fighters with a campaign can be picked; otherwise `selectable`. */
+  private canPick(config: FighterConfig): boolean {
+    return this.mode === 'story' ? hasStoryCampaign(config.id) : config.selectable;
+  }
+
+  private lockedTag(config: FighterConfig): string {
+    if (this.mode !== 'story') return STRINGS.cpuOnly;
+    return isStoryRival(config.id) ? STRINGS.storyLockedRival : STRINGS.storyLockedSoon;
   }
 
   /** Last difficulty chosen in this session (game registry), or the default. */
@@ -203,7 +232,8 @@ export class CharacterSelectScene extends Phaser.Scene {
     const count = ROSTER.length;
     for (let i = 1; i <= count; i++) {
       const candidate = (this.selectedIndex + step * i + count * i) % count;
-      if (ROSTER[candidate]?.selectable) {
+      const config = ROSTER[candidate];
+      if (config && this.canPick(config)) {
         this.selectedIndex = candidate;
         this.refreshSelection();
         return;
@@ -220,8 +250,15 @@ export class CharacterSelectScene extends Phaser.Scene {
       card.setSelected(index === this.selectedIndex);
     });
     this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(ROSTER.length)));
-    this.opponentLabel?.setText(STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName));
+    this.opponentLabel?.setText(this.badgeText(fighter));
     this.hero.show(fighter);
+  }
+
+  /** Quick fight: the CPU opponent. Story: where the campaign starts. */
+  private badgeText(fighter: FighterConfig): string {
+    const origin = fighterOrigin(fighter.id);
+    if (this.mode === 'story' && origin) return STRINGS.storyOrigin(locationLabel(origin));
+    return STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName);
   }
 
   private back(): void {
@@ -230,7 +267,13 @@ export class CharacterSelectScene extends Phaser.Scene {
 
   private confirm(): void {
     const player = ROSTER[this.selectedIndex];
-    if (!player?.selectable) return;
+    if (!player || !this.canPick(player)) return;
+    if (this.mode === 'story') {
+      this.registry.set(RegistryKeys.aiDifficulty, this.difficulty.value);
+      this.cameras.main.flash(150, 255, 255, 255);
+      beginStory(this, player.id);
+      return;
+    }
     const setup: MatchSetup = {
       playerFighterId: player.id,
       cpuFighterId: pickCpuOpponent(player.id).id,

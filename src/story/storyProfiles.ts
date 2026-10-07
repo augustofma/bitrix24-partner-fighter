@@ -40,3 +40,10 @@ export function storyRouteFor(fighterId: string): StoryRoute | undefined {
 export function hasStoryCampaign(fighterId: string): boolean {
   return storyRouteFor(fighterId) !== undefined;
 }
+
+/** Fighters met as rivals in some campaign (shown locked in the story select screen). */
+export function isStoryRival(fighterId: string): boolean {
+  return STORY_PROFILES.some((profile) =>
+    (profile.storyRoute ?? []).some((leg) => leg.opponent === fighterId),
+  );
+}

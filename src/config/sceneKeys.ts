@@ -5,4 +5,6 @@ export const SceneKeys = {
   Versus: 'VersusScene',
   Fight: 'FightScene',
   Victory: 'VictoryScene',
+  StoryMap: 'StoryMapScene',
+  CampaignComplete: 'CampaignCompleteScene',
 } as const;

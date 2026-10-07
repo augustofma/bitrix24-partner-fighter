@@ -28,6 +28,7 @@ export class RosterCard {
   private readonly glow: Phaser.GameObjects.Rectangle;
   private readonly marker: Phaser.GameObjects.Container;
   private selected = false;
+  private readonly selectable: boolean;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -35,7 +36,10 @@ export class RosterCard {
     y: number,
     readonly config: FighterConfig | null,
     onPress: () => void,
+    /** Whether this mode lets the player pick it, and the tag shown when it does not. */
+    options: { selectable?: boolean; lockedTag?: string } = {},
   ) {
+    this.selectable = options.selectable ?? config?.selectable ?? false;
     this.container = scene.add.container(x, y);
     this.glow = scene.add
       .rectangle(0, 0, WIDTH + GLOW_PAD * 2, HEIGHT + GLOW_PAD * 2, COLORS.neon, 0.6)
@@ -44,7 +48,7 @@ export class RosterCard {
     this.container.add([this.glow, this.frame]);
     this.drawFrame();
 
-    if (config) this.addFighter(config);
+    if (config) this.addFighter(config, options.lockedTag ?? STRINGS.cpuOnly);
     else this.addEmptySlot();
 
     this.marker = this.createMarker();
@@ -58,7 +62,7 @@ export class RosterCard {
       ease: 'Sine.easeInOut',
     });
 
-    if (config?.selectable) {
+    if (config && this.selectable) {
       this.container
         .setSize(WIDTH, HEIGHT)
         .setInteractive({ useHandCursor: true })
@@ -73,7 +77,7 @@ export class RosterCard {
     this.drawFrame();
     this.glow.setVisible(selected);
     this.marker.setVisible(selected);
-    if (this.config?.selectable) this.container.setAlpha(selected ? 1 : DIMMED_ALPHA);
+    if (this.config && this.selectable) this.container.setAlpha(selected ? 1 : DIMMED_ALPHA);
     if (changed) {
       this.scene.tweens.add({
         targets: this.container,
@@ -94,7 +98,7 @@ export class RosterCard {
   }
 
   private drawFrame(): void {
-    const locked = !this.config?.selectable;
+    const locked = !this.config || !this.selectable;
     this.frame.clear();
     drawArcadeFrame(this.frame, -WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT, {
       fill: COLORS.navy,
@@ -104,7 +108,7 @@ export class RosterCard {
     });
   }
 
-  private addFighter(config: FighterConfig): void {
+  private addFighter(config: FighterConfig, lockedTag: string): void {
     const scene = this.scene;
     const artWidth = WIDTH - ART_INSET * 2;
     const artHeight = HEIGHT - ART_INSET * 2 - NAME_PLATE_HEIGHT;
@@ -143,10 +147,10 @@ export class RosterCard {
     if (name.width > artWidth - 8) name.setScale((artWidth - 8) / name.width);
     this.container.add([backdrop, portrait, plate, name]);
 
-    if (!config.selectable) {
+    if (!this.selectable) {
       this.container.setAlpha(LOCKED_ALPHA);
       const tag = scene.add
-        .text(WIDTH / 2 - 10, -HEIGHT / 2 + 10, STRINGS.cpuOnly, arcadeText(15, COLORS.magenta))
+        .text(WIDTH / 2 - 10, -HEIGHT / 2 + 10, lockedTag, arcadeText(15, COLORS.magenta))
         .setOrigin(1, 0);
       this.container.add(tag);
     }

@@ -5,4 +5,6 @@
 export const RegistryKeys = {
   /** Last CPU difficulty chosen on the character select screen. */
   aiDifficulty: 'aiDifficulty',
+  /** The story campaign in progress (StoryProgress), or nothing outside story mode. */
+  storyProgress: 'storyProgress',
 } as const;

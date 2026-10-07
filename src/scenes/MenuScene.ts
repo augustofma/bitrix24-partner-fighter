@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { MENU_CONFIRM_KEYS } from '../config/controls';
+import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
@@ -11,6 +11,8 @@ import { POSES } from '../render/placeholder/poses';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
 import { ArtButton } from '../ui/ArtButton';
 import { MenuButton } from '../ui/MenuButton';
+import { ModeMenu } from '../ui/ModeMenu';
+import type { GameMode } from '../types/match';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
@@ -23,6 +25,9 @@ const LOGO_FLOAT_PX = 4;
 const LOGO_FLOAT_MS = 2200;
 const LOGO_BREATH_SCALE = 1.01;
 const LOGO_BREATH_MS = 2600;
+
+/** Emitted by the JOGAR button (art or fallback) when activated. */
+const PLAY_EVENT = 'play';
 
 /** Delay before leaving after a keyboard confirm, so the press is visible. */
 const KEY_PRESS_MS = 90;
@@ -40,14 +45,45 @@ export class MenuScene extends Phaser.Scene {
 
   create(): void {
     fadeIn(this);
-    const start = () => goToScene(this, SceneKeys.CharacterSelect);
+    const startMode = (mode: GameMode) => goToScene(this, SceneKeys.CharacterSelect, { mode });
+    const modes = new ModeMenu(this, BUTTON_POSITION.x, BUTTON_POSITION.y, [
+      { label: STRINGS.modeStory, onSelect: () => startMode('story') },
+      { label: STRINGS.modeQuickFight, onSelect: () => startMode('quick') },
+    ]);
     const hasArt = Object.values(TITLE_ART).every(({ key }) => this.textures.exists(key));
-    if (hasArt) this.createIllustrated(start);
-    else this.createProcedural(start);
+    const play = hasArt ? this.createIllustrated() : this.createProcedural();
+    this.bindModeMenu(modes, play);
+  }
+
+  /**
+   * JOGAR opens the mode choice in its place (HISTÓRIA / LUTA RÁPIDA). Keyboard: Enter/Space
+   * opens and confirms, arrows move, Esc closes it again.
+   */
+  private bindModeMenu(modes: ModeMenu, play: Phaser.GameObjects.Container): void {
+    const open = () => {
+      if (modes.isOpen) return;
+      play.setVisible(false);
+      modes.open();
+    };
+    play.on(PLAY_EVENT, open);
+    onKeys(this, MENU_CONFIRM_KEYS, () => {
+      if (modes.isOpen) modes.confirm();
+      else {
+        if (play instanceof ArtButton) play.press();
+        this.time.delayedCall(KEY_PRESS_MS, open);
+      }
+    });
+    onKeys(this, ['LEFT', 'UP'], () => modes.isOpen && modes.move(-1));
+    onKeys(this, ['RIGHT', 'DOWN'], () => modes.isOpen && modes.move(1));
+    onKeys(this, MENU_BACK_KEYS, () => {
+      if (!modes.isOpen) return;
+      modes.close();
+      play.setVisible(true);
+    });
   }
 
   /** The approved art: texts (hint, disclaimer, version) are part of the background image. */
-  private createIllustrated(start: () => void): void {
+  private createIllustrated(): Phaser.GameObjects.Container {
     this.add
       .image(0, 0, TITLE_ART.background.key)
       .setOrigin(0)
@@ -71,21 +107,18 @@ export class MenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
 
-    const button = new ArtButton(
+    const button: ArtButton = new ArtButton(
       this,
       BUTTON_POSITION.x,
       BUTTON_POSITION.y,
       TITLE_ART.button.key,
-      start,
+      () => button.emit(PLAY_EVENT),
     );
-    onKeys(this, MENU_CONFIRM_KEYS, () => {
-      button.press();
-      this.time.delayedCall(KEY_PRESS_MS, start);
-    });
+    return button;
   }
 
   /** Fallback when the title art is missing: procedural background, text title, button. */
-  private createProcedural(start: () => void): void {
+  private createProcedural(): Phaser.GameObjects.Container {
     createArcadeBackground(this);
     this.drawSilhouettes();
 
@@ -103,8 +136,9 @@ export class MenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
 
-    new MenuButton(this, centerX, 330, STRINGS.play, start).setHighlighted(true);
-    onKeys(this, MENU_CONFIRM_KEYS, start);
+    const button: MenuButton = new MenuButton(this, centerX, BUTTON_POSITION.y, STRINGS.play, () =>
+      button.emit(PLAY_EVENT),
+    ).setHighlighted(true);
 
     const hint = this.add
       .text(centerX, 392, STRINGS.pressStart, arcadeText(16, COLORS.white))
@@ -119,6 +153,7 @@ export class MenuScene extends Phaser.Scene {
       .text(GAME_WIDTH - 12, GAME_HEIGHT - 10, STRINGS.version, bodyText(12, COLORS.white))
       .setOrigin(1, 1)
       .setAlpha(0.5);
+    return button;
   }
 
   /** The first two roster fighters facing each other on the sides of the title. */

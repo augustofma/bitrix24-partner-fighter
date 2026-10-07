@@ -7,7 +7,10 @@ import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { createPortrait } from '../render/PortraitView';
 import { getStageConfig } from '../stages/stageRegistry';
+import { locationLabel } from '../story/locations';
+import { fighterOrigin, storyRouteFor } from '../story/storyProfiles';
 import type { MatchSetup } from '../types/match';
+import { getStoryProgress } from './story/storyFlow';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
@@ -17,8 +20,15 @@ const PORTRAIT_HEIGHT = 380;
 const SLIDE_MS = 450;
 /** Horizontal offset of the diagonal split between both sides. */
 const SPLIT_SKEW = 120;
+/** Final x of the left portrait (the right one mirrors it). */
+const PORTRAIT_SIDE_X = 220;
+const ORIGIN_Y = 462;
+const STAGE_LABEL_Y = 40;
 
-/** "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. */
+/**
+ * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where
+ * each fighter comes from and the campaign stage.
+ */
 export class VersusScene extends Phaser.Scene {
   constructor() {
     super(SceneKeys.Versus);
@@ -54,10 +64,15 @@ export class VersusScene extends Phaser.Scene {
       ...size,
       mirrored: true,
     });
-    this.tweens.add({ targets: left, x: 220, duration: SLIDE_MS, ease: 'Cubic.easeOut' });
+    this.tweens.add({
+      targets: left,
+      x: PORTRAIT_SIDE_X,
+      duration: SLIDE_MS,
+      ease: 'Cubic.easeOut',
+    });
     this.tweens.add({
       targets: right,
-      x: GAME_WIDTH - 220,
+      x: GAME_WIDTH - PORTRAIT_SIDE_X,
       duration: SLIDE_MS,
       ease: 'Cubic.easeOut',
     });
@@ -77,6 +92,7 @@ export class VersusScene extends Phaser.Scene {
     this.add
       .text(half, GAME_HEIGHT - 70, stage.displayName, arcadeText(22, COLORS.cyan))
       .setOrigin(0.5);
+    if (setup.mode === 'story') this.addStoryDetails(setup);
     this.add
       .text(half, GAME_HEIGHT - 30, STRINGS.vsSkipHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
@@ -86,5 +102,34 @@ export class VersusScene extends Phaser.Scene {
     this.time.delayedCall(DURATION_MS, start);
     this.input.once('pointerup', start);
     onKeys(this, MENU_CONFIRM_KEYS, start);
+  }
+
+  /** Story fights: each fighter's city and UF under the portraits, and the campaign stage. */
+  private addStoryDetails(setup: MatchSetup): void {
+    const sides = [
+      { id: setup.playerFighterId, x: PORTRAIT_SIDE_X },
+      { id: setup.cpuFighterId, x: GAME_WIDTH - PORTRAIT_SIDE_X },
+    ];
+    for (const { id, x } of sides) {
+      const origin = fighterOrigin(id);
+      if (!origin) continue;
+      const label = this.add
+        .text(x, ORIGIN_Y, locationLabel(origin), arcadeText(16, COLORS.neon))
+        .setOrigin(0.5)
+        .setAlpha(0);
+      this.tweens.add({ targets: label, alpha: 1, delay: SLIDE_MS, duration: 250 });
+    }
+    const progress = getStoryProgress(this);
+    const route = storyRouteFor(setup.playerFighterId);
+    if (progress && route) {
+      this.add
+        .text(
+          GAME_WIDTH / 2,
+          STAGE_LABEL_Y,
+          STRINGS.storyLeg(progress.currentStage + 1, route.length),
+          arcadeText(18, COLORS.gold),
+        )
+        .setOrigin(0.5);
+    }
   }
 }

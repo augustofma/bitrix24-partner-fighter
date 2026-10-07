@@ -43,14 +43,14 @@ export function createVictoryTitle(
   return scene.add.container(x, y, [title, glow]);
 }
 
-/** The result panel (art) with "VERDICT ■ Reason ■ score" centered on it. */
+/** The result panel (art, when loaded) with "VERDICT ■ Reason ■ score" centered on it. */
 export function createResultLine(
   scene: Phaser.Scene,
-  panelKey: string,
+  panelKey: string | null,
   segments: readonly ResultSegment[],
 ): Phaser.GameObjects.Container {
   const { x, y, width } = VICTORY_LAYOUT.resultPanel;
-  const container = scene.add.container(x, y, [scene.add.image(0, 0, panelKey)]);
+  const container = scene.add.container(x, y, panelKey ? [scene.add.image(0, 0, panelKey)] : []);
   const parts: Phaser.GameObjects.Text[] = [];
   segments.forEach((segment, i) => {
     if (i > 0) {

@@ -4,6 +4,8 @@ import { BootScene } from './scenes/BootScene';
 import { CharacterSelectScene } from './scenes/CharacterSelectScene';
 import { FightScene } from './scenes/FightScene';
 import { MenuScene } from './scenes/MenuScene';
+import { CampaignCompleteScene } from './scenes/story/CampaignCompleteScene';
+import { StoryMapScene } from './scenes/story/StoryMapScene';
 import { VersusScene } from './scenes/VersusScene';
 import { VictoryScene } from './scenes/VictoryScene';
 
@@ -30,7 +32,16 @@ const config: Phaser.Types.Core.GameConfig = {
     roundPixels: false,
   },
   // Order matters only for the first scene (Boot).
-  scene: [BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene],
+  scene: [
+    BootScene,
+    MenuScene,
+    CharacterSelectScene,
+    StoryMapScene,
+    VersusScene,
+    FightScene,
+    VictoryScene,
+    CampaignCompleteScene,
+  ],
 };
 
 const game = new Phaser.Game(config);

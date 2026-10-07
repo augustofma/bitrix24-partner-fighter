@@ -1,4 +1,6 @@
-import type { MapPoint } from './brazilMap';
+import type { StoryLocation, StoryProgress } from '../types/story';
+import { locationToMap, type MapPoint, type MapRect } from './brazilMap';
+import { getStoryLocation } from './locations';
 
 /** How far the arc bulges sideways, relative to the trip's length. */
 const ARC_BULGE = 0.28;
@@ -42,4 +44,15 @@ export function flightPath(from: MapPoint, to: MapPoint): FlightPath {
       return Math.atan2(y, x);
     },
   };
+}
+
+/** The trip the map must animate for a campaign about to travel (null when not traveling). */
+export function tripForProgress(
+  progress: StoryProgress,
+  rect: MapRect,
+): { from: StoryLocation; to: StoryLocation; path: FlightPath } | null {
+  if (progress.phase !== 'travel' || !progress.nextLocation) return null;
+  const from = getStoryLocation(progress.currentLocation);
+  const to = getStoryLocation(progress.nextLocation);
+  return { from, to, path: flightPath(locationToMap(from, rect), locationToMap(to, rect)) };
 }

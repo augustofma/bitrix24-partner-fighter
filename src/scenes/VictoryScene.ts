@@ -11,6 +11,7 @@ import { createPortrait } from '../render/PortraitView';
 import type { MatchResult } from '../types/match';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
 import { ArtButton } from '../ui/ArtButton';
+import { ArcadeButton } from '../ui/select/ArcadeButton';
 import { MenuButton } from '../ui/MenuButton';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { VictoryCard } from '../ui/victory/VictoryCard';
@@ -18,6 +19,7 @@ import { victoryContent, type VictoryContent } from '../ui/victory/victoryConten
 import { createVictoryEffects } from '../ui/victory/VictoryEffects';
 import { VICTORY_LAYOUT } from '../ui/victory/victoryLayout';
 import { createResultLine, createVictoryTitle } from '../ui/victory/victoryText';
+import { continueStory, finishStoryMatch, quitStory, retryStoryFight } from './story/storyFlow';
 import { fadeIn, goToScene } from './transitions';
 
 /** Entrance timeline (ms): title, card, result line, then the button (~1.1 s in total). */
@@ -36,6 +38,19 @@ const BUTTON_START_SCALE = 0.85;
 /** Delay before leaving after a keyboard confirm, so the press is visible. */
 const KEY_PRESS_MS = 90;
 
+/** Story choices replace the art button: arcade buttons in one row. */
+const STORY_BUTTON = { width: 270, height: 58, fontSize: 20 } as const;
+const STORY_BUTTON_GAP = 22;
+
+interface ScreenActions {
+  /** Story choices (empty: the art's VOLTAR AO MENU button). */
+  buttons: readonly { label: string; onSelect: () => void }[];
+  /** Enter / Space. */
+  primary: () => void;
+  /** Esc / Backspace. */
+  cancel: () => void;
+}
+
 const FALLBACK_PORTRAIT_SIZE = { width: 220, height: 260 };
 const FALLBACK_PORTRAIT_Y = 240;
 
@@ -43,7 +58,8 @@ const FALLBACK_PORTRAIT_Y = 240;
  * Match result. With the art loaded: the illustrated arena, an animated title with the
  * winner's name, the winner's card with the real portrait, the result line and a real
  * VOLTAR AO MENU button, entering in sequence. Without it: the previous procedural screen.
- * Everything written comes from the real MatchResult (see victoryContent).
+ * Everything written comes from the real MatchResult (see victoryContent). Story fights record
+ * the result in the campaign and offer CONTINUAR, or TENTAR NOVAMENTE / SAIR PARA O MENU.
  */
 export class VictoryScene extends Phaser.Scene {
   constructor() {
@@ -58,13 +74,73 @@ export class VictoryScene extends Phaser.Scene {
       getFighterConfig(setup.cpuFighterId),
     ] as const;
     const content = victoryContent(result, sides);
-    const back = () => goToScene(this, SceneKeys.Menu);
+    const actions = setup.mode === 'story' ? this.storyActions(result) : this.quickActions();
     const hasArt = Object.values(VICTORY_ART).every(({ key }) => this.textures.exists(key));
-    if (hasArt) this.createIllustrated(content, back);
-    else this.createProcedural(content, back);
+    if (hasArt) this.createIllustrated(content, actions);
+    else this.createProcedural(content, actions);
   }
 
-  private createIllustrated(content: VictoryContent, back: () => void): void {
+  /** Quick fight: one way out, back to the menu (the art's own button). */
+  private quickActions(): ScreenActions {
+    const back = () => goToScene(this, SceneKeys.Menu);
+    return { buttons: [], primary: back, cancel: back };
+  }
+
+  /**
+   * Story fight: the result is recorded once (a win advances the campaign, a loss keeps the
+   * same fight). Win: CONTINUAR. Loss or draw: TENTAR NOVAMENTE / SAIR PARA O MENU.
+   */
+  private storyActions(result: MatchResult): ScreenActions {
+    finishStoryMatch(this, result);
+    const leave = () => quitStory(this);
+    if (result.winnerIndex === 0) {
+      const next = () => continueStory(this);
+      return {
+        buttons: [{ label: STRINGS.storyContinue, onSelect: next }],
+        primary: next,
+        cancel: leave,
+      };
+    }
+    const retry = () => retryStoryFight(this);
+    return {
+      buttons: [
+        { label: STRINGS.storyRetry, onSelect: retry },
+        { label: STRINGS.storyQuit, onSelect: leave },
+      ],
+      primary: retry,
+      cancel: leave,
+    };
+  }
+
+  /** The art's VOLTAR AO MENU button, or a row of arcade buttons for story choices. */
+  private createButtons(actions: ScreenActions): {
+    root: Phaser.GameObjects.Container;
+    press: () => void;
+  } {
+    const { button: at } = VICTORY_LAYOUT;
+    if (actions.buttons.length === 0) {
+      const art = new ArtButton(this, at.x, at.y, VICTORY_ART.button.key, actions.primary);
+      return { root: art, press: () => art.press() };
+    }
+    const row = this.add.container(at.x, at.y);
+    const span =
+      actions.buttons.length * STORY_BUTTON.width + (actions.buttons.length - 1) * STORY_BUTTON_GAP;
+    const buttons = actions.buttons.map((item, i) => {
+      const button = new ArcadeButton(
+        this,
+        -span / 2 + STORY_BUTTON.width / 2 + i * (STORY_BUTTON.width + STORY_BUTTON_GAP),
+        0,
+        item.label,
+        item.onSelect,
+        { ...STORY_BUTTON, variant: i === 0 ? 'primary' : 'secondary', pulse: i === 0 },
+      );
+      row.add(button);
+      return button;
+    });
+    return { root: row, press: () => buttons[0]?.flash() };
+  }
+
+  private createIllustrated(content: VictoryContent, actions: ScreenActions): void {
     this.add
       .image(0, 0, VICTORY_ART.background.key)
       .setOrigin(0)
@@ -79,14 +155,14 @@ export class VictoryScene extends Phaser.Scene {
     );
     const title = createVictoryTitle(this, content.title);
     const result = createResultLine(this, VICTORY_ART.resultPanel.key, content.result);
-    const { button: at } = VICTORY_LAYOUT;
-    const button = new ArtButton(this, at.x, at.y, VICTORY_ART.button.key, back);
+    const buttons = this.createButtons(actions);
 
-    this.playEntrance(title, card, result, button);
-    onKeys(this, [...MENU_CONFIRM_KEYS, ...MENU_BACK_KEYS], () => {
-      button.press();
-      this.time.delayedCall(KEY_PRESS_MS, back);
+    this.playEntrance(title, card, result, buttons.root);
+    onKeys(this, MENU_CONFIRM_KEYS, () => {
+      buttons.press();
+      this.time.delayedCall(KEY_PRESS_MS, actions.primary);
     });
+    onKeys(this, MENU_BACK_KEYS, actions.cancel);
   }
 
   /** Background first, then title (pop + bounce), card (fade + rise), result, button. */
@@ -94,7 +170,7 @@ export class VictoryScene extends Phaser.Scene {
     title: Phaser.GameObjects.Container,
     card: VictoryCard,
     result: Phaser.GameObjects.Container,
-    button: ArtButton,
+    button: Phaser.GameObjects.Container,
   ): void {
     title.setScale(TITLE_START_SCALE).setAlpha(0);
     this.tweens.add({
@@ -146,7 +222,7 @@ export class VictoryScene extends Phaser.Scene {
   }
 
   /** Fallback when the art is missing: procedural background, portraits, text and button. */
-  private createProcedural(content: VictoryContent, back: () => void): void {
+  private createProcedural(content: VictoryContent, actions: ScreenActions): void {
     createArcadeBackground(this);
     const centerX = GAME_WIDTH / 2;
     const { featured } = content;
@@ -166,11 +242,16 @@ export class VictoryScene extends Phaser.Scene {
     const subtitle = content.result.map((segment) => segment.text).join('  -  ');
     this.add.text(centerX, 390, subtitle, bodyText(18, COLORS.white)).setOrigin(0.5);
 
-    new MenuButton(this, centerX, 460, STRINGS.backToMenu, back, {
-      width: 340,
-      height: 56,
-      fontSize: 26,
-    }).setHighlighted(true);
-    onKeys(this, [...MENU_CONFIRM_KEYS, ...MENU_BACK_KEYS], back);
+    if (actions.buttons.length === 0) {
+      new MenuButton(this, centerX, 460, STRINGS.backToMenu, actions.primary, {
+        width: 340,
+        height: 56,
+        fontSize: 26,
+      }).setHighlighted(true);
+    } else {
+      this.createButtons(actions);
+    }
+    onKeys(this, MENU_CONFIRM_KEYS, actions.primary);
+    onKeys(this, MENU_BACK_KEYS, actions.cancel);
   }
 }
