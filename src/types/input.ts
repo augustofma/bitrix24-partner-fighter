@@ -24,8 +24,20 @@ export interface InputFrame {
   pressed: InputState;
 }
 
+/**
+ * Read-only facts about the controlled fighter that a device may need to express the player's
+ * intent (never to decide gameplay). Example: the touch joystick gives one jump per push up.
+ */
+export interface InputReadContext {
+  selfAirborne: boolean;
+}
+
 /** Anything that can report held actions (keyboard, touch buttons, gamepad...). */
 export interface InputSource {
   /** Called once per simulation frame. */
-  read(): Partial<InputState>;
+  read(context?: InputReadContext): Partial<InputState>;
+  /** Forgets per-push memory (new round). */
+  reset?(): void;
+  /** Releases listeners. */
+  destroy?(): void;
 }

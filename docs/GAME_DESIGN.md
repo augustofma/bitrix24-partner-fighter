@@ -384,21 +384,29 @@ alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
 
 ## Controles
 
-| Ação               | Teclado                                    | Touch                  |
-| ------------------ | ------------------------------------------ | ---------------------- |
-| Andar              | ← →                                        | ◀ ▶ (esquerda da tela) |
-| Pular              | ↑                                          | ▲                      |
-| Agachar            | ↓                                          | ▼                      |
-| Soco               | A                                          | SOCO (direita da tela) |
-| Chute              | S                                          | CHUTE                  |
-| Especial           | F                                          | ESP                    |
-| Dificuldade (sel.) | ↑ / ↓ na seleção de personagem             | `<` `>` ou tocar opção |
-| Defender           | D                                          | DEF                    |
-| Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | ▲, depois SOCO / CHUTE |
-| Defesa agachada    | ↓ + D                                      | ▼ + DEF                |
-| Soco agachado      | ↓ + A                                      | ▼ + SOCO               |
-| Rasteira           | ↓ + S                                      | ▼ + CHUTE              |
+| Ação               | Teclado                                    | Touch                               |
+| ------------------ | ------------------------------------------ | ----------------------------------- |
+| Andar              | ← →                                        | Joystick ← → (esquerda da tela)     |
+| Pular              | ↑ (↑ + ← / → para pulo diagonal)           | Joystick ↑, ↖ ou ↗                  |
+| Agachar            | ↓                                          | Joystick ↓ (↙ / ↘ também agacham)   |
+| Soco               | A                                          | SOCO (direita da tela)              |
+| Chute              | S                                          | CHUTE                               |
+| Especial           | F                                          | ESP                                 |
+| Dificuldade (sel.) | ↑ / ↓ na seleção de personagem             | `<` `>` ou tocar opção              |
+| Defender           | D                                          | DEF                                 |
+| Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | Joystick ↗ / ↖, depois SOCO / CHUTE |
+| Defesa agachada    | ↓ + D                                      | Joystick ↓ + DEF                    |
+| Soco agachado      | ↓ + A                                      | Joystick ↓ + SOCO                   |
+| Rasteira           | ↓ + S                                      | Joystick ↓ + CHUTE                  |
 
-Touch suporta vários dedos ao mesmo tempo (direção + pulo, direção + ataque aéreo, ▼ + DEF,
-▼ + SOCO, ▼ + CHUTE).
+**Joystick virtual (touch):** só converte a posição do dedo nas mesmas entradas digitais das
+setas, nunca em velocidade. Zona morta de 20% do curso no centro; fora dela vale só o ângulo,
+em 8 setores (diagonais com 50° e direções retas com 40°, para facilitar ↗ e ↖). O dedo pode
+sair da base e continua controlando; ao soltar, tudo é liberado na hora e o botão volta ao
+centro. Diferença única em relação ao teclado: no touch, manter o joystick para cima dá **um**
+pulo (para pular de novo, saia da zona de cima e volte); no teclado, segurar ↑ continua pulando
+a cada aterrissagem, como antes.
+
+Touch suporta vários dedos ao mesmo tempo: um no joystick e outro nos botões (↗ + CHUTE,
+↖ + SOCO, ↓ + DEF, ↓ + SOCO, ↓ + CHUTE).
 O jogo é landscape; em celulares na vertical aparece "Gire o dispositivo para jogar".

@@ -258,8 +258,18 @@ Toque   ─ TouchControls ───────┼─ PlayerController ─┐
 
 - `InputAction` = `left | right | up | down | punch | kick | block | special`. As direções são **absolutas**
   (tela); o `Fighter` converte em frente/trás conforme o lado para onde está virado.
-- `InputSource.read()` devolve as ações seguradas. Toques e teclas muito curtos (menos de um
-  frame) ficam retidos (latch), então nunca se perdem.
+- `InputSource.read(context?)` devolve as ações seguradas. Toques e teclas muito curtos
+  (menos de um frame) ficam retidos (latch), então nunca se perdem. O `PlayerController` passa
+  um `InputReadContext` só de leitura (`selfAirborne`), usado pelo touch para expressar
+  intenção; nunca decide gameplay.
+- **Joystick virtual (touch):** `src/input/joystick.ts` é puro e testado: `joystickDirection`
+  (zona morta de 20% do curso, depois só o ângulo em 8 setores, diagonais de 50°),
+  `directionInputs` (direção → `up/down/left/right`, como as setas), `JoystickTracker` (o
+  primeiro dedo que toca perto do joystick é o dono; outros dedos nunca o movem nem soltam;
+  o dedo continua valendo fora da base) e `JumpLatch` (no touch, um pulo por empurrão para
+  cima: envia `up` até o lutador sair do chão e espera o joystick sair da zona de cima).
+  `VirtualJoystick` (Phaser) só desenha a base e o botão e repassa os ponteiros;
+  `TouchControls` junta joystick e botões de ação num `InputState`.
 - Remapear teclas: edite `PLAYER_ONE_KEYS` em `src/config/controls.ts`. Uma tela de opções futura
   só precisa produzir outro `KeyBindings`.
 - Adicionar um dispositivo: implemente `InputSource` e passe-o ao `PlayerController`.

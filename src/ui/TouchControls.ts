@@ -1,8 +1,17 @@
 import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
 import { STRINGS } from '../config/strings';
-import type { InputAction, InputSource, InputState } from '../types/input';
+import {
+  DIRECTION_ACTIONS,
+  JumpLatch,
+  directionInputs,
+  joystickFrame,
+  type DirectionAction,
+  type JoystickDirection,
+} from '../input/joystick';
+import type { InputAction, InputReadContext, InputSource, InputState } from '../types/input';
 import { COLORS, DEPTH, arcadeText } from './theme';
+import { VirtualJoystick } from './VirtualJoystick';
 
 interface ButtonLayout {
   action: InputAction;
@@ -23,17 +32,14 @@ const HIT_PADDING = 10;
 const IDLE_ALPHA = 0.3;
 const PRESSED_ALPHA = 0.7;
 
-const PAD_X = 132;
-const PAD_Y = GAME_HEIGHT - 104;
+/** Joystick center: bottom-left, clear of the HUD and of the action buttons. */
+const STICK_X = 126;
+const STICK_Y = GAME_HEIGHT - 96;
 const ACTION_X = GAME_WIDTH - 150;
 const ACTION_Y = GAME_HEIGHT - 100;
 
-/** Left: directions. Right: actions. Positions in logical (960x540) pixels. */
+/** Action buttons on the right; positions in logical (960x540) pixels. */
 const LAYOUT: readonly ButtonLayout[] = [
-  { action: 'left', label: '◀', x: PAD_X - 70, y: PAD_Y },
-  { action: 'right', label: '▶', x: PAD_X + 70, y: PAD_Y },
-  { action: 'up', label: '▲', x: PAD_X, y: PAD_Y - 62 },
-  { action: 'down', label: '▼', x: PAD_X, y: PAD_Y + 62 },
   { action: 'punch', label: STRINGS.touchPunch, x: ACTION_X - 80, y: ACTION_Y + 20 },
   { action: 'kick', label: STRINGS.touchKick, x: ACTION_X + 10, y: ACTION_Y - 40 },
   { action: 'block', label: STRINGS.touchBlock, x: ACTION_X + 80, y: ACTION_Y + 40 },
@@ -41,15 +47,22 @@ const LAYOUT: readonly ButtonLayout[] = [
 ];
 
 /**
- * On-screen multi-touch buttons. Acts as an InputSource, merged with the keyboard
- * by PlayerController. A tap shorter than a frame is latched so it is never lost.
+ * On-screen multi-touch controls: a virtual joystick on the left (8 directions, mapped to the
+ * same up/down/left/right the arrow keys hold) and the action buttons on the right. Acts as an
+ * InputSource, merged with the keyboard by PlayerController. Taps or flicks shorter than a
+ * frame are latched so they are never lost. Each pointer is tracked independently.
  */
 export class TouchControls implements InputSource {
   private readonly buttons = new Map<InputAction, TouchButton>();
   private readonly latched = new Set<InputAction>();
+  private readonly joystick: VirtualJoystick;
+  private readonly jumpLatch = new JumpLatch();
 
   constructor(private readonly scene: Phaser.Scene) {
     for (const layout of LAYOUT) this.createButton(layout);
+    this.joystick = new VirtualJoystick(scene, STICK_X, STICK_Y, (direction) =>
+      this.latchDirection(direction),
+    );
 
     const releasePointer = (pointer: Phaser.Input.Pointer) => this.release(pointer.id);
     const releaseAll = () => this.release(null);
@@ -63,13 +76,37 @@ export class TouchControls implements InputSource {
     });
   }
 
-  read(): Partial<InputState> {
+  read(context?: InputReadContext): Partial<InputState> {
     const state: Partial<InputState> = {};
     for (const [action, button] of this.buttons) {
       state[action] = button.pointers.size > 0 || this.latched.has(action);
     }
+    const latchedDirections = new Set<DirectionAction>(
+      DIRECTION_ACTIONS.filter((action) => this.latched.has(action)),
+    );
+    Object.assign(
+      state,
+      joystickFrame(
+        this.joystick.direction,
+        latchedDirections,
+        this.jumpLatch,
+        context?.selfAirborne ?? false,
+      ),
+    );
     this.latched.clear();
     return state;
+  }
+
+  reset(): void {
+    this.jumpLatch.reset();
+  }
+
+  /** A direction entered between two frames still counts on the next one. */
+  private latchDirection(direction: JoystickDirection | null): void {
+    const inputs = directionInputs(direction);
+    for (const action of DIRECTION_ACTIONS) {
+      if (inputs[action]) this.latched.add(action);
+    }
   }
 
   private createButton({ action, label, x, y }: ButtonLayout): void {

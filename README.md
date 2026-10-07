@@ -115,8 +115,10 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU      |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)    |
 
-**Touch:** direcional à esquerda (◀ ▶ ▲ ▼) e botões SOCO / CHUTE / DEF / ESP à direita, com
-multi-touch (ex.: ▶ + ▲, depois CHUTE; ▼ + DEF; ▼ + SOCO; ▼ + CHUTE). Na seleção, os botões
+**Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões
+SOCO / CHUTE / DEF / ESP à direita, com multi-touch (ex.: joystick ↗ + CHUTE; ↓ + DEF;
+↓ + SOCO; ↓ + CHUTE). Empurrar o joystick para cima dá um pulo; para pular de novo, saia da
+zona de cima e volte. Na seleção, os botões
 `<` `>` (ou um toque na opção) trocam a dificuldade. Os controles de luta aparecem
 automaticamente em dispositivos de toque (force com `?touch=1` ou `?touch=0`). Em celular na
 vertical o jogo pede para girar o aparelho.

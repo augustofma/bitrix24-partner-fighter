@@ -218,6 +218,15 @@ sem pedido explícito.**
 - [x] Testes de conteúdo (Augusto, Filipe, FIGHTER_A, derrota, tempo, empate) e dos assets
 - [x] Playtest: 1280×720, 1920×1080, 844×390 com toque e uma partida real até a vitória
 
+## DONE (v0.18: joystick virtual no mobile, branch `feature/mobile-virtual-joystick`)
+
+- [x] Joystick de 8 direções no lugar de ◀ ▶ ▲ ▼; gera as mesmas entradas digitais das setas
+- [x] Zona morta de 20%, setores por ângulo com diagonais um pouco mais largas (50°)
+- [x] Um dedo por controle: joystick e botões de ação independentes (multi-touch)
+- [x] Touch: um pulo por empurrão para cima (teclado inalterado: segurar ↑ repete o pulo)
+- [x] Testes de direções, zona morta, ponteiros, pulo único, combos e determinismo
+- [x] Playtest com toques reais (CDP) em 844×390, 667×375, 915×412 e 1280×720, incluindo cross-up
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
