@@ -9,7 +9,7 @@ import { VICTORY_ART, VICTORY_ASSETS } from '../src/render/assets/victoryAssets'
 import type { FighterConfig } from '../src/types/fighter';
 import type { MatchResult } from '../src/types/match';
 import { fitTitleScale, titleSeed } from '../src/ui/victory/fightTitle';
-import { victoryContent } from '../src/ui/victory/victoryContent';
+import { resultRole, victoryContent } from '../src/ui/victory/victoryContent';
 import { VICTORY_LAYOUT } from '../src/ui/victory/victoryLayout';
 import { jpegSize, readRgbaPng } from './png';
 
@@ -37,6 +37,18 @@ describe('victory screen content (from the real MatchResult)', () => {
     expect(content.nameLabel).toBe(player.displayName);
     expect(texts(content)).toEqual([STRINGS.youWin, STRINGS.reasonKo, '2 x 0']);
     expect(content.result[0]?.tone).toBe('win');
+  });
+
+  it('result typography roles: verdict leads, reason is detail, score is the scoreboard', () => {
+    const won = victoryContent(result(augusto, 0, 'ko', [2, 0]), [augusto, fighterB]);
+    expect(won.result.map(resultRole)).toEqual(['verdict', 'detail', 'score']);
+    const lost = victoryContent(result(augusto, 1, 'timeout', [0, 2]), [augusto, fighterB]);
+    expect(lost.result.map(resultRole)).toEqual(['verdict', 'detail', 'score']);
+    const draw = victoryContent(result(filipe, null, 'timeout', [4, 4]), [filipe, fighterB]);
+    expect(draw.result.map(resultRole)).toEqual(['detail', 'score']);
+    // Campaign complete line (no explicit roles): the cheer leads, the route is detail.
+    expect(resultRole({ text: 'MUNDO DOMINADO!', tone: 'win' })).toBe('verdict');
+    expect(resultRole({ text: 'RECIFE  →  JOINVILLE', tone: 'neutral' })).toBe('detail');
   });
 
   it('time over and a 2 x 1 score', () => {
