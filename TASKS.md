@@ -208,6 +208,16 @@ sem pedido explícito.**
 - [x] Script reproduzível (`scripts/stage-art/`), helpers de imagem compartilhados (`scripts/art_tools.py`)
 - [x] Playtest no Chromium: desktop 1280×720 e mobile 844×390, sem erros
 
+## DONE (v0.17: tela de vitória ilustrada, branch `feature/victory-screen-redesign`)
+
+- [x] Arte aprovada separada em camadas (fundo, moldura do card, painel, botão) por script reproduzível
+- [x] Título, retrato, nome, veredito, motivo e placar dinâmicos a partir do `MatchResult` real
+- [x] Entrada em sequência (~1,1 s), neon do título, card pulsando/flutuando com brilho varrendo
+- [x] Confete pixelado, quadradinhos subindo e brilhos, atrás do conteúdo
+- [x] Botão de arte compartilhado (`ArtButton`) com a tela inicial: hover, clique, toque, teclado
+- [x] Testes de conteúdo (Augusto, Filipe, FIGHTER_A, derrota, tempo, empate) e dos assets
+- [x] Playtest: 1280×720, 1920×1080, 844×390 com toque e uma partida real até a vitória
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

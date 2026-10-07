@@ -257,6 +257,24 @@ em `scripts/title-art/source.webp`; `prepare_title_art.py` separa três camadas 
   são redesenhados pelo código.
 - Se a arte não carregar, a `MenuScene` volta ao visual procedural anterior.
 
+## Tela de vitória
+
+Arte aprovada de uma arena noturna com holofotes, torcida, placas "BITRIX24 PARTNER FIGHTER" e
+confete, com o card do vencedor, o painel do resultado e o botão VOLTAR AO MENU. A fonte fica em
+`scripts/victory-art/source.png`; o preparo está em
+[scripts/victory-art/README.md](../scripts/victory-art/README.md).
+
+- **Título:** "<NOME> VENCEU!" (ou EMPATE) em dourado com contorno magenta, sobre uma cópia
+  neon do contorno que pisca devagar; entra com pop e bounce e depois flutua 3 px.
+- **Card:** moldura da arte sobre a janela azul-marinho com listras laterais; dentro, o retrato
+  real do vencedor (os dois no empate) e o nome na plaqueta. A moldura pulsa um brilho ciano, um
+  halo suave fica atrás, o card flutua 3 px e um brilho cruza a janela de tempos em tempos.
+- **Resultado:** "VOCÊ VENCEU!" em dourado (ou "VOCÊ PERDEU" em magenta), motivo e placar,
+  separados por quadradinhos ciano.
+- **Botão:** a arte do VOLTAR AO MENU, com hover 1,03 e brilho, pressionado 0,97.
+- **Detalhes:** confete pixelado caindo, quadradinhos neon subindo e brilhos, sempre atrás do
+  card e dos textos.
+
 ## Cenário: Bitrix24 Partner Summit
 
 Ilustração pixel-art aprovada de um auditório de evento: painel de LED "Bitrix24 Partner
@@ -318,6 +336,7 @@ registrada aqui:
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros |
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                       |
+| `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                       |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                       |
 
 ## VFX do especial (v0.8)

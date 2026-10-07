@@ -32,8 +32,9 @@ Menu → Seleção → Tela VS → Luta (melhor de 3 rounds) → Tela de vitóri
    redor e gesticula (e acena ao fim do round). É só visual: a arena é a mesma de antes.
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
-5. **Vitória:** vencedor da partida, motivo do último round e placar (ex.: 2 x 1); botão
-   VOLTAR AO MENU.
+5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do
+   vencedor, a linha "VOCÊ VENCEU!/VOCÊ PERDEU · motivo do último round · placar (ex.: 2 x 1)" e
+   o botão VOLTAR AO MENU (clique, toque, Enter, Espaço ou Esc).
 
 ## Sistema de combate
 

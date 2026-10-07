@@ -9,6 +9,7 @@ import { TITLE_ART } from '../render/assets/titleAssets';
 import { drawFigure } from '../render/placeholder/drawFigure';
 import { POSES } from '../render/placeholder/poses';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
+import { ArtButton } from '../ui/ArtButton';
 import { MenuButton } from '../ui/MenuButton';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
@@ -23,13 +24,6 @@ const LOGO_FLOAT_MS = 2200;
 const LOGO_BREATH_SCALE = 1.01;
 const LOGO_BREATH_MS = 2600;
 
-const BUTTON_HOVER_SCALE = 1.03;
-const BUTTON_PRESS_SCALE = 0.97;
-const BUTTON_SCALE_MS = 90;
-/** Extra touch area around the visible button (game px on each side). */
-const BUTTON_HIT_PADDING = 16;
-const BUTTON_GLOW_ALPHA = 0.22;
-const BUTTON_GLOW_MS = 520;
 /** Delay before leaving after a keyboard confirm, so the press is visible. */
 const KEY_PRESS_MS = 90;
 
@@ -77,64 +71,17 @@ export class MenuScene extends Phaser.Scene {
       ease: 'Sine.easeInOut',
     });
 
-    const press = this.createArtButton(start);
+    const button = new ArtButton(
+      this,
+      BUTTON_POSITION.x,
+      BUTTON_POSITION.y,
+      TITLE_ART.button.key,
+      start,
+    );
     onKeys(this, MENU_CONFIRM_KEYS, () => {
-      press();
+      button.press();
       this.time.delayedCall(KEY_PRESS_MS, start);
     });
-  }
-
-  /**
-   * The JOGAR button layer: hover grows it and lights a soft glow, pressing shrinks it,
-   * releasing on it starts the game. Returns the "pressed" animation for keyboard confirms.
-   */
-  private createArtButton(start: () => void): () => void {
-    const { x, y } = BUTTON_POSITION;
-    const button = this.add.image(x, y, TITLE_ART.button.key);
-    const glow = this.add
-      .image(x, y, TITLE_ART.button.key)
-      .setBlendMode(Phaser.BlendModes.ADD)
-      .setAlpha(0);
-    const glowPulse = this.tweens.add({
-      targets: glow,
-      alpha: BUTTON_GLOW_ALPHA,
-      duration: BUTTON_GLOW_MS,
-      yoyo: true,
-      repeat: -1,
-      paused: true,
-    });
-    const scaleTo = (scale: number) =>
-      this.tweens.add({ targets: [button, glow], scale, duration: BUTTON_SCALE_MS });
-    const setHover = (hover: boolean) => {
-      scaleTo(hover ? BUTTON_HOVER_SCALE : 1);
-      if (hover) glowPulse.resume();
-      else {
-        glowPulse.pause();
-        glow.setAlpha(0);
-      }
-    };
-
-    // Hit area in the image's local (unscaled) space, a bit larger than what is drawn.
-    const hitArea = new Phaser.Geom.Rectangle(
-      -BUTTON_HIT_PADDING,
-      -BUTTON_HIT_PADDING,
-      button.width + BUTTON_HIT_PADDING * 2,
-      button.height + BUTTON_HIT_PADDING * 2,
-    );
-    button
-      .setInteractive({
-        hitArea,
-        hitAreaCallback: Phaser.Geom.Rectangle.Contains,
-        useHandCursor: true,
-      })
-      .on('pointerover', () => setHover(true))
-      .on('pointerout', () => setHover(false))
-      .on('pointerdown', () => scaleTo(BUTTON_PRESS_SCALE))
-      .on('pointerup', () => {
-        scaleTo(BUTTON_HOVER_SCALE);
-        start();
-      });
-    return () => scaleTo(BUTTON_PRESS_SCALE);
   }
 
   /** Fallback when the title art is missing: procedural background, text title, button. */

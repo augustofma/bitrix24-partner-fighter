@@ -40,6 +40,8 @@ export const STRINGS = {
   ko: 'K.O.',
   timeOver: 'TIME OVER',
   draw: 'EMPATE',
+  drawNames: (left: string, right: string) => `${left}  x  ${right}`,
+  resultSeparator: '■',
   wins: (name: string) => `${name} VENCEU!`,
   youWin: 'VOCÊ VENCEU!',
   youLose: 'VOCÊ PERDEU',

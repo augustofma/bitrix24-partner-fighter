@@ -86,6 +86,7 @@ src/
     assets/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
       titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
+      victoryAssets.ts    PURO: camadas da tela de vitória (fundo, card, painel, botão)
       stageAssets.ts      PURO: imagens declaradas em StageConfig.art (sem duplicatas)
       textureInfo.ts      Quantos frames tem uma textura carregada
     placeholder/          Boneco geométrico: poses por estado + desenho
@@ -104,6 +105,13 @@ src/
     FightHud.ts, HealthBar.ts, Announcer.ts, TouchControls.ts,
     SpecialMeterBar.ts, DifficultySelector.ts (painel < FÁCIL | NORMAL | DIFÍCIL >),
     MenuButton.ts, ArcadeBackground.ts, theme.ts
+    ArtButton.ts          Botão feito de arte (JOGAR, VOLTAR AO MENU): hover 1,03 + brilho, press 0,97
+    victory/              Tela de vitória
+      victoryContent.ts   PURO: título, retratos, nome e linha de resultado a partir do MatchResult
+      victoryLayout.ts    PURO: posições das camadas (saída do script de preparo)
+      VictoryCard.ts      Card com retrato real, brilho da moldura, halo, flutuação e brilho varrendo
+      victoryText.ts      Título com neon piscando e linha de resultado sobre o painel
+      VictoryEffects.ts   Confete pixelado, quadradinhos subindo e brilhos (partículas leves)
     select/               Visual da seleção de personagem (Phaser, exceto os módulos puros)
       selectLayout.ts     PURO: geometria da tela, posição de cada card, páginas e slots vazios
       fighterRatings.ts   PURO: barras PODER/VELOCIDADE/ALCANCE derivadas do FighterConfig
@@ -158,6 +166,16 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   `roundStart`. Nada de lógica de fim de luta duplicada. A empolgação vai de 0 a 1 em
   ~0,4 s e mistura os ritmos `CALM_MOTION` e `CHEER_MOTION`. As fases avançam por
   `ritmo × dt` no tempo de render, então mudar a velocidade nunca faz uma camada pular.
+
+## Tela de vitória (VictoryScene)
+
+Com as camadas de `VICTORY_ASSETS` carregadas, a cena monta: fundo da arena, efeitos (atrás de
+tudo), card do vencedor, título, linha de resultado e o botão `ArtButton`. Todo texto vem de
+`victoryContent(result, sides)`, que só lê o `MatchResult` real (vencedor, motivo do último
+round, placar) e é testado sem Phaser. Entrada em sequência (~1,1 s): título com pop e
+bounce, card com fade e subida, resultado deslizando, botão por último. Clique, toque, Enter,
+Espaço, Esc e Backspace usam o mesmo `back` (`goToScene` para o menu). Sem a arte, a cena usa
+o visual procedural anterior.
 
 ## Fluxo entre cenas
 
