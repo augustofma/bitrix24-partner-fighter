@@ -6,6 +6,7 @@ import {
   collectFighterAssets,
   pixelArtTextureKeys,
   portraitTextureKey,
+  vfxTextureKey,
 } from '../src/render/assets/fighterAssets';
 import {
   selectSpriteAssets,
@@ -129,7 +130,7 @@ describe('validateSpriteAssets', () => {
 });
 
 describe('collectFighterAssets (loading derived from the roster)', () => {
-  it('collects portrait and sheet of fighters that declare them', () => {
+  it('collects portrait, special-effect emblems and sheet of fighters that declare them', () => {
     const requests = collectFighterAssets(ROSTER);
     expect(requests).toEqual([
       {
@@ -137,6 +138,7 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         key: portraitTextureKey('fighters/augusto/portrait.png'),
         path: 'fighters/augusto/portrait.png',
       },
+      { type: 'image', key: vfxTextureKey('vfx/24zap-emblem.png'), path: 'vfx/24zap-emblem.png' },
       {
         type: 'spritesheet',
         key: 'augusto-sheet',
@@ -149,6 +151,12 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         key: portraitTextureKey('fighters/filipe/portrait.png'),
         path: 'fighters/filipe/portrait.png',
       },
+      {
+        type: 'image',
+        key: vfxTextureKey('vfx/mindhub-emblem.png'),
+        path: 'vfx/mindhub-emblem.png',
+      },
+      { type: 'image', key: vfxTextureKey('vfx/mindhub-sigil.png'), path: 'vfx/mindhub-sigil.png' },
       {
         type: 'spritesheet',
         key: 'filipe-sheet',
@@ -189,6 +197,9 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         portraitTextureKey('fighters/augusto/portrait.png'),
         'fighter-a-demo-sheet',
         portraitTextureKey('fighters/fighter-a/portrait.png'),
+        vfxTextureKey('vfx/24zap-emblem.png'),
+        vfxTextureKey('vfx/mindhub-emblem.png'),
+        vfxTextureKey('vfx/mindhub-sigil.png'),
       ].sort(),
     );
   });

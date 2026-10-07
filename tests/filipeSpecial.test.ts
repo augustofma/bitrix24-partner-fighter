@@ -53,7 +53,7 @@ describe('Filipe: MINDHUB AGENT configuration', () => {
       blockstunFrames: 16,
       hitstopFrames: 12,
     });
-    expect(filipe.assets.specialEffects?.[agent.id]?.style).toBe('agentNetwork');
+    expect(filipe.assets.specialEffects?.[agent.id]?.style).toBe('mindNetwork');
   });
 
   it('reaches much further than his normals, but nowhere near the whole screen', () => {

@@ -34,6 +34,8 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `round-start`   | "ROUND n" / "FINAL ROUND"               | Gongo arcade com swoosh                     | 0,70   |
 | `fight`         | "FIGHT!"                                | Golpe + acorde de synth + prato             | 0,80   |
 | `perfect`       | Round vencido sem perder vida (PERFECT) | Fanfarra subindo, acorde brilhante, faíscas | 0,85   |
+| `special-zap`   | Especial do 24zap começa (Augusto)      | Envio de mensagem, bolhas, sininho, impacto | 0,85   |
+| `special-mind`  | Especial do Mindhub começa (Filipe)     | Blips digitais, ruído de dados, descarga    | 0,85   |
 | `victory`       | Pose de vitória do vencedor do round    | Arpejo vencedor curto                       | 0,70   |
 
 Licença: original do projeto (mesma licença do repositório).

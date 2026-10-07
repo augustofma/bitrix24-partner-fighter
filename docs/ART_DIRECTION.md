@@ -416,15 +416,31 @@ registrada aqui:
 | `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                            | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
 | `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                             | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
 | `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                          | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
+| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`                       | Logos dos apps 24zap e Mindhub, fornecidos pelo dono do projeto para uso no jogo          | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/*` (emblemas pixel-art)                                               | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                    | Uso autorizado pelo dono do projeto                               |
 | `public/audio/sfx/*` (19 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                            | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                   | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
 | JOÃO GUIOTTI e ROMUALDO (boneco genérico)                                         | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                            |
 
-## VFX do especial (v0.8)
+## VFX dos especiais (temas dos apps)
 
-24ZAP reutiliza os frames 14, 17, 15, 18, 19 e 16 na animação special, com fases 2/2/2.
-Os PNGs definitivos permanecem iguais. SpecialEffects desenha pequenos envelopes e rastros
-azul/verde originais, sem logos ou áudio, por configuração em assets.specialEffects.
-O efeito acompanha stateFrame e espelha o avanço; não define dano nem caixas.
+24ZAP reutiliza os frames 14, 17, 15, 18, 19 e 16 na animação special, com fases 2/2/2; os PNGs
+dos lutadores não mudam. Os efeitos são procedurais (`src/render/special/`) mais três emblemas
+pixel-art feitos a partir dos logos fornecidos pelo dono do projeto
+(`scripts/vfx-art/prepare_app_emblems.py`): os logos são reduzidos para uma grade de 48 px, com
+paleta reduzida e contorno escuro de 1 px, para entrarem no estilo do jogo em vez de colados
+como imagem lisa.
+
+- **24zap:** verde do app (#25D366) com verde-claro, os acentos rosa e amarelo dos balõezinhos
+  do logo e o azul dos ✓✓ de "lida". Balões de chat, ondas ")))" de envio, emblema do app
+  enviado como mensagem e selo no impacto.
+- **Mindhub:** azul-marinho do jogo, ciano neon, azul elétrico e branco. O símbolo
+  cérebro-circuito do logo vira um "selo" brilhante na mão (versão só do símbolo, tingida em
+  ciano com brilho aditivo) e o emblema completo (disco marinho, borda ciano, símbolo branco)
+  aparece no fim do alcance e no impacto; trilhas de circuito em ângulo reto (como o lado direito
+  do símbolo), rede neural e onda de choque quadrada.
+
+Os efeitos ficam em volta dos lutadores e nunca cobrem barras de vida, barra de especial ou
+controles touch.

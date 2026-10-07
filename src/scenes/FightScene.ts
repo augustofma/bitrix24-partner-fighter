@@ -20,7 +20,7 @@ import { DebugOverlay } from '../render/DebugOverlay';
 import { FightCamera } from '../render/FightCamera';
 import type { FighterView } from '../render/FighterView';
 import { HitEffects } from '../render/HitEffects';
-import { SpecialEffects } from '../render/SpecialEffects';
+import { SpecialEffects } from '../render/special/SpecialEffects';
 import { createStageView } from '../render/stage/createStageView';
 import type { StageBackdrop } from '../render/stage/StageBackdrop';
 import { getStageConfig } from '../stages/stageRegistry';
@@ -146,16 +146,19 @@ export class FightScene extends Phaser.Scene {
 
   private handleEvent(event: SimulationEvent): void {
     // Sounds follow real simulation events only (contacts, jumps, landings, KO...).
-    gameSfx(this).playAll(combatSfx(event));
+    gameSfx(this).playAll(combatSfx(event, this.simulation.fighters));
     switch (event.type) {
       case 'hit':
+        this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'hit');
         this.fightCamera.shake(80, 0.004);
         return;
       case 'block':
+        this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'block');
         return;
       case 'koHit':
+        this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'ko');
         this.fightCamera.shake(350, 0.012);
         this.cameras.main.flash(120, 255, 255, 255);

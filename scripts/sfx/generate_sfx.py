@@ -258,6 +258,31 @@ def sfx_perfect(rng):
     return mix(rise, at(attack(chord, 4), 0.24), at(sparkle * 0.7, 0.26), at(boom, 0.24))
 
 
+def sfx_special_zap(rng):
+    """24zap special: a "message sent" swoosh, bubble pops, a two-tone chime and an energy hit."""
+    swoosh_len = 0.22
+    swoosh = bandpass(rng.uniform(-1, 1, int(swoosh_len * SR)), 900, 5000)
+    swoosh *= np.sin(np.pi * seconds(swoosh_len) / swoosh_len) ** 2
+    pops = mix(*[at(np.sin(sweep(900 + 260 * i, 1500 + 300 * i, 0.04)) * decay(0.04, 60) * 0.5, 0.05 + i * 0.05) for i in range(4)])
+    chime = mix(note(1568, 0.12, "sine", 18), at(note(2093, 0.3, "sine", 10), 0.09))
+    hit = np.sin(sweep(220, 70, 0.22)) * decay(0.22, 12)
+    zap = highpass(rng.uniform(-1, 1, int(0.18 * SR)), 3500) * decay(0.18, 22) * 0.4
+    return mix(swoosh * 0.7, pops, at(chime * 0.6, 0.18), at(hit, 0.2), at(zap, 0.2))
+
+
+def sfx_special_mind(rng):
+    """Mindhub special: a digital "thinking" blip sequence over a data warble, then a deep discharge."""
+    steps = [1047, 1568, 1319, 2093, 1760, 2349, 1976, 2637]
+    blips = mix(*[at(note(f, 0.04, "square", 70) * 0.28, i * 0.032) for i, f in enumerate(steps)])
+    warble_len = 0.3
+    t = seconds(warble_len)
+    warble = np.sin(2 * np.pi * 660 * t + 4 * np.sin(2 * np.pi * 37 * t)) * np.linspace(0.1, 0.5, len(t))
+    discharge = lowpass(saw(sweep(300, 1400, 0.25, curve=0.7), 14), 4000) * decay(0.25, 6) * 0.45
+    boom = np.sin(sweep(160, 45, 0.35)) * decay(0.35, 8)
+    glitch = highpass(rng.uniform(-1, 1, int(0.12 * SR)), 5000) * (rng.uniform(0, 1, int(0.12 * SR)) > 0.85) * 0.5
+    return mix(blips, warble * 0.4, at(discharge, 0.25), at(boom, 0.27), at(glitch, 0.27))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -279,6 +304,8 @@ EFFECTS = {
     "fight": sfx_fight,
     "victory": sfx_victory,
     "perfect": sfx_perfect,
+    "special-zap": sfx_special_zap,
+    "special-mind": sfx_special_mind,
 }
 
 

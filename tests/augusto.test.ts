@@ -90,7 +90,7 @@ describe('Augusto roster and data', () => {
   });
 
   it('loads its art through the shared pipeline and falls back when the sheet is unavailable', () => {
-    expect(collectFighterAssets([augusto])).toHaveLength(2);
+    expect(collectFighterAssets([augusto])).toHaveLength(3); // portrait, 24zap emblem, sheet;
     expect(selectSpriteAssets(augusto, null)).toBeNull();
     expect(selectSpriteAssets(augusto, 40)).toBe(augusto.assets.sprite);
     expect(selectSpriteAssets(augusto, 39)).toBeNull();

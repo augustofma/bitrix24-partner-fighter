@@ -45,7 +45,8 @@ import {
 } from './helpers';
 
 /** All the sounds a run of frames makes (what FightScene would play). */
-const soundsOf = (events: readonly SimulationEvent[]) => events.flatMap(combatSfx);
+const soundsOf = (events: readonly SimulationEvent[]) =>
+  events.flatMap((event) => combatSfx(event));
 const count = (sounds: readonly SfxId[], id: SfxId) => sounds.filter((s) => s === id).length;
 
 describe('combat sounds come from real simulation events', () => {

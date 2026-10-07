@@ -316,7 +316,7 @@ Hitbox (24, -126, 108, 56): alcance frontal de 132 px. Avança 5 px/frame no sta
 (até 70 px sem obstáculos); para no recovery. Facing travado, sem invulnerabilidade.
 Tem um único contato por execução. Contra o chute normal (11 de dano, 10/4/16), ganha dano,
 alcance e avanço, mas fica exposto por 28 frames se errar e pode ser punido ao ser bloqueado.
-A sequência visual reaproveita os sprites, acompanhada de mensagens digitais azul/verde.
+A sequência visual reaproveita os sprites; o efeito é o tema 24zap (veja "VFX dos especiais").
 
 **MINDHUB AGENT (Filipe):** Filipe ativa um agente de IA que dispara uma descarga digital à
 frente. Custo 35 (descontado no primeiro frame, mesmo se errar), somente no chão, nível `mid`,
@@ -325,9 +325,27 @@ pushback 6 e hitstop 12. Hitbox (30, -132, 140, 76): alcance frontal de 170 px, 
 chute dele, mas longe de cobrir a tela. Não avança (ele "conjura" parado), um único contato.
 Comparado ao chute (10 de dano, 11/4/18), é bem mais forte e longo, porém lento o bastante para
 ser visto e, bloqueado, deixa Filipe em desvantagem (24 de recovery contra 16 de blockstun).
-Visual: reaproveita os frames do soco; os agentes orbitam a mão, uma rede de nós se forma no
-alcance do golpe e descarrega um feixe azul/ciano/verde com pulsos e partículas (procedural,
-sem logos nem imagens externas).
+Visual: reaproveita os frames do soco; o efeito é o tema Mindhub (veja "VFX dos especiais").
+
+### VFX dos especiais
+
+Cada especial tem a identidade do app ligado a ele, só na apresentação (frame data, dano, custo e
+caixas iguais). As fases seguem o frame data do golpe: carga (startup), disparo (active),
+dissipação (recovery) e um impacto no acerto ou na defesa.
+
+- **24ZAP (Augusto), app de mensagens:** na carga, balões "digitando..." aparecem ao redor e o
+  emblema do 24zap se forma na mão, com energia verde se concentrando; no disparo, o emblema é
+  "enviado" à frente de uma rajada de balões de chat, com ondas ")))" de envio; no acerto, onda
+  de choque verde, balões estourando nas cores do logo (verde, rosa, amarelo), ✓✓ azul de
+  "lida" e o selo do 24zap no oponente (na defesa: menor e só um ✓ cinza, "enviada"); depois os
+  balões sobem e somem.
+- **MINDHUB AGENT (Filipe), IA:** na carga, o símbolo cérebro-circuito do Mindhub acende na mão
+  dentro de uma mira giratória, bits de dados convergem e trilhas de circuito são desenhadas até
+  o alvo; no disparo, descarga digital, rede neural com pulsos e o emblema do Mindhub chegando
+  ao fim do alcance; no acerto, onda de choque quadrada/losango, linhas neurais com nós e o
+  emblema; depois a rede desliga nó a nó e o símbolo se expande e some.
+
+Cada um também tem som próprio ao começar (`special-zap`, `special-mind`).
 A CPU também usa especiais (veja "Especiais da CPU"), pelas mesmas regras do jogador.
 
 ### SPECIAL READY (só visual)

@@ -105,7 +105,7 @@ describe('Filipe roster and data', () => {
   });
 
   it('loads its art through the shared pipeline and falls back when the sheet is unavailable', () => {
-    expect(collectFighterAssets([filipe])).toHaveLength(2);
+    expect(collectFighterAssets([filipe])).toHaveLength(4); // portrait, Mindhub emblem + sigil, sheet;
     expect(selectSpriteAssets(filipe, null)).toBeNull();
     expect(selectSpriteAssets(filipe, 40)).toBe(filipe.assets.sprite);
     expect(selectSpriteAssets(filipe, 39)).toBeNull();

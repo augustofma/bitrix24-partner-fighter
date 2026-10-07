@@ -159,7 +159,13 @@ export const filipe: FighterConfig = {
     portrait: 'fighters/filipe/portrait.png',
     pixelArt: true,
     specialEffects: {
-      'filipe.mindhubAgent': { style: 'agentNetwork', label: STRINGS.specialMindhubAgent },
+      'filipe.mindhubAgent': {
+        style: 'mindNetwork',
+        label: STRINGS.specialMindhubAgent,
+        emblem: 'vfx/mindhub-emblem.png',
+        glyph: 'vfx/mindhub-sigil.png',
+        sound: 'special-mind',
+      },
     },
     sprite: {
       sheet: {

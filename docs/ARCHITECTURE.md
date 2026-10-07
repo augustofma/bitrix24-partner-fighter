@@ -117,7 +117,12 @@ src/
       stageMotion.ts      PURO: ritmos e poses dos loops (público, cabeça, mão) por animação
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
     HitEffects.ts         Faíscas de impacto
-    SpecialEffects.ts     VFX procedural por configuração, sincronizado a stateFrame
+    special/              VFX dos especiais por tema de app (configurado em assets.specialEffects)
+      SpecialEffects.ts   Gerente: desenha o golpe a partir do stateFrame e os impactos por tempo;
+                          imagens e Graphics criados uma vez e reaproveitados
+      specialTheme.ts     Contrato de um tema (fases do golpe + impacto)
+      zapTheme.ts, mindTheme.ts  Temas 24zap (mensagens) e Mindhub (IA)
+      vfxShapes.ts        Formas reutilizáveis (balão de chat, ✓✓, ondas, mira, trilhas)
     DebugOverlay.ts       Hitboxes/hurtboxes (F2)
     PortraitView.ts       Card de personagem (seleção/VS/vitória); `framed: false` só a arte
   ui/                     Interface fixa na tela (Phaser)
@@ -552,12 +557,16 @@ Nesta versão cada execução tem um contato, inclusive o especial. Um futuro mu
 estender a linha do tempo de AttackConfig e o controle de contatos por índice/janela em
 Fighter/CombatSystem; não simular hits via timers do renderer ou condicionais por personagem.
 
-SpecialMeterBar desenha as barras do HUD e prontidão pelo custo configurado. SpecialEffects lê
-assets.specialEffects[activeAttack.id] (`{ style, label }`), stateFrame e posição e despacha
-para o desenhista do estilo: `digital` (pacotes de dados, 24ZAP) ou `agentNetwork` (rede de
-agentes de IA com nós, conexões, pulsos e feixe, MINDHUB AGENT). Tudo é derivado do
-stateFrame, sem aleatoriedade, então congela durante hitstop e some se o golpe for
-interrompido. Um estilo novo é uma função a mais na tabela STYLES, escolhida por configuração. assets.sprite.animations.special reaproveita o pipeline de fases;
+SpecialMeterBar desenha as barras do HUD e prontidão pelo custo configurado. Os VFX dos
+especiais ficam em `src/render/special/`: `assets.specialEffects[activeAttack.id]` diz o tema
+(`zapMessages` ou `mindNetwork`), o rótulo, o emblema / símbolo (imagens pixel-art em
+`public/vfx/`, carregadas pelo mesmo `collectFighterAssets` dos sprites) e o som do início. O
+golpe é desenhado só a partir de `stateFrame` e da fase (`startup` / `active` / `recovery`),
+então congela no hitstop e some no instante em que o golpe acaba ou é interrompido; o impacto
+(chamado pela `FightScene` nos eventos `hit` / `koHit` / `block` de especiais) é curto e por
+tempo, então toca durante o hitstop. Tudo é criado no construtor (2 Graphics, rótulos e alguns
+`Image` reaproveitados) e destruído com a cena: nada é criado por frame. Um tema novo é um
+objeto `SpecialTheme` registrado na tabela `THEMES`. assets.sprite.animations.special reaproveita o pipeline de fases;
 a ausência usa punch como fallback. Não há alterações nos PNGs.
 
 ### Cross-up (passar por cima)

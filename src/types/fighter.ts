@@ -1,3 +1,4 @@
+import type { SfxId } from './audio';
 import type { LocalBox } from './geometry';
 
 /** Every state a fighter can be in. Rendering maps 1:1 from these to animations. */
@@ -150,16 +151,24 @@ export interface FighterAssetManifest {
 }
 
 /**
- * Procedural VFX styles available to any special (drawn by render/SpecialEffects.ts):
- * - `digital`: small data packets travelling through the hitbox.
- * - `agentNetwork`: a network of AI-agent nodes and links that discharges forward.
+ * App-themed VFX available to any special (drawn by render/special/):
+ * - `zapMessages`: messaging app look (24zap): green chat bubbles, send waves, read receipts.
+ * - `mindNetwork`: AI look (Mindhub): a glowing brain-circuit sigil, circuit traces, a neural
+ *   mesh and a digital discharge.
+ * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
-export type SpecialEffectStyle = 'digital' | 'agentNetwork';
+export type SpecialEffectStyle = 'zapMessages' | 'mindNetwork';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;
   /** Short text flashed above the fighter while the move runs. */
   label: string;
+  /** Pixel-art app emblem (path in /public) shown on the move and on the impact. */
+  emblem?: string;
+  /** Symbol-only image (white, path in /public), tinted and glowed by the style. */
+  glyph?: string;
+  /** Sound when the special starts (default: the generic special sound). */
+  sound?: SfxId;
 }
 
 export interface FighterSpriteAssets {

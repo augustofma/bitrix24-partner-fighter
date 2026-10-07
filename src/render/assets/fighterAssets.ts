@@ -18,6 +18,11 @@ export function portraitTextureKey(path: string): string {
   return `portrait:${path}`;
 }
 
+/** Texture key of a special-effect image (emblem / glyph), derived from its path. */
+export function vfxTextureKey(path: string): string {
+  return `vfx:${path}`;
+}
+
 /** Every texture declared by the roster, without duplicates (first declaration wins). */
 export function collectFighterAssets(roster: readonly FighterConfig[]): AssetRequest[] {
   const requests = new Map<string, AssetRequest>();
@@ -25,6 +30,13 @@ export function collectFighterAssets(roster: readonly FighterConfig[]): AssetReq
     if (assets.portrait) {
       const key = portraitTextureKey(assets.portrait);
       if (!requests.has(key)) requests.set(key, { type: 'image', key, path: assets.portrait });
+    }
+    for (const effect of Object.values(assets.specialEffects ?? {})) {
+      for (const path of [effect.emblem, effect.glyph]) {
+        if (!path) continue;
+        const key = vfxTextureKey(path);
+        if (!requests.has(key)) requests.set(key, { type: 'image', key, path });
+      }
     }
     const sheet = assets.sprite?.sheet;
     if (sheet && !requests.has(sheet.key)) {
@@ -47,6 +59,12 @@ export function pixelArtTextureKeys(roster: readonly FighterConfig[]): string[] 
     if (!assets.pixelArt) continue;
     if (assets.portrait) keys.add(portraitTextureKey(assets.portrait));
     if (assets.sprite) keys.add(assets.sprite.sheet.key);
+  }
+  // Effect emblems are pixel art for every fighter.
+  for (const { assets } of roster) {
+    for (const effect of Object.values(assets.specialEffects ?? {})) {
+      for (const path of [effect.emblem, effect.glyph]) if (path) keys.add(vfxTextureKey(path));
+    }
   }
   return [...keys];
 }

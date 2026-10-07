@@ -35,7 +35,9 @@ export type SfxId =
   | 'round-start'
   | 'fight'
   | 'victory'
-  | 'perfect';
+  | 'perfect'
+  | 'special-zap'
+  | 'special-mind';
 
 export interface SfxConfig {
   id: SfxId;

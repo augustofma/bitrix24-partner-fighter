@@ -302,6 +302,15 @@ sem pedido explícito.**
 - [x] Testes: sem especial, sem energia, custo < 100, groundOnly, distância, stun, consumo,
       cooldown, finalizar, punição com reação, vários especiais, ordem por dificuldade, determinismo
 
+## DONE (v0.26: VFX dos especiais com temas dos apps, branch `feature/app-themed-special-vfx`)
+
+- [x] Temas por configuração (`assets.specialEffects`: estilo, emblema, símbolo, som)
+- [x] 24ZAP: balões "digitando", emblema enviado, ondas de envio, impacto com ✓✓ e selo
+- [x] MINDHUB AGENT: símbolo cérebro-circuito na mira, trilhas de circuito, rede neural, impacto
+      digital com o emblema; emblemas pixel-art feitos dos logos fornecidos
+- [x] Sons próprios de início (`special-zap`, `special-mind`); testes de fases, limpeza e
+      reaproveitamento de objetos; playtest desktop e mobile (inclusive KO por especial)
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis

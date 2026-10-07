@@ -151,7 +151,14 @@ export const augusto: FighterConfig = {
   ],
   palette: { body: 0x191c24, accent: 0x258bff, skin: 0xb8b8b8, outline: 0x080b12 },
   assets: {
-    specialEffects: { 'augusto.24zap': { style: 'digital', label: STRINGS.special24ZapEffect } },
+    specialEffects: {
+      'augusto.24zap': {
+        style: 'zapMessages',
+        label: STRINGS.special24ZapEffect,
+        emblem: 'vfx/24zap-emblem.png',
+        sound: 'special-zap',
+      },
+    },
     portrait: 'fighters/augusto/portrait.png',
     pixelArt: true,
     sprite: {

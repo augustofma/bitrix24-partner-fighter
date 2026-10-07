@@ -1,3 +1,4 @@
+import type { ReadonlyFighter } from '../core/fighter/ReadonlyFighter';
 import type { SimulationEvent } from '../core/FightSimulation';
 import type { AttackStateId } from '../types/fighter';
 import type { SfxId } from '../types/audio';
@@ -22,7 +23,11 @@ export function impactSfx(attackState: AttackStateId): SfxId {
   return IMPACT_BY_ATTACK[attackState];
 }
 
-export function combatSfx(event: SimulationEvent): SfxId[] {
+export function combatSfx(
+  event: SimulationEvent,
+  /** When given, a special with its own sound (assets.specialEffects[id].sound) uses it. */
+  fighters?: readonly ReadonlyFighter[],
+): SfxId[] {
   switch (event.type) {
     case 'hit':
     case 'koHit':
@@ -34,8 +39,12 @@ export function combatSfx(event: SimulationEvent): SfxId[] {
       return ['jump'];
     case 'land':
       return ['landing'];
-    case 'specialStart':
-      return ['special'];
+    case 'specialStart': {
+      const fighter = fighters?.[event.fighterIndex];
+      const move = fighter?.activeAttack;
+      const themed = move ? fighter.config.assets.specialEffects?.[move.id]?.sound : undefined;
+      return [themed ?? 'special'];
+    }
     case 'ko':
       return ['ko'];
     case 'fightStart':
