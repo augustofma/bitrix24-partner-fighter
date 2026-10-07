@@ -613,6 +613,16 @@ atributos, dano, vida, leitura de input futuro ou RNG manipulado. Valores por di
 
 A IA não conhece nenhum personagem: um teste garante que `src/controllers/` não contém IDs.
 
+**Especiais:** `src/core/fighter/specialMoves.ts` é a única regra de "qual especial um aperto
+inicia" (`specialForPress`: energia e `groundOnly`, na ordem do config), usada pelo `Fighter` e
+pela CPU. No `decide()`, antes dos golpes normais, `trySpecial` só segue se o lutador está livre
+no chão, o cooldown e a hesitação acabaram e `specialWouldConnect` (hitbox do especial, com o
+avanço do startup, contra a hurtbox atual) confirma o alcance; então rola
+`AIProfile.special` (chance base + bônus de finalizar e de punir whiff, este só após
+`reactionFrames`). O aperto é o mesmo botão do jogador e o `Fighter` revalida tudo. O RNG só é
+usado quando há especial disponível, então CPUs sem especial mantêm a sequência exata de antes.
+Vários especiais: `usableSpecials` lista os utilizáveis e a CPU avalia o que o aperto iniciaria.
+
 ## Pipeline de arte dos lutadores
 
 A arte é **só apresentação**: nada em `FighterConfig.assets` é lido pela simulação. Trocar,

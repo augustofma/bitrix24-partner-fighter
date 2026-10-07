@@ -13,6 +13,7 @@ import type { InputFrame, InputState } from '../../types/input';
 import { toWorldRect } from '../geometry';
 import { horizontalAxis } from '../input';
 import { attackPhaseAt, totalAttackFrames, type AttackPhase } from './attackFrames';
+import { specialForPress } from './specialMoves';
 
 /**
  * Moments of a fighter's own movement that presentation reacts to (sounds, dust): the jump
@@ -362,10 +363,7 @@ export class Fighter implements ReadonlyFighter {
   private tryBufferedSpecial(): boolean {
     if (this.inputBuffer.current?.button !== 'special') return false;
     this.inputBuffer.clear();
-    const move = this.config.specials.find(
-      (candidate) =>
-        (!candidate.groundOnly || !this.isAirborne) && candidate.meterCost <= this.meter,
-    );
+    const move = specialForPress(this.config, this.meter, this.isAirborne);
     if (!move) return false;
     this.changeSpecialMeter(-move.meterCost);
     this.startAttack(move);

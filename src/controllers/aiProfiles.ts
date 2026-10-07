@@ -47,6 +47,37 @@ export interface AIProfile {
   retreatFrames: readonly [number, number];
   guardFrames: readonly [number, number];
   waitFrames: readonly [number, number];
+  /**
+   * Specials. The CPU only considers one the fighter could really start now (same rules as a
+   * human press: meter, posture, free to act), from the ground and at a distance where it
+   * would connect. Then it rolls these, so a charged meter is a tactical option, never an
+   * automatic press.
+   */
+  special: AISpecialProfile;
+}
+
+export interface AISpecialProfile {
+  /** Base chance to throw it when it is available and in range. */
+  useChance: number;
+  /** After throwing one: frames before the next special is even considered. */
+  decisionCooldown: readonly [number, number];
+  /** After deciding NOT to throw it: frames before considering again (no per-frame retries). */
+  declineCooldown: readonly [number, number];
+  /** Hesitation once the meter first pays for a special (no instant press on "READY"). */
+  readyDelay: readonly [number, number];
+  /** Added chance when its damage would finish the round (opponent.health <= damage). */
+  finisherBias: number;
+  /**
+   * Chance to check the real geometry (the special's hitbox vs the opponent's hurtbox, startup
+   * travel included) and to hold it while the opponent is in the air (a jump would carry them
+   * over it). Otherwise it only eyeballs the reach and may throw it slightly short.
+   */
+  spacingAwareness: number;
+  /**
+   * Added chance when the opponent is stuck in an attack's recovery long enough for the
+   * special's startup, seen only after reactionFrames (a whiff punish).
+   */
+  punishBonus: number;
 }
 
 /** Baseline CPU: reacts fast but blocks only sometimes, reads most low/overhead attacks. */
@@ -68,6 +99,16 @@ export const NORMAL_AI: AIProfile = {
   retreatFrames: [14, 28],
   guardFrames: [12, 24],
   waitFrames: [10, 24],
+  // Moderate: uses a good opening, does not burn the meter on sight.
+  special: {
+    useChance: 0.4,
+    decisionCooldown: [55, 100],
+    declineCooldown: [40, 70],
+    readyDelay: [20, 45],
+    finisherBias: 0.3,
+    spacingAwareness: 0.85,
+    punishBonus: 0.15,
+  },
 };
 
 /**
@@ -91,6 +132,16 @@ export const EASY_AI: AIProfile = {
   retreatFrames: [14, 28],
   guardFrames: [10, 20],
   waitFrames: [20, 40],
+  // Rare and hesitant: a beginner sees the special exists without eating it all the time.
+  special: {
+    useChance: 0.13,
+    decisionCooldown: [120, 180],
+    declineCooldown: [90, 150],
+    readyDelay: [60, 120],
+    finisherBias: 0.08,
+    spacingAwareness: 0.5,
+    punishBonus: 0,
+  },
 };
 
 /**
@@ -115,6 +166,16 @@ export const HARD_AI: AIProfile = {
   retreatFrames: [10, 20],
   guardFrames: [12, 24],
   waitFrames: [6, 14],
+  // Frequent and smart: right spacing, whiff punishes and round finishers.
+  special: {
+    useChance: 0.72,
+    decisionCooldown: [30, 65],
+    declineCooldown: [12, 24],
+    readyDelay: [6, 16],
+    finisherBias: 0.6,
+    spacingAwareness: 1,
+    punishBonus: 0.35,
+  },
 };
 
 /** The CPU personality used for each difficulty; the same AIController plays all of them. */

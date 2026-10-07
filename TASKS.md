@@ -294,12 +294,20 @@ sem pedido explícito.**
 - [x] Testes de encontros, origens, rotas, partida, coordenadas, vistas e determinismo;
       playtest desktop e mobile com derrota + retry
 
+## DONE (v0.25: especiais da CPU, branch `feature/cpu-special-ai`)
+
+- [x] CPU usa especiais pelas regras do jogador (`specialForPress`, compartilhado com o `Fighter`)
+- [x] Parâmetros por dificuldade em `AIProfile.special` (chance, cooldowns, hesitação, finalizar,
+      punir whiff, checagem de alcance); sem cheat: só vê o que um humano veria, após reação
+- [x] Testes: sem especial, sem energia, custo < 100, groundOnly, distância, stun, consumo,
+      cooldown, finalizar, punição com reação, vários especiais, ordem por dificuldade, determinismo
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
        (`EASY_AI`, `NORMAL_AI`, `HARD_AI`) com pessoas reais; a FÁCIL ainda pode estar difícil
-       para iniciantes e a DIFÍCIL não usa especiais.
-2. [ ] CPU usar especiais (decisão por `AIProfile`, só com meter disponível, sem ler o futuro).
+       para iniciantes.
+2. [ ] Comandos de entrada diferentes por especial (hoje um botão inicia o primeiro utilizável).
 3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
 4. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.

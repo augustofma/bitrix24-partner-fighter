@@ -328,7 +328,7 @@ ser visto e, bloqueado, deixa Filipe em desvantagem (24 de recovery contra 16 de
 Visual: reaproveita os frames do soco; os agentes orbitam a mão, uma rede de nós se forma no
 alcance do golpe e descarrega um feixe azul/ciano/verde com pulsos e partículas (procedural,
 sem logos nem imagens externas).
-A CPU não usa especiais, mas reage, bloqueia e recebe seus impactos pelas regras existentes.
+A CPU também usa especiais (veja "Especiais da CPU"), pelas mesmas regras do jogador.
 
 ### SPECIAL READY (só visual)
 
@@ -415,6 +415,29 @@ pula raramente. A DIFÍCIL defende com frequência e quase sempre na postura cer
 desperdiça o soco alto contra quem está agachado, pressiona com pausas curtas e quase
 sempre ataca no jump-in. Em simulações CPU x CPU (20 partidas por par, lados e lutadores
 alternados), DIFÍCIL venceu NORMAL e NORMAL venceu FÁCIL em todas.
+
+### Especiais da CPU
+
+A CPU descobre os especiais pelo `FighterConfig` (nada por personagem) e só considera o que um
+aperto de especial realmente iniciaria: energia ≥ custo (o mesmo limiar do SPECIAL READY, sem
+esperar 100), postura permitida (`groundOnly`), livre no chão (nunca em hitstun, blockstun, KO,
+no próprio golpe ou no ar) e a uma distância em que o golpe alcança. Aí o especial é uma opção
+da árvore de decisão, não um aperto automático: rola uma chance e, usando ou não, espera um
+cooldown antes de considerar de novo. Quando a barra fica pronta, ainda hesita um pouco.
+
+| Dificuldade | Chance base | Cooldown após usar | Cooldown ao recusar | Hesitação | Finalizar | Punir whiff | Checa o alcance |
+| ----------- | ----------- | ------------------ | ------------------- | --------- | --------- | ----------- | --------------- |
+| FÁCIL       | 13%         | 120–180 frames     | 90–150 frames       | 60–120    | +8%       | +0%         | 50%             |
+| NORMAL      | 40%         | 55–100 frames      | 40–70 frames        | 20–45     | +30%      | +15%        | 85%             |
+| DIFÍCIL     | 72%         | 30–65 frames       | 12–24 frames        | 6–16      | +60%      | +35%        | 100%            |
+
+"Finalizar": soma quando o dano do especial zera a vida do oponente. "Punir whiff": soma quando
+o oponente está preso no recovery de um golpe, percebido só depois dos `reactionFrames`, e o
+recovery que falta cobre o startup do especial. Sem checar o alcance, a CPU calcula "no olho" e
+pode jogar o golpe um pouco curto; checando, também espera o oponente aterrissar. A chance total
+nunca passa de 95%. Em simulação CPU × CPU (20 lutas, contra FIGHTER_A no NORMAL), Filipe usa
+cerca de 3 especiais por minuto no FÁCIL, 8 no NORMAL e 10 no DIFÍCIL; a barra fica pronta e
+sem uso ~78%, ~34% e ~14% do tempo.
 
 ## Rounds e vitória (melhor de 3)
 
