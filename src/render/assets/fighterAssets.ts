@@ -9,7 +9,9 @@ export type AssetRequest =
   | { type: 'image'; key: string; path: string }
   | { type: 'spritesheet'; key: string; path: string; frameWidth: number; frameHeight: number }
   /** A web font; `key` is the CSS font-family it registers. */
-  | { type: 'font'; key: string; path: string };
+  | { type: 'font'; key: string; path: string }
+  /** Music or sound: `path` first, then `altPaths`; the browser plays the first it supports. */
+  | { type: 'audio'; key: string; path: string; altPaths: readonly string[] };
 
 /** Texture key of a portrait image (derived from its path, so it is unique and shareable). */
 export function portraitTextureKey(path: string): string {

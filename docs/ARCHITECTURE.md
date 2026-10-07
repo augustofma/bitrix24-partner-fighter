@@ -37,6 +37,7 @@ src/
     sceneKeys.ts          Nomes das cenas
     registryKeys.ts       Chaves do registry do Phaser (estado da sessão entre cenas)
     strings.ts            Todos os textos de UI (pronto para i18n)
+    audio.ts              Faixas, volumes, fades, música de cada tela e stageMusic()
     fonts.ts              GAME_FONTS (TITLE, ARCADE, HUD, PIXEL, BODY) e os arquivos de fonte (OFL)
   types/                  Tipos compartilhados (sem lógica)
     fighter.ts            FighterConfig, AttackConfig, estados, assets
@@ -80,6 +81,10 @@ src/
     storyProgress.ts      Progresso imutável: início, chegada, resultado, MatchSetup da etapa
     brazilMap.ts          Contorno do Brasil (lon/lat) e projeção para o retângulo do mapa
     flightPath.ts         Curva do voo (Bezier quadrática), ponto e direção em t
+  audio/                  Música
+    MusicManager.ts       PURO: faixa atual, crossfade, sting, volume, mute, espera do unlock
+    PhaserMusicBackend.ts Ponte para o sound manager do Phaser
+    gameMusic.ts          Um MusicManager por jogo; tempo dos fades, unlock, tecla M
   input/                  Dispositivos (Phaser)
     KeyboardInputSource.ts, menuKeys.ts
   render/                 Desenho do mundo (Phaser)
@@ -283,6 +288,40 @@ conferem que fica dentro do contorno.
 o `to` da anterior) e coloque-a em `storyRoute` do perfil do lutador. A seleção passa a
 liberá-lo na história, sem nenhuma mudança nas cenas. `stageId` por etapa permite cenários
 próprios por cidade quando existirem.
+
+## Música (MusicManager)
+
+As cenas só dizem qual faixa querem; quem decide é o `MusicManager` (um por jogo, em
+`gameMusic(scene)`), que não depende do Phaser e é testado com um backend falso:
+
+- **Uma faixa atual.** Pedir a faixa que já toca não faz nada: reentrar numa cena nunca
+  duplica a música. Trocar de faixa faz crossfade (sai em 450 ms, entra em 600 ms; a luta entra
+  em 700 ms). Uma terceira troca no meio do fade corta a voz mais antiga: no máximo duas vozes.
+- **Sting:** `playSting` abaixa a música atual em 250 ms e toca a faixa uma vez; depois, silêncio.
+  No `matchOver` a música da luta sai em 900 ms e a `VictoryScene` toca `victory-sting`.
+- **Autoplay:** enquanto o navegador mantém o áudio bloqueado nada é criado; o último pedido
+  espera e começa no primeiro toque / clique / tecla (evento `unlocked` do Phaser). Stings
+  pedidos nesse período são descartados (nunca tocam atrasados).
+- **Carregamento:** a `BootScene` carrega só `menu-theme`; a `AudioLoaderScene` (invisível)
+  baixa o resto em segundo plano. Uma faixa pedida antes de chegar começa quando o arquivo
+  entra no cache. Arquivo ausente = silêncio, nunca erro.
+- **Aba em segundo plano:** o Phaser suspende o contexto de áudio e o loop do jogo; nada é
+  recriado ao voltar. Os fades usam o relógio real (limitado a 1 s por passo).
+- **Volume e mute:** `MUSIC_VOLUME` (0,55) × ganho da faixa; `M` liga/desliga o som (guardado
+  em `localStorage` quando disponível).
+
+| Cena                                 | Pedido                                                   |
+| ------------------------------------ | -------------------------------------------------------- |
+| MenuScene                            | `play(SCENE_MUSIC.menu)`                                 |
+| CharacterSelectScene                 | `play(SCENE_MUSIC.characterSelect)`                      |
+| StoryMapScene                        | `play(SCENE_MUSIC.storyMap)` (continua durante o voo)    |
+| VersusScene                          | nada: segue a música da tela anterior                    |
+| FightScene                           | `play(stageMusic(stage), 700)`; no `matchOver`, `stop()` |
+| VictoryScene / CampaignCompleteScene | `playSting(SCENE_MUSIC.victory)`                         |
+
+**Música de um cenário novo:** gere a faixa (adicione-a em `compose.py` e em `MusicTrackId`),
+registre em `MUSIC_TRACKS` e ponha `music: '<id>'` no `StageConfig`. Sem `music`, o cenário usa
+`DEFAULT_STAGE_MUSIC`.
 
 ## Tipografia
 

@@ -1,3 +1,5 @@
+import { gameMusic } from '../audio/gameMusic';
+import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
@@ -45,6 +47,7 @@ export class MenuScene extends Phaser.Scene {
 
   create(): void {
     fadeIn(this);
+    gameMusic(this).play(SCENE_MUSIC.menu);
     const startMode = (mode: GameMode) => goToScene(this, SceneKeys.CharacterSelect, { mode });
     const hasArt = Object.values(TITLE_ART).every(({ key }) => this.textures.exists(key));
     const play = hasArt ? this.createIllustrated() : this.createProcedural();

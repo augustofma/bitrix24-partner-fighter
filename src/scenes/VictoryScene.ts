@@ -1,3 +1,5 @@
+import { gameMusic } from '../audio/gameMusic';
+import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
@@ -68,6 +70,8 @@ export class VictoryScene extends Phaser.Scene {
 
   create(result: MatchResult): void {
     fadeIn(this);
+    // A short original sting, then musical silence on this screen.
+    gameMusic(this).playSting(SCENE_MUSIC.victory);
     const { setup } = result;
     const sides = [
       getFighterConfig(setup.playerFighterId),

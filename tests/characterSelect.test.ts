@@ -95,6 +95,9 @@ vi.mock('../src/ui/select/HeroPanel', () => ({
   },
 }));
 vi.mock('../src/scenes/transitions', () => ({ fadeIn: vi.fn(), goToScene: ui.goToScene }));
+vi.mock('../src/audio/gameMusic', () => ({
+  gameMusic: () => ({ play: vi.fn(), playSting: vi.fn(), stop: vi.fn() }),
+}));
 vi.mock('../src/input/menuKeys', () => ({
   onKeys: (_scene: unknown, names: string[], handler: () => void) => {
     for (const name of names) ui.keys.set(name, handler);

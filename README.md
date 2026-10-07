@@ -133,6 +133,7 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)   |
 | Menus              | Enter / Espaço confirma, ← / → modo, Esc volta |
 | Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU        |
+| Som                | M liga/desliga a música                        |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)      |
 
 **Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões

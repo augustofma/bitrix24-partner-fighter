@@ -1,5 +1,6 @@
 export const SceneKeys = {
   Boot: 'BootScene',
+  AudioLoader: 'AudioLoaderScene',
   Menu: 'MenuScene',
   CharacterSelect: 'CharacterSelectScene',
   Versus: 'VersusScene',

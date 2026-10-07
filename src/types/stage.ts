@@ -1,3 +1,5 @@
+import type { MusicTrackId } from './audio';
+
 export interface StagePalette {
   skyTop: number;
   skyBottom: number;
@@ -20,6 +22,8 @@ export interface StageConfig {
   palette: StagePalette;
   /** Illustrated art; when missing or not loaded, StageView draws the procedural stage. */
   art?: StageArt;
+  /** Fight music of this stage (config/audio.ts DEFAULT_STAGE_MUSIC when missing). */
+  music?: MusicTrackId;
 }
 
 /** An image used by a stage (path relative to /public; key unique in the texture cache). */

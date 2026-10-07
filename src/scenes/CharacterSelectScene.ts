@@ -1,3 +1,5 @@
+import { gameMusic } from '../audio/gameMusic';
+import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_WIDTH } from '../config/display';
@@ -57,6 +59,7 @@ export class CharacterSelectScene extends Phaser.Scene {
   create(data?: { mode?: GameMode }): void {
     this.mode = data?.mode ?? 'quick';
     fadeIn(this);
+    gameMusic(this).play(SCENE_MUSIC.characterSelect);
     createSelectBackground(this);
 
     this.selectedIndex = ROSTER.findIndex((fighter) => this.canPick(fighter));

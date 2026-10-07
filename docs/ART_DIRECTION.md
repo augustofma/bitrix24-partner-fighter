@@ -366,6 +366,25 @@ Todas as fontes são OFL, ficam em `public/fonts/` com a licença e são definid
 Textos grandes usam contorno escuro e sombra dura. Cenas nunca citam fontes: usam
 `arcadeText`, `hudText`, `pixelText`, `bodyText` ou `createFightTitle`.
 
+## Música
+
+Trilha **original**, composta e sintetizada no próprio repositório
+([scripts/music/README.md](../scripts/music/README.md)): estética de fliperama de luta dos anos
+90 com synthwave moderno: baixo forte, bateria eletrônica, pads, leads de synth com vibrato,
+power chords de "guitarra" sintetizada e toques discretos de chiptune. Nenhuma melodia, sample
+ou trecho de outros jogos (Street Fighter, King of Fighters, Mortal Kombat, Tekken etc.).
+
+| Tela                       | Faixa                    | Volume efetivo |
+| -------------------------- | ------------------------ | -------------- |
+| Menu                       | `menu-theme`             | 0,55           |
+| Seleção (e VS)             | `character-select-theme` | 0,52           |
+| Mapa do Brasil (e VS)      | `story-map-theme`        | 0,55           |
+| Luta (`StageConfig.music`) | `partner-summit-theme`   | 0,47           |
+| Vitória / campanha         | `victory-sting` (4 s)    | 0,55           |
+
+Volume da música 0,55 (ganho por faixa para igualar); efeitos sonoros futuros ficam em 0,85,
+acima da música. Arquivos em `public/audio/music/` (efeitos futuros em `public/audio/sfx/`).
+
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
@@ -382,6 +401,7 @@ registrada aqui:
 | `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                            | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
 | `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                             | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
 | `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                          | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
+| `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                   | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts` | Original do projeto                                               |
 | JOÃO GUIOTTI e ROMUALDO (boneco genérico)                                         | Renderer procedural existente com paletas próprias                                        | Original do projeto                                               |
 | `scripts/title-art/source.webp` e `public/ui/title/*`                             | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_title_art.py`      | Arte do projeto, aprovada pelo usuário                            |

@@ -1,3 +1,5 @@
+import { gameMusic } from '../audio/gameMusic';
+import { MUSIC_FADE, stageMusic } from '../config/audio';
 import Phaser from 'phaser';
 import { DEBUG_TOGGLE_KEY, PLAYER_ONE_KEYS } from '../config/controls';
 import { GAME_HEIGHT } from '../config/display';
@@ -61,6 +63,7 @@ export class FightScene extends Phaser.Scene {
     fadeIn(this);
 
     const stage = getStageConfig(setup.stageId);
+    gameMusic(this).play(stageMusic(stage), MUSIC_FADE.fightInMs);
     const configs = [
       getFighterConfig(setup.playerFighterId),
       getFighterConfig(setup.cpuFighterId),
@@ -165,6 +168,8 @@ export class FightScene extends Phaser.Scene {
         this.startRoundPresentation();
         return;
       case 'matchOver': {
+        // The fight music winds down; the victory screen plays the sting.
+        gameMusic(this).stop(MUSIC_FADE.matchEndOutMs);
         const { winnerIndex, reason, roundWins } = event.outcome;
         const result: MatchResult = { winnerIndex, reason, roundWins, setup: this.setup };
         goToScene(this, SceneKeys.Victory, result);

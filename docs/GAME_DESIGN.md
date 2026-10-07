@@ -459,6 +459,16 @@ Uma turnê pelo Brasil contra rivais de outras cidades, usando as mesmas lutas d
   lutador) ou VOLTAR AO MENU.
 - O progresso dura a sessão e é independente da luta rápida.
 
+## Música
+
+Cada tela tem trilha própria, original: tema de abertura no menu, faixa mais rápida na seleção,
+tema de aventura no mapa do Brasil (inclusive durante o voo) e a faixa do cenário na luta
+(`StageConfig.music`; hoje `partner-summit-theme`). O VS mantém a música da tela anterior. Quando
+a partida termina a música da luta some e toca uma fanfarra curta (4 s) na vitória; depois,
+silêncio. Trocas sempre com fade. A música só começa depois da primeira interação (exigência dos
+navegadores) e **M** liga/desliga o som. Detalhes em
+[ART_DIRECTION.md](ART_DIRECTION.md#música).
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |

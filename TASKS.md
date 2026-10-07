@@ -253,6 +253,17 @@ sem pedido explícito.**
       voo, novos lutadores na simulação, CPU, melhor de 3, barra de especial, fontes e timer
 - [x] Playtest Augusto (com derrota + retry) e Filipe em 1280×720, 1920×1080 e 844×390
 
+## DONE (v0.21: SPECIAL READY e música, branch `feature/audio-and-special-ready-polish`)
+
+- [x] SPECIAL READY a partir do custo do especial mais barato do lutador (Augusto 30, Filipe 35);
+      sem especial, nunca READY
+- [x] Glow que respira, brilho correndo, raios procedurais, faíscas, explosão ao ficar READY e
+      descarga ao gastar; botão ESP do mobile com borda e anel pulsando
+- [x] `MusicManager` central (faixa atual, crossfade, sting, volume, mute, unlock, sem duplicar)
+- [x] Trilha original sintetizada (`scripts/music/compose.py`): menu, seleção, mapa, luta e
+      fanfarra de vitória; música por cenário em `StageConfig.music`
+- [x] Testes de READY, botão ESP, MusicManager, configuração e arquivos de áudio
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
@@ -261,8 +272,8 @@ sem pedido explícito.**
 2. [ ] CPU usar especiais (decisão por `AIProfile`, só com meter disponível, sem ler o futuro).
 3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
-4. [ ] **Áudio básico:** `AudioManager` ouvindo `SimulationEvent` (hit, block, KO, anúncios) e
-       música de menu e de luta, respeitando o desbloqueio de áudio no mobile.
+4. [ ] **Efeitos sonoros:** ouvir `SimulationEvent` (hit, block, KO, anúncios, SPECIAL READY)
+       com `SFX_VOLUME` e arquivos em `public/audio/sfx/` (a música já existe).
 5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
        remapeamento de teclas salva em `localStorage`.
 6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
@@ -275,6 +286,7 @@ sem pedido explícito.**
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
 15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).
+16. [ ] Tela de opções com volume de música/efeitos (hoje só M para mutar).
 
 ## FUTURE (não implementar agora)
 
@@ -285,7 +297,7 @@ sem pedido explícito.**
 - Sequências de comando para especiais e suporte a multi-hit real
 - Combos, contador de hits, cancelamentos
 - Vários cenários
-- Sons, músicas e falas dos personagens
+- Falas dos personagens e trilha gravada por músicos (hoje é sintetizada)
 - Modo torneio / arcade com chaveamento (o Modo História já cobre a sequência de rivais)
 - Ranking
 - Multiplayer local (2 jogadores no mesmo teclado/gamepads)

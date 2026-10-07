@@ -1,3 +1,5 @@
+import { gameMusic } from '../../audio/gameMusic';
+import { SCENE_MUSIC } from '../../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../../config/controls';
 import { GAME_WIDTH } from '../../config/display';
@@ -64,6 +66,8 @@ export class StoryMapScene extends Phaser.Scene {
 
   create(): void {
     fadeIn(this);
+    // The map theme keeps going during the whole flight and the rival card.
+    gameMusic(this).play(SCENE_MUSIC.storyMap);
     const progress = getStoryProgress(this);
     const map = STORY_MAP_LAYOUT.map;
     const trip = progress ? tripForProgress(progress, map) : null;

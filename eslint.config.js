@@ -36,6 +36,7 @@ export default tseslint.config(
       'src/stages/**/*.ts',
       'src/config/**/*.ts',
       'src/story/**/*.ts',
+      'src/audio/MusicManager.ts',
     ],
     rules: {
       'no-restricted-imports': [

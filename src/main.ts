@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { BACKGROUND_COLOR, GAME_HEIGHT, GAME_WIDTH } from './config/display';
+import { AudioLoaderScene } from './scenes/AudioLoaderScene';
 import { BootScene } from './scenes/BootScene';
 import { CharacterSelectScene } from './scenes/CharacterSelectScene';
 import { FightScene } from './scenes/FightScene';
@@ -34,6 +35,7 @@ const config: Phaser.Types.Core.GameConfig = {
   // Order matters only for the first scene (Boot).
   scene: [
     BootScene,
+    AudioLoaderScene,
     MenuScene,
     CharacterSelectScene,
     StoryMapScene,
