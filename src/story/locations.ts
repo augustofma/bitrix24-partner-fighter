@@ -81,6 +81,13 @@ export function locationLabel(location: StoryLocation): string {
     : name;
 }
 
+/** Place with its country, for the campaign's starting point: "RECIFE - PE · BRASIL", "RÚSSIA". */
+export function locationWithCountry(location: StoryLocation): string {
+  return location.kind === 'city'
+    ? `${locationLabel(location)} · ${location.country.toUpperCase()}`
+    : locationLabel(location);
+}
+
 /** The place's name alone, in capitals ("RECIFE", "RÚSSIA"), for route titles. */
 export function locationName(location: StoryLocation): string {
   return location.name.toUpperCase();

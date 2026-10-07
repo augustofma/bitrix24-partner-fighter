@@ -342,6 +342,10 @@ sem pedido explícito.**
       `shutdown`
 - [x] Testes de config, assets, escolha por lugar, voo, reações e ciclo de vida; playtest
       desktop, 1080p e mobile 844×390
+- [x] Story Mode com origem dinâmica: a campanha começa no lugar do escolhido
+      (`storyLocationId`) e é gerada (`campaignOpponents` + `rivalLeg`), sem rotas por
+      personagem; os 4 personagens são jogáveis; "PONTO DE PARTIDA" no mapa; Recife vira destino
+      (cenário Marco Zero) para quem não começa lá
 
 ## NEXT (próximas tarefas recomendadas)
 
@@ -367,8 +371,7 @@ sem pedido explícito.**
 12. [ ] Arte própria (sprite + retrato) para ROMUALDO, e especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-15. [ ] Cenários próprios para as outras cidades (basta `stageId` no lugar; hoje só Recife tem;
-        nenhuma etapa atual da história acontece em Recife).
+15. [ ] Cenários próprios para os outros lugares (basta `stageId` no lugar; hoje só Recife tem).
 16. [ ] Som ambiente de torcida por cenário (ainda não existe sistema de áudio de ambiente).
 17. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
 

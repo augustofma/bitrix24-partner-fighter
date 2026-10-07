@@ -11,9 +11,9 @@ import { ROSTER, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import type { FighterConfig } from '../types/fighter';
 import { isAIDifficulty, type AIDifficulty, type GameMode, type MatchSetup } from '../types/match';
-import { locationLabel } from '../story/locations';
+import { getStoryLocation, locationLabel } from '../story/locations';
 import {
-  fighterOrigin,
+  campaignStartLocation,
   hasStoryCampaign,
   isStoryRival,
   quickFightStageId,
@@ -266,10 +266,12 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.hero.show(fighter);
   }
 
-  /** Quick fight: the CPU opponent. Story: where the campaign starts. */
+  /** Quick fight: the CPU opponent. Story: where the campaign starts (the fighter's place). */
   private badgeText(fighter: FighterConfig): string {
-    const origin = fighterOrigin(fighter.id);
-    if (this.mode === 'story' && origin) return STRINGS.storyOrigin(locationLabel(origin));
+    if (this.mode === 'story' && hasStoryCampaign(fighter.id)) {
+      const start = getStoryLocation(campaignStartLocation(fighter.id));
+      return STRINGS.storyStart(locationLabel(start));
+    }
     return STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName);
   }
 

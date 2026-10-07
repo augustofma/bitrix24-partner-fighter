@@ -497,16 +497,22 @@ sem uso ~78%, ~34% e ~14% do tempo.
 
 Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da luta rápida.
 
-- **Seleção ("MODO HISTÓRIA"):** só lutadores com campanha podem ser escolhidos (hoje Augusto e
-  Filipe, de **Recife - PE**); João e Romualdo aparecem como **RIVAL**. O selo mostra a origem
-  ("ORIGEM RECIFE - PE"); a dificuldade da CPU vale para a campanha toda.
-- **Origem × local do confronto:** a origem oficial de cada lutador não muda (Filipe e Augusto
-  de Recife - PE, João de São Paulo - SP, Romualdo de Joinville - SC), mas a campanha pode
-  enfrentá-lo em outro lugar: **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
-  Joinville.
-- **Rota de Augusto:** Recife → **Portugal** (Filipe) → **Rússia** (João Guiotti) → Joinville
-  (Romualdo). **Rota de Filipe:** Recife → Rússia (João Guiotti) → Joinville (Romualdo). Cada
-  viagem parte de onde a campanha está (o lugar da luta anterior).
+- **Seleção ("MODO HISTÓRIA"):** todo personagem da história pode ser escolhido (Augusto,
+  Filipe, João Guiotti, Romualdo). O selo mostra onde a campanha começa ("PARTIDA RÚSSIA"); a
+  dificuldade da CPU vale para a campanha toda.
+- **Origem × lugar na história:** a origem oficial não muda (Augusto e Filipe de Recife - PE,
+  João de São Paulo - SP, Romualdo de Joinville - SC), mas cada um tem um lugar na história:
+  Augusto em **Recife**, **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
+  **Joinville**. A campanha do escolhido **começa no lugar dele**, e os outros são enfrentados
+  nos lugares deles, um por um (nunca ele mesmo).
+- **Rotas (geradas):** Augusto: Recife → Portugal (Filipe) → Rússia (João) → Joinville
+  (Romualdo). Filipe: Portugal → Recife (Augusto) → Rússia (João) → Joinville (Romualdo).
+  João: Rússia → Recife (Augusto) → Portugal (Filipe) → Joinville (Romualdo). Romualdo:
+  Joinville → Recife (Augusto) → Portugal (Filipe) → Rússia (João). Cada viagem parte de onde a
+  campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário
+  RECIFE); os outros lugares usam o Partner Summit até terem cenário próprio.
+- **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
+  (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.
 - **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
   dos trópicos). Viagens dentro do Brasil usam o mapa do Brasil (voo de ~3 s); viagens ao
   exterior usam um mapa-múndi estilizado com o Brasil destacado em dourado (voo de ~4,4 s, em

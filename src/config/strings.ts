@@ -11,6 +11,9 @@ export const STRINGS = {
   modeHint: '← → escolher    ENTER confirmar    ESC voltar',
   storySelectTitle: 'MODO HISTÓRIA',
   storyOrigin: (label: string) => `ORIGEM  ${label}`,
+  /** Story select badge: where the chosen fighter's campaign starts. */
+  storyStart: (label: string) => `PARTIDA  ${label}`,
+  storyStartingPoint: 'PONTO DE PARTIDA',
   storyLockedRival: 'RIVAL',
   storyLockedSoon: 'EM BREVE',
   storyTrip: (from: string, to: string) => `${from}  →  ${to}`,

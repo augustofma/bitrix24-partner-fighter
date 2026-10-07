@@ -25,9 +25,9 @@ import {
 } from '../src/story/locations';
 import {
   STORY_PROFILES,
-  encounterLocationId,
   fighterOrigin,
   hasStoryCampaign,
+  storyLocationId,
   storyRouteFor,
 } from '../src/story/storyProfiles';
 import {
@@ -55,7 +55,7 @@ describe('origins (all from configuration)', () => {
       expect(() => getFighterConfig(profile.fighterId)).not.toThrow();
       expect(() => getStoryLocation(profile.home)).not.toThrow();
       if (profile.encounter) expect(() => getStoryLocation(profile.encounter!)).not.toThrow();
-      for (const leg of profile.storyRoute ?? []) {
+      for (const leg of storyRouteFor(profile.fighterId) ?? []) {
         expect(() => getStoryLocation(leg.destination)).not.toThrow();
         expect(() => getFighterConfig(leg.opponent)).not.toThrow();
         expect(leg.opponent).not.toBe(profile.fighterId);
@@ -68,11 +68,12 @@ describe('origins (all from configuration)', () => {
   });
 });
 
-describe('encounter places (separate from origins)', () => {
-  it('Filipe is challenged in Portugal, João Guiotti in Russia, Romualdo at home', () => {
-    expect(encounterLocationId('filipe')).toBe('portugal');
-    expect(encounterLocationId('joao-guiotti')).toBe('russia');
-    expect(encounterLocationId('romualdo')).toBe('joinville');
+describe('story places (separate from origins)', () => {
+  it('Filipe is in Portugal, João Guiotti in Russia, Augusto and Romualdo at home', () => {
+    expect(storyLocationId('augusto')).toBe('recife');
+    expect(storyLocationId('filipe')).toBe('portugal');
+    expect(storyLocationId('joao-guiotti')).toBe('russia');
+    expect(storyLocationId('romualdo')).toBe('joinville');
   });
 
   it('their official origins do not change', () => {
@@ -80,10 +81,10 @@ describe('encounter places (separate from origins)', () => {
     expect(fighterOrigin('joao-guiotti')?.id).toBe('sao-paulo');
   });
 
-  it("every leg against a rival flies to that rival's encounter place", () => {
+  it("every leg against a rival flies to that rival's place in the story", () => {
     for (const profile of STORY_PROFILES) {
-      for (const leg of profile.storyRoute ?? []) {
-        expect(leg.destination, leg.opponent).toBe(encounterLocationId(leg.opponent));
+      for (const leg of storyRouteFor(profile.fighterId) ?? []) {
+        expect(leg.destination, leg.opponent).toBe(storyLocationId(leg.opponent));
       }
     }
   });
@@ -99,17 +100,18 @@ describe('campaigns', () => {
     expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'joinville']);
   });
 
-  it('Filipe (never against himself): Recife -> Russia (João Guiotti) -> Joinville (Romualdo)', () => {
+  it('Filipe (never against himself): Portugal -> Recife (Augusto) -> Russia -> Joinville', () => {
     expect(storyRouteFor('filipe')).toEqual([
+      { opponent: 'augusto', destination: 'recife' },
       { opponent: 'joao-guiotti', destination: 'russia' },
       { opponent: 'romualdo', destination: 'joinville' },
     ]);
-    expect(routeCities('filipe')).toEqual(['recife', 'russia', 'joinville']);
+    expect(routeCities('filipe')).toEqual(['portugal', 'recife', 'russia', 'joinville']);
   });
 
-  it('only fighters with a route are playable in story mode', () => {
+  it('every story character is playable in story mode; others are not', () => {
     const playable = ROSTER.filter((config) => hasStoryCampaign(config.id)).map((c) => c.id);
-    expect(playable).toEqual(['augusto', 'filipe']);
+    expect(playable).toEqual(['augusto', 'filipe', 'joao-guiotti', 'romualdo']);
     expect(() => startStory('fighter-a')).toThrow();
   });
 });
@@ -172,13 +174,13 @@ describe('story progress', () => {
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
     let progress = startStory('filipe');
-    for (let leg = 0; leg < 2; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
+    for (let leg = 0; leg < 3; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
-      currentStage: 2,
+      currentStage: 3,
       currentLocation: 'joinville',
       opponent: null,
-      completedStages: [0, 1],
+      completedStages: [0, 1, 2],
     });
     expect(recordStoryMatch(progress, true)).toBe(progress);
     expect(arriveForFight(progress)).toBe(progress);

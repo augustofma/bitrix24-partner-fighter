@@ -2,7 +2,7 @@ import { selectSpriteAssets, validateSpriteAssets } from '../src/render/sprite/s
 import { describe, expect, it } from 'vitest';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { ROSTER } from '../src/fighters/roster';
-import { storyRouteFor, fighterOrigin, encounterLocationId } from '../src/story/storyProfiles';
+import { storyRouteFor, fighterOrigin, storyLocationId } from '../src/story/storyProfiles';
 import {
   attackFrameIndex,
   jumpFrameIndex,
@@ -16,7 +16,7 @@ describe('João Guiotti PNG assets', () => {
     expect(ROSTER.filter((f) => f.id === 'joao-guiotti')).toEqual([joaoGuiotti]);
     expect(joaoGuiotti.assets.portrait).toBe('fighters/joao-guiotti/portrait.png');
     expect(fighterOrigin(joaoGuiotti.id)?.id).toBe('sao-paulo');
-    expect(encounterLocationId(joaoGuiotti.id)).toBe('russia');
+    expect(storyLocationId(joaoGuiotti.id)).toBe('russia');
     for (const id of ['augusto', 'filipe'])
       expect(storyRouteFor(id)?.some((leg) => leg.opponent === joaoGuiotti.id)).toBe(true);
   });

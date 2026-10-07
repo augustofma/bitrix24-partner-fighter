@@ -14,7 +14,7 @@ import {
   quitStory,
   retryStoryFight,
 } from '../src/scenes/story/storyFlow';
-import { WORLD_TOUR } from '../src/story/storyProfiles';
+import { storyRouteFor } from '../src/story/storyProfiles';
 import type { MatchResult, MatchSetup } from '../src/types/match';
 
 /** A stand-in scene: only the game registry matters to the story glue. */
@@ -53,7 +53,9 @@ describe('story flow between the existing scenes', () => {
       SceneKeys.Versus,
       expect.objectContaining({
         playerFighterId: 'filipe',
-        cpuFighterId: 'joao-guiotti',
+        // Filipe starts in Portugal; his first rival is Augusto, met in Recife (Marco Zero).
+        cpuFighterId: 'augusto',
+        stageId: 'recife',
         difficulty: 'hard',
         mode: 'story',
       }),
@@ -82,7 +84,7 @@ describe('story flow between the existing scenes', () => {
   it('the last win leads to the campaign ending; quitting clears the campaign', () => {
     const scene = fakeScene();
     beginStory(scene, 'augusto');
-    for (let leg = 0; leg < WORLD_TOUR.length; leg++) {
+    for (let leg = 0; leg < (storyRouteFor('augusto')?.length ?? 0); leg++) {
       arriveAndFight(scene);
       finishStoryMatch(scene, result(lastNavigation()?.[1] as MatchSetup, 0));
     }

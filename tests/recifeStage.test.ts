@@ -26,7 +26,7 @@ import { partnerArena } from '../src/stages/partnerArena';
 import { recife } from '../src/stages/recife';
 import { DEFAULT_STAGE_ID, STAGES, getStageConfig } from '../src/stages/stageRegistry';
 import { STORY_LOCATIONS, stageIdForLocation } from '../src/story/locations';
-import { STORY_PROFILES, quickFightStageId } from '../src/story/storyProfiles';
+import { STORY_PROFILES, quickFightStageId, storyRouteFor } from '../src/story/storyProfiles';
 import { legStageId } from '../src/story/storyProgress';
 import type { AttackConfig } from '../src/types/fighter';
 import type { StageConfig } from '../src/types/stage';
@@ -166,7 +166,7 @@ describe('RECIFE is picked by place, never by fighter', () => {
 
   it('every campaign fight takes its stage from where it happens', () => {
     for (const profile of STORY_PROFILES) {
-      for (const leg of profile.storyRoute ?? []) {
+      for (const leg of storyRouteFor(profile.fighterId) ?? []) {
         expect(legStageId(leg)).toBe(stageIdForLocation(leg.destination));
       }
     }
