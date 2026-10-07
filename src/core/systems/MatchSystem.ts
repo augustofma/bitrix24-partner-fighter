@@ -57,6 +57,11 @@ export class MatchSystem {
     return matchPoint > 0 && this.wins[0] === matchPoint && this.wins[1] === matchPoint;
   }
 
+  /** Whether a round won by `side` now would win the match (read-only, e.g. for the crowd). */
+  wouldWinMatch(side: FighterSide): boolean {
+    return this.wins[side] + 1 >= this.rules.roundsToWin;
+  }
+
   get isOver(): boolean {
     return this.outcome !== null;
   }

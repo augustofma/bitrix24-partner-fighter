@@ -31,9 +31,18 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    mostra o adversário, que prioriza os personagens reservados à CPU. Abaixo da grade, o
    painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
-   As lutas acontecem no **Bitrix24 Partner Summit**: o público pula em onda durante a luta e
-   comemora mais rápido quando um round tem vencedor; o presidente, sentado no palco, olha ao
-   redor e gesticula (e acena ao fim do round). É só visual: a arena é a mesma de antes.
+   O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
+   Zero** (RECIFE); os demais, no **Bitrix24 Partner Summit**. Na luta rápida vale a cidade do
+   rival ou, se ele não tiver (FIGHTER_B), a do jogador; na história, o destino da etapa. O VS
+   mostra o nome do cenário e o lugar ("MARCO ZERO - RECIFE, PE").
+   - **Partner Summit:** o público pula em onda e comemora mais rápido quando um round tem
+     vencedor; o presidente, sentado no palco, olha ao redor e gesticula (e acena ao fim do
+     round).
+   - **Recife:** a torcida atrás da grade se mexe em grupos (pulos, balanço, palmas em rajada,
+     flashes de celular), reage a golpes fortes, especiais, KO e PERFECT, comemora o fim do
+     round e mais ainda a vitória da partida. Um avião cruza o céu a cada ~20-30 s rebocando a
+     faixa "Arrecife Digital", que ondula como tecido.
+     É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do

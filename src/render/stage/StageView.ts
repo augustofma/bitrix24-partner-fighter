@@ -39,11 +39,21 @@ export class StageView implements StageBackdrop {
   }
 
   setMood(mood: StageMood): void {
-    if (this.crowdTween) this.crowdTween.timeScale = mood === 'celebrate' ? CHEER_TIME_SCALE : 1;
+    if (this.crowdTween) this.crowdTween.timeScale = mood === 'fight' ? 1 : CHEER_TIME_SCALE;
+  }
+
+  react(): void {
+    // The procedural crowd only follows the mood.
   }
 
   update(): void {
     // Tweens animate this stage on their own.
+  }
+
+  destroy(): void {
+    // Its graphics belong to the scene's display list, destroyed with the scene.
+    this.crowdTween?.remove();
+    this.crowdTween = null;
   }
 
   /** World width a parallax layer must cover so it never shows an empty edge. */

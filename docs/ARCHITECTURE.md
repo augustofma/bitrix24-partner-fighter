@@ -74,6 +74,7 @@ src/
     roster.ts             Lista de personagens e helpers
   stages/                 CONTEÚDO: cenários
     partnerSummit.ts      Bitrix24 Partner Summit (padrão): mesma arena, arte ilustrada
+    recife.ts             RECIFE (Marco Zero): mesma arena, público em grupos, avião com faixa
     partnerArena.ts       Cenário procedural (também é o fallback visual)
     stageRegistry.ts
   story/                  MODO HISTÓRIA, PURO (sem Phaser; o ESLint garante)
@@ -114,6 +115,10 @@ src/
       createStageView.ts  Arte ilustrada se as texturas carregaram; senão o procedural
       IllustratedStageView.ts Fundo + público em colunas + recortes animados (cabeça, mão)
       StageView.ts        Cenário procedural com parallax
+      IllustratedStageView.ts  Cenário da arte: fundo, público (onda ou grupos), flashes, recortes
+      StageFlyoverView.ts Avião que cruza o céu rebocando a faixa (tiras que ondulam)
+      stageMotion.ts      Matemática pura dos loops (público, presidente, avião, faixa)
+      crowdReaction.ts    Evento da simulação -> reação do público (só leitura)
       stageMotion.ts      PURO: ritmos e poses dos loops (público, cabeça, mão) por animação
     FightCamera.ts        Câmera que segue o ponto médio, presa à arena
     HitEffects.ts         Faíscas de impacto
@@ -202,6 +207,27 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   `roundStart`. Nada de lógica de fim de luta duplicada. A empolgação vai de 0 a 1 em
   ~0,4 s e mistura os ritmos `CALM_MOTION` e `CHEER_MOTION`. As fases avançam por
   `ritmo × dt` no tempo de render, então mudar a velocidade nunca faz uma camada pular.
+- **Vitória da partida e reações:** no `victoryPose`, se o round também decide a partida
+  (`MatchSystem.wouldWinMatch`, só leitura) o humor é `'victory'` (empolgação 1,5, além do
+  `CHEER_MOTION`). Golpes fortes (dano ≥ 10), especiais, KO e PERFECT chamam
+  `stageView.react(...)` (`crowdReaction(event)` mapeia os eventos): um pico de empolgação que
+  decai sozinho (~0,6/s). Tudo é apresentação: nada volta para a simulação.
+- **Público em grupos (`crowd.style: 'groups'`):** cada coluna recebe de um hash fixo do índice
+  o seu loop (`hop`, `bob`, `sway`, `burst`), velocidade, tamanho e atraso; cerca de um terço só
+  entra na empolgação a partir de um limiar. Flashes de celular (`crowd.flashes`) são um pool
+  fixo desenhado num único Graphics, mais frequentes quando a torcida se empolga.
+- **Avião (`art.flyover`):** `StageFlyoverView` cria uma vez o avião, a hélice, a faixa
+  cortada em tiras (`setCrop`) e as cordas (Graphics) e os reaproveita a cada voo: fora da tela
+  → cruza da direita para a esquerda (como o avião aponta na arte) → sai → pausa sorteada por um
+  gerador visual com semente (`visualRng`, nunca `Math.random` nem a simulação) → de novo. A
+  faixa ondula por tira (`bannerWave`: parada junto às cordas, mais solta na cauda) e segue o
+  balanço do avião com atraso. O grupo tem parallax próprio, distante (`scrollFactor`).
+- **Ciclo de vida:** cada view guarda o que cria; `destroy()` é chamado no `shutdown` da
+  `FightScene`. Nada é criado por frame (testes contam objetos com uma cena falsa).
+- **Qual cenário:** o lugar decide, nunca o lutador. `StoryLocation.stageId` diz o cenário das
+  lutas naquele lugar (`recife` → `'recife'`); na história, `legStageId(leg)` usa o `stageId`
+  da etapa ou o do destino. Na luta rápida, `quickFightStageId` usa o cenário da cidade do rival
+  ou, se ele não tiver cidade (FIGHTER_B), a do jogador; lugares sem cenário usam o padrão.
 
 ## Tela de vitória (VictoryScene)
 
@@ -313,8 +339,11 @@ rivais de `storyProfiles.ts`. Use `rivalLeg('<id>')` numa rota.
 
 **Como adicionar uma campanha:** defina uma `StoryRoute` (lista de `rivalLeg(...)` em ordem; a
 partida de cada etapa é o destino da anterior) e coloque-a em `storyRoute` do perfil. A seleção passa a
-liberá-lo na história, sem nenhuma mudança nas cenas. `stageId` por etapa permite cenários
-próprios por cidade quando existirem.
+liberá-lo na história, sem nenhuma mudança nas cenas.
+
+**Como associar um encontro a um cenário:** dê `stageId` ao lugar em `locations.ts` (ex.:
+`recife` tem `stageId: 'recife'`): toda luta com `destination` nesse lugar usa esse cenário.
+Para uma exceção, ponha `stageId` na própria `StoryLeg`. Nenhum código de cena muda.
 
 ## Música (MusicManager)
 
@@ -719,13 +748,13 @@ Nenhum outro arquivo precisa mudar: seleção, VS, HUD, combate e IA leem tudo d
 
 ### Pontos de extensão preparados (não implementados)
 
-| Futuro              | Onde encaixa                                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                       |
-| Vários cenários     | Novo `StageConfig` (com `art` opcional) em `stages/` + registrar em `stageRegistry.ts`; falta a escolha na UI |
-| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                               |
-| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos        |
-| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                          |
+| Futuro              | Onde encaixa                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Combos              | Contador no `CombatSystem` (já é uma classe com estado)                                                     |
+| Vários cenários     | Novo `StageConfig` (com `art` opcional) em `stages/` + registrar em `stageRegistry.ts` + `stageId` no lugar |
+| Som, música e falas | Ouvir `SimulationEvent` na `FightScene` (como `HitEffects` faz)                                             |
+| Multiplayer online  | `NetworkController` implementando `FighterController`; simulação já é determinística e em passos fixos      |
+| Torneio e ranking   | Novas cenas consumindo `MatchResult`                                                                        |
 
 ## Decisões técnicas
 

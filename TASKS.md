@@ -329,6 +329,20 @@ sem pedido explícito.**
 - [x] Testes de alpha, margens, baseline, dimensões, carregamento e índices
 - [x] Playtest desktop/mobile emulado, F2, Story/VS/Vitória, cross-up e flipX
 
+## DONE (v0.28: cenário RECIFE, branch `feature/recife-stage`)
+
+- [x] Arte oficial do Marco Zero como `StageConfig` `recife` (mesma arena), com preparo
+      reproduzível (`scripts/stage-art/recife/`): céu limpo, avião, hélice e faixa em camadas
+- [x] Cenário pelo lugar: `StoryLocation.stageId` (Recife → RECIFE), `legStageId` na história,
+      `quickFightStageId` (cidade do rival, senão do jogador) na luta rápida; VS mostra o lugar
+- [x] Torcida em grupos (loops, ritmos, alturas e atrasos próprios), flashes de celular,
+      reações a golpe forte/especial/KO/PERFECT, comemoração do round e maior na vitória
+- [x] Avião cruzando o céu (~15 s na tela, um voo a cada ~19-29 s, RNG visual com semente),
+      hélice girando, faixa em tiras ondulando com atraso; tudo criado uma vez e destruído no
+      `shutdown`
+- [x] Testes de config, assets, escolha por lugar, voo, reações e ciclo de vida; playtest
+      desktop, 1080p e mobile 844×390
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
@@ -353,8 +367,10 @@ sem pedido explícito.**
 12. [ ] Arte própria (sprite + retrato) para ROMUALDO, e especiais para João e Romualdo.
 13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
 14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-15. [ ] Cenários próprios por cidade (o `StoryLeg.stageId` já permite; hoje todas usam o Partner Summit).
-16. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
+15. [ ] Cenários próprios para as outras cidades (basta `stageId` no lugar; hoje só Recife tem;
+        nenhuma etapa atual da história acontece em Recife).
+16. [ ] Som ambiente de torcida por cenário (ainda não existe sistema de áudio de ambiente).
+17. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
 
 ## FUTURE (não implementar agora)
 

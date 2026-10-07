@@ -316,6 +316,29 @@ de arena com reflexos. É o cenário padrão das lutas. A fonte fica em
   ao redor mais rápido e a mão vira um aceno amplo (±28°).
 - A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
 
+## Cenário: RECIFE (Marco Zero)
+
+Arte oficial fornecida pelo dono do projeto: o Marco Zero de Recife em pixel art, com prédios
+históricos, palmeiras, bandeirinhas, bandeiras azuis da Arrecife Digital, a torcida atrás da
+grade, o piso de mosaico da praça e um avião rebocando a faixa "Arrecife Digital". A
+composição não foi redesenhada: o preparo
+([scripts/stage-art/recife/README.md](../scripts/stage-art/recife/README.md)) só tira o avião,
+as cordas e a faixa do céu (preenchido por difusão) para eles voarem como camadas próprias.
+
+- Mesmo enquadramento do Partner Summit (arte 12% maior que a tela, parallax); `top` −12
+  põe os pés dos lutadores no piso da praça, à frente da grade, sem pisar na torcida. Céu e
+  prédios principais ficam inteiros em 1280×720, 1920×1080 e 844×390.
+- **Torcida:** colunas de ~20 px (uma pessoa) em grupos com loops, ritmos, alturas e atrasos
+  diferentes; ninguém pula em sincronia. Debaixo dos guarda-sóis a faixa começa abaixo das
+  lonas, que nunca pulam. Flashes de celular em pixel (ponto branco com cruz curta).
+- **Avião:** voa da direita para a esquerda, como aponta na arte, a 110 px/s (~15 s na tela),
+  um pouco abaixo do HUD (y 100) e acima dos prédios centrais; balança 2,5 px e inclina ±1,5°;
+  a hélice gira em 4 quadros (blur de pixel). Cordas escuras de 1 px, visíveis no azul e nas
+  nuvens.
+- **Faixa:** 24 tiras que ondulam até 3 px, paradas junto às cordas e mais soltas na cauda,
+  seguindo o balanço do avião com atraso. O texto continua legível.
+- A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
+
 ## Interface da seleção de personagem
 
 Visual de fliperama, sem assets de imagem novos: tudo é desenhado em código em
@@ -427,6 +450,7 @@ registrada aqui:
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                     | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local    | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`           | ImageGen integrado, referências autorizadas pelo usuário; montagem local                  | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local        | Arte original gerada para o projeto; sem assets de terceiros      |
+| `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py` | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py` | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `public/fonts/bangers/*` (fonte Bangers)                                          | The Bangers Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/bangers/OFL.txt`)        |
