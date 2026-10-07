@@ -11,6 +11,11 @@ const GLOW_MS = 520;
 export interface ArtButtonOptions {
   /** Extra hit area on each side (comfortable touch target on phones). */
   hitPadding?: number;
+  /**
+   * Glow strength while idle (0..1, default 0: no glow until hovered). With it, the glow keeps
+   * breathing softly at this level and rises to the hover level under the pointer.
+   */
+  idleGlow?: number;
 }
 
 /**
@@ -22,6 +27,8 @@ export class ArtButton extends Phaser.GameObjects.Container {
   private readonly image: Phaser.GameObjects.Image;
   private readonly glow: Phaser.GameObjects.Image;
   private readonly glowPulse: Phaser.Tweens.Tween;
+  private readonly idleGlow: number;
+  private hovered = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -35,13 +42,19 @@ export class ArtButton extends Phaser.GameObjects.Container {
     this.image = scene.add.image(0, 0, textureKey);
     this.glow = scene.add.image(0, 0, textureKey).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
     this.add([this.image, this.glow]);
-    this.glowPulse = scene.tweens.add({
-      targets: this.glow,
-      alpha: GLOW_ALPHA,
+    this.idleGlow = options.idleGlow ?? 0;
+    // One breathing counter (0..1) drives the glow at the idle or the hover level.
+    this.glowPulse = scene.tweens.addCounter({
+      from: 0,
+      to: 1,
       duration: GLOW_MS,
       yoyo: true,
       repeat: -1,
-      paused: true,
+      paused: this.idleGlow === 0,
+      onUpdate: (tween) => {
+        const level = this.hovered ? GLOW_ALPHA : this.idleGlow * GLOW_ALPHA;
+        this.glow.setAlpha((tween.getValue() ?? 0) * level);
+      },
     });
 
     // Hit area in the image's local (unscaled) space, a bit larger than what is drawn.
@@ -74,8 +87,9 @@ export class ArtButton extends Phaser.GameObjects.Container {
   }
 
   private setHover(hover: boolean): void {
+    this.hovered = hover;
     this.scaleTo(hover ? HOVER_SCALE : 1);
-    if (hover) this.glowPulse.resume();
+    if (hover || this.idleGlow > 0) this.glowPulse.resume();
     else {
       this.glowPulse.pause();
       this.glow.setAlpha(0);

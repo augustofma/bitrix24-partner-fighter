@@ -377,6 +377,16 @@ sem pedido explícito.**
 - [x] Testes comuns aos cenários com avião (`tests/flyoverStages.test.ts`); playtest desktop
       e mobile 844×390
 
+## DONE (v0.31: nova tela inicial animada, branch `feature/new-animated-title-screen`)
+
+- [x] Arte oficial (João Guiotti × Isaque Ferreira, arena neon) separada em camadas: fundo,
+      logo, START, brilho e 9 partes de vento; layout gerado (`titleArtLayout.ts`)
+- [x] Vento por tiras (`WindLayer` + `windMotion.ts`): cabelo do João, gola/costas/barra/manga
+      dos dois; luzes pulsando e faíscas (`TitleAmbience`); logo flutuando; START com brilho
+      respirando, hover, clique e hit area maior; entrada em ~0,9 s
+- [x] Testes de camadas, layout e vento; playtest desktop/mobile, 70 s sem crescer objetos,
+      tweens ou memória
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

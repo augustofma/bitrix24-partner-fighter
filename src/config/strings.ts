@@ -31,6 +31,8 @@ export const STRINGS = {
   campaignRoute: (cities: readonly string[]) => cities.join('  →  '),
   confirm: 'CONFIRMAR',
   pressStart: 'PRESSIONE ENTER OU TOQUE',
+  /** Under the title's START button (as in the approved art). */
+  titleHint: 'PRESSIONE START OU TOQUE',
   version: 'v0.1 - protótipo',
   disclaimer: 'Projeto de fã. Arte e personagens provisórios.',
   previousFighter: '◀',

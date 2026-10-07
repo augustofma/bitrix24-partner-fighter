@@ -264,17 +264,23 @@ config existente preservados.
 
 ## Tela inicial
 
-Arte ilustrada aprovada (arena noturna com holofotes, globo, torcida e dois lutadores
-genéricos mascarados), com o logo "BITRIX24 / PARTNER FIGHTER" e o botão JOGAR. A fonte fica
-em `scripts/title-art/source.webp`; `prepare_title_art.py` separa três camadas em
-`public/ui/title/` (fundo sem logo/botão, logo e botão com alpha). Detalhes do processo em
-[scripts/title-art/README.md](../scripts/title-art/README.md).
+Arte oficial aprovada: arena neon com globo, holofotes, troféu e telões, **João Guiotti** à
+esquerda (azul) e **Isaque Ferreira** à direita (roxo) em guarda, o logo "BITRIX24 / PARTNER
+FIGHTER" centralizado e o botão START. A fonte fica em `scripts/title-art/source.webp`;
+`prepare_title_art.py` separa as camadas em `public/ui/title/` (detalhes em
+[scripts/title-art/README.md](../scripts/title-art/README.md)). Nada foi redesenhado.
 
-- O logo flutua (±4 px, 2,2 s) e "respira" (escala 1,01, 2,6 s), sempre sobre uma área
-  limpa no fundo: nunca aparece um logo parado atrás do animado.
-- O botão é uma camada real: hover 1,03 com brilho aditivo suave, pressionado 0,97.
-- "PRESSIONE ENTER OU TOQUE", o aviso de projeto de fã e a versão fazem parte do fundo e não
-  são redesenhados pelo código.
+- **Entrada (~0,9 s):** fundo com fade, os lutadores acendem num brilho ciano/violeta, o logo
+  cresce de 0,9 a 1 e o START aparece com um pop; depois entra o loop.
+- **Logo:** flutua 8 px para cima e volta (~2,2 s, seno) e respira 1,2%, sobre uma área limpa.
+- **START:** camada real. Brilho dourado respirando parado, hover 1,03 com brilho maior,
+  pressionado 0,97; hit area 22 px maior que o desenho.
+- **Dica:** "— PRESSIONE START OU TOQUE —" em Russo One, pulsando de leve.
+- **Vento:** um vento da arena (da direita para a esquerda, em rajadas lentas) move o cabelo
+  do João (tufos para trás, até ~2,6 px) e o tecido dos dois: gola, costas, barra e manga
+  (1-1,6 px). A borda presa ao corpo fica parada; rosto, mãos e anatomia não se mexem.
+- **Ambiente:** luzes dos holofotes, do troféu e do globo pulsando suavemente e faíscas
+  pequenas subindo e piscando.
 - Se a arte não carregar, a `MenuScene` volta ao visual procedural anterior.
 
 ## Tela de vitória

@@ -105,7 +105,7 @@ src/
       spriteValidation.ts   PURO: validação da config + decisão de fallback
     assets/
       fighterAssets.ts    PURO: lista de assets do roster (sem duplicatas)
-      titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, botão JOGAR)
+      titleAssets.ts      PURO: camadas da tela inicial (fundo, logo, START, brilho, vento)
       victoryAssets.ts    PURO: camadas da tela de vitória (fundo, card, painel, botão)
       fontAssets.ts       PURO: FONT_ASSETS a partir de config/fonts.ts
       stageAssets.ts      PURO: imagens declaradas em StageConfig.art (sem duplicatas)
@@ -180,12 +180,20 @@ public/                   Assets estáticos; arte de lutadores em public/fighter
 
 ## Tela inicial (MenuScene)
 
-A `BootScene` carrega `TITLE_ASSETS` junto com os assets do roster. Com as três texturas
-presentes, a `MenuScene` monta a arte em camadas: fundo (sem logo e sem botão), logo com
-tweens de flutuação e escala, e o botão JOGAR como imagem interativa (hit area 16 px maior
-que o desenho, hover/press por escala e brilho aditivo). Clique, toque, Enter e Espaço usam o
-mesmo `start` (`goToScene` para a seleção, protegido contra chamada dupla). Sem as texturas,
-a cena usa o visual procedural anterior.
+A `BootScene` carrega `TITLE_ASSETS` (fundo, logo, START, brilho e as partes que o vento move)
+junto com os assets do roster. Com todas as texturas presentes, a `MenuScene` monta a arte em
+camadas, na ordem de desenho: fundo (sem logo, START, texto da dica e cabelo do João) →
+`TitleAmbience` (luzes da arena pulsando por tween e faíscas num único Graphics, posições
+calculadas pelo tempo) → `WindLayer` de cada parte (cabelo do João; gola, costas, barra e manga
+dos dois lutadores) → logo flutuando → START (`ArtButton` com `idleGlow` e hit area 22 px
+maior) → dica pulsando. As posições vêm de `src/ui/title/titleArtLayout.ts`, gerado pelo
+preparo da arte. O vento é matemática pura (`src/ui/title/windMotion.ts`): cada parte é
+cortada em tiras de 2 px (crops da mesma textura, criadas uma vez) e cada tira se desloca um
+pouco, com a borda costurada ao corpo parada e a borda livre mexendo mais, numa onda que
+percorre a peça; rajadas lentas (`windGust`) mudam a força sem nunca parar. Rosto, mãos e
+logos impressos ficam fora das partes. Clique, toque, Enter e Espaço abrem o menu de modos
+(HISTÓRIA / LUTA RÁPIDA) no lugar do START, como antes. Tudo é destruído no `shutdown`; sem
+as texturas, a cena usa o visual procedural anterior.
 
 ## Cenários (StageConfig.art)
 
