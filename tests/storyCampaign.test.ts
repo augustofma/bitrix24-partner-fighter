@@ -40,6 +40,7 @@ function playThrough(fighterId: string): StoryProgress[] {
 describe('the campaign starts where the chosen fighter is', () => {
   it.each([
     ['augusto', 'recife'],
+    ['isaque-ferreira', 'spain'],
     ['joao-guiotti', 'russia'],
     ['romualdo', 'joinville'],
     ['filipe', 'portugal'],
@@ -81,19 +82,51 @@ describe('rivals are generated, never written per campaign', () => {
     }
   });
 
-  it('Augusto: Recife -> Portugal (Filipe) -> Russia (João) -> Joinville (Romualdo)', () => {
-    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'joinville']);
-    expect(campaignOpponents('augusto')).toEqual(['filipe', 'joao-guiotti', 'romualdo']);
+  it('Augusto: Recife -> Portugal (Filipe) -> Russia (João) -> Spain (Isaque) -> Joinville', () => {
+    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'spain', 'joinville']);
+    expect(campaignOpponents('augusto')).toEqual([
+      'filipe',
+      'joao-guiotti',
+      'isaque-ferreira',
+      'romualdo',
+    ]);
   });
 
-  it('João: Russia -> Recife (Augusto) -> Portugal (Filipe) -> Joinville (Romualdo)', () => {
-    expect(routeCities('joao-guiotti')).toEqual(['russia', 'recife', 'portugal', 'joinville']);
-    expect(campaignOpponents('joao-guiotti')).toEqual(['augusto', 'filipe', 'romualdo']);
+  it('João: Russia -> Recife -> Portugal -> Spain (Isaque) -> Joinville', () => {
+    expect(routeCities('joao-guiotti')).toEqual([
+      'russia',
+      'recife',
+      'portugal',
+      'spain',
+      'joinville',
+    ]);
+    expect(campaignOpponents('joao-guiotti')).toEqual([
+      'augusto',
+      'filipe',
+      'isaque-ferreira',
+      'romualdo',
+    ]);
   });
 
-  it('Romualdo: Joinville -> Recife (Augusto) -> Portugal (Filipe) -> Russia (João)', () => {
-    expect(routeCities('romualdo')).toEqual(['joinville', 'recife', 'portugal', 'russia']);
-    expect(campaignOpponents('romualdo')).toEqual(['augusto', 'filipe', 'joao-guiotti']);
+  it('Romualdo: Joinville -> Recife -> Portugal -> Russia -> Spain (Isaque)', () => {
+    expect(routeCities('romualdo')).toEqual(['joinville', 'recife', 'portugal', 'russia', 'spain']);
+    expect(campaignOpponents('romualdo')).toEqual([
+      'augusto',
+      'filipe',
+      'joao-guiotti',
+      'isaque-ferreira',
+    ]);
+  });
+
+  it('Isaque: starts in Spain, never fights himself', () => {
+    expect(campaignStartLocation('isaque-ferreira')).toBe('spain');
+    expect(routeCities('isaque-ferreira')).toEqual([
+      'spain',
+      'recife',
+      'portugal',
+      'russia',
+      'joinville',
+    ]);
   });
 });
 

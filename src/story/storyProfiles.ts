@@ -21,6 +21,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   { fighterId: 'filipe', home: 'recife', encounter: 'portugal' },
   // João Guiotti is from São Paulo, but in the story he is in Russia.
   { fighterId: 'joao-guiotti', home: 'sao-paulo', encounter: 'russia' },
+  // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
+  { fighterId: 'isaque-ferreira', encounter: 'spain' },
   { fighterId: 'romualdo', home: 'joinville' },
 ];
 
@@ -40,7 +42,9 @@ function requireProfile(fighterId: string): StoryCharacterProfile {
  */
 export function storyLocationId(fighterId: string): string {
   const profile = requireProfile(fighterId);
-  return profile.encounter ?? profile.home;
+  const place = profile.encounter ?? profile.home;
+  if (!place) throw new Error(`"${fighterId}" has neither a home nor a story place.`);
+  return place;
 }
 
 /** Where the chosen fighter's campaign starts (StoryProgress.currentLocation at the start). */
@@ -88,7 +92,7 @@ export function isStoryRival(fighterId: string): boolean {
 /** Official home of a fighter (undefined for fighters outside the story). */
 export function fighterOrigin(fighterId: string): StoryLocation | undefined {
   const profile = getStoryProfile(fighterId);
-  return profile ? getStoryLocation(profile.home) : undefined;
+  return profile?.home ? getStoryLocation(profile.home) : undefined;
 }
 
 /**

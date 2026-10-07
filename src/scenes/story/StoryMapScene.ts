@@ -191,10 +191,14 @@ export class StoryMapScene extends Phaser.Scene {
       });
       this.add.circle(x, y, CITY_DOT_RADIUS, color).setStrokeStyle(2, COLORS.ink);
       if (world && role === 'other') continue;
-      // Labels go inland (left) for places on the east half of the map.
-      const left = x > rect.x + rect.width * 0.5;
+      // Labels go inland (left) for places on the east half of the map, unless the place
+      // says otherwise (neighbours whose labels would overlap).
+      const left = location.mapLabel
+        ? location.mapLabel.side === 'left'
+        : x > rect.x + rect.width * 0.5;
+      const dy = location.mapLabel?.dy ?? 0;
       this.add
-        .text(x + (left ? -14 : 14), y, locationLabel(location), pixelText(13, color))
+        .text(x + (left ? -14 : 14), y + dy, locationLabel(location), pixelText(13, color))
         .setOrigin(left ? 1 : 0, 0.5)
         .setDepth(LABEL_DEPTH);
     }

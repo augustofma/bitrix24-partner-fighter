@@ -316,14 +316,18 @@ sistema de combate. A única diferença de uma luta da história é `MatchSetup.
 **Dados (puros, em `src/story/`):**
 
 - `STORY_LOCATIONS`: lugares do mapa, `{ id, kind: 'city' | 'country', name, country, region?,
-regionCode?, latitude, longitude }`. Cidades brasileiras (Recife, São Paulo, Joinville) e
-  países (Portugal, Rússia). `locationLabel` dá "RECIFE - PE" para cidades e "PORTUGAL" para
-  países.
-- `STORY_PROFILES`: para cada personagem da história, `home` (**origem oficial**, mostrada sob
-  os retratos na seleção e no VS) e `encounter` opcional: **o lugar do personagem no mundo da
+regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (Recife, São
+  Paulo, Joinville) e países (Portugal, Espanha, Rússia). `locationLabel` dá "RECIFE - PE" para
+  cidades e "PORTUGAL" para países. `mapLabel` (opcional) põe o rótulo de um lugar de um lado e
+  um pouco acima/abaixo do marcador, para vizinhos próximos (Portugal e Espanha) não se
+  sobreporem; sem ele, o rótulo vai para o interior do mapa.
+- `STORY_PROFILES`: para cada personagem da história, `home` opcional (**origem oficial**,
+  mostrada sob os retratos na seleção e no VS; sem ela, nada aparece) e `encounter` opcional
+  (um dos dois é obrigatório): **o lugar do personagem no mundo da
   história** (padrão = `home`), lido por `storyLocationId(id)`. É dali que a campanha dele
   COMEÇA e é ali que as outras campanhas o ENFRENTAM. Hoje: Augusto em Recife, Filipe em
-  Portugal (é de Recife), João Guiotti na Rússia (é de São Paulo), Romualdo em Joinville.
+  Portugal (é de Recife), João Guiotti na Rússia (é de São Paulo), Isaque Ferreira na Espanha
+  (sem origem oficial cadastrada), Romualdo em Joinville.
 - **Campanhas geradas (nada escrito por personagem):** `storyRouteFor(id)` =
   `campaignOpponents(id)` (todos os outros personagens da história, na ordem de
   `STORY_PROFILES`, ou na `opponentOrder` opcional do perfil; nunca o próprio) mapeados por
@@ -331,9 +335,10 @@ regionCode?, latitude, longitude }`. Cidades brasileiras (Recife, São Paulo, Jo
   `campaignStartLocation(id)` = `storyLocationId(id)`, que vira o `currentLocation` inicial. A
   etapa não guarda a partida: é o destino da etapa anterior (ou o início, na primeira), então o
   avião sai sempre de onde a campanha está. Exemplos: Augusto Recife → Portugal (Filipe) →
-  Rússia (João) → Joinville (Romualdo); João Rússia → Recife (Augusto) → Portugal (Filipe) →
-  Joinville (Romualdo); Romualdo Joinville → Recife → Portugal → Rússia. Recife vira destino
-  para todos que não começam lá.
+  Rússia (João) → Espanha (Isaque) → Joinville (Romualdo); João Rússia → Recife (Augusto) →
+  Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
+  Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
+  Recife vira destino para todos que não começam lá.
 - `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
   `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
   (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo

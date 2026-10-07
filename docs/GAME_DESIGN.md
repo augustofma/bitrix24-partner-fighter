@@ -523,17 +523,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da luta rápida.
 
 - **Seleção ("MODO HISTÓRIA"):** todo personagem da história pode ser escolhido (Augusto,
-  Filipe, João Guiotti, Romualdo). O selo mostra onde a campanha começa ("PARTIDA RÚSSIA"); a
+  Filipe, João Guiotti, Isaque Ferreira, Romualdo). O selo mostra onde a campanha começa ("PARTIDA RÚSSIA"); a
   dificuldade da CPU vale para a campanha toda.
 - **Origem × lugar na história:** a origem oficial não muda (Augusto e Filipe de Recife - PE,
   João de São Paulo - SP, Romualdo de Joinville - SC), mas cada um tem um lugar na história:
-  Augusto em **Recife**, **Filipe em Portugal**, **João Guiotti na Rússia**, Romualdo em
-  **Joinville**. A campanha do escolhido **começa no lugar dele**, e os outros são enfrentados
+  Augusto em **Recife**, **Filipe em Portugal**, **João Guiotti na Rússia**, **Isaque
+  Ferreira na Espanha** (ainda sem origem oficial) e Romualdo em **Joinville**. A campanha do escolhido **começa no lugar dele**, e os outros são enfrentados
   nos lugares deles, um por um (nunca ele mesmo).
-- **Rotas (geradas):** Augusto: Recife → Portugal (Filipe) → Rússia (João) → Joinville
-  (Romualdo). Filipe: Portugal → Recife (Augusto) → Rússia (João) → Joinville (Romualdo).
-  João: Rússia → Recife (Augusto) → Portugal (Filipe) → Joinville (Romualdo). Romualdo:
-  Joinville → Recife (Augusto) → Portugal (Filipe) → Rússia (João). Cada viagem parte de onde a
+- **Rotas (geradas):** Augusto: Recife → Portugal (Filipe) → Rússia (João) → Espanha (Isaque)
+  → Joinville (Romualdo). Filipe: Portugal → Recife (Augusto) → Rússia (João) → Espanha
+  (Isaque) → Joinville (Romualdo). João: Rússia → Recife (Augusto) → Portugal (Filipe) →
+  Espanha (Isaque) → Joinville (Romualdo). Romualdo: Joinville → Recife (Augusto) → Portugal
+  (Filipe) → Rússia (João) → Espanha (Isaque). Isaque: Espanha → Recife → Portugal → Rússia →
+  Joinville. Cada viagem parte de onde a
   campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário
   RECIFE); os outros lugares usam o Partner Summit até terem cenário próprio.
 - **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar

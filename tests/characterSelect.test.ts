@@ -289,13 +289,7 @@ describe('CharacterSelectScene roster integration', () => {
 });
 
 describe('CharacterSelectScene story mode', () => {
-  it('keeps Isaque visible but locked until a story profile is configured', () => {
-    const { cards } = openScene('story');
-    const card = cards.find((c) => c.config === isaqueFerreira);
-    expect(card).toBeDefined();
-    expect(fake(card)?.input?.enabled).not.toBe(true);
-  });
-  it.each([augusto, filipe, joaoGuiotti, romualdo])(
+  it.each([augusto, filipe, joaoGuiotti, romualdo, isaqueFerreira])(
     '%s can start a campaign: correct fighter, start place and rivals',
     (fighter) => {
       const { cards } = openScene('story');

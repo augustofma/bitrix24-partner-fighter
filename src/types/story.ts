@@ -19,6 +19,11 @@ export interface StoryLocation {
   regionCode?: string;
   latitude: number;
   longitude: number;
+  /**
+   * Where the map writes this place's label (default: inland, level with the marker). For
+   * neighbours whose labels would overlap (e.g. Portugal and Spain).
+   */
+  mapLabel?: { side: 'left' | 'right'; dy: number };
   /** Arena of fights held here (a StageConfig id); the default stage when omitted. */
   stageId?: string;
 }
@@ -45,10 +50,14 @@ export type StoryRoute = readonly StoryLeg[];
  */
 export interface StoryCharacterProfile {
   fighterId: string;
-  /** Home (a StoryLocation id): the fighter's official origin, shown on select and VS. */
-  home: string;
   /**
-   * The fighter's place in the story world (a StoryLocation id); defaults to `home`. Its own
+   * Home (a StoryLocation id): the fighter's official origin, shown on select and VS. Optional:
+   * a fighter without an official origin only has its story place (`encounter`).
+   */
+  home?: string;
+  /**
+   * The fighter's place in the story world (a StoryLocation id); defaults to `home` (one of
+   * the two is required). Its own
    * campaign STARTS here (StoryProgress.currentLocation at the start), and the other campaigns
    * MEET it here. A fighter can be from one place and be in another (e.g. abroad).
    */

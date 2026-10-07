@@ -53,7 +53,8 @@ describe('origins (all from configuration)', () => {
   it('every profile and route points to real fighters and places', () => {
     for (const profile of STORY_PROFILES) {
       expect(() => getFighterConfig(profile.fighterId)).not.toThrow();
-      expect(() => getStoryLocation(profile.home)).not.toThrow();
+      if (profile.home) expect(() => getStoryLocation(profile.home!)).not.toThrow();
+      expect(profile.home ?? profile.encounter).toBeDefined();
       if (profile.encounter) expect(() => getStoryLocation(profile.encounter!)).not.toThrow();
       for (const leg of storyRouteFor(profile.fighterId) ?? []) {
         expect(() => getStoryLocation(leg.destination)).not.toThrow();
@@ -95,23 +96,25 @@ describe('campaigns', () => {
     expect(storyRouteFor('augusto')).toEqual([
       { opponent: 'filipe', destination: 'portugal' },
       { opponent: 'joao-guiotti', destination: 'russia' },
+      { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
     ]);
-    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'joinville']);
+    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'spain', 'joinville']);
   });
 
-  it('Filipe (never against himself): Portugal -> Recife (Augusto) -> Russia -> Joinville', () => {
+  it('Filipe (never against himself): Portugal -> Recife -> Russia -> Spain -> Joinville', () => {
     expect(storyRouteFor('filipe')).toEqual([
       { opponent: 'augusto', destination: 'recife' },
       { opponent: 'joao-guiotti', destination: 'russia' },
+      { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
     ]);
-    expect(routeCities('filipe')).toEqual(['portugal', 'recife', 'russia', 'joinville']);
+    expect(routeCities('filipe')).toEqual(['portugal', 'recife', 'russia', 'spain', 'joinville']);
   });
 
   it('every story character is playable in story mode; others are not', () => {
     const playable = ROSTER.filter((config) => hasStoryCampaign(config.id)).map((c) => c.id);
-    expect(playable).toEqual(['augusto', 'filipe', 'joao-guiotti', 'romualdo']);
+    expect(playable).toEqual(['augusto', 'filipe', 'joao-guiotti', 'romualdo', 'isaque-ferreira']);
     expect(() => startStory('fighter-a')).toThrow();
   });
 });
@@ -167,6 +170,12 @@ describe('story progress', () => {
     const third = recordStoryMatch(arriveForFight(second), true);
     expect(third).toMatchObject({
       currentLocation: 'russia',
+      nextLocation: 'spain',
+      opponent: 'isaque-ferreira',
+    });
+    const fourth = recordStoryMatch(arriveForFight(third), true);
+    expect(fourth).toMatchObject({
+      currentLocation: 'spain',
       nextLocation: 'joinville',
       opponent: 'romualdo',
     });
@@ -174,13 +183,13 @@ describe('story progress', () => {
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
     let progress = startStory('filipe');
-    for (let leg = 0; leg < 3; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
+    for (let leg = 0; leg < 4; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
-      currentStage: 3,
+      currentStage: 4,
       currentLocation: 'joinville',
       opponent: null,
-      completedStages: [0, 1, 2],
+      completedStages: [0, 1, 2, 3],
     });
     expect(recordStoryMatch(progress, true)).toBe(progress);
     expect(arriveForFight(progress)).toBe(progress);

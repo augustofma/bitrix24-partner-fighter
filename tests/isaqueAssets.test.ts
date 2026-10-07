@@ -12,11 +12,12 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Isaque PNG assets', () => {
-  it('keeps one roster entry, his own portrait and quick-fight eligibility', () => {
+  it('keeps one roster entry, his own portrait, quick-fight and story eligibility', () => {
     expect(ROSTER.filter((f) => f.id === 'isaque-ferreira')).toEqual([isaqueFerreira]);
     expect(isaqueFerreira.assets.portrait).toBe('fighters/isaque-ferreira/portrait.png');
     expect(isaqueFerreira.playable).toBe(true);
-    expect(hasStoryCampaign(isaqueFerreira.id)).toBe(false);
+    // His story place is Spain (configuration only; no invented official origin).
+    expect(hasStoryCampaign(isaqueFerreira.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(isaqueFerreira, 40)).toEqual([]);

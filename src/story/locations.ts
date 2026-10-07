@@ -53,6 +53,18 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     country: 'Portugal',
     latitude: 39.6,
     longitude: -8.2,
+    // Next to Spain on the world map: its label goes below-left, Spain's above-right.
+    mapLabel: { side: 'left', dy: 11 },
+  },
+  {
+    id: 'spain',
+    kind: 'country',
+    name: 'Espanha',
+    country: 'Espanha',
+    // Around Madrid: east of Portugal's marker, so both labels stay apart on the world map.
+    latitude: 40.4,
+    longitude: -3.7,
+    mapLabel: { side: 'right', dy: -11 },
   },
   {
     id: 'russia',

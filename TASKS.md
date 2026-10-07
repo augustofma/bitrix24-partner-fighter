@@ -401,6 +401,15 @@ sem pedido explícito.**
 - [x] Playtest desktop/debug contra quatro fighters, Isaque CPU e mobile emulado com multi-touch,
       cross-up, flipX e vitória; 632 testes e check aprovados
 
+## DONE (v0.32: Isaque Ferreira na Espanha no Modo História, branch `feature/isaque-spain-story-integration`)
+
+- [x] `StoryLocation` `spain` (país, ~Madri) no mapa-múndi; rótulos de Portugal e Espanha em
+      lados opostos (`mapLabel`, configuração)
+- [x] Perfil do Isaque só com `encounter: 'spain'` (`home` passou a ser opcional; sem origem
+      inventada); entra depois do João: campanhas passam por Rússia → Espanha
+- [x] Testes do lugar, rotas, voo a partir do `currentLocation`, chegada, VS, retry, vitória e
+      fim de campanha na Espanha; playtest desktop, 1080p e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
