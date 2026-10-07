@@ -3,9 +3,8 @@ import { STANDARD_BODY } from './shared/standardBody';
 
 /**
  * ROMUALDO - Joinville, SC. A bit heavier: walks a little slower and hits harder, paying with
- * longer recoveries. Second rival of the Partner Tour story campaign.
- * No art yet: drawn by the generic placeholder renderer (figure and portrait) in its own
- * palette. Adding art later is only `assets` (see docs/ART_DIRECTION.md).
+ * longer recoveries. Final rival of the Partner Tour story campaign.
+ * Original artwork is independent from combat timing and geometry.
  */
 export const romualdo: FighterConfig = {
   id: 'romualdo',
@@ -128,5 +127,35 @@ export const romualdo: FighterConfig = {
   },
   specials: [],
   palette: { body: 0x2e8b57, accent: 0xff8a1f, skin: 0xc68642, outline: 0x0b0820 },
-  assets: {},
+  assets: {
+    portrait: 'fighters/romualdo/portrait.png',
+    pixelArt: true,
+    sprite: {
+      sheet: {
+        key: 'romualdo-sheet',
+        path: 'fighters/romualdo/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      // Eight transparent pixels below the grounded soles.
+      visual: { scale: 1, offsetX: 0, offsetY: 8 },
+      animations: {
+        idle: { frames: [0, 1, 2, 3], frameRate: 6 },
+        walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
+        jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },
+        crouch: { frames: [13] },
+        punch: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        kick: { frames: [17, 18, 19], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        crouchPunch: { frames: [20, 21, 22], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        crouchKick: { frames: [23, 24, 25], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        airPunch: { frames: [26, 27, 28], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        airKick: { frames: [29, 30, 31], attackPhases: { startup: 1, active: 1, recovery: 1 } },
+        block: { frames: [32] },
+        crouchBlock: { frames: [33] },
+        hurt: { frames: [34, 35], frameRate: 10 },
+        knockout: { frames: [36, 37, 38], frameRate: 8 },
+        victory: { frames: [39] },
+      },
+    },
+  },
 };

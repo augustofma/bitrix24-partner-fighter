@@ -35,7 +35,7 @@ describe('João Guiotti and Romualdo', () => {
       expect(config.specials).toEqual([]);
     }
     expect(joaoGuiotti.assets.sprite).toBeDefined();
-    expect(romualdo.assets.sprite).toBeUndefined();
+    expect(romualdo.assets.sprite).toBeDefined();
     const palettes = ROSTER.map((config) => config.palette.body);
     expect(new Set(palettes).size).toBe(palettes.length);
   });
