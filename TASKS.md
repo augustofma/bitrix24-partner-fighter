@@ -518,6 +518,12 @@ sem pedido explícito.**
       `special-alaio-strike`
 - [x] Testes de alcance, defesa em pé/agachado, pulo, fuga, CPU, VFX e sprite; playtest no navegador
 
+## DONE (final ilustrado do Aislan, branch `feature/aislan-story-ending`)
+
+- [x] Arte oficial 4:3 cortada em 16:9 a partir de `CROP_TOP` (`prepare_aislan_ending.py`),
+      `endingArt` no perfil do Aislan
+- [x] Testes do asset; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

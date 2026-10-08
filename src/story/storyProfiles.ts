@@ -39,7 +39,13 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Ending: Romualdo watching the sunset over Joinville, the city gate beside him.
   { fighterId: 'romualdo', home: 'joinville', endingArt: 'story/endings/romualdo.jpg' },
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
-  { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
+  {
+    fighterId: 'aislan',
+    encounter: 'joinville',
+    encounterStageId: 'joinville-zopu',
+    // Ending: Aislan at the Joinville lookout, watching the sunset over the city.
+    endingArt: 'story/endings/aislan.jpg',
+  },
 ];
 
 /**

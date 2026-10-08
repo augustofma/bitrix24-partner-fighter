@@ -399,6 +399,14 @@ mirante olhando o pôr do sol sobre Joinville, com o pórtico da cidade à direi
 Mesma apresentação do final do Augusto: o Romualdo está à esquerda e o título, à direita, não o
 cobre.
 
+## Final do Modo História: AISLAN
+
+Arte oficial fornecida pelo dono do projeto: o Aislan, de costas, de blazer xadrez azul e crachá do
+Partner Summit, no Mirante de Joinville olhando o pôr do sol sobre a cidade
+([scripts/story-ending-art/aislan/README.md](../scripts/story-ending-art/aislan/README.md)). A fonte
+é 4:3: o corte 16:9 mantém a cabeça e o céu e tira a parte de baixo das pernas (que ficaria atrás
+do painel e dos botões). O título fica à direita da cabeça, sem cobri-lo.
+
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
 Arte oficial fornecida pelo dono do projeto: o salão da sede da Bitrix24 em Moscou, com o
@@ -567,6 +575,7 @@ registrada aqui:
 | `scripts/stage-art/bitrix24-moscow/source.png` e `public/stages/bitrix24-moscow/*`    | Arte oficial fornecida pelo usuário; redimensionada por `prepare_bitrix24_moscow.py`            | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`   | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/story-ending-art/aislan/source.webp` e `public/story/endings/aislan.jpg`     | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_aislan_ending.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                      | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*`     | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/victory-art/source.png` e `public/ui/victory/*`                              | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`          | Arte do projeto, aprovada pelo usuário                            |
