@@ -71,6 +71,22 @@ export function finishStoryMatch(scene: SceneLike, result: MatchResult): StoryPr
   return next;
 }
 
+/**
+ * Where a finished match goes. Normally the victory screen; but the win that completes a
+ * campaign (its last fight, the final boss's when there is one) goes straight to the
+ * campaign's ending, without the "<NAME> VENCEU!" screen in between.
+ */
+export function endMatch(scene: Phaser.Scene, result: MatchResult): void {
+  if (isLeaving(scene)) return;
+  if (result.setup.mode === 'story' && result.winnerIndex === 0) {
+    if (finishStoryMatch(scene, result)?.phase === 'complete') {
+      goToScene(scene, SceneKeys.CampaignComplete);
+      return;
+    }
+  }
+  goToScene(scene, SceneKeys.Victory, result);
+}
+
 /** After a won story match: the next trip, or the campaign's ending. */
 export function continueStory(scene: Phaser.Scene): void {
   const progress = getStoryProgress(scene);

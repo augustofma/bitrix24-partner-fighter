@@ -16,6 +16,7 @@ import { campaignStartLocation, hasStoryCampaign, isStoryRival } from '../story/
 import type { StageSelectData } from './StageSelectScene';
 import { beginStory } from './story/storyFlow';
 import { DifficultySelector } from '../ui/DifficultySelector';
+import { ControlsHint } from '../ui/ControlsHint';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
 import { drawArcadeFrame } from '../ui/select/arcadeFrame';
 import { HeroPanel } from '../ui/select/HeroPanel';
@@ -31,7 +32,7 @@ import {
   type GridDirection,
   type RosterGrid,
 } from '../ui/select/selectLayout';
-import { COLORS, arcadeText, bodyText, css } from '../ui/theme';
+import { COLORS, arcadeText, css } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
 
 const TITLE_SHINE_MS = 1400;
@@ -84,7 +85,7 @@ export class CharacterSelectScene extends Phaser.Scene {
   /** Quick fight: the fighter picked on the first step. */
   private player: FighterConfig | null = null;
   private titleText!: Phaser.GameObjects.Text;
-  private hintText!: Phaser.GameObjects.Text;
+  private hint!: ControlsHint;
 
   constructor() {
     super(SceneKeys.CharacterSelect);
@@ -144,10 +145,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.add
       .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.navyDeep, 0.85)
       .setStrokeStyle(2, COLORS.royal);
-    this.hintText = this.add
-      .text(GAME_WIDTH / 2, footerY, STRINGS.selectHint, bodyText(13, COLORS.white))
-      .setOrigin(0.5)
-      .setAlpha(0.92);
+    this.hint = new ControlsHint(this, GAME_WIDTH / 2, footerY, STRINGS.selectHint, GAME_WIDTH);
 
     onKeys(this, ['LEFT'], () => this.moveSelection('left'));
     onKeys(this, ['RIGHT'], () => this.moveSelection('right'));
@@ -358,7 +356,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     );
     this.opponentLabel?.setText(this.badgeText(fighter));
     this.titleText.setText(this.titleFor());
-    this.hintText.setText(
+    this.hint.setHint(
       this.step === 'rival' && this.player
         ? STRINGS.selectRivalHint(this.player.displayName)
         : STRINGS.selectHint,

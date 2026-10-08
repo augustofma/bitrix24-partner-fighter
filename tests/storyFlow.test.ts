@@ -13,6 +13,7 @@ import {
   arriveAndFight,
   beginStory,
   continueStory,
+  endMatch,
   finishStoryMatch,
   getStoryProgress,
   quitStory,
@@ -100,6 +101,42 @@ describe('story flow between the existing scenes', () => {
     quitStory(scene);
     expect(getStoryProgress(scene)).toBeNull();
     expect(lastNavigation()).toEqual([SceneKeys.Menu]);
+  });
+
+  it('end of a match: the victory screen, except after the win that completes the campaign', () => {
+    const scene = fakeScene();
+    beginStory(scene, 'augusto');
+    const legs = storyRouteFor('augusto')?.length ?? 0;
+    for (let leg = 0; leg < legs; leg++) {
+      arriveAndFight(scene);
+      const setup = lastNavigation()?.[1] as MatchSetup;
+      if (leg === legs - 1) {
+        // A loss in the last fight still shows the victory screen (retry from there).
+        endMatch(scene, result(setup, 1));
+        expect(lastNavigation()).toEqual([SceneKeys.Victory, result(setup, 1)]);
+        expect(getStoryProgress(scene)).toMatchObject({ phase: 'fight' });
+        // The final boss's defeat goes straight to the campaign's ending, recorded once.
+        endMatch(scene, result(setup, 0));
+        expect(lastNavigation()).toEqual([SceneKeys.CampaignComplete]);
+        expect(getStoryProgress(scene)).toMatchObject({ phase: 'complete' });
+      } else {
+        endMatch(scene, result(setup, 0));
+        expect(lastNavigation()).toEqual([SceneKeys.Victory, result(setup, 0)]);
+        // The victory screen records it again: no double advance.
+        const after = getStoryProgress(scene);
+        finishStoryMatch(scene, result(setup, 0));
+        expect(getStoryProgress(scene)).toEqual(after);
+      }
+    }
+    // Quick fights always show the victory screen.
+    const quick: MatchSetup = {
+      playerFighterId: 'augusto',
+      cpuFighterId: 'filipe',
+      stageId: 'recife',
+      difficulty: 'normal',
+    };
+    endMatch(fakeScene(), result(quick, 0));
+    expect(lastNavigation()).toEqual([SceneKeys.Victory, result(quick, 0)]);
   });
 
   it('quick fights never touch the campaign', () => {

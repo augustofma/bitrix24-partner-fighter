@@ -498,6 +498,12 @@ sem pedido explícito.**
 - [x] Rota do final sem lugar repetido em sequência (Joinville → Joinville)
 - [x] Testes do asset e dos perfis; playtest desktop e mobile
 
+## DONE (rodapé estilo luta e fim direto da campanha, branch `feature/dmitry-final-boss-integration`)
+
+- [x] `ControlsHint`: rodapé das seleções em Bangers, teclas douradas e setas desenhadas
+- [x] `endMatch`: vencer a última luta da campanha vai direto à campanha concluída
+- [x] Testes de `parseHint` e do fluxo; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

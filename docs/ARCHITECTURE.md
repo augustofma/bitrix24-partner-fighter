@@ -371,6 +371,9 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
   Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
   Recife vira destino para todos que não começam lá.
+- **Fim da partida:** a `FightScene` entrega o resultado a `endMatch` (`storyFlow.ts`): a vitória
+  que conclui a campanha é registrada ali e vai direto à `CampaignCompleteScene`; o resto vai à
+  `VictoryScene` (que registra o resultado; registrar de novo não avança duas vezes).
 - **Final ilustrado:** `endingArt` opcional no perfil (caminho em `public/`). O `BootScene`
   carrega todos com `collectStoryEndingAssets(STORY_PROFILES)`; a `CampaignCompleteScene` usa
   `storyEndingAsset(perfil)` e, se a textura existe, troca a arte de vitória e o card pela

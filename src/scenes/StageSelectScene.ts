@@ -12,6 +12,7 @@ import { getSelectableStages } from '../stages/stageRegistry';
 import { quickFightStageId } from '../story/storyProfiles';
 import type { AIDifficulty, MatchSetup } from '../types/match';
 import type { StageConfig } from '../types/stage';
+import { ControlsHint } from '../ui/ControlsHint';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
 import { drawArcadeFrame } from '../ui/select/arcadeFrame';
 import { createSelectBackground } from '../ui/select/SelectBackground';
@@ -112,10 +113,7 @@ export class StageSelectScene extends Phaser.Scene {
     this.add
       .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.navyDeep, 0.85)
       .setStrokeStyle(2, COLORS.royal);
-    this.add
-      .text(GAME_WIDTH / 2, footerY, STRINGS.stageSelectHint, bodyText(13, COLORS.white))
-      .setOrigin(0.5)
-      .setAlpha(0.92);
+    new ControlsHint(this, GAME_WIDTH / 2, footerY, STRINGS.stageSelectHint, GAME_WIDTH);
 
     onKeys(this, ['UP', 'LEFT'], () => this.move(-1));
     onKeys(this, ['DOWN', 'RIGHT'], () => this.move(1));

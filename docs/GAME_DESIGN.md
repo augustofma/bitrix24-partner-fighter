@@ -651,6 +651,9 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   contra ele em Moscou, no cenário **BITRIX24 MOSCOU**, que na história só é usado nessa luta.
   Ele não é rival comum (não aparece no meio das rotas) e não tem campanha própria. Fica fora da seleção
   comum (`playable: false`); mapa e VS mostram FINAL BOSS.
+- **Última luta:** vencer a última luta (a do chefe final) leva direto à tela de campanha
+  concluída, sem a tela "<NOME> VENCEU!". As outras vitórias e todas as derrotas passam pela
+  tela de vitória como antes.
 - **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje só o Augusto,
   olhando o pôr do sol no Marco Zero). Ela ocupa a tela toda com um zoom lento e aparece sozinha
   por um instante; depois entram o título (menor, à direita, sem cobrir o personagem), a rota e

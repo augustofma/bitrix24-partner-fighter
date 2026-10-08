@@ -33,7 +33,8 @@ import { PerfectCall } from '../ui/PerfectCall';
 import { COLORS, DEPTH, bodyText } from '../ui/theme';
 import { TouchControls } from '../ui/TouchControls';
 import { readUrlFlag, shouldShowTouchControls } from '../utils/device';
-import { goToScene, fadeIn } from './transitions';
+import { endMatch } from './story/storyFlow';
+import { fadeIn } from './transitions';
 
 /**
  * PERFECT comes this long after K.O. / TIME OVER, so both calls are read; with its ~1.6 s on
@@ -199,11 +200,12 @@ export class FightScene extends Phaser.Scene {
         this.startRoundPresentation();
         return;
       case 'matchOver': {
-        // The fight music winds down; the victory screen plays the sting.
+        // The fight music winds down; the next screen (victory, or the campaign's ending after
+        // its last fight) plays the sting.
         gameMusic(this).stop(MUSIC_FADE.matchEndOutMs);
         const { winnerIndex, reason, roundWins, perfects } = event.outcome;
         const result: MatchResult = { winnerIndex, reason, roundWins, perfects, setup: this.setup };
-        goToScene(this, SceneKeys.Victory, result);
+        endMatch(this, result);
         return;
       }
     }

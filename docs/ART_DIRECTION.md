@@ -373,6 +373,13 @@ as cordas e a faixa do céu (preenchido por difusão) para eles voarem como cama
   seguindo o balanço do avião com atraso. O texto continua legível no céu aberto.
 - A arte não define gameplay: arena, chão e paredes são os do PARTNER ARENA.
 
+## Barra de comandos (rodapé das seleções)
+
+`ControlsHint` (src/ui/) desenha os comandos no estilo de jogo de luta: teclas em dourado, ação
+em branco e maiúsculas, na letra de luta (Bangers) com contorno e sombra. As setas são
+triângulos desenhados (as fontes não têm setas). Vem das mesmas strings de dica
+(`STRINGS.*Hint`) e encolhe para caber.
+
 ## Final do Modo História: AUGUSTO
 
 Arte oficial fornecida pelo dono do projeto: o Augusto, de costas e de terno, com o crachá azul,
