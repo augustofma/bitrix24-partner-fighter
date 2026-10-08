@@ -21,13 +21,26 @@ export function usableSpecials(
   );
 }
 
-/** The special a press would start now, if any (same rule the Fighter applies). */
+/**
+ * The special a press would start now, if any (same rule the Fighter applies). A fighter with
+ * several specials takes turns: `turn` (how many specials it has started) picks where the list
+ * starts, so each press starts the next move in config order and they alternate. When the move
+ * whose turn it is cannot be paid (or not in the air), the next usable one in the list goes.
+ */
 export function specialForPress(
   config: Pick<FighterConfig, 'specials'>,
   meter: number,
   airborne: boolean,
+  turn = 0,
 ): SpecialMoveConfig | undefined {
-  return usableSpecials(config, meter, airborne)[0];
+  const { specials } = config;
+  const usable = new Set(usableSpecials(config, meter, airborne));
+  const start = specials.length > 0 ? (turn ?? 0) % specials.length : 0;
+  for (let i = 0; i < specials.length; i++) {
+    const move = specials[(start + i) % specials.length]!;
+    if (usable.has(move)) return move;
+  }
+  return undefined;
 }
 
 /**

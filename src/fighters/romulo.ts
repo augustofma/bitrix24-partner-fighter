@@ -1,5 +1,20 @@
-import type { FighterConfig } from '../types/fighter';
+import type { FighterConfig, SpecialMoveConfig } from '../types/fighter';
+import { augusto } from './augusto';
+import { filipe } from './filipe';
 import { STANDARD_BODY } from './shared/standardBody';
+
+/*
+ * Rômulo (Arrecife Digital) uses both house specials, Augusto's 24ZAP and Filipe's MINDHUB
+ * AGENT, one at a time: a press starts one, the next press the other (specialForPress takes
+ * turns between a fighter's specials). Same frame data, cost and look as the originals; only the
+ * ids are his (effects are keyed by move id).
+ */
+const zap = augusto.specials[0]!;
+const mindhub = filipe.specials[0]!;
+const zapEffect = augusto.assets.specialEffects![zap.id]!;
+const mindhubEffect = filipe.assets.specialEffects![mindhub.id]!;
+const ROMULO_24ZAP: SpecialMoveConfig = { ...zap, id: 'romulo.24zap' };
+const ROMULO_MINDHUB: SpecialMoveConfig = { ...mindhub, id: 'romulo.mindhubAgent' };
 
 /** Heavier normals trade mobility and recovery for modest extra damage. */
 export const romulo: FighterConfig = {
@@ -120,11 +135,15 @@ export const romulo: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [ROMULO_24ZAP, ROMULO_MINDHUB],
   palette: { body: 0x181c2b, accent: 0xd9a52e, skin: 0xcf926b, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/romulo/portrait.png',
     pixelArt: true,
+    specialEffects: {
+      [ROMULO_24ZAP.id]: zapEffect,
+      [ROMULO_MINDHUB.id]: mindhubEffect,
+    },
     sprite: {
       sheet: {
         key: 'romulo-sheet',
@@ -150,6 +169,8 @@ export const romulo: FighterConfig = {
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
         victory: { frames: [39] },
+        // Both specials thrust the hand forward: the punch's poses, one per phase.
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
       },
     },
   },

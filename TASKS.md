@@ -566,6 +566,13 @@ sem pedido explícito.**
 - [x] Arte oficial em 1440×810 (`prepare_joao_guiotti_ending.py`), `joao-guiotti` em
       `STORY_ENDING_ART`; testes e playtest desktop e mobile
 
+## DONE (especiais do Rômulo, branch `feature/romulo-specials`)
+
+- [x] Lutador com vários especiais alterna entre eles (`specialForPress` + `specialTurn`); a vez
+      cuja energia não paga cede ao próximo usável; lutadores de um especial não mudam
+- [x] Rômulo com 24ZAP! e MINDHUB AGENT (dados e visual dos originais, ids próprios)
+- [x] Testes de alternância, custo, CPU e playtest no navegador
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

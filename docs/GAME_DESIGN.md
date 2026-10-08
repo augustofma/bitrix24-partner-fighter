@@ -452,6 +452,12 @@ ou pular não adiantam (no ar não há defesa); **só a defesa** (em pé ou agac
 deixando 4 de chip. Startup longo (a tempestade avisa) e muito punível na defesa (34 de recovery
 contra 18 de blockstun). A CPU usa a qualquer distância. Pose: o punho erguido (frame 40).
 
+**Rômulo: 24ZAP! e MINDHUB AGENT, um de cada vez.** Os mesmos dois especiais do Augusto e do
+Filipe (mesmos dados, custo e visual). Cada aperto de F / ESP solta o outro: 24ZAP!, MINDHUB,
+24ZAP!... Se for a vez do MINDHUB (35) e só houver energia para o 24ZAP! (30), sai o 24ZAP!, para
+o botão nunca falhar. A regra é genérica (`specialForPress` com a vez do lutador): qualquer lutador
+com mais de um especial alterna; a CPU segue a mesma vez.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura

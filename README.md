@@ -99,7 +99,8 @@ estelar, anel de engrenagem e blocos voando. Os dois têm emblema pixel-art orig
 
 Selecionável na luta rápida, como jogador ou rival CPU. Vida 100, caminhada 3,0, recuo 2,4,
 salto 16,5 e velocidade aérea 3,9. Seis normais um pouco mais fortes, compensados por recuperação
-maior; sem especial exclusivo. Corpo robusto preservado na arte.
+maior. Usa os dois especiais da casa, **24ZAP!** e **MINDHUB AGENT**, um de cada vez: cada F / ESP
+solta o outro. Corpo robusto preservado na arte.
 É da Arrecife Digital, mas mora em **Castelo Branco, Portugal**: na história a campanha dele começa
 lá e as outras o enfrentam lá, no cenário próprio **CASTELO BRANCO** (o terraço das muralhas sobre
 a cidade, com torcida e o avião da faixa "Arrecife Digital";

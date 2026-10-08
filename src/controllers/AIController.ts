@@ -156,7 +156,7 @@ export class AIController implements FighterController {
    * whose special is available, so CPUs without one keep their exact random sequence.
    */
   private trackSpecialReadiness(self: ReadonlyFighter): void {
-    if (!specialForPress(self.config, self.specialMeter, false)) {
+    if (!specialForPress(self.config, self.specialMeter, false, self.specialTurn)) {
       this.specialReadyIn = null;
       return;
     }
@@ -178,7 +178,7 @@ export class AIController implements FighterController {
     const tuning = this.profile.special;
     if (this.specialCooldown > 0 || this.specialReadyIn !== 0) return false;
     if (!SPECIAL_READY_STATES.has(self.state) || self.isAirborne) return false;
-    const move = specialForPress(self.config, self.specialMeter, false);
+    const move = specialForPress(self.config, self.specialMeter, false, self.specialTurn);
     if (!move || !this.specialInRange(move, self, opponent)) return false;
 
     let chance = tuning.useChance;

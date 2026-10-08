@@ -13,7 +13,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Romulo fighter integration', () => {
-  it('has unique ids, a balanced standard-body profile and no exclusive special', () => {
+  it('has unique ids, a balanced standard-body profile and the two house specials', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(romulo.stats).toEqual({
       maxHealth: 100,
@@ -22,7 +22,7 @@ describe('Romulo fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(romulo.specials).toEqual([]);
+    expect(romulo.specials.map((s) => s.id)).toEqual(['romulo.24zap', 'romulo.mindhubAgent']);
     expect(Object.values(romulo.attacks).map((a) => a.damage)).toEqual([8, 12, 6, 10, 8, 11]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

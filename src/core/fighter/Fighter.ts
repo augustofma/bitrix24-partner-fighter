@@ -44,6 +44,8 @@ export class Fighter implements ReadonlyFighter {
   readonly config: FighterConfig;
   health: number;
   private meter = 0;
+  /** Index of the special whose turn is next (see specialForPress); kept across rounds. */
+  private nextSpecial = 0;
   readonly position: Vec2;
   readonly velocity: Vec2 = { x: 0, y: 0 };
   direction: Direction;
@@ -74,6 +76,10 @@ export class Fighter implements ReadonlyFighter {
 
   get state(): FighterStateId {
     return this.currentState;
+  }
+
+  get specialTurn(): number {
+    return this.nextSpecial;
   }
 
   get specialMeter(): number {
@@ -363,8 +369,10 @@ export class Fighter implements ReadonlyFighter {
   private tryBufferedSpecial(): boolean {
     if (this.inputBuffer.current?.button !== 'special') return false;
     this.inputBuffer.clear();
-    const move = specialForPress(this.config, this.meter, this.isAirborne);
+    const move = specialForPress(this.config, this.meter, this.isAirborne, this.nextSpecial);
     if (!move) return false;
+    // The next press starts the move after this one (fighters with several specials alternate).
+    this.nextSpecial = this.config.specials.indexOf(move) + 1;
     this.changeSpecialMeter(-move.meterCost);
     this.startAttack(move);
     this.pendingActions.push('specialStart');

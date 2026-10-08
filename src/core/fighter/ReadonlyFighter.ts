@@ -10,6 +10,8 @@ export interface ReadonlyFighter {
   readonly config: FighterConfig;
   readonly health: number;
   readonly specialMeter: number;
+  /** Specials started so far: whose turn it is when the fighter has several (specialForPress). */
+  readonly specialTurn: number;
   readonly maxHealth: number;
   readonly position: Readonly<Vec2>;
   readonly velocity: Readonly<Vec2>;
