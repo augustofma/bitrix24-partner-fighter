@@ -633,6 +633,11 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   contra ele em Moscou, no cenário **BITRIX24 MOSCOU**, que na história só é usado nessa luta.
   Ele não é rival comum (não aparece no meio das rotas) e não tem campanha própria. Antes dele
   existir, as rotas acima não mudam.
+- **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje só o Augusto,
+  olhando o pôr do sol no Marco Zero). Ela ocupa a tela toda com um zoom lento e aparece sozinha
+  por um instante; depois entram o título (menor, à direita, sem cobrir o personagem), a rota e
+  os botões. Uma tecla nesse instante só mostra os botões, nunca pula o final. Os outros
+  personagens usam a tela de campanha concluída padrão, com o card.
 - **Final:** "CAMPANHA CONCLUÍDA" com a rota percorrida, JOGAR NOVAMENTE (recomeça com o mesmo
   lutador) ou VOLTAR AO MENU.
 - O progresso dura a sessão e é independente da luta rápida.

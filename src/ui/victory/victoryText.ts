@@ -28,8 +28,9 @@ const TONE_COLOR: Record<ResultTone, number> = {
 export function createVictoryTitle(
   scene: Phaser.Scene,
   text: string,
+  at: { x: number; y: number; maxWidth: number } = VICTORY_LAYOUT.title,
 ): Phaser.GameObjects.Container {
-  const { x, y, maxWidth } = VICTORY_LAYOUT.title;
+  const { x, y, maxWidth } = at;
   const title = createFightTitle(scene, 0, 0, text);
   const glow = createFightTitle(scene, 0, 0, text)
     .setBlendMode(Phaser.BlendModes.ADD)

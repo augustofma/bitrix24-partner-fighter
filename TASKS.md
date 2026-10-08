@@ -479,6 +479,14 @@ sem pedido explícito.**
 - [x] Lista de fases calculada pela quantidade (`stageList`), sem linha escondida com 6 fases
 - [x] Testes com um Dmitry só de teste; playtest desktop e mobile
 
+## DONE (final ilustrado do Augusto no Modo História, branch `feature/augusto-story-ending`)
+
+- [x] Arte oficial em 1440×810 (`prepare_augusto_ending.py`), `endingArt` no perfil do Augusto
+- [x] `CampaignCompleteScene`: ilustração em tela cheia com zoom lento, título à direita, sem
+      card; tecla na introdução só mostra os botões; outros personagens com o final padrão
+- [x] Rota do final sem lugar repetido em sequência (Joinville → Joinville)
+- [x] Testes do asset e dos perfis; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

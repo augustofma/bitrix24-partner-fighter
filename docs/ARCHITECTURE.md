@@ -370,6 +370,10 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
   Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
   Recife vira destino para todos que não começam lá.
+- **Final ilustrado:** `endingArt` opcional no perfil (caminho em `public/`). O `BootScene`
+  carrega todos com `collectStoryEndingAssets(STORY_PROFILES)`; a `CampaignCompleteScene` usa
+  `storyEndingAsset(perfil)` e, se a textura existe, troca a arte de vitória e o card pela
+  ilustração. Sem a arte, o final padrão. A rota mostrada junta lugares repetidos em sequência.
 - **Chefe final:** `STORY_FINAL_BOSS` (`{ fighterId: 'dmitry', destination: 'russia', stageId:
 'bitrix24-moscow' }`) é dado, não lógica por personagem. `finalBossLeg(id)` devolve essa etapa
   quando o chefe está no `ROSTER` e não é o próprio jogador; `storyRouteFor` a põe no fim de toda
