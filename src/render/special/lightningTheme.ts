@@ -3,7 +3,7 @@ import { clamp01, disc, easeOutBack, easeOutCubic, hash01, lerp, type Graphics }
 
 /*
  * ALAIO STRIKE!: a final boss's over-the-top storm. Charge: the fist goes up, sparks crackle on
- * it and a fat storm cloud with angry cartoon eyes rolls over the whole screen while the stage
+ * it and a fat storm cloud rolls over the whole screen while the stage
  * darkens. Execution: a white flash, then lightning everywhere: bolts from the cloud to the
  * floor across the whole visible stage (the move hits anywhere), with a thick bolt into the
  * fist and sparks where they land. Hit: a bolt right onto the victim, an electric burst and
@@ -27,7 +27,7 @@ const FALLBACK_HALF_VIEW = 480;
 const VIEW_HEIGHT = 540;
 /**
  * The cloud bank hangs from the top of the view (behind the HUD bars) down to here: its puffy
- * underside and the angry face sit just below the HUD (health bars and ROUND end ~100 px).
+ * underside sits just below the HUD (health bars and ROUND end ~100 px).
  */
 const CLOUD_BOTTOM = 160;
 /** How dark the stage gets under the storm. */
@@ -120,8 +120,7 @@ function sparks(
 /**
  * The storm cloud bank over the view: a dark mass from the top of the screen with a puffy,
  * bumpy underside (overlapping pixel puffs, lighter tops for volume), lit from below by the
- * lightning, and a big angry cartoon face in the middle (the "avacalhado" touch). `cover` 0..1
- * is how much of the width it has rolled over (it comes in from both sides of the centre).
+ * lightning. `cover` 0..1 is how much of the width it has rolled over (it comes in from both sides of the centre).
  */
 function stormCloud(
   g: Graphics,
@@ -157,23 +156,6 @@ function stormCloud(
     // Lit from below by the bolts.
     if (lit > 0)
       glow.fillStyle(BOLT, 0.4 * lit * alpha).fillRect(cx - r * 0.7, cy + r * 0.62, r * 1.4, 5);
-  }
-
-  // Angry face, once the middle has rolled in: brows down, eyes glaring at the stage.
-  if (cover < 0.35) return;
-  const face = clamp01((cover - 0.35) / 0.4) * alpha;
-  const fy = bottom - 32;
-  for (const side of [-1, 1]) {
-    const ex = centerX + side * 38;
-    g.fillStyle(WHITE, face).fillRect(ex - 14, fy - 7, 28, 16);
-    g.fillStyle(DARK, face).fillRect(ex - 5 - side * 3, fy - 1, 10, 10);
-    g.lineStyle(7, DARK, face).lineBetween(ex - side * 20, fy - 20, ex + side * 15, fy - 8);
-  }
-  // A grumpy zig-zag mouth.
-  g.lineStyle(4, DARK, face);
-  for (let i = 0; i < 4; i++) {
-    const x0 = centerX - 24 + i * 12;
-    g.lineBetween(x0, fy + 22 + (i % 2) * 6, x0 + 12, fy + 22 + ((i + 1) % 2) * 6);
   }
 }
 

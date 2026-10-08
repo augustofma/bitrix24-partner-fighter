@@ -637,8 +637,7 @@ como imagem lisa.
 
 - **ALAIO STRIKE!:** raios ciano (#7DF9FF) com miolo branco e faíscas amarelas (#FFF27A),
   nuvem roxo-acinzentada (#2B2440, #4B4170, borda #8A7FC0) e escurecimento azul-noite. Raios em
-  zigue-zague (segmentos com galhos curtos), nuvem de "puffs" em pixel com rosto de desenho
-  animado. É o único efeito que ocupa o estágio inteiro: usa a área visível da câmera, não o
+  zigue-zague (segmentos com galhos curtos), nuvem de "puffs" em pixel, sem rosto. É o único efeito que ocupa o estágio inteiro: usa a área visível da câmera, não o
   hitbox, e a nuvem fica atrás das barras do HUD (nunca por cima).
 
 Os efeitos ficam em volta dos lutadores e nunca cobrem barras de vida, barra de especial ou

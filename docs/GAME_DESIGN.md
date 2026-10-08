@@ -474,8 +474,7 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   explosão estelar âmbar, anel de engrenagem, blocos se espalhando e faíscas (na defesa: menor,
   sem emblema); depois o robô se desmonta e a planta apaga.
 - **ALAIO STRIKE! (Dmitry), tempestade avacalhada:** na carga, o Dmitry ergue o punho, faíscas
-  estalam nele, o estágio escurece e uma nuvem de tempestade gorda, de cara brava (olhos
-  franzidos e boca em zigue-zague), rola pela tela inteira; no disparo, clarão e raios do céu ao
+  estalam nele, o estágio escurece e uma nuvem de tempestade gorda rola pela tela inteira; no disparo, clarão e raios do céu ao
   chão por todo o estágio visível, com faíscas onde caem e um raio grosso no punho; no acerto, um
   raio cai em cima do rival, com explosão elétrica e faíscas (na defesa: um estalo menor na
   guarda); depois a nuvem vai embora e sobe fumaça. Som: tempestade, chiado "zzzt", trovão e

@@ -161,7 +161,7 @@ export interface FighterAssetManifest {
  *   blocks, a workflow of nodes, an amber beam and a starburst.
  * - `liquidFlow`: purple liquid look (FLUIDZ!): a wobbling blob, a rippling stream with a wave
  *   crest, a splash crown of drops with gravity and a puddle.
- * - `skyLightning`: a boss storm (ALAIO STRIKE!): an angry cartoon storm cloud over the whole
+ * - `skyLightning`: a boss storm (ALAIO STRIKE!): a storm cloud over the whole
  *   screen and lightning bolts from it to the floor across the stage, a bolt onto the victim.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
