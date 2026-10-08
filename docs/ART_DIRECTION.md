@@ -412,6 +412,13 @@ sacada de Madri olhando o pôr do sol sobre o Palácio Real e a cúpula do Metr�
 ([scripts/story-ending-art/isaque-ferreira/README.md](../scripts/story-ending-art/isaque-ferreira/README.md)).
 Ele está à esquerda e o título, à direita, não o cobre.
 
+## Final do Modo História: GABRIEL MATTOZO
+
+Arte oficial fornecida pelo dono do projeto: o Gabriel Mattozo, de costas, de moletom claro, num
+mirante de Curitiba olhando o pôr do sol sobre a cidade, com a estufa do Jardim Botânico ao lado
+([scripts/story-ending-art/gabriel-mattozo/README.md](../scripts/story-ending-art/gabriel-mattozo/README.md)).
+Ele está à esquerda e o título, à direita, não o cobre.
+
 ## Final do Modo História: ROMUALDO
 
 Arte oficial fornecida pelo dono do projeto: o Romualdo, de costas, de blazer azul e jeans, num
@@ -647,6 +654,7 @@ registrada aqui:
 | `scripts/story-ending-art/aislan/source.webp` e `public/story/endings/aislan.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_aislan_ending.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/filipe/source.webp` e `public/story/endings/filipe.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_filipe_ending.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/joao-guiotti/source.webp` e `public/story/endings/joao-guiotti.jpg`       | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_joao_guiotti_ending.py`          | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/story-ending-art/gabriel-mattozo/source.webp` e `public/story/endings/gabriel-mattozo.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_gabriel_mattozo_ending.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/isaque-ferreira/source.webp` e `public/story/endings/isaque-ferreira.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_isaque_ferreira_ending.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romulo/source.webp` e `public/story/endings/romulo.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romulo_ending.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                                    | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`       | Arte do projeto, aprovada pelo usuário                            |

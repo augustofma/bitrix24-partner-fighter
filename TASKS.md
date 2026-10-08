@@ -627,6 +627,11 @@ sem pedido explícito.**
 - [x] Tela de carregamento no boot (`LoadingBar`: título, barra e porcentagem) para o celular
       não ficar com tela preta enquanto baixa ~48 MB de arte e áudio
 
+## DONE (final ilustrado do Gabriel Mattozo, branch `feature/gabriel-story-ending`)
+
+- [x] Arte oficial em 1440×810 (`prepare_gabriel_mattozo_ending.py`), `gabriel-mattozo` em
+      `STORY_ENDING_ART`: de novo todo personagem da história tem final próprio
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Carregar cenários, endings e lutadores sob demanda (hoje o boot baixa tudo, ~48 MB)

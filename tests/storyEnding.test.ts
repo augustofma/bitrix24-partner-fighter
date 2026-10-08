@@ -20,19 +20,25 @@ function jpegSize(file: string): [number, number] | null {
 const publicFile = (path: string) => join(__dirname, '..', 'public', path);
 
 describe('story endings', () => {
-  it.each(['augusto', 'filipe', 'joao-guiotti', 'isaque-ferreira', 'romualdo', 'aislan', 'romulo'])(
-    '%s has his own illustration, prepared at 16:9 (1440x810)',
-    (fighterId) => {
-      const asset = storyEndingAsset(fighterId);
-      expect(asset).toEqual({
-        type: 'image',
-        key: `story-ending:story/endings/${fighterId}.jpg`,
-        path: `story/endings/${fighterId}.jpg`,
-      });
-      expect(existsSync(publicFile(asset!.path))).toBe(true);
-      expect(jpegSize(publicFile(asset!.path))).toEqual([1440, 810]);
-    },
-  );
+  it.each([
+    'augusto',
+    'filipe',
+    'joao-guiotti',
+    'isaque-ferreira',
+    'gabriel-mattozo',
+    'romualdo',
+    'aislan',
+    'romulo',
+  ])('%s has his own illustration, prepared at 16:9 (1440x810)', (fighterId) => {
+    const asset = storyEndingAsset(fighterId);
+    expect(asset).toEqual({
+      type: 'image',
+      key: `story-ending:story/endings/${fighterId}.jpg`,
+      path: `story/endings/${fighterId}.jpg`,
+    });
+    expect(existsSync(publicFile(asset!.path))).toBe(true);
+    expect(jpegSize(publicFile(asset!.path))).toEqual([1440, 810]);
+  });
 
   it('every story character has an illustrated ending', () => {
     const withEnding = [
@@ -40,6 +46,7 @@ describe('story endings', () => {
       'filipe',
       'joao-guiotti',
       'isaque-ferreira',
+      'gabriel-mattozo',
       'romualdo',
       'aislan',
       'romulo',

@@ -729,7 +729,7 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   concluída, sem a tela "<NOME> VENCEU!". As outras vitórias e todas as derrotas passam pela
   tela de vitória como antes.
 - **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje o Augusto,
-  olhando o pôr do sol no Marco Zero; o Filipe, num miradouro de Lisboa sobre o Tejo; o João Guiotti, numa sacada sobre uma cidade à beira do rio; o Isaque, numa sacada de Madri; o Romualdo, num mirante sobre Joinville ao lado do pórtico;
+  olhando o pôr do sol no Marco Zero; o Filipe, num miradouro de Lisboa sobre o Tejo; o João Guiotti, numa sacada sobre uma cidade à beira do rio; o Isaque, numa sacada de Madri; o Gabriel Mattozo, num mirante de Curitiba ao lado do Jardim Botânico; o Romualdo, num mirante sobre Joinville ao lado do pórtico;
   e o Aislan, no Mirante de Joinville olhando a cidade). Ela ocupa a tela toda com um zoom lento e
   aparece sozinha
   por um instante; depois entram o título (menor, à direita, sem cobrir o personagem), a rota e
