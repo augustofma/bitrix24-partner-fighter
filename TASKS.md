@@ -624,9 +624,12 @@ sem pedido explícito.**
 
 - [x] Barra fixa no pé da luta com os comandos do teclado (`ControlsHint`, mesmo estilo das
       seleções); escondida com controles de toque
+- [x] Tela de carregamento no boot (`LoadingBar`: título, barra e porcentagem) para o celular
+      não ficar com tela preta enquanto baixa ~48 MB de arte e áudio
 
 ## NEXT (próximas tarefas recomendadas)
 
+- [ ] Carregar cenários, endings e lutadores sob demanda (hoje o boot baixa tudo, ~48 MB)
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

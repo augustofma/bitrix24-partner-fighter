@@ -14,6 +14,7 @@ import { FONT_ASSETS } from '../render/assets/fontAssets';
 import { queueAsset } from '../render/assets/queueAsset';
 import { VICTORY_ASSETS } from '../render/assets/victoryAssets';
 import { STAGES } from '../stages/stageRegistry';
+import { LoadingBar } from '../ui/LoadingBar';
 import { validateRosterAssets } from '../render/sprite/spriteValidation';
 
 /**
@@ -29,6 +30,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
+    new LoadingBar(this);
     const assets: AssetRequest[] = [
       ...FONT_ASSETS,
       ...BOOT_AUDIO_ASSETS,

@@ -5,6 +5,9 @@
 export const STRINGS = {
   titleTop: 'BITRIX24',
   titleBottom: 'PARTNER FIGHTER',
+  /** Boot loading screen label (progress from 0 to 1). */
+  loading: (progress: number) =>
+    `CARREGANDO  ${Math.round(Math.min(Math.max(progress, 0), 1) * 100)}%`,
   play: 'JOGAR',
   modeStory: 'HISTÓRIA',
   modeQuickFight: 'LUTA RÁPIDA',
