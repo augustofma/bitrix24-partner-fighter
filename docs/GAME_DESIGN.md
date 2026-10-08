@@ -25,7 +25,7 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    slots "EM BREVE" completam a página). Augusto é a seleção inicial; todos os jogáveis podem
    ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
-   destaque mostra retrato ampliado, nome, descrição e barras PODER / VELOCIDADE / ALCANCE
+   destaque mostra retrato ampliado, nome e barras PODER / VELOCIDADE / ALCANCE
    (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
    há várias páginas) percorrem os jogáveis; tocar um card seleciona e tocar de novo
    confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. Abaixo da grade, o

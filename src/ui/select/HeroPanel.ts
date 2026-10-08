@@ -2,7 +2,7 @@ import type Phaser from 'phaser';
 import { STRINGS } from '../../config/strings';
 import { createPortrait } from '../../render/PortraitView';
 import type { FighterConfig } from '../../types/fighter';
-import { COLORS, arcadeText, bodyText, css } from '../theme';
+import { COLORS, arcadeText, css } from '../theme';
 import { drawArcadeFrame } from './arcadeFrame';
 import { RATING_MAX, rateFighter, type FighterRatings } from './fighterRatings';
 import { SELECT_LAYOUT } from './selectLayout';
@@ -13,8 +13,8 @@ const PADDING = 14;
 const NAME_Y = TOP + 32;
 const NAME_RIBBON_HEIGHT = 42;
 const ART_TOP = TOP + 58;
-const ART_HEIGHT = 190;
-const DESCRIPTION_Y = TOP + 262;
+// The portrait takes the space down to the stats (no description line under it).
+const ART_HEIGHT = 208;
 const STATS_TOP = TOP + 286;
 const STAT_ROW = 20;
 const PIP_WIDTH = 24;
@@ -36,7 +36,7 @@ const STAT_ROWS: readonly { key: keyof FighterRatings; label: string }[] = [
 
 /**
  * Large "hero" panel for the highlighted fighter: enlarged portrait under a spotlight, name
- * ribbon, short description and display-only rating bars. Content slides in on every change.
+ * ribbon and display-only rating bars (no description text under the portrait). Content slides in on every change.
  */
 export class HeroPanel {
   private content: Phaser.GameObjects.Container | null = null;
@@ -108,14 +108,7 @@ export class HeroPanel {
       framed: false,
     });
 
-    const description = scene.add
-      .text(CENTER_X, DESCRIPTION_Y, config.description, {
-        ...bodyText(14, COLORS.white),
-        wordWrap: { width: WIDTH - PADDING * 2 },
-      })
-      .setOrigin(0.5);
-
-    content.add([spotlight, portrait, ribbon, name, description, ...this.createStats(config)]);
+    content.add([spotlight, portrait, ribbon, name, ...this.createStats(config)]);
     scene.tweens.add({
       targets: content,
       x: 0,
