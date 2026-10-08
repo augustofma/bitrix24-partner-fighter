@@ -669,3 +669,21 @@ partir das referências enviadas pelo usuário; sem material de jogos comerciais
 
 O escritório BITRIX24 MOSCOU já existente é reutilizado integralmente. Nenhum cenário foi
 regenerado. O personagem aparece no mapa, VS, luta e resultado como chefe final oculto na seleção.
+
+## RÔMULO — ARRECIFE DIGITAL
+
+Sprite e portrait originais gerados pelo ImageGen integrado, usando a foto de corpo inteiro,
+a foto de rosto e o pôster aprovados pelo usuário. Nenhum sprite de franquia ou imagem externa
+foi copiado. Licença/proveniência: arte original gerada para este projeto com as referências
+fornecidas e geração autorizada pelo usuário. Fontes e prompts em
+[scripts/romulo-art](../scripts/romulo-art/README.md).
+
+Identidade: cabelo preto curto, barba cheia, rosto largo e sorriso amigável, corpo robusto;
+blazer escuro, camiseta mostarda, calça e sapatos escuros, cordão/crachá de evento sem logos.
+A largura natural foi preservada, sem deformação horizontal para afinar o personagem.
+
+PNG RGBA 1536×1120, grade 8×5 de 192×224; retrato RGBA 240×300. Baseline 216, margem mínima
+4 px, scale 1, offsets 0/8. Poses base à direita; renderer aplica flipX. Recortes e escala
+proporcional por pose em Pillow/NumPy offline, sem dependência nova no jogo. A rasteira usa a
+pose recolhida de recuperação também no startup; o chute aéreo foi elevado para acompanhar
+melhor a hitbox existente. Arte não muda timing nem colisões.

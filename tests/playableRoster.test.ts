@@ -25,6 +25,7 @@ describe('playable roster (data-driven)', () => {
       'romualdo',
       'isaque-ferreira',
       'aislan',
+      'romulo',
     ]);
     // The final boss and test/demo placeholders stay in the roster (code and tests use them) but are not offered.
     expect(ROSTER.filter((f) => !f.playable).map((f) => f.id)).toEqual([

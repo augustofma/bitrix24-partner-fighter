@@ -169,6 +169,23 @@ com o especial ALAIO VIBECODE! (o mesmo do João, veja "Especiais e energia").
 Alcance, stun e knockback seguem a referência intermediária de João; startup/recovery maiores
 e mobilidade menor compensam o dano um pouco maior. Não substitui a validação de equilíbrio com jogadores.
 
+### RÔMULO — ARRECIFE DIGITAL
+
+Perfil robusto de luta rápida, sem especial exclusivo ou campanha. Vida 100, caminhada 3,0,
+recuo 2,4, impulso de salto 16,5 e velocidade aérea 3,9. Corpo padrão; a largura da arte não
+muda colisões. Os normais têm dano moderadamente maior e recuperação mais longa:
+
+| Golpe       | Dano | Startup | Ativo | Recovery |
+| ----------- | ---: | ------: | ----: | -------: |
+| punch       |    8 |       6 |     3 |       13 |
+| kick        |   12 |      11 |     4 |       19 |
+| crouchPunch |    6 |       6 |     3 |       11 |
+| crouchKick  |   10 |      10 |     4 |       20 |
+| airPunch    |    8 |       6 |     6 |       12 |
+| airKick     |   11 |       9 |     8 |       16 |
+
+Tempos em frames a 60 Hz. A IA e a seleção usam o config genérico do roster.
+
 ### DMITRY — FINAL BOSS
 
 Chefe final controlado pela IA genérica. Vida 108, caminhada 3,0, recuo 2,4, impulso de salto

@@ -8,7 +8,7 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
-JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA e AISLAN. A história exige também um perfil de campanha;
+JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN e RÔMULO. A história exige também um perfil de campanha;
 Todos os seis estão disponíveis na história e na luta rápida. Na **LUTA RÁPIDA** são três
 passos: **seu lutador**, **o rival** (qualquer jogável, inclusive o mesmo; começa sugerindo o
 próximo do roster) e **a fase** (todos os cenários ilustrados, com prévia; começa no cenário da
@@ -94,6 +94,14 @@ glitch com divisão RGB e um ✓ de "build passou". **GPTMAKER!** (Romualdo, cus
 o especial mais forte e mais lento): uma planta azul é projetada, um robozinho-agente é montado
 bloco a bloco atrás do ombro e dispara um feixe âmbar sobre um fluxo de nós; no acerto, explosão
 estelar, anel de engrenagem e blocos voando. Os dois têm emblema pixel-art original e som próprio.
+
+## RÔMULO — ARRECIFE DIGITAL
+
+Selecionável na luta rápida, como jogador ou rival CPU. Vida 100, caminhada 3,0, recuo 2,4,
+salto 16,5 e velocidade aérea 3,9. Seis normais um pouco mais fortes, compensados por recuperação
+maior; sem especial exclusivo ou campanha nesta etapa. Corpo robusto preservado na arte.
+Sprite RGBA 1536×1120 (40 células 192×224), portrait 240×300, scale 1 e offsets 0/8.
+[Fontes, prompts e preparo](scripts/romulo-art/README.md).
 
 ## AISLAN — ZOPU
 

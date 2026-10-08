@@ -518,6 +518,16 @@ sem pedido explícito.**
       `special-alaio-strike`
 - [x] Testes de alcance, defesa em pé/agachado, pulo, fuga, CPU, VFX e sprite; playtest no navegador
 
+## DONE (Rômulo — Arrecife Digital, branch `feature/romulo-arrecife-fighter`)
+
+- [x] Auditoria: personagem inexistente; implementação nova a partir da main atual
+- [x] FighterConfig equilibrado, seis normais, roster e luta rápida; sem especial/campanha
+- [x] Sprite RGBA 1536×1120 com 40 células e portrait 240×300; fontes/prompts/preparo preservados
+- [x] Escala 1 e offsets 0/8, corpo robusto, baseline e margem validados por célula
+- [x] Testes de assets, fases, seleção, CPU, simulação e determinismo
+- [x] Playtest de poses/debug, comparações com os sete fighters, Rômulo como P1 e CPU
+- [x] Teclado e smoke mobile landscape com multi-touch e cross-up
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
