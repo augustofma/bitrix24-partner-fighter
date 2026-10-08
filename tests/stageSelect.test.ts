@@ -30,6 +30,8 @@ const ui = vi.hoisted(() => {
     keys: new Map<string, () => void>(),
     texts: [] as Display[],
     containers: [] as Display[],
+    /** Tap targets: the preview's zone first, then one per stage row. */
+    zones: [] as { x: number; y: number; width: number; height: number; display: Display }[],
     goToScene: vi.fn(),
     playSfx: vi.fn(),
   };
@@ -42,6 +44,11 @@ vi.mock('phaser', () => ({
         rectangle: () => ui.display(),
         graphics: () => ui.display(),
         image: () => ui.display(),
+        zone: (x: number, y: number, width: number, height: number) => {
+          const display = ui.display();
+          ui.zones.push({ x, y, width, height, display });
+          return display;
+        },
         container: () => {
           const container = ui.display();
           ui.containers.push(container);
@@ -93,6 +100,7 @@ beforeEach(() => {
   ui.keys.clear();
   ui.texts.length = 0;
   ui.containers.length = 0;
+  ui.zones.length = 0;
   ui.goToScene.mockClear();
   ui.playSfx.mockClear();
 });
@@ -154,7 +162,7 @@ describe('StageSelectScene', () => {
   it('a tap on a stage selects it, a tap on the selected one confirms', () => {
     openScene();
     const stages = getSelectableStages();
-    const rows = ui.containers.filter((c) => c.handlers.has('pointerup'));
+    const rows = ui.zones.slice(1).map((zone) => zone.display);
     expect(rows).toHaveLength(stages.length);
     const russia = stages.findIndex((s) => s.id === 'russia');
     rows[russia]?.handlers.get('pointerup')?.();
@@ -162,6 +170,37 @@ describe('StageSelectScene', () => {
     expect(captionName()).toBeDefined();
     rows[russia]?.handlers.get('pointerup')?.();
     expect(lastCall()?.[2]).toMatchObject({ stageId: 'russia' });
+  });
+
+  it('every row is tappable over its whole width (regression: the name half was dead)', () => {
+    openScene();
+    const { list } = STAGE_SELECT_LAYOUT;
+    const rows = ui.zones.slice(1);
+    expect(rows).toHaveLength(getSelectableStages().length);
+    for (const zone of rows) {
+      // A zone centred in its row (zones are centred on their position) as big as the row.
+      expect(zone).toMatchObject({
+        x: list.width / 2,
+        y: list.rowHeight / 2,
+        width: list.width,
+        height: list.rowHeight,
+      });
+      expect(zone.display.input?.enabled).toBe(true);
+    }
+  });
+
+  it('a tap on the big preview fights on the selected stage', () => {
+    openScene();
+    const { preview } = STAGE_SELECT_LAYOUT;
+    const zone = ui.zones[0]!;
+    expect(zone).toMatchObject({
+      x: preview.left + preview.width / 2,
+      y: preview.top + preview.height / 2,
+      width: preview.width,
+      height: preview.height,
+    });
+    zone.display.handlers.get('pointerup')?.();
+    expect(lastCall()?.[2]).toMatchObject({ stageId: 'recife' });
   });
 
   it('ESC goes back to the rival pick, keeping both fighters', () => {
