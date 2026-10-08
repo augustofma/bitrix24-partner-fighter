@@ -132,6 +132,17 @@ portrait 240×300, scale 1 e offsets 0/8. [Arte e reprodução](scripts/dmitry-a
 
 Requer **Node.js 20.19+** (testado com Node 24).
 
+## Jogar online (GitHub Pages)
+
+**https://augustofma.github.io/bitrix24-partner-fighter/**: abre no navegador, desktop ou celular
+(na horizontal).
+
+O site é a branch `gh-pages`, que guarda só o jogo compilado (`dist/`). O workflow
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) republica a cada push na `main`:
+roda o `npm run check`, compila e atualiza a `gh-pages` (um build quebrado nunca vai ao ar).
+Configuração única no GitHub: o repositório público (ou um plano com Pages em repositório
+privado) e **Settings → Pages → Deploy from a branch → `gh-pages` / `(root)`**.
+
 ## Instalação e execução
 
 ```bash
