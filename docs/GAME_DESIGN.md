@@ -654,8 +654,8 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
 - **Última luta:** vencer a última luta (a do chefe final) leva direto à tela de campanha
   concluída, sem a tela "<NOME> VENCEU!". As outras vitórias e todas as derrotas passam pela
   tela de vitória como antes.
-- **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje só o Augusto,
-  olhando o pôr do sol no Marco Zero). Ela ocupa a tela toda com um zoom lento e aparece sozinha
+- **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje o Augusto,
+  olhando o pôr do sol no Marco Zero, e o Romualdo, num mirante sobre Joinville ao lado do pórtico). Ela ocupa a tela toda com um zoom lento e aparece sozinha
   por um instante; depois entram o título (menor, à direita, sem cobrir o personagem), a rota e
   os botões. Uma tecla nesse instante só mostra os botões, nunca pula o final. Os outros
   personagens usam a tela de campanha concluída padrão, com o card.

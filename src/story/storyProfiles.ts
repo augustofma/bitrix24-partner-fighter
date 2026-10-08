@@ -36,7 +36,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   },
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
-  { fighterId: 'romualdo', home: 'joinville' },
+  // Ending: Romualdo watching the sunset over Joinville, the city gate beside him.
+  { fighterId: 'romualdo', home: 'joinville', endingArt: 'story/endings/romualdo.jpg' },
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
   { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
 ];

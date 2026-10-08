@@ -504,6 +504,11 @@ sem pedido explícito.**
 - [x] `endMatch`: vencer a última luta da campanha vai direto à campanha concluída
 - [x] Testes de `parseHint` e do fluxo; playtest desktop e mobile
 
+## DONE (final ilustrado do Romualdo, branch `feature/dmitry-final-boss-integration`)
+
+- [x] Arte oficial em 1440×810 (`prepare_romualdo_ending.py`), `endingArt` no perfil do Romualdo
+- [x] Testes do asset; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

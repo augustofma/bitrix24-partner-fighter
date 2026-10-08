@@ -28,9 +28,16 @@ describe('story endings', () => {
     expect(jpegSize(file)).toEqual([1440, 810]);
   });
 
-  it('is only Augusto’s for now: the others keep the victory art ending', () => {
+  it('Romualdo has his own illustration too, prepared the same way', () => {
+    const asset = storyEndingAsset(getStoryProfile('romualdo'));
+    expect(asset?.path).toBe('story/endings/romualdo.jpg');
+    expect(jpegSize(join(__dirname, '..', 'public', asset!.path))).toEqual([1440, 810]);
+  });
+
+  it('only Augusto and Romualdo for now: the others keep the victory art ending', () => {
+    const withEnding = ['augusto', 'romualdo'];
     for (const profile of STORY_PROFILES) {
-      expect(storyEndingAsset(profile) !== undefined).toBe(profile.fighterId === 'augusto');
+      expect(storyEndingAsset(profile) !== undefined).toBe(withEnding.includes(profile.fighterId));
     }
     expect(storyEndingAsset(undefined)).toBeUndefined();
   });
