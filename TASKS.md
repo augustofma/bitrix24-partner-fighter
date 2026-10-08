@@ -453,6 +453,15 @@ sem pedido explícito.**
       (`draw_original_emblems.py`), sons `special-vibe` e `special-gpt`
 - [x] Testes de configuração, execução, defesa, VFX sem travamento/limpeza e CPU usando os especiais
 
+## DONE (FLUIDZ! do Aislan, branch `feature/aislan-fluidz`)
+
+- [x] Branch junta `feature/quick-fight-selection` (Aislan, Joinville ZOPU, seleção) e
+      `feature/new-specials`
+- [x] FLUIDZ!: custo 30, chão, mid, 17 de dano, 13/7/23, alcance 164
+- [x] Tema de VFX `liquidFlow` (rosa, bolha, jato ondulante, splash com gravidade, poça), emblema
+      original `fluidz-emblem.png` e som `special-fluidz`
+- [x] Testes de configuração, execução, defesa, VFX sem travamento/limpeza e CPU; playtest
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

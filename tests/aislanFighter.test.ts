@@ -11,7 +11,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Aislan fighter integration', () => {
-  it('has unique ids and a balanced standard-body profile without a special', () => {
+  it('has unique ids, a balanced standard-body profile and FLUIDZ!', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(aislan.stats).toEqual({
       maxHealth: 100,
@@ -20,7 +20,7 @@ describe('Aislan fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(aislan.specials).toEqual([]);
+    expect(aislan.specials.map((m) => m.id)).toEqual(['aislan.fluidz']);
     expect(Object.values(aislan.attacks).map((a) => a.damage)).toEqual([7, 11, 5, 9, 7, 10]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

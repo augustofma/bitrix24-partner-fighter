@@ -6,6 +6,7 @@ import { fighterB } from '../src/fighters/fighterB';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { partnerArena } from '../src/stages/partnerArena';
 import type { FighterConfig } from '../src/types/fighter';
 import type { InputState } from '../src/types/input';
@@ -15,6 +16,7 @@ const FIGHTERS = [
   [joaoGuiotti, 'ALAIO VIBECODE!', 'vibeCode', 'vfx/vibecode-emblem.png', 'special-vibe'],
   [isaqueFerreira, 'ALAIO VIBECODE!', 'vibeCode', 'vfx/vibecode-emblem.png', 'special-vibe'],
   [romualdo, 'GPTMAKER!', 'agentBuilder', 'vfx/gptmaker-emblem.png', 'special-gpt'],
+  [aislan, 'FLUIDZ!', 'liquidFlow', 'vfx/fluidz-emblem.png', 'special-fluidz'],
 ] as const;
 
 const reach = (box: { x: number; width: number }) => box.x + box.width;

@@ -9,6 +9,7 @@ import { filipe } from '../src/fighters/filipe';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { collectFighterAssets, vfxTextureKey } from '../src/render/assets/fighterAssets';
 import { SpecialEffects } from '../src/render/special/SpecialEffects';
 import { chatBubble, disc, easeOutBack, pixelBox } from '../src/render/special/vfxShapes';
@@ -139,7 +140,7 @@ function tenSpecials(config: FighterConfig, distance: number) {
 
 describe('special VFX: no freeze on use', () => {
   it('every special image is part of the roster assets loaded before the fight', () => {
-    const configs = [augusto, filipe, joaoGuiotti, isaqueFerreira, romualdo];
+    const configs = [augusto, filipe, joaoGuiotti, isaqueFerreira, romualdo, aislan];
     const keys = new Set(collectFighterAssets(configs).map((asset) => asset.key));
     for (const config of configs) {
       for (const effect of Object.values(config.assets.specialEffects ?? {})) {
@@ -156,6 +157,7 @@ describe('special VFX: no freeze on use', () => {
     ['ALAIO VIBECODE! (João)', joaoGuiotti, 120, 'joao-guiotti.alaioVibecode'],
     ['ALAIO VIBECODE! (Isaque)', isaqueFerreira, 120, 'isaque-ferreira.alaioVibecode'],
     ['GPTMAKER!', romualdo, 120, 'romualdo.gptMaker'],
+    ['FLUIDZ!', aislan, 120, 'aislan.fluidz'],
   ] as const)(
     '%s: ten uses in a row, no loading, no triangulated shapes, same flow every time',
     (_name, config, distance, moveId) => {

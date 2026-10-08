@@ -318,6 +318,23 @@ def sfx_special_gpt(rng):
     return mix(clicks, at(servo, 0.02), at(beep, 0.1), at(buzz, 0.17), at(boom, 0.28), at(crack, 0.28))
 
 
+def sfx_special_fluidz(rng):
+    """FLUIDZ!: liquid "bloops" (bubbles whose pitch jumps up as they pop), a gurgling pour
+    rising in pitch, then a wet splash."""
+    bloops = mix(*[at(np.sin(sweep(300 + 140 * i, 900 + 260 * i, 0.06, curve=0.5)) * decay(0.06, 35) * 0.45,
+                      0.03 + i * 0.045 + rng.uniform(0, 0.01)) for i in range(5)])
+    pour_len = 0.2
+    t = seconds(pour_len)
+    gurgle = 0.5 + 0.5 * np.sin(2 * np.pi * (14 + 30 * t / pour_len) * t)
+    pour = bandpass(rng.uniform(-1, 1, len(t)), 500, 2600) * gurgle * np.linspace(0.2, 0.8, len(t)) * 0.45
+    splash_len = 0.32
+    splash = bandpass(rng.uniform(-1, 1, int(splash_len * SR)), 900, 7000) * decay(splash_len, 11) * 0.7
+    drops = mix(*[at(np.sin(sweep(1400 + 300 * i, 2400 + 300 * i, 0.03)) * decay(0.03, 80) * 0.25,
+                     0.26 + i * 0.03 + rng.uniform(0, 0.01)) for i in range(4)])
+    thud = np.sin(sweep(180, 70, 0.2)) * decay(0.2, 14) * 0.8
+    return mix(bloops, at(pour, 0.04), at(splash, 0.22), drops, at(thud, 0.22))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -343,6 +360,7 @@ EFFECTS = {
     "special-mind": sfx_special_mind,
     "special-vibe": sfx_special_vibe,
     "special-gpt": sfx_special_gpt,
+    "special-fluidz": sfx_special_fluidz,
 }
 
 

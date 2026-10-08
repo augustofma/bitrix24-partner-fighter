@@ -164,7 +164,7 @@ e mobilidade menor compensam o dano um pouco maior. Não substitui a validação
 ### AISLAN — ZOPU
 
 Perfil equilibrado, mesmos valores-base do Isaque: vida 100, avanço/recuo 3,1/2,5 px/frame,
-pulo 16,5 e velocidade aérea 3,9. Seis normais, sem especial exclusivo.
+pulo 16,5 e velocidade aérea 3,9. Seis normais e o especial FLUIDZ! (veja "Especiais e energia").
 Dano e startup/ativo/recovery: soco 7 e 5/3/11; chute 11 e 10/4/17; soco agachado 5 e 5/3/9;
 rasteira 9 e 9/4/18; soco aéreo 7 e 5/6/10; chute aéreo 10 e 8/8/14.
 Aislan entra depois de Romualdo nas rotas, em Joinville, no cenário JOINVILLE (ZOPU)
@@ -400,6 +400,13 @@ pushback 6,5 e hitstop 13. Hitbox (30, -138, 130, 84): alcance de 160 px, do pei
 Não avança. É o que mais tira vida e o mais lento de sair, e o mais punível bloqueado (27 de
 recovery contra 17 de blockstun). Os dois reaproveitam os frames do soco.
 
+**FLUIDZ! (Aislan):** um jato de líquido rosa. Custo 30, somente no chão, nível `mid`, dano 17,
+chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
+5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
+ao peito. Inclina-se um pouco no jato (1,5 px/frame no startup/ativo), um único contato.
+Bloqueado, deixa Aislan em desvantagem (23 de recovery contra 15 de blockstun). Reaproveita os
+frames do soco.
+
 ### VFX dos especiais
 
 Cada especial tem a identidade do app ligado a ele, só na apresentação (frame data, dano, custo e
@@ -431,15 +438,22 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   nós (o "workflow" do agente) que acende até o alvo, com o emblema do robô no fim; no acerto,
   explosão estelar âmbar, anel de engrenagem, blocos se espalhando e faíscas (na defesa: menor,
   sem emblema); depois o robô se desmonta e a planta apaga.
+- **FLUIDZ! (Aislan), líquido rosa:** na carga, o líquido se junta à frente do corpo numa bolha
+  rosa que balança, gotas são puxadas para ela, bolhas sobem e uma gota pinga; no disparo, um
+  jato grosso e ondulante sai da mão até o fim do alcance, com reflexos brilhantes correndo nele,
+  uma crista de onda na ponta e gotas espirrando; no acerto, splash: clarão, coroa de gotas
+  jogadas para cima e para a frente que caem com gravidade, ondas concêntricas e o emblema da gota
+  (na defesa: menor, sem emblema); depois o jato vira gotas que caem e uma poça rosa se espalha e
+  seca no chão.
 
 Cada um também tem som próprio ao começar (`special-zap`, `special-mind`, `special-vibe`,
-`special-gpt`).
+`special-gpt`, `special-fluidz`).
 A CPU também usa especiais (veja "Especiais da CPU"), pelas mesmas regras do jogador.
 
 ### SPECIAL READY (só visual)
 
 A barra entra em **SPECIAL READY** quando a energia alcança o custo do especial **mais barato**
-configurado para aquele lutador (Augusto, João e Isaque: 30; Filipe e Romualdo: 35), nunca "barra
+configurado para aquele lutador (Augusto, João, Isaque e Aislan: 30; Filipe e Romualdo: 35), nunca "barra
 cheia". Especiais com custo acima do máximo da barra não contam; lutadores sem especial (FIGHTER_A/B)
 nunca ficam READY. A restrição `groundOnly` não entra na conta, para o HUD não piscar a cada pulo.
 

@@ -215,6 +215,7 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         key: portraitTextureKey('fighters/aislan/portrait.png'),
         path: 'fighters/aislan/portrait.png',
       },
+      { type: 'image', key: vfxTextureKey('vfx/fluidz-emblem.png'), path: 'vfx/fluidz-emblem.png' },
       {
         type: 'spritesheet',
         key: 'aislan-sheet',
@@ -268,6 +269,7 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         vfxTextureKey('vfx/mindhub-sigil.png'),
         vfxTextureKey('vfx/vibecode-emblem.png'),
         vfxTextureKey('vfx/gptmaker-emblem.png'),
+        vfxTextureKey('vfx/fluidz-emblem.png'),
       ].sort(),
     );
   });

@@ -96,7 +96,8 @@ estelar, anel de engrenagem e blocos voando. Os dois têm emblema pixel-art orig
 ## AISLAN — ZOPU
 
 Novo fighter equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e velocidade aérea 3,9.
-Seis normais, sem especial exclusivo. Arte original, atlas 1536×1120 (40 frames 192×224) e
+Seis normais e o especial **FLUIDZ!** (F / ESP, custo 30, só no chão): um jato rosa de líquido
+que ondula até o rival e explode num splash de gotas. Arte original, atlas 1536×1120 (40 frames 192×224) e
 portrait 240×300; [fontes, prompts e preparo](scripts/aislan-art/README.md).
 Na história entra após Romualdo, na mesma Joinville, mas luta no cenário próprio
 **JOINVILLE (ZOPU)** (`joinville-zopu`): o mesmo pórtico com bandeirinhas e banners da ZOPU e o

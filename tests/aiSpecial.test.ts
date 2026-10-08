@@ -21,6 +21,7 @@ import { fighterB } from '../src/fighters/fighterB';
 import { filipe } from '../src/fighters/filipe';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { partnerArena } from '../src/stages/partnerArena';
 import type { FighterConfig, SpecialMoveConfig } from '../src/types/fighter';
 import type { InputState } from '../src/types/input';
@@ -312,7 +313,7 @@ describe('CPU specials by difficulty', () => {
     return specials / (frames / 3600);
   }
 
-  it.each([filipe, augusto, joaoGuiotti, romualdo])(
+  it.each([filipe, augusto, joaoGuiotti, romualdo, aislan])(
     '9/10. %s: Easy < Normal < Hard, and every level does use it',
     (config) => {
       const easy = specialsPerMinute(config, aiProfileFor('easy'));

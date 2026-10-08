@@ -1,7 +1,11 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** Balanced newcomer: medium mobility, damage and recovery, using the standard body. */
+/**
+ * AISLAN - ZOPU. Balanced: medium mobility, damage and recovery, using the standard body, and
+ * the pink liquid special FLUIDZ!.
+ */
 export const aislan: FighterConfig = {
   id: 'aislan',
   name: 'aislan',
@@ -120,11 +124,44 @@ export const aislan: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // A gush of pink liquid: a rippling stream with a splash at the end of its reach.
+      id: 'aislan.fluidz',
+      displayName: STRINGS.specialFluidz,
+      state: 'special',
+      level: 'mid',
+      meterCost: 30,
+      groundOnly: true,
+      // A small lean into the pour.
+      advanceSpeed: 1.5,
+      damage: 17,
+      chipDamage: 2,
+      startupFrames: 13,
+      activeFrames: 7,
+      // Blocked, it leaves him at a disadvantage (23 recovery against 15 blockstun).
+      recoveryFrames: 23,
+      // Reach 164 px (his kick: 100), waist to chest.
+      hitbox: { x: 24, y: -124, width: 140, height: 62 },
+      hitstunFrames: 24,
+      blockstunFrames: 15,
+      knockback: 8.5,
+      blockPushback: 5.5,
+      hitstopFrames: 11,
+    },
+  ],
   palette: { body: 0x164f89, accent: 0xe0b75a, skin: 0xe0ac69, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/aislan/portrait.png',
     pixelArt: true,
+    specialEffects: {
+      'aislan.fluidz': {
+        style: 'liquidFlow',
+        label: STRINGS.specialFluidz,
+        emblem: 'vfx/fluidz-emblem.png',
+        sound: 'special-fluidz',
+      },
+    },
     sprite: {
       sheet: {
         key: 'aislan-sheet',
@@ -135,6 +172,7 @@ export const aislan: FighterConfig = {
       // Eight transparent pixels below the grounded soles.
       visual: { scale: 1, offsetX: 0, offsetY: 8 },
       animations: {
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
         jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },

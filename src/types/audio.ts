@@ -39,7 +39,8 @@ export type SfxId =
   | 'special-zap'
   | 'special-mind'
   | 'special-vibe'
-  | 'special-gpt';
+  | 'special-gpt'
+  | 'special-fluidz';
 
 export interface SfxConfig {
   id: SfxId;

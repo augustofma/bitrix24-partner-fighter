@@ -12,6 +12,7 @@ import { filipe } from '../src/fighters/filipe';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { collectFighterAssets, vfxTextureKey } from '../src/render/assets/fighterAssets';
 import { SpecialEffects } from '../src/render/special/SpecialEffects';
 import { partnerArena } from '../src/stages/partnerArena';
@@ -126,6 +127,7 @@ describe('app-themed special VFX: timing and cleanup', () => {
     [joaoGuiotti, 120, 'vfx:vfx/vibecode-emblem.png'],
     [isaqueFerreira, 120, 'vfx:vfx/vibecode-emblem.png'],
     [romualdo, 120, 'vfx:vfx/gptmaker-emblem.png'],
+    [aislan, 120, 'vfx:vfx/fluidz-emblem.png'],
   ] as const)(
     '%s: shows on the move, impact on hit, nothing left after',
     (config, distance, emblem) => {

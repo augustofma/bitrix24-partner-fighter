@@ -94,5 +94,6 @@ export const STRINGS = {
   specialMindhubAgent: 'MINDHUB AGENT',
   specialAlaioVibecode: 'ALAIO VIBECODE!',
   specialGptMaker: 'GPTMAKER!',
+  specialFluidz: 'FLUIDZ!',
   debugHint: 'F2: hitboxes',
 } as const;
