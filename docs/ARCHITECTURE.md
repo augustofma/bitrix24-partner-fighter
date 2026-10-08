@@ -129,6 +129,7 @@ src/
                           imagens e Graphics criados uma vez e reaproveitados
       specialTheme.ts     Contrato de um tema (fases do golpe + impacto)
       zapTheme.ts, mindTheme.ts  Temas 24zap (mensagens) e Mindhub (IA)
+      vibeTheme.ts, agentTheme.ts  ALAIO VIBECODE! (código neon) e GPTMAKER! (agente de IA)
       vfxShapes.ts        Formas reutilizáveis (balão de chat, ✓✓, ondas, mira, trilhas)
     DebugOverlay.ts       Hitboxes/hurtboxes (F2)
     PortraitView.ts       Card de personagem (seleção/VS/vitória); `framed: false` só a arte

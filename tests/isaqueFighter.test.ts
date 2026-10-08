@@ -11,7 +11,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Isaque fighter integration', () => {
-  it('has unique ids and a balanced standard-body profile without a special', () => {
+  it('has unique ids, a balanced standard-body profile and ALAIO VIBECODE!', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(isaqueFerreira.stats).toEqual({
       maxHealth: 100,
@@ -20,7 +20,7 @@ describe('Isaque fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(isaqueFerreira.specials).toEqual([]);
+    expect(isaqueFerreira.specials.map((m) => m.id)).toEqual(['isaque-ferreira.alaioVibecode']);
     expect(Object.values(isaqueFerreira.attacks).map((a) => a.damage)).toEqual([
       7, 11, 5, 9, 7, 10,
     ]);

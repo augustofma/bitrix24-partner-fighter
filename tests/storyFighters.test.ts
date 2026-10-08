@@ -29,12 +29,12 @@ describe('João Guiotti and Romualdo', () => {
     expect(romualdo.description).toBe('Joinville - SC');
   });
 
-  it('are complete fighters: six normals, no specials yet, own palette, independent visuals', () => {
+  it('are complete fighters: six normals, one special each, own palette, independent visuals', () => {
     for (const config of NEW_FIGHTERS) {
       expect(Object.keys(config.attacks).sort()).toEqual(
         ['airKick', 'airPunch', 'crouchKick', 'crouchPunch', 'kick', 'punch'].sort(),
       );
-      expect(config.specials).toEqual([]);
+      expect(config.specials).toHaveLength(1);
     }
     expect(joaoGuiotti.assets.sprite).toBeDefined();
     expect(romualdo.assets.sprite).toBeDefined();
@@ -163,7 +163,7 @@ describe('João Guiotti and Romualdo', () => {
       const first = play();
       expect(first.outcome).not.toBeNull();
       expect(Math.max(...first.outcome!.roundWins)).toBeGreaterThanOrEqual(1);
-      // The special meter charges for both (they have no specials yet, but the meter works).
+      // The special meter charges for both.
       expect(first.meterCharged).toBe(true);
       expect(play()).toEqual(first);
     },

@@ -444,6 +444,15 @@ sem pedido explícito.**
 - [x] Esc volta um passo mantendo as escolhas; testes de fluxo, layout e recorte; playtest
       desktop e touch até a luta no cenário escolhido
 
+## DONE (v0.34: especiais ALAIO VIBECODE! e GPTMAKER!, branch `feature/new-specials`)
+
+- [x] ALAIO VIBECODE! para João e Isaque (`shared/alaioVibecode.ts`, ids próprios): custo 30,
+      chão, mid, 17 de dano, 12/6/24, alcance 162
+- [x] GPTMAKER! para Romualdo: custo 35, chão, mid, 21 de dano, 17/6/27, alcance 160
+- [x] Temas de VFX `vibeCode` e `agentBuilder`, emblemas pixel-art originais
+      (`draw_original_emblems.py`), sons `special-vibe` e `special-gpt`
+- [x] Testes de configuração, execução, defesa, VFX sem travamento/limpeza e CPU usando os especiais
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

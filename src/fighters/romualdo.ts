@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -125,11 +126,45 @@ export const romualdo: FighterConfig = {
       hitstopFrames: 9,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // Romualdo builds an AI agent on the spot and it fires an amber beam: his heavy special.
+      id: 'romualdo.gptMaker',
+      displayName: STRINGS.specialGptMaker,
+      state: 'special',
+      level: 'mid',
+      meterCost: 35,
+      groundOnly: true,
+      // He plants his feet while the agent is assembled: no forward travel.
+      advanceSpeed: 0,
+      // The hardest-hitting special, and the slowest to come out (seen coming from afar)...
+      damage: 21,
+      chipDamage: 3,
+      startupFrames: 17,
+      activeFrames: 6,
+      // ...and the most punishable when blocked (27 recovery against 17 blockstun).
+      recoveryFrames: 27,
+      // Reach 160 px (his kick: ~100), chest to head.
+      hitbox: { x: 30, y: -138, width: 130, height: 84 },
+      hitstunFrames: 26,
+      blockstunFrames: 17,
+      knockback: 10,
+      blockPushback: 6.5,
+      hitstopFrames: 13,
+    },
+  ],
   palette: { body: 0x2e8b57, accent: 0xff8a1f, skin: 0xc68642, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/romualdo/portrait.png',
     pixelArt: true,
+    specialEffects: {
+      'romualdo.gptMaker': {
+        style: 'agentBuilder',
+        label: STRINGS.specialGptMaker,
+        emblem: 'vfx/gptmaker-emblem.png',
+        sound: 'special-gpt',
+      },
+    },
     sprite: {
       sheet: {
         key: 'romualdo-sheet',
@@ -140,6 +175,7 @@ export const romualdo: FighterConfig = {
       // Eight transparent pixels below the grounded soles.
       visual: { scale: 1, offsetX: 0, offsetY: 8 },
       animations: {
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
         jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },

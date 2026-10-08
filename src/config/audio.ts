@@ -88,6 +88,8 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   perfect: sfx('perfect', 0.85),
   'special-zap': sfx('special-zap', 0.85),
   'special-mind': sfx('special-mind', 0.85),
+  'special-vibe': sfx('special-vibe', 0.85),
+  'special-gpt': sfx('special-gpt', 0.85),
 };
 
 /** Variation range of `vary` effects: playback rate 1 ± this, level 1 - [0, this]. */

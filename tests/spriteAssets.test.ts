@@ -170,6 +170,11 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         path: 'fighters/joao-guiotti/portrait.png',
       },
       {
+        type: 'image',
+        key: vfxTextureKey('vfx/vibecode-emblem.png'),
+        path: 'vfx/vibecode-emblem.png',
+      },
+      {
         type: 'spritesheet',
         key: 'joao-guiotti-sheet',
         path: 'fighters/joao-guiotti/sprite.png',
@@ -180,6 +185,11 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         type: 'image',
         key: portraitTextureKey('fighters/romualdo/portrait.png'),
         path: 'fighters/romualdo/portrait.png',
+      },
+      {
+        type: 'image',
+        key: vfxTextureKey('vfx/gptmaker-emblem.png'),
+        path: 'vfx/gptmaker-emblem.png',
       },
       {
         type: 'spritesheet',
@@ -256,6 +266,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         vfxTextureKey('vfx/24zap-emblem.png'),
         vfxTextureKey('vfx/mindhub-emblem.png'),
         vfxTextureKey('vfx/mindhub-sigil.png'),
+        vfxTextureKey('vfx/vibecode-emblem.png'),
+        vfxTextureKey('vfx/gptmaker-emblem.png'),
       ].sort(),
     );
   });

@@ -1,5 +1,8 @@
 import type { FighterConfig } from '../types/fighter';
+import { alaioVibecode } from './shared/alaioVibecode';
 import { STANDARD_BODY } from './shared/standardBody';
+
+const VIBECODE = alaioVibecode('joao-guiotti');
 
 /**
  * JOÃO GUIOTTI - São Paulo, SP. Technical and balanced: good walk speed, the quickest jab,
@@ -125,11 +128,12 @@ export const joaoGuiotti: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [VIBECODE.move],
   palette: { body: 0x7b2cbf, accent: 0x2fe0ff, skin: 0xe0ac69, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/joao-guiotti/portrait.png',
     pixelArt: true,
+    specialEffects: { [VIBECODE.move.id]: VIBECODE.effect },
     sprite: {
       sheet: {
         key: 'joao-guiotti-sheet',
@@ -140,6 +144,7 @@ export const joaoGuiotti: FighterConfig = {
       // Eight transparent pixels below the grounded soles.
       visual: { scale: 1, offsetX: 0, offsetY: 8 },
       animations: {
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
         jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },

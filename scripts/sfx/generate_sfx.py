@@ -284,6 +284,40 @@ def sfx_special_mind(rng):
     return mix(blips, warble * 0.4, at(discharge, 0.25), at(boom, 0.27), at(glitch, 0.27))
 
 
+def sfx_special_vibe(rng):
+    """ALAIO VIBECODE!: a burst of keyboard typing, a synthwave "vibe" wobble with a rising
+    arpeggio, then a glitchy release and a punchy hit."""
+    keys = mix(*[at(bandpass(rng.uniform(-1, 1, int(0.018 * SR)), 1800, 6000) * decay(0.018, 220)
+                    * (0.35 + 0.25 * rng.uniform()), i * 0.02 + rng.uniform(0, 0.004)) for i in range(7)])
+    wob_len = 0.26
+    t = seconds(wob_len)
+    lfo = 0.5 + 0.5 * np.sin(2 * np.pi * 9 * t)
+    wob = saw(2 * np.pi * np.cumsum(np.full(len(t), 110.0)) / SR, 20) + saw(2 * np.pi * np.cumsum(np.full(len(t), 110.8)) / SR, 20)
+    wob = lowpass(wob * (0.3 + 0.7 * lfo), 2400) * np.linspace(0.2, 1, len(t)) * 0.45
+    arp = mix(*[at(note(f, 0.07, "square", 30) * 0.22, 0.05 + i * 0.026) for i, f in enumerate((659, 784, 988, 1319, 1568, 1976))])
+    glitch_len = 0.16
+    glitch = highpass(rng.uniform(-1, 1, int(glitch_len * SR)), 2500) * (rng.uniform(0, 1, int(glitch_len * SR)) > 0.7)
+    glitch = glitch * np.repeat(rng.uniform(0, 1, int(glitch_len * SR) // 220 + 1) > 0.4, 220)[: int(glitch_len * SR)] * 0.45
+    hit = np.sin(sweep(240, 60, 0.25)) * decay(0.25, 11)
+    return mix(keys, wob, arp, at(glitch, 0.2), at(hit, 0.2))
+
+
+def sfx_special_gpt(rng):
+    """GPTMAKER!: blocks clicking together and a servo whir as the agent is built, a friendly
+    two-tone robot "beep-boop", then a buzzing beam charge and a heavy hit."""
+    clicks = mix(*[at(bandpass(rng.uniform(-1, 1, int(0.02 * SR)), 900, 4000) * decay(0.02, 160) * 0.55, i * 0.034) for i in range(5)])
+    servo_len = 0.2
+    t = seconds(servo_len)
+    servo_phase = sweep(220, 520, servo_len)
+    servo = (np.sin(servo_phase) + 0.4 * np.sin(2 * servo_phase) + 0.2 * np.sin(3 * servo_phase)) * (0.6 + 0.4 * np.sin(2 * np.pi * 30 * t)) * 0.3
+    beep = mix(note(880, 0.08, "square", 20) * 0.3, at(note(1175, 0.11, "square", 18) * 0.3, 0.08))
+    buzz_len = 0.12
+    buzz = lowpass(saw(sweep(90, 180, buzz_len), 24), 3200) * np.linspace(0.3, 1, int(buzz_len * SR)) * 0.4
+    boom = np.sin(sweep(170, 42, 0.38)) * decay(0.38, 8)
+    crack = highpass(rng.uniform(-1, 1, int(0.08 * SR)), 3000) * decay(0.08, 40) * 0.4
+    return mix(clicks, at(servo, 0.02), at(beep, 0.1), at(buzz, 0.17), at(boom, 0.28), at(crack, 0.28))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -307,6 +341,8 @@ EFFECTS = {
     "perfect": sfx_perfect,
     "special-zap": sfx_special_zap,
     "special-mind": sfx_special_mind,
+    "special-vibe": sfx_special_vibe,
+    "special-gpt": sfx_special_gpt,
 }
 
 
