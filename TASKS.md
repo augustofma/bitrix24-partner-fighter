@@ -606,6 +606,13 @@ sem pedido explícito.**
 - [x] Cenário `portugal` no lugar Portugal (luta do Filipe) e na seleção (9 fases, sem rolagem)
 - [x] Testes atualizados; playtest da luta e do voo
 
+## DONE (cenário MADRI da luta do Isaque, branch `feature/spain-stage`)
+
+- [x] Arte preparada por `prepare_spain.py` (jato sem hélice, faixa separada pelo brilho)
+- [x] Hélice opcional no preparo e na animação do voo (`propeller` opcional)
+- [x] Cenário `spain` no lugar Espanha (luta do Isaque) e na seleção (10 fases, sem rolagem)
+- [x] Testes atualizados; playtest da luta e do voo
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)

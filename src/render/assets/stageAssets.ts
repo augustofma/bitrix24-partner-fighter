@@ -27,7 +27,9 @@ function artImages(art: StageArt): StageImage[] {
     ...(flyover
       ? [
           flyover.plane,
-          { key: flyover.propeller.key, path: flyover.propeller.path },
+          ...(flyover.propeller
+            ? [{ key: flyover.propeller.key, path: flyover.propeller.path }]
+            : []),
           flyover.banner,
           flyover.skyline,
         ]

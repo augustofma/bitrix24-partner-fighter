@@ -30,7 +30,7 @@ function seedOf(id: string): number {
  */
 export class StageFlyoverView {
   private readonly plane: Phaser.GameObjects.Image;
-  private readonly propeller: Phaser.GameObjects.Image;
+  private readonly propeller: Phaser.GameObjects.Image | null;
   private readonly strips: Phaser.GameObjects.Image[] = [];
   private readonly lines: Phaser.GameObjects.Graphics;
   private readonly random: () => number;
@@ -63,12 +63,14 @@ export class StageFlyoverView {
       .setScale(scale)
       .setDepth(depth)
       .setScrollFactor(factor);
-    this.propeller = scene.add
-      .image(0, 0, config.propeller.key)
-      .setOrigin(0.5)
-      .setScale(scale)
-      .setDepth(depth)
-      .setScrollFactor(factor);
+    this.propeller = config.propeller
+      ? scene.add
+          .image(0, 0, config.propeller.key)
+          .setOrigin(0.5)
+          .setScale(scale)
+          .setDepth(depth)
+          .setScrollFactor(factor)
+      : null;
     const banner = scene.textures.get(config.banner.key).getSourceImage();
     this.bannerWidth = banner.width * scale;
     this.stripWidth = Math.ceil(banner.width / config.bannerStrips);
@@ -129,7 +131,7 @@ export class StageFlyoverView {
   }
 
   destroy(): void {
-    for (const object of [this.plane, this.propeller, this.lines, ...this.strips]) {
+    for (const object of this.objects) {
       object.destroy();
     }
   }
@@ -147,9 +149,10 @@ export class StageFlyoverView {
       .setPosition(left + (this.plane.width * scale) / 2, top + (this.plane.height * scale) / 2)
       .setAngle(bob.angle);
     const blade = PROPELLER_FRAMES[Math.floor(seconds * PROPELLER_FPS) % PROPELLER_FRAMES.length];
-    this.propeller
-      .setPosition(left + config.propeller.x * scale, top + config.propeller.y * scale)
-      .setScale(scale, scale * (blade ?? 1));
+    if (this.propeller && config.propeller)
+      this.propeller
+        .setPosition(left + config.propeller.x * scale, top + config.propeller.y * scale)
+        .setScale(scale, scale * (blade ?? 1));
 
     // The banner trails: its height follows the plane's bob a moment later.
     this.bannerBob += (bob.y - this.bannerBob) * Math.min(1, dt * BANNER_FOLLOW);
@@ -176,8 +179,18 @@ export class StageFlyoverView {
     this.lines.lineBetween(hookX, hookY, edge + 2 * inward, edgeTop + attachBottom * scale);
   }
 
+  private get objects(): (Phaser.GameObjects.Image | Phaser.GameObjects.Graphics)[] {
+    const objects: (Phaser.GameObjects.Image | Phaser.GameObjects.Graphics)[] = [
+      this.plane,
+      this.lines,
+      ...this.strips,
+    ];
+    if (this.propeller) objects.push(this.propeller);
+    return objects;
+  }
+
   private setVisible(visible: boolean): void {
-    for (const object of [this.plane, this.propeller, this.lines, ...this.strips]) {
+    for (const object of this.objects) {
       object.setVisible(visible);
     }
   }

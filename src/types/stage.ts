@@ -83,8 +83,8 @@ export interface StageCrowd {
  */
 export interface StageFlyover {
   plane: StageImage;
-  /** Spinning propeller drawn over the plane's nose (pivot = blade center). */
-  propeller: StageImage & { x: number; y: number };
+  /** Spinning propeller drawn over the plane's nose (pivot = blade center); none for a jet. */
+  propeller?: StageImage & { x: number; y: number };
   banner: StageImage;
   /**
    * The architecture against the sky (top rows of the background, sky made transparent),

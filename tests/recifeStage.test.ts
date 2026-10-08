@@ -46,7 +46,7 @@ const publicPath = (path: string) => join(__dirname, '..', 'public', path);
 /** Texture sizes the fake scene reports (the real files' sizes). */
 function textureSize(key: string): { width: number; height: number } {
   if (key === art.background.key) return jpegSize(publicPath(art.background.path));
-  const image = [flyover.plane, flyover.propeller, flyover.banner, flyover.skyline].find(
+  const image = [flyover.plane, flyover.propeller!, flyover.banner, flyover.skyline].find(
     (i) => i.key === key,
   );
   if (!image) return { width: 1, height: 1 };
@@ -123,7 +123,7 @@ describe('RECIFE stage config', () => {
 
   it('ships its art: background at the display size, plane, propeller and banner with alpha', () => {
     expect(jpegSize(publicPath(art.background.path))).toEqual({ width: 1075, height: 605 });
-    for (const image of [flyover.plane, flyover.propeller, flyover.banner]) {
+    for (const image of [flyover.plane, flyover.propeller!, flyover.banner]) {
       expect(existsSync(publicPath(image.path)), image.path).toBe(true);
       const png = readRgbaPng(publicPath(image.path));
       // Transparent around the shape, opaque inside it.
@@ -142,7 +142,7 @@ describe('RECIFE stage config', () => {
     const expected = [
       art.background,
       flyover.plane,
-      flyover.propeller,
+      flyover.propeller!,
       flyover.banner,
       flyover.skyline,
     ].map((image) => image.key);
@@ -171,7 +171,7 @@ describe('RECIFE is picked by place, never by fighter', () => {
     expect(stageIdForLocation('recife')).toBe('recife');
     expect(legStageId({ opponent: 'romualdo', destination: 'recife' })).toBe('recife');
     // Places without their own stage use the default; an explicit leg stage still wins.
-    for (const place of ['sao-paulo', 'russia', 'spain']) {
+    for (const place of ['sao-paulo', 'russia']) {
       expect(stageIdForLocation(place)).toBe(DEFAULT_STAGE_ID);
     }
     expect(
@@ -304,7 +304,7 @@ describe('Recife plane flies behind the buildings', () => {
     const lastFlyover = Math.max(
       order.lastIndexOf(flyover.banner.key),
       at(flyover.plane.key),
-      at(flyover.propeller.key),
+      at(flyover.propeller!.key),
     );
     expect(at(art.background.key)).toBe(0);
     expect(at(flyover.plane.key)).toBeGreaterThan(0);

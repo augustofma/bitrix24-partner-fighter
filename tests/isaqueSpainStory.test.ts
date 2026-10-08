@@ -130,7 +130,7 @@ describe('the trip to Spain and the fight there', () => {
     expect(storyMatchSetup(fight, 'normal')).toEqual({
       playerFighterId: 'augusto',
       cpuFighterId: ISAQUE,
-      stageId: DEFAULT_STAGE_ID, // Spain has no stage of its own yet
+      stageId: 'spain', // Madrid's Puerta de Alcalá
       difficulty: 'normal',
       mode: 'story',
     });

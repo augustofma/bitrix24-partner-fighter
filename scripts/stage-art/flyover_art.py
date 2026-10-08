@@ -37,9 +37,10 @@ class FlyoverStage:
     out: Path
     # Search box of the flying group (source px): x0, y0, x1, y1.
     sky_box: tuple
-    # Plane | tow lines | banner, split by x (source px); the propeller is left of the nose.
+    # Plane | tow lines | banner, split by x (source px); the propeller is left of the nose
+    # (None: a jet, no propeller layer).
     plane_max_x: int
-    propeller_max_x: int
+    propeller_max_x: Optional[int]
     banner_min_x: int
     # Rows of the display-size background covered by the skyline occluder.
     skyline_rows: int
@@ -201,8 +202,11 @@ def prepare(stage):
     if stage.plane_min_y is not None:
         group[: stage.plane_min_y, x0:PLANE_MAX_X] = False
     whole_plane = large_components(split(group, x0, PLANE_MAX_X), 200)
-    propeller = split(whole_plane, x0, PROPELLER_MAX_X)
-    plane = split(whole_plane, PROPELLER_MAX_X, PLANE_MAX_X)
+    if PROPELLER_MAX_X is None:
+        propeller, plane = None, whole_plane
+    else:
+        propeller = split(whole_plane, x0, PROPELLER_MAX_X)
+        plane = split(whole_plane, PROPELLER_MAX_X, PLANE_MAX_X)
     banner = large_components(split(group, BANNER_MIN_X, x1), 2000)
     # Everything else in the box: the two tow lines (redrawn in code so the banner can trail).
     lines = group & ~dilate(plane | banner, 1)
@@ -227,6 +231,8 @@ def prepare(stage):
 
     boxes = {}
     for name, mask in (('plane', plane), ('propeller', propeller), ('banner', banner)):
+        if mask is None:
+            continue
         rgba, (bx0, by0, bx1, by1) = layer(image, mask, 0.5)
         boxes[name] = (bx0, by0, bx1, by1)
         out = rgba.resize(
@@ -240,8 +246,9 @@ def prepare(stage):
 
     # Placements relative to the plane body's top-left (display px).
     px0, py0 = boxes['plane'][:2]
-    rx0, ry0, rx1, ry1 = boxes['propeller']
-    print(f'propeller center: ({scaled((rx0 + rx1) / 2 - px0)}, {scaled((ry0 + ry1) / 2 - py0)})')
+    if 'propeller' in boxes:
+        rx0, ry0, rx1, ry1 = boxes['propeller']
+        print(f'propeller center: ({scaled((rx0 + rx1) / 2 - px0)}, {scaled((ry0 + ry1) / 2 - py0)})')
     bx0, by0 = boxes['banner'][:2]
     print(f'banner: gap {scaled(bx0 - boxes["plane"][2])}, offsetY {scaled(by0 - py0)}')
     # Tow lines: where they leave the plane's tail.

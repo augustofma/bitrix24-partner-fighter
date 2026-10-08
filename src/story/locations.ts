@@ -99,6 +99,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     latitude: 40.4,
     longitude: -3.7,
     mapLabel: { side: 'right', dy: -11 },
+    // Fights here (Isaque's) happen at Madrid's Puerta de Alcalá.
+    stageId: 'spain',
   },
   {
     id: 'russia',

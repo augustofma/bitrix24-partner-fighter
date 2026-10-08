@@ -436,6 +436,14 @@ beira-mar olhando o pôr do sol sobre a praia e os prédios
 cadastrada para o id `romulo`; aparece quando o lutador entrar no elenco. O Romulo está à esquerda
 e o título, à direita, não o cobre.
 
+## Cenário: MADRI (Isaque Ferreira, Espanha)
+
+Arte oficial fornecida pelo dono do projeto: a Puerta de Alcalá com estandartes da Bitrix24,
+chafarizes, flores, a cúpula do Metrópolis, telão, bandeiras da Espanha e a torcida atrás das
+grades ([scripts/stage-art/spain/README.md](../scripts/stage-art/spain/README.md)). É onde se luta
+contra o Isaque na história. O avião é um jato: sem hélice (a hélice ficou opcional na animação);
+ele passa por trás do portão e da cúpula. Torcida dos dois lados do canteiro; `top` 0.
+
 ## Cenário: PORTUGAL (Filipe)
 
 Arte oficial fornecida pelo dono do projeto: o calçadão de pedra portuguesa sobre o litoral, com
@@ -632,6 +640,7 @@ registrada aqui:
 | `scripts/stage-art/bitrix24-moscow/source.png` e `public/stages/bitrix24-moscow/*`                  | Arte oficial fornecida pelo usuário; redimensionada por `prepare_bitrix24_moscow.py`            | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/castelo-branco/source.webp` e `public/stages/castelo-branco/*`                   | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_castelo_branco.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/portugal/source.webp` e `public/stages/portugal/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_portugal.py`                | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/spain/source.webp` e `public/stages/spain/*`                                     | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_spain.py`                   | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |

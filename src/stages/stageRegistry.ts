@@ -9,6 +9,7 @@ import { curitiba } from './curitiba';
 import { portugal } from './portugal';
 import { recife } from './recife';
 import { russia } from './russia';
+import { spain } from './spain';
 
 export const STAGES: readonly StageConfig[] = [
   partnerSummit,
@@ -17,6 +18,7 @@ export const STAGES: readonly StageConfig[] = [
   joinville,
   joinvilleZopu,
   russia,
+  spain,
   casteloBranco,
   curitiba,
   bitrix24Moscow,

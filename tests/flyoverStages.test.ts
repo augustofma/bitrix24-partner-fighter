@@ -40,7 +40,7 @@ const FLYOVER_STAGES = [recife, joinville, joinvilleZopu, russia] as const;
 function images(stage: StageConfig) {
   const art = stage.art!;
   const f = art.flyover!;
-  return [art.background, f.plane, f.propeller, f.banner, f.skyline];
+  return [art.background, f.plane, f.propeller!, f.banner, f.skyline];
 }
 
 function textureSize(stage: StageConfig, key: string) {
