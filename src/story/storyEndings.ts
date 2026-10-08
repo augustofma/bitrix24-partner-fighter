@@ -12,6 +12,8 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   filipe: 'story/endings/filipe.jpg',
   // João Guiotti on a balcony, watching the sunset over a riverside city.
   'joao-guiotti': 'story/endings/joao-guiotti.jpg',
+  // Isaque Ferreira on a Madrid balcony, watching the sunset over the Royal Palace and the city.
+  'isaque-ferreira': 'story/endings/isaque-ferreira.jpg',
   // Romualdo watching the sunset over Joinville, the city gate beside him.
   romualdo: 'story/endings/romualdo.jpg',
   // Aislan at the Joinville lookout, watching the sunset over the city.

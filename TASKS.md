@@ -573,6 +573,11 @@ sem pedido explícito.**
 - [x] Rômulo com 24ZAP! e MINDHUB AGENT (dados e visual dos originais, ids próprios)
 - [x] Testes de alternância, custo, CPU e playtest no navegador
 
+## DONE (final ilustrado do Isaque Ferreira, branch `feature/isaque-story-ending`)
+
+- [x] Arte oficial em 1440×810 (`prepare_isaque_ferreira_ending.py`), `isaque-ferreira` em
+      `STORY_ENDING_ART`: todo personagem da história tem final próprio; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

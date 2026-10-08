@@ -20,7 +20,7 @@ function jpegSize(file: string): [number, number] | null {
 const publicFile = (path: string) => join(__dirname, '..', 'public', path);
 
 describe('story endings', () => {
-  it.each(['augusto', 'filipe', 'joao-guiotti', 'romualdo', 'aislan', 'romulo'])(
+  it.each(['augusto', 'filipe', 'joao-guiotti', 'isaque-ferreira', 'romualdo', 'aislan', 'romulo'])(
     '%s has his own illustration, prepared at 16:9 (1440x810)',
     (fighterId) => {
       const asset = storyEndingAsset(fighterId);
@@ -34,8 +34,16 @@ describe('story endings', () => {
     },
   );
 
-  it('the other story characters keep the standard ending (victory art and card)', () => {
-    const withEnding = ['augusto', 'filipe', 'joao-guiotti', 'romualdo', 'aislan', 'romulo'];
+  it('every story character has an illustrated ending', () => {
+    const withEnding = [
+      'augusto',
+      'filipe',
+      'joao-guiotti',
+      'isaque-ferreira',
+      'romualdo',
+      'aislan',
+      'romulo',
+    ];
     for (const { fighterId } of STORY_PROFILES) {
       expect(storyEndingAsset(fighterId) !== undefined).toBe(withEnding.includes(fighterId));
     }
