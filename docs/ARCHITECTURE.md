@@ -167,7 +167,8 @@ src/
                             (stageList), janela da lista e recorte "cover"
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, StageSelectScene, VersusScene, FightScene,
-    VictoryScene
+    PauseScene (sobre a luta pausada), VictoryScene
+    assetLoading.ts       Carregamento sob demanda (fila do que falta, carga em segundo plano)
     story/                StoryMapScene, CampaignCompleteScene e storyFlow.ts (cola entre as
                           cenas e o StoryProgress no registry)
     transitions.ts        Fade entre cenas
@@ -190,10 +191,28 @@ scripts/                  Ferramentas offline de preparação de assets
 public/                   Assets estáticos; arte de lutadores em public/fighters/<id>/
 ```
 
+## Carregamento sob demanda
+
+`render/assets/sceneAssets.ts` diz o que cada momento precisa (dados puros), e as cenas pedem só
+o que ainda não está no cache (`scenes/assetLoading.ts`):
+
+- **`BootScene`** (`bootAssets`): fontes, arte do título e da vitória, retratos e emblemas dos
+  especiais, música do título e efeitos sonoros (~6 MB com a música de fundo). Sem sprite sheets,
+  arte de cenário nem finais.
+- **`VersusScene`** (`matchAssets`): as sprite sheets dos dois lutadores e a arte do cenário (no
+  Modo História também o final do jogador) baixam enquanto a tela VS aparece; se não chegaram ao
+  fim dela (ou o jogador pulou), ela espera mostrando a porcentagem.
+- **`StageSelectScene`** (`stageThumbnailAssets`): o fundo de cada cenário, na primeira vez.
+- **`FightScene`** e **`CampaignCompleteScene`**: `preload` de segurança com a barra
+  (`LoadingBar`) para o que ainda faltar.
+
+Arquivo ausente continua não sendo fatal (cada tela cai no visual procedural). Os lutadores
+`pixelArt` recebem o filtro NEAREST ao fim de cada carga (`applyPixelArtFilter`).
+
 ## Tela inicial (MenuScene)
 
 A `BootScene` carrega `TITLE_ASSETS` (fundo, logo, START, brilho e as partes que o vento move)
-junto com os assets do roster. Com todas as texturas presentes, a `MenuScene` monta a arte em
+junto com os retratos do roster. Com todas as texturas presentes, a `MenuScene` monta a arte em
 camadas, na ordem de desenho: fundo (sem logo, START, texto da dica e cabelo do João) →
 `TitleAmbience` (luzes da arena pulsando por tween e faíscas num único Graphics, posições
 calculadas pelo tempo) → `WindLayer` de cada parte (cabelo do João; gola, costas, barra e manga
@@ -212,7 +231,7 @@ as texturas, a cena usa o visual procedural anterior.
 `StageConfig` define a arena (largura, chão, paredes), que é gameplay, e opcionalmente `art`,
 que é só apresentação: imagem de fundo, `top` (Y do topo da arte), faixas do público com a
 barreira à frente e `performers` (recortes que giram em torno de um pivô, com o movimento
-`headLook` ou `handGesture`). A `BootScene` carrega `collectStageAssets(STAGES)`;
+`headLook` ou `handGesture`). A arte do cenário é carregada pela `VersusScene` antes da luta (`matchAssets`);
 `createStageView` usa a `IllustratedStageView` quando todas as texturas existem e cai no
 `StageView` procedural caso contrário.
 
@@ -380,8 +399,8 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   `VictoryScene` (que registra o resultado; registrar de novo não avança duas vezes).
 - **Final ilustrado:** `STORY_ENDING_ART` (`src/story/storyEndings.ts`) liga o id do lutador ao
   caminho da ilustração em `public/`. Fica fora dos perfis de propósito: um final pode ser
-  cadastrado antes do lutador existir (o do Romulo, `romulo`). O `BootScene` carrega só os dos
-  lutadores do `ROSTER` (`collectStoryEndingAssets`); a `CampaignCompleteScene` usa
+  cadastrado antes do lutador existir (o do Romulo, `romulo`). A `VersusScene` das lutas da
+  campanha carrega o do jogador junto com a luta (`matchAssets`); a `CampaignCompleteScene` usa
   `storyEndingAsset(id)` e, se a textura existe, troca a arte de vitória e o card pela
   ilustração. Sem a arte, o final padrão. A rota mostrada junta lugares repetidos em sequência.
 - **Chefe final:** o config real `src/fighters/dmitry.ts` está no roster com `playable: false`.

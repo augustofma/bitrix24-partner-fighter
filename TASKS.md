@@ -647,36 +647,36 @@ sem pedido explícito.**
       instalado, abre como app em tela cheia (`apple-touch-icon` 180, barra de status translúcida)
 - [ ] Testar num iPhone/iPad de verdade (aqui só emulação no Chromium; sem WebKit no ambiente)
 
+## DONE (celular mais leve e pausa, branch `feature/mobile-perf-pause`)
+
+- [x] Carregamento sob demanda: abertura de ~48 MB para ~6 MB; sprites e cenário na tela VS,
+      miniaturas na escolha de fase, final junto das lutas da campanha (`sceneAssets.ts`)
+- [x] Botões de toque e joystick como imagens tingidas de texturas geradas uma vez
+      (`TouchCircle`), sem o earcut por quadro dos `Arc` preenchidos
+- [x] Pausa na luta (`PauseScene`): ESC/P, botão II no toque e pausa automática ao sair da
+      página; CONTINUAR, REINICIAR LUTA, SAIR PARA O MENU
+
 ## NEXT (próximas tarefas recomendadas)
 
-- [ ] Carregar cenários, endings e lutadores sob demanda (hoje o boot baixa tudo, ~48 MB)
-- [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)
-
-0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
-       cada frame (~4% da CPU num celular lento, sem relação com especiais); trocar por
-       textura gerada uma vez.
-
-1. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
+1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
+2. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
+3. [ ] Galeria de finais liberados no menu.
+4. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
        (`EASY_AI`, `NORMAL_AI`, `HARD_AI`) com pessoas reais; a FÁCIL ainda pode estar difícil
        para iniciantes.
-2. [ ] Comandos de entrada diferentes por especial (hoje um botão inicia o primeiro utilizável).
-3. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
+5. [ ] 2 jogadores no mesmo aparelho e suporte a gamepad.
+6. [ ] Comandos de entrada por especial (ex.: ↓↘→ + soco), mantendo o botão de especial.
+7. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
-4. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
-5. [ ] **Pausa e opções:** pausar a luta (Esc / botão touch), reiniciar, voltar ao menu; tela de
-       remapeamento de teclas salva em `localStorage`.
-6. [ ] Tela de carregamento na `BootScene` (barra de progresso) quando houver muitos assets.
-7. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
-8. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
-9. [ ] Botão de tela cheia no mobile e teste em iOS Safari / Android Chrome reais.
-10. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
-11. [ ] CI (GitHub Actions) rodando `npm run check`.
-12. [ ] Especiais para João e Romualdo.
-13. [ ] Campanhas para João e Romualdo (hoje só rivais) e mais cidades no mapa.
-14. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-15. [ ] Cenários próprios para os outros lugares (basta `stageId` no lugar; hoje Recife e Joinville têm).
-16. [ ] Som ambiente de torcida por cenário (ainda não existe sistema de áudio de ambiente).
-17. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo).
+8. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
+9. [ ] Contador de combo e pausa de impacto nos golpes fortes.
+10. [ ] Som ambiente de torcida por cenário.
+11. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo) e
+        remapeamento de teclas salvo em `localStorage`.
+12. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
+13. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
+14. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
+15. [ ] Mais cidades no mapa do Modo História.
 
 ## FUTURE (não implementar agora)
 

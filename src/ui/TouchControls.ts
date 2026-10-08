@@ -109,6 +109,13 @@ export class TouchControls implements InputSource {
     this.jumpLatch.reset();
   }
 
+  /** Releases every button and the stick (the fight is being paused). */
+  releaseAll(): void {
+    this.release(null);
+    this.joystick.release();
+    this.latched.clear();
+  }
+
   /** Lights the ESP button while the player's special is available. Cheap to call per frame. */
   setSpecialReady(ready: boolean): void {
     if (ready === this.specialReady) return;

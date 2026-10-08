@@ -6,6 +6,7 @@ export const SceneKeys = {
   StageSelect: 'StageSelectScene',
   Versus: 'VersusScene',
   Fight: 'FightScene',
+  Pause: 'PauseScene',
   Victory: 'VictoryScene',
   StoryMap: 'StoryMapScene',
   CampaignComplete: 'CampaignCompleteScene',

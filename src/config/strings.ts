@@ -109,5 +109,12 @@ export const STRINGS = {
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:
-    '← → andar    ↑ pular    ↓ agachar    A soco    S chute    D defesa    F especial',
+    '← → andar    ↑ pular    ↓ agachar    A soco    S chute    D defesa    F especial    ESC pausa',
+  pauseTitle: 'PAUSA',
+  pauseResume: 'CONTINUAR',
+  pauseRestart: 'REINICIAR LUTA',
+  pauseQuit: 'SAIR PARA O MENU',
+  pauseHint: '↑ ↓ escolher    ENTER confirmar    ESC continuar',
+  /** Touch pause button (two bars). */
+  touchPause: 'II',
 } as const;

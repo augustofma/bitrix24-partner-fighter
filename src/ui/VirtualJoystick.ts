@@ -53,10 +53,7 @@ export class VirtualJoystick {
     const up = (pointer: Phaser.Input.Pointer) => {
       if (this.tracker.pointerUp(pointer.id)) this.update();
     };
-    const releaseAll = () => {
-      this.tracker.release();
-      this.update();
-    };
+    const releaseAll = () => this.release();
     const input = scene.input;
     input.on('pointerdown', down);
     input.on('pointermove', move);
@@ -70,6 +67,12 @@ export class VirtualJoystick {
       input.off('pointerupoutside', up);
       scene.game.events.off(Phaser.Core.Events.BLUR, releaseAll);
     });
+  }
+
+  /** Lets go of the stick (e.g. when the fight is paused: the finger's lift would be missed). */
+  release(): void {
+    this.tracker.release();
+    this.update();
   }
 
   get direction(): JoystickDirection | null {

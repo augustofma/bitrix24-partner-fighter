@@ -22,5 +22,8 @@ export const PLAYER_ONE_KEYS: KeyBindings = {
 export const MENU_CONFIRM_KEYS: readonly string[] = ['ENTER', 'SPACE'];
 export const MENU_BACK_KEYS: readonly string[] = ['ESC', 'BACKSPACE'];
 
+/** Pauses the fight (and, on the pause screen, resumes it). */
+export const PAUSE_KEYS: readonly string[] = ['ESC', 'P'];
+
 /** Toggles the hitbox/hurtbox debug overlay during a fight. */
 export const DEBUG_TOGGLE_KEY = 'F2';

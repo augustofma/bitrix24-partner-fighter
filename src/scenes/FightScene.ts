@@ -2,7 +2,7 @@ import { combatSfx } from '../audio/combatSfx';
 import { gameMusic, gameSfx } from '../audio/gameAudio';
 import { MUSIC_FADE, stageMusic } from '../config/audio';
 import Phaser from 'phaser';
-import { DEBUG_TOGGLE_KEY, PLAYER_ONE_KEYS } from '../config/controls';
+import { DEBUG_TOGGLE_KEY, PAUSE_KEYS, PLAYER_ONE_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
 import { SceneKeys } from '../config/sceneKeys';
 import { FIXED_STEP_MS, MAX_STEPS_PER_FRAME } from '../config/simulation';
@@ -34,11 +34,12 @@ import { Announcer } from '../ui/Announcer';
 import { ControlsHint } from '../ui/ControlsHint';
 import { FightHud } from '../ui/FightHud';
 import { PerfectCall } from '../ui/PerfectCall';
-import { COLORS, DEPTH, bodyText } from '../ui/theme';
+import { COLORS, DEPTH, arcadeText, bodyText } from '../ui/theme';
 import { TouchControls } from '../ui/TouchControls';
 import { readUrlFlag, shouldShowTouchControls } from '../utils/device';
 import { endMatch } from './story/storyFlow';
-import { fadeIn } from './transitions';
+import { fadeIn, isLeaving } from './transitions';
+import { TouchCircle } from '../ui/TouchCircle';
 
 /**
  * PERFECT comes this long after K.O. / TIME OVER, so both calls are read; with its ~1.6 s on
@@ -55,6 +56,8 @@ const PERFECT_DELAY_MS = 1300;
 /** Fixed controls bar at the bottom of the screen (keyboard players). */
 const CONTROLS_BAR_HEIGHT = 24;
 const CONTROLS_BAR_Y = GAME_HEIGHT - CONTROLS_BAR_HEIGHT / 2;
+/** Touch pause button: bottom center, between the stick and the action buttons. */
+const PAUSE_BUTTON = { x: GAME_WIDTH / 2, y: GAME_HEIGHT - 34, radius: 22 };
 
 export class FightScene extends Phaser.Scene {
   private setup!: MatchSetup;
@@ -121,6 +124,7 @@ export class FightScene extends Phaser.Scene {
     ];
     this.setupDebugOverlay();
     this.createControlsBar();
+    this.setupPause();
 
     this.events.once('shutdown', () => {
       this.controllers.forEach((c) => c.destroy?.());
@@ -168,6 +172,50 @@ export class FightScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(DEPTH.hud)
       .setAlpha(0.95);
+  }
+
+  /**
+   * ESC / P, the touch pause button, or leaving the page (app switch, notification, another
+   * window) freeze the fight and open the pause screen over it.
+   */
+  private setupPause(): void {
+    onKeys(this, PAUSE_KEYS, () => this.pauseFight());
+    if (this.touch) {
+      const { x, y, radius } = PAUSE_BUTTON;
+      const circle = new TouchCircle(this, x, y, radius)
+        .setFillStyle(COLORS.ink, 0.35)
+        .setStrokeStyle(2, COLORS.white, 0.6)
+        .setScrollFactor(0)
+        .setDepth(DEPTH.touch);
+      this.add
+        .text(x, y, STRINGS.touchPause, arcadeText(16, COLORS.white))
+        .setOrigin(0.5)
+        .setAlpha(0.85)
+        .setScrollFactor(0)
+        .setDepth(DEPTH.touch);
+      const hit = circle.fill;
+      hit.setInteractive(
+        new Phaser.Geom.Circle(hit.width / 2, hit.height / 2, radius + 8),
+        Phaser.Geom.Circle.Contains,
+      );
+      hit.on('pointerup', () => this.pauseFight());
+    }
+    const autoPause = () => this.pauseFight();
+    this.game.events.on(Phaser.Core.Events.BLUR, autoPause);
+    this.game.events.on(Phaser.Core.Events.HIDDEN, autoPause);
+    this.events.once('shutdown', () => {
+      this.game.events.off(Phaser.Core.Events.BLUR, autoPause);
+      this.game.events.off(Phaser.Core.Events.HIDDEN, autoPause);
+    });
+  }
+
+  private pauseFight(): void {
+    // Not while the match is already handing over to the next screen.
+    if (!this.scene.isActive() || isLeaving(this)) return;
+    // A finger lifted while paused would be missed: let go of everything first.
+    this.touch?.releaseAll();
+    this.scene.pause();
+    this.scene.launch(SceneKeys.Pause, this.setup);
   }
 
   private setupDebugOverlay(): void {

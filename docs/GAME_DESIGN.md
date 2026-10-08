@@ -71,7 +71,9 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
      É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.
 4. **Luta:** melhor de 3. No teclado, uma barra fixa no pé da tela mostra os comandos o tempo todo
    (← → andar, ↑ pular, ↓ agachar, A soco, S chute, D defesa, F especial); com controles de toque
-   ela não aparece (os botões já dizem). Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
+   ela não aparece (os botões já dizem). **Pausa:** ESC ou P (no toque, o botão II embaixo, no
+   centro) congela a luta e abre CONTINUAR / REINICIAR LUTA / SAIR PARA O MENU (no Modo História
+   sair descarta a campanha); sair da página (outro app, notificação) também pausa. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do
    vencedor, a linha "VOCÊ VENCEU!/VOCÊ PERDEU · motivo do último round · placar (ex.: 2 x 1)" e
