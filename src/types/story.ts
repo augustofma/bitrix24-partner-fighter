@@ -80,11 +80,6 @@ export interface StoryCharacterProfile {
   encounterStageId?: string;
   /** Order to meet the rivals in this fighter's campaign; default: the story roster's order. */
   opponentOrder?: readonly string[];
-  /**
-   * Illustration of this fighter's story ending (a path under public/), shown full screen when
-   * their campaign is completed. Story mode only; without it the ending uses the victory art.
-   */
-  endingArt?: string;
 }
 
 export type StoryPhase = 'travel' | 'fight' | 'complete';

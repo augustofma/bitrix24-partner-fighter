@@ -11,7 +11,6 @@ import { VICTORY_ART } from '../../render/assets/victoryAssets';
 import { storyEndingAsset } from '../../render/assets/storyEndingAssets';
 import { createPortrait } from '../../render/PortraitView';
 import { getStoryLocation, isHomeCountry, locationName } from '../../story/locations';
-import { getStoryProfile } from '../../story/storyProfiles';
 import { routeCities } from '../../story/storyProgress';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
@@ -43,7 +42,7 @@ const ENDING_SHADE = { top: 150, bottom: 210, alpha: 0.62 } as const;
  * cheer with the route flown, and JOGAR NOVAMENTE / VOLTAR AO MENU. Reuses the victory
  * screen's art and pieces (procedural fallback when the art is missing).
  *
- * A champion whose story profile has an ending illustration (`endingArt`) gets it instead of
+ * A champion with an ending illustration (STORY_ENDING_ART) gets it instead of
  * the victory art and the card: full screen, slowly zooming, shown alone for a moment before
  * the title, the cheer and the buttons fade in over darkened bands.
  */
@@ -62,7 +61,7 @@ export class CampaignCompleteScene extends Phaser.Scene {
     }
     const champion = getFighterConfig(progress.selectedFighter);
     const hasArt = Object.values(VICTORY_ART).every(({ key }) => this.textures.exists(key));
-    const endingKey = storyEndingAsset(getStoryProfile(champion.id))?.key;
+    const endingKey = storyEndingAsset(champion.id)?.key;
     const ending = endingKey !== undefined && this.textures.exists(endingKey);
 
     if (ending) {

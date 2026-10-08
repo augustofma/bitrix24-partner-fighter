@@ -8,7 +8,6 @@ import {
 } from '../render/assets/fighterAssets';
 import { collectStageAssets } from '../render/assets/stageAssets';
 import { collectStoryEndingAssets } from '../render/assets/storyEndingAssets';
-import { STORY_PROFILES } from '../story/storyProfiles';
 import { TITLE_ASSETS } from '../render/assets/titleAssets';
 import { BOOT_AUDIO_ASSETS } from '../render/assets/audioAssets';
 import { FONT_ASSETS } from '../render/assets/fontAssets';
@@ -37,7 +36,7 @@ export class BootScene extends Phaser.Scene {
       ...VICTORY_ASSETS,
       ...collectStageAssets(STAGES),
       ...collectFighterAssets(ROSTER),
-      ...collectStoryEndingAssets(STORY_PROFILES),
+      ...collectStoryEndingAssets(ROSTER.map((fighter) => fighter.id)),
     ];
     for (const asset of assets) queueAsset(this, asset);
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {

@@ -7,7 +7,7 @@ pôr do sol no Marco Zero do Recife, de volta para casa depois da campanha.
 `public/story/endings/augusto.jpg` (1440×810, 1,5× a tela de 960×540, para ficar nítida em telas
 grandes e aguentar o zoom lento do final).
 
-A arte entra pelo perfil de história (`endingArt` em `src/story/storyProfiles.ts`) e só aparece
+A arte é ligada ao lutador em `STORY_ENDING_ART` (`src/story/storyEndings.ts`) e só aparece
 na `CampaignCompleteScene`, ao zerar o Modo História com o Augusto. Título, rota e botões são
 desenhados por cima, em código.
 

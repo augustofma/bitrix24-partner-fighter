@@ -374,9 +374,11 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
 - **Fim da partida:** a `FightScene` entrega o resultado a `endMatch` (`storyFlow.ts`): a vitória
   que conclui a campanha é registrada ali e vai direto à `CampaignCompleteScene`; o resto vai à
   `VictoryScene` (que registra o resultado; registrar de novo não avança duas vezes).
-- **Final ilustrado:** `endingArt` opcional no perfil (caminho em `public/`). O `BootScene`
-  carrega todos com `collectStoryEndingAssets(STORY_PROFILES)`; a `CampaignCompleteScene` usa
-  `storyEndingAsset(perfil)` e, se a textura existe, troca a arte de vitória e o card pela
+- **Final ilustrado:** `STORY_ENDING_ART` (`src/story/storyEndings.ts`) liga o id do lutador ao
+  caminho da ilustração em `public/`. Fica fora dos perfis de propósito: um final pode ser
+  cadastrado antes do lutador existir (o do Romulo, `romulo`). O `BootScene` carrega só os dos
+  lutadores do `ROSTER` (`collectStoryEndingAssets`); a `CampaignCompleteScene` usa
+  `storyEndingAsset(id)` e, se a textura existe, troca a arte de vitória e o card pela
   ilustração. Sem a arte, o final padrão. A rota mostrada junta lugares repetidos em sequência.
 - **Chefe final:** o config real `src/fighters/dmitry.ts` está no roster com `playable: false`.
   `isFinalBossEncounter(leg)` compara o encontro à configuração e fornece às cenas de mapa/VS

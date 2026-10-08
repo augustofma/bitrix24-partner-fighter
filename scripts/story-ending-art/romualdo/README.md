@@ -6,7 +6,7 @@ mirante olhando o pôr do sol sobre Joinville, com o pórtico da cidade à direi
 `prepare_romualdo_ending.py` faz o mesmo preparo do final do Augusto (recorte 16:9 centralizado)
 e gera `public/story/endings/romualdo.jpg` (1440×810).
 
-A arte entra pelo perfil de história (`endingArt` em `src/story/storyProfiles.ts`) e só aparece
+A arte é ligada ao lutador em `STORY_ENDING_ART` (`src/story/storyEndings.ts`) e só aparece
 na `CampaignCompleteScene`, ao zerar o Modo História com o Romualdo.
 
 Uso (ferramenta offline, fora do build; requer Python 3 e Pillow):

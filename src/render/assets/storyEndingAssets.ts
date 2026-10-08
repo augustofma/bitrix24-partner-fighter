@@ -1,4 +1,4 @@
-import type { StoryCharacterProfile } from '../../types/story';
+import { STORY_ENDING_ART } from '../../story/storyEndings';
 import type { AssetRequest } from './fighterAssets';
 
 /** Texture key of a story ending illustration (from its path, so it is unique). */
@@ -6,21 +6,24 @@ export function storyEndingTextureKey(path: string): string {
   return `story-ending:${path}`;
 }
 
-/** The ending illustration of a story profile, if it has one. */
+/** The ending illustration of a fighter, if one is registered (STORY_ENDING_ART). */
 export function storyEndingAsset(
-  profile: StoryCharacterProfile | undefined,
+  fighterId: string,
+  endings: Readonly<Record<string, string>> = STORY_ENDING_ART,
 ): AssetRequest | undefined {
-  if (!profile?.endingArt) return undefined;
-  return { type: 'image', key: storyEndingTextureKey(profile.endingArt), path: profile.endingArt };
+  const path = endings[fighterId];
+  if (!path) return undefined;
+  return { type: 'image', key: storyEndingTextureKey(path), path };
 }
 
-/** Every ending illustration declared by the story profiles, without duplicates. */
+/** The ending illustrations of these fighters (those that have one), without duplicates. */
 export function collectStoryEndingAssets(
-  profiles: readonly StoryCharacterProfile[],
+  fighterIds: readonly string[],
+  endings: Readonly<Record<string, string>> = STORY_ENDING_ART,
 ): AssetRequest[] {
   const requests = new Map<string, AssetRequest>();
-  for (const profile of profiles) {
-    const asset = storyEndingAsset(profile);
+  for (const id of fighterIds) {
+    const asset = storyEndingAsset(id, endings);
     if (asset && !requests.has(asset.key)) requests.set(asset.key, asset);
   }
   return [...requests.values()];

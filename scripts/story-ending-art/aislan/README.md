@@ -10,7 +10,7 @@ corte começa `CROP_TOP` (100 px) abaixo do topo, mantendo a cabeça e um pouco 
 título fica à direita da cabeça) e deixando de fora a parte de baixo das pernas, que ficaria
 atrás do painel e dos botões de qualquer forma.
 
-A arte entra pelo perfil de história (`endingArt` em `src/story/storyProfiles.ts`) e só aparece
+A arte é ligada ao lutador em `STORY_ENDING_ART` (`src/story/storyEndings.ts`) e só aparece
 na `CampaignCompleteScene`, ao zerar o Modo História com o Aislan.
 
 Uso (ferramenta offline, fora do build; requer Python 3 e Pillow):

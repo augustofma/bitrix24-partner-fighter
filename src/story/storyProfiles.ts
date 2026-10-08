@@ -22,8 +22,7 @@ import { getStoryLocation, stageIdForLocation } from './locations';
  * it playable in story mode and a rival in the other campaigns.
  */
 export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
-  // Ending: Augusto watching the sunset on the Recife waterfront, back home.
-  { fighterId: 'augusto', home: 'recife', endingArt: 'story/endings/augusto.jpg' },
+  { fighterId: 'augusto', home: 'recife' },
   // Filipe is from Recife, but in the story he is in Portugal.
   { fighterId: 'filipe', home: 'recife', encounter: 'portugal' },
   // João Guiotti is from São Paulo, but in the story he is in Russia.
@@ -36,16 +35,9 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   },
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
-  // Ending: Romualdo watching the sunset over Joinville, the city gate beside him.
-  { fighterId: 'romualdo', home: 'joinville', endingArt: 'story/endings/romualdo.jpg' },
+  { fighterId: 'romualdo', home: 'joinville' },
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
-  {
-    fighterId: 'aislan',
-    encounter: 'joinville',
-    encounterStageId: 'joinville-zopu',
-    // Ending: Aislan at the Joinville lookout, watching the sunset over the city.
-    endingArt: 'story/endings/aislan.jpg',
-  },
+  { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
 ];
 
 /**

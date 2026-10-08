@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { ROSTER } from '../src/fighters/roster';
 import { collectStoryEndingAssets, storyEndingAsset } from '../src/render/assets/storyEndingAssets';
-import { STORY_PROFILES, getStoryProfile } from '../src/story/storyProfiles';
+import { STORY_ENDING_ART } from '../src/story/storyEndings';
+import { STORY_PROFILES } from '../src/story/storyProfiles';
 
 /** Width and height of a JPEG, from its SOF0/SOF2 frame. */
 function jpegSize(file: string): [number, number] | null {
@@ -15,38 +17,50 @@ function jpegSize(file: string): [number, number] | null {
   return null;
 }
 
+const publicFile = (path: string) => join(__dirname, '..', 'public', path);
+
 describe('story endings', () => {
-  it('Augusto has his ending illustration, prepared at 16:9', () => {
-    const asset = storyEndingAsset(getStoryProfile('augusto'));
-    expect(asset).toEqual({
-      type: 'image',
-      key: 'story-ending:story/endings/augusto.jpg',
-      path: 'story/endings/augusto.jpg',
-    });
-    const file = join(__dirname, '..', 'public', asset!.path);
-    expect(existsSync(file)).toBe(true);
-    expect(jpegSize(file)).toEqual([1440, 810]);
-  });
+  it.each(['augusto', 'romualdo', 'aislan', 'romulo'])(
+    '%s has his own illustration, prepared at 16:9 (1440x810)',
+    (fighterId) => {
+      const asset = storyEndingAsset(fighterId);
+      expect(asset).toEqual({
+        type: 'image',
+        key: `story-ending:story/endings/${fighterId}.jpg`,
+        path: `story/endings/${fighterId}.jpg`,
+      });
+      expect(existsSync(publicFile(asset!.path))).toBe(true);
+      expect(jpegSize(publicFile(asset!.path))).toEqual([1440, 810]);
+    },
+  );
 
-  it.each(['romualdo', 'aislan'])('%s has his own illustration too, at 16:9', (fighterId) => {
-    const asset = storyEndingAsset(getStoryProfile(fighterId));
-    expect(asset?.path).toBe(`story/endings/${fighterId}.jpg`);
-    expect(jpegSize(join(__dirname, '..', 'public', asset!.path))).toEqual([1440, 810]);
-  });
-
-  it('only Augusto, Romualdo and Aislan for now: the others keep the victory art ending', () => {
+  it('the other story characters keep the standard ending (victory art and card)', () => {
     const withEnding = ['augusto', 'romualdo', 'aislan'];
-    for (const profile of STORY_PROFILES) {
-      expect(storyEndingAsset(profile) !== undefined).toBe(withEnding.includes(profile.fighterId));
+    for (const { fighterId } of STORY_PROFILES) {
+      expect(storyEndingAsset(fighterId) !== undefined).toBe(withEnding.includes(fighterId));
     }
-    expect(storyEndingAsset(undefined)).toBeUndefined();
+    expect(storyEndingAsset('nobody')).toBeUndefined();
   });
 
-  it('every declared ending is loaded once, and its file exists', () => {
-    const assets = collectStoryEndingAssets([...STORY_PROFILES, ...STORY_PROFILES]);
-    expect(assets).toHaveLength(STORY_PROFILES.filter((p) => p.endingArt).length);
-    for (const asset of assets) {
-      expect(existsSync(join(__dirname, '..', 'public', asset.path))).toBe(true);
+  it('only fighters in the roster have their ending loaded, each once', () => {
+    const ids = ROSTER.map((fighter) => fighter.id);
+    const assets = collectStoryEndingAssets([...ids, ...ids]);
+    const expected = Object.keys(STORY_ENDING_ART).filter((id) => ids.includes(id));
+    expect(assets.map((a) => a.path).sort()).toEqual(
+      expected.map((id) => STORY_ENDING_ART[id]!).sort(),
+    );
+  });
+
+  it('an ending registered ahead of its fighter (Romulo) is picked up once he joins', () => {
+    // Without him in the roster his art is not loaded...
+    if (!ROSTER.some((f) => f.id === 'romulo')) {
+      expect(collectStoryEndingAssets(ROSTER.map((f) => f.id)).map((a) => a.path)).not.toContain(
+        'story/endings/romulo.jpg',
+      );
     }
+    // ...and as soon as a fighter with that id is in it, it is.
+    expect(collectStoryEndingAssets(['romulo']).map((a) => a.path)).toEqual([
+      'story/endings/romulo.jpg',
+    ]);
   });
 });

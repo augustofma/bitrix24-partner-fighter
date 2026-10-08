@@ -524,6 +524,13 @@ sem pedido explícito.**
       `endingArt` no perfil do Aislan
 - [x] Testes do asset; playtest desktop e mobile
 
+## DONE (final do Romulo e seleção para mais três, branch `feature/romulo-ending-roster`)
+
+- [x] Finais em `STORY_ENDING_ART` (por id, fora dos perfis): o do Romulo (`romulo`) já
+      cadastrado, carregado e mostrado quando ele entrar no roster
+- [x] Seleção conferida com 9 jogáveis (atual + Romulo, Gabriel Mattozo e Danilo, só no teste):
+      grade 5 × 2 numa página, nomes longos em duas linhas, VS e HUD sem corte
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
