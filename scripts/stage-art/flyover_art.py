@@ -56,6 +56,10 @@ class FlyoverStage:
     plane_max_y: Optional[int] = None
     # (label, (x0, y0, x1, y1)) source boxes printed at display scale for the crowd config.
     crowd_boxes: tuple = field(default_factory=tuple)
+    # Source boxes cleared from the sky whatever their colour: e.g. tow lines drawn in a blue
+    # the sky mask takes for sky. Keep them between plane_max_x and banner_min_x: they are only
+    # removed from the background (the lines are redrawn in code), never part of a layer.
+    clear_boxes: tuple = field(default_factory=tuple)
 
 
 def hsv(image):
@@ -170,6 +174,8 @@ def prepare(stage):
         sky |= stage.extra_sky(image)
     group[y0:y1, x0:x1] = ~sky[y0:y1, x0:x1]
     group = fill_holes(group, SKY_BOX)
+    for cx0, cy0, cx1, cy1 in stage.clear_boxes:
+        group[cy0:cy1, cx0:cx1] = True
     if stage.tail_min_x is not None:
         tail = stage.tail_min_x
         group[:, tail:] &= stage.tail_mask(image)[:, tail:]
