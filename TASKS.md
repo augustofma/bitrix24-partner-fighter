@@ -613,6 +613,13 @@ sem pedido explícito.**
 - [x] Cenário `spain` no lugar Espanha (luta do Isaque) e na seleção (10 fases, sem rolagem)
 - [x] Testes atualizados; playtest da luta e do voo
 
+## DONE (especial N8N! do Gabriel Mattozo, branch `feature/gabriel-n8n-special`)
+
+- [x] `gabriel-mattozo.n8n`: custo 30, chão, mid, 16 de dano, alcance 176
+- [x] Tema de VFX `workflowNodes` (nós, conexões curvas, pacotes, check de executado) e som
+      `special-n8n`
+- [x] Testes de configuração, acerto, defesa, alcance e VFX; playtest no navegador
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)

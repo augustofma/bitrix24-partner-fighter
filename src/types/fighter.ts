@@ -161,12 +161,20 @@ export interface FighterAssetManifest {
  *   blocks, a workflow of nodes, an amber beam and a starburst.
  * - `liquidFlow`: purple liquid look (FLUIDZ!): a wobbling blob, a rippling stream with a wave
  *   crest, a splash crown of drops with gravity and a puddle.
+ * - `workflowNodes`: automation look (N8N!): workflow nodes popping in, curved connections
+ *   with data packets racing to the rival, and an "executed" check burst.
  * - `skyLightning`: a boss storm (ALAIO STRIKE!): a storm cloud over the whole
  *   screen and lightning bolts from it to the floor across the stage, a bolt onto the victim.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
 export type SpecialEffectStyle =
-  'zapMessages' | 'mindNetwork' | 'vibeCode' | 'agentBuilder' | 'liquidFlow' | 'skyLightning';
+  | 'zapMessages'
+  | 'mindNetwork'
+  | 'vibeCode'
+  | 'agentBuilder'
+  | 'liquidFlow'
+  | 'skyLightning'
+  | 'workflowNodes';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

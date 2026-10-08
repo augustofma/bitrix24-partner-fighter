@@ -359,6 +359,19 @@ def sfx_special_alaio_strike(rng):
     return mix(gather, at(crackle, 0.02), at(zzzt, 0.08), at(clap, 0.4), at(boom, 0.4), at(roll, 0.44))
 
 
+
+def sfx_special_n8n(rng):
+    """N8N!: a workflow runs: quick digital "blips" as the nodes pop in (rising), a whoosh of
+    data along the connections, then a bright two-note "success" chime and a punchy hit."""
+    blips = mix(*[at(note(660 + 140 * i, 0.05, "square", 40) * 0.28, 0.02 + i * 0.05) for i in range(4)])
+    flow_len = 0.18
+    flow = bandpass(rng.uniform(-1, 1, int(flow_len * SR)), 1500, 6000) * np.linspace(0.1, 0.8, int(flow_len * SR)) * 0.4
+    chime = mix(note(1319, 0.09, "sine", 14) * 0.35, at(note(1760, 0.16, "sine", 10) * 0.35, 0.07))
+    hit = np.sin(sweep(200, 60, 0.22)) * decay(0.22, 12) * 0.9
+    click = highpass(rng.uniform(-1, 1, int(0.03 * SR)), 3000) * decay(0.03, 90) * 0.4
+    return mix(blips, at(flow, 0.2), at(chime, 0.36), at(hit, 0.36), at(click, 0.36))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -386,6 +399,7 @@ EFFECTS = {
     "special-gpt": sfx_special_gpt,
     "special-fluidz": sfx_special_fluidz,
     "special-alaio-strike": sfx_special_alaio_strike,
+    "special-n8n": sfx_special_n8n,
 }
 
 

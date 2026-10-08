@@ -41,7 +41,8 @@ export type SfxId =
   | 'special-vibe'
   | 'special-gpt'
   | 'special-fluidz'
-  | 'special-alaio-strike';
+  | 'special-alaio-strike'
+  | 'special-n8n';
 
 export interface SfxConfig {
   id: SfxId;

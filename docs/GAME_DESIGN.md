@@ -474,6 +474,11 @@ Filipe (mesmos dados, custo e visual). Cada aperto de F / ESP solta o outro: 24Z
 o botão nunca falhar. A regra é genérica (`specialForPress` com a vez do lutador): qualquer lutador
 com mais de um especial alterna; a CPU segue a mesma vez.
 
+**N8N! (Gabriel Mattozo):** um fluxo de automação disparado no rival. Custo 30, somente no chão,
+nível `mid`, dano 16, chip 2, startup 12 / ativo 7 / recovery 22, hitstun 22, blockstun 14,
+knockback 8 e hitstop 11. Hitbox (30, -132, 146, 70): alcance de 176 px. Bloqueado, deixa o
+Gabriel em desvantagem (22 de recovery contra 14 de blockstun).
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -518,6 +523,12 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   raio cai em cima do rival, com explosão elétrica e faíscas (na defesa: um estalo menor na
   guarda); depois a nuvem vai embora e sobe fumaça. Som: tempestade, chiado "zzzt", trovão e
   estrondo longo.
+- **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
+  frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
+  disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por
+  elas; no acerto, "executado": anel coral, um nó grande com check verde, nós menores e pacotes se
+  espalhando (na defesa: menor); depois as conexões somem e os nós encolhem. Som: blips digitais,
+  fluxo de dados, acorde de sucesso e impacto.
 - **FLUIDZ! (Aislan), líquido roxo da Fluidz:** na carga, o líquido se junta à frente do corpo
   numa bolha roxa que balança, gotas são puxadas para ela, bolhas sobem e uma gota pinga; no disparo, um
   jato grosso e ondulante sai da mão até o fim do alcance, com reflexos brilhantes correndo nele,

@@ -10,6 +10,7 @@ import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
+import { WORKFLOW_THEME } from './workflowTheme';
 import { ZAP_THEME } from './zapTheme';
 
 const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
@@ -19,6 +20,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   agentBuilder: AGENT_THEME,
   liquidFlow: FLUID_THEME,
   skyLightning: LIGHTNING_THEME,
+  workflowNodes: WORKFLOW_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;

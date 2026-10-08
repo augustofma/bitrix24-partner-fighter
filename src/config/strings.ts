@@ -99,5 +99,6 @@ export const STRINGS = {
   specialGptMaker: 'GPTMAKER!',
   specialFluidz: 'FLUIDZ!',
   specialAlaioStrike: 'ALAIO STRIKE!',
+  specialN8n: 'N8N!',
   debugHint: 'F2: hitboxes',
 } as const;

@@ -40,6 +40,7 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-gpt`          | GPTMAKER! começa (Romualdo)             | Blocos encaixando, servo, bipe-bupe, raio                        | 0,85   |
 | `special-fluidz`       | FLUIDZ! começa (Aislan)                 | Bolhas, jorro borbulhante, splash molhado                        | 0,85   |
 | `special-alaio-strike` | ALAIO STRIKE! começa (Dmitry)           | Tempestade se formando, chiado elétrico, trovão e estrondo longo | 0,9    |
+| `special-n8n`          | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
 | `victory`              | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
 
 Licença: original do projeto (mesma licença do repositório).

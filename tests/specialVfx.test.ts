@@ -14,6 +14,7 @@ import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
 import { aislan } from '../src/fighters/aislan';
 import { dmitry } from '../src/fighters/dmitry';
+import { gabrielMattozo } from '../src/fighters/gabrielMattozo';
 import { collectFighterAssets, vfxTextureKey } from '../src/render/assets/fighterAssets';
 import { SpecialEffects } from '../src/render/special/SpecialEffects';
 import { partnerArena } from '../src/stages/partnerArena';
@@ -172,6 +173,31 @@ describe('app-themed special VFX: timing and cleanup', () => {
     expect(combatSfx(start, sim.fighters)).toEqual(['special-alaio-strike']);
     let sawImpact = false;
     for (let frames = 0; frames < 140; frames++) {
+      for (const event of sim.step([idle(), idle()])) {
+        if (event.type === 'hit' || event.type === 'koHit') {
+          effects.impact(event, sim.fighters[event.attackerIndex]);
+          sawImpact = true;
+        }
+      }
+      time.now += 1000 / 60;
+      effects.sync(sim.fighters);
+    }
+    expect(sawImpact).toBe(true);
+    expect(sim.fighters[0].state).not.toBe('special');
+    expect({ ...created, images: created.images.length }).toEqual(objectsAfterSetup);
+  });
+
+  it('Gabriel Mattozo N8N!: hits, plays its sound, impact shown, creates nothing', () => {
+    const { scene, created, time } = fakeScene();
+    const effects = new SpecialEffects(scene);
+    const objectsAfterSetup = { ...created, images: created.images.length };
+    const sim = specialFight(gabrielMattozo, 150);
+    const start = stepFrames(sim, 1, press({ special: true })).find(
+      (e) => e.type === 'specialStart',
+    ) as SimulationEvent;
+    expect(combatSfx(start, sim.fighters)).toEqual(['special-n8n']);
+    let sawImpact = false;
+    for (let frames = 0; frames < 120; frames++) {
       for (const event of sim.step([idle(), idle()])) {
         if (event.type === 'hit' || event.type === 'koHit') {
           effects.impact(event, sim.fighters[event.attackerIndex]);

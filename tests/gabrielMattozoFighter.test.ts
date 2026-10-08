@@ -13,7 +13,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Gabriel Mattozo fighter integration', () => {
-  it('has unique ids, a balanced standard-body profile and no exclusive special', () => {
+  it('has unique ids, a balanced standard-body profile and the N8N! special', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(gabrielMattozo.stats).toEqual({
       maxHealth: 100,
@@ -22,7 +22,7 @@ describe('Gabriel Mattozo fighter integration', () => {
       jumpForce: 16.8,
       jumpHorizontalSpeed: 4.1,
     });
-    expect(gabrielMattozo.specials).toEqual([]);
+    expect(gabrielMattozo.specials.map((s) => s.id)).toEqual(['gabriel-mattozo.n8n']);
     expect(Object.values(gabrielMattozo.attacks).map((a) => a.damage)).toEqual([6, 10, 5, 9, 6, 9]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

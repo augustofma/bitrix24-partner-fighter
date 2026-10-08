@@ -717,6 +717,9 @@ como imagem lisa.
   quadrado roxo cortado pela faixa diagonal escura, reduzido à grade de 48 px com cantos em
   degrau e contorno escuro (sem o nome "fluidz").
 
+- **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
+  borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
+  fluxo (nós, conexões e pacotes), sem logo de produto.
 - **ALAIO STRIKE!:** raios ciano (#7DF9FF) com miolo branco e faíscas amarelas (#FFF27A),
   nuvem roxo-acinzentada (#2B2440, #4B4170, borda #8A7FC0) e escurecimento azul-noite. Raios em
   zigue-zague (segmentos com galhos curtos), nuvem de "puffs" em pixel, sem rosto. É o único efeito que ocupa o estágio inteiro: usa a área visível da câmera, não o

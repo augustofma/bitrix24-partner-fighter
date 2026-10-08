@@ -106,6 +106,8 @@ Arte própria com óculos pretos, hoodie bege, jeans escuro e tênis branco. Atl
 É de **Curitiba - PR**: na história a campanha dele começa lá e as outras o enfrentam lá, no
 cenário próprio **CURITIBA** (o Jardim Botânico, com a estufa, torcida e o avião da faixa "GMC";
 [arte e preparo](scripts/stage-art/curitiba/README.md)).
+Especial **N8N!** (F / ESP, custo 30, só no chão): um fluxo de automação disparado no rival, com
+nós, conexões e pacotes de dados até o alvo.
 
 ## RÔMULO — ARRECIFE DIGITAL
 

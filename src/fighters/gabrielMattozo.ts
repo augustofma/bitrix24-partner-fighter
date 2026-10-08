@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -120,9 +121,42 @@ export const gabrielMattozo: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // N8N!: he fires an automation workflow at the rival: nodes, connections and data packets
+      // racing to the target. Quick fighter, quick special: fast start, moderate damage.
+      id: 'gabriel-mattozo.n8n',
+      displayName: STRINGS.specialN8n,
+      state: 'special',
+      level: 'mid',
+      meterCost: 30,
+      groundOnly: true,
+      // He keeps his feet planted while the flow runs.
+      advanceSpeed: 0,
+      damage: 16,
+      chipDamage: 2,
+      startupFrames: 12,
+      activeFrames: 7,
+      // Punishable when blocked (22 recovery against 14 blockstun).
+      recoveryFrames: 22,
+      // Long reach (the whole workflow): 176 px; his kick: ~100.
+      hitbox: { x: 30, y: -132, width: 146, height: 70 },
+      hitstunFrames: 22,
+      blockstunFrames: 14,
+      knockback: 8,
+      blockPushback: 5.5,
+      hitstopFrames: 11,
+    },
+  ],
   palette: { body: 0xd9c8aa, accent: 0x4f88c6, skin: 0xd49a73, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'gabriel-mattozo.n8n': {
+        style: 'workflowNodes',
+        label: STRINGS.specialN8n,
+        sound: 'special-n8n',
+      },
+    },
     portrait: 'fighters/gabriel-mattozo/portrait.png',
     pixelArt: true,
     sprite: {
@@ -150,6 +184,8 @@ export const gabrielMattozo: FighterConfig = {
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
         victory: { frames: [39] },
+        // N8N!: the punch's poses (hand forward), one per phase.
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
       },
     },
   },
