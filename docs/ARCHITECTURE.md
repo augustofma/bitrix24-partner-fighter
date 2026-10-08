@@ -675,7 +675,8 @@ adversário; a correção acontece no primeiro frame livre após o landing.
 `Trip.requiresFlight` compara os IDs dos lugares de partida e destino. A `StoryMapScene`
 apresenta diretamente o desafio quando forem iguais, sem criar avião ou tween de voo.
 O progresso continua usando as mesmas funções de chegada, luta e retry. Aislan usa
-`encounter: joinville` e `encounterStageId: joinville`, após Romualdo na ordem de perfis.
+`encounter: joinville` e `encounterStageId: joinville-zopu` (o pórtico com a arte da ZOPU), após
+Romualdo na ordem de perfis.
 Não há alias de personagem: o stage do encounter pode mudar independentemente do lugar.
 
 ## CPU (AIController)

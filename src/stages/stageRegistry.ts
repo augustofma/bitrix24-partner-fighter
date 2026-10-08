@@ -2,6 +2,7 @@ import type { StageConfig } from '../types/stage';
 import { partnerArena } from './partnerArena';
 import { partnerSummit } from './partnerSummit';
 import { joinville } from './joinville';
+import { joinvilleZopu } from './joinvilleZopu';
 import { recife } from './recife';
 import { russia } from './russia';
 
@@ -9,6 +10,7 @@ export const STAGES: readonly StageConfig[] = [
   partnerSummit,
   recife,
   joinville,
+  joinvilleZopu,
   russia,
   partnerArena,
 ];

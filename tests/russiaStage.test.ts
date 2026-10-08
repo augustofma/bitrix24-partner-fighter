@@ -69,7 +69,8 @@ describe('RUSSIA stage, chosen by João Guiotti’s encounter', () => {
 
   it('other encounters keep their stages', () => {
     for (const leg of storyRouteFor('joao-guiotti')!) {
-      expect(legStageId(leg)).toBe(stageIdForLocation(leg.destination));
+      // Only an encounter with its own arena (Aislan's ZOPU Joinville) overrides the place's.
+      expect(legStageId(leg)).toBe(leg.stageId ?? stageIdForLocation(leg.destination));
     }
     expect(legStageId(rivalLeg('augusto'))).toBe('recife');
     expect(legStageId(rivalLeg('romualdo'))).toBe('joinville');

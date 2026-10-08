@@ -382,6 +382,11 @@ laranja "CRMThink". É a cidade do Romualdo. A composição não foi redesenhada
 ([scripts/stage-art/joinville/README.md](../scripts/stage-art/joinville/README.md)) usa as mesmas
 ferramentas do Recife (`scripts/stage-art/flyover_art.py`).
 
+A luta do Aislan em Joinville usa a versão ZOPU da mesma arte (`joinville-zopu`): bandeirinhas,
+banners e floreiras verdes da ZOPU e a faixa branca "zopu" no avião. Mesma composição, então
+reaproveita a torcida, as grades e o voo do Joinville; só as imagens e os encaixes do avião
+mudam ([scripts/stage-art/joinville-zopu/README.md](../scripts/stage-art/joinville-zopu/README.md)).
+
 - Mesmo enquadramento dos outros cenários; `top` −50 põe os pés no calçamento da praça, à
   frente dos canteiros e das grades.
 - **Torcida:** igual à do Recife: colunas de ~20 px em grupos (loops, ritmos, alturas e
@@ -519,6 +524,7 @@ registrada aqui:
 | `public/fighters/filipe/*.png` e `scripts/filipe-art/*.png`                       | ImageGen integrado, referências e geração autorizadas pelo usuário; montagem local           | Arte original gerada para o projeto; sem assets de terceiros      |
 | `scripts/stage-art/russia/source.png` e `public/stages/russia/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_russia.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/joinville/source.png` e `public/stages/joinville/*`            | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_joinville.py` | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/joinville-zopu/source.png` e `public/stages/joinville-zopu/*`  | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_joinville_zopu.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                  | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*` | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/victory-art/source.png` e `public/ui/victory/*`                          | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_victory_art.py`       | Arte do projeto, aprovada pelo usuário                            |

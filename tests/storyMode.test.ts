@@ -98,7 +98,7 @@ describe('campaigns', () => {
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
-      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville' },
+      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
     ]);
     expect(routeCities('augusto')).toEqual([
       'recife',
@@ -116,7 +116,7 @@ describe('campaigns', () => {
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
-      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville' },
+      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
     ]);
     expect(routeCities('filipe')).toEqual([
       'portugal',

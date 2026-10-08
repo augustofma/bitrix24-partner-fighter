@@ -30,8 +30,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
   { fighterId: 'romualdo', home: 'joinville' },
-  // Shared location and current arena, independently configurable for a future stage.
-  { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville' },
+  // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
+  { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
 ];
 
 export function getStoryProfile(fighterId: string): StoryCharacterProfile | undefined {

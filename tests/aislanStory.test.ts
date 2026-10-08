@@ -29,15 +29,15 @@ describe('Aislan shared location, independent encounter', () => {
     expect(JSON.stringify(requests)).toContain('fighters/aislan/sprite.png');
     expect(JSON.stringify(requests)).toContain('fighters/aislan/portrait.png');
   });
-  it('uses the existing Joinville location and arena without a fighter alias', () => {
+  it('shares the Joinville location but fights in the ZOPU Joinville; Romualdo keeps his', () => {
     expect(STORY_LOCATIONS.filter((l) => l.id === 'joinville')).toHaveLength(1);
     expect(rivalLeg('aislan')).toEqual({
       opponent: 'aislan',
       destination: 'joinville',
-      stageId: 'joinville',
+      stageId: 'joinville-zopu',
     });
     expect(legStageId(rivalLeg('romualdo'))).toBe('joinville');
-    expect(legStageId(rivalLeg('aislan'))).toBe('joinville');
+    expect(legStageId(rivalLeg('aislan'))).toBe('joinville-zopu');
     // An encounter override affects only this leg, not the shared location or the other rival.
     expect(legStageId({ ...rivalLeg('aislan'), stageId: 'partner-summit' })).toBe('partner-summit');
     expect(legStageId(rivalLeg('romualdo'))).toBe('joinville');
@@ -50,14 +50,22 @@ describe('Aislan shared location, independent encounter', () => {
       expect(route.at(-1)?.opponent).toBe('aislan');
     },
   );
-  it('loads one shared set of stage images for both encounters', () => {
-    const first = getStageConfig(legStageId(rivalLeg('romualdo')));
-    const second = getStageConfig(legStageId(rivalLeg('aislan')));
-    expect(second).toBe(first);
-    expect(collectStageAssets([first, second])).toEqual(collectStageAssets([first]));
-    expect(collectStageAssets([second]).every((asset) => !asset.path.includes('aislan'))).toBe(
+  it('each encounter loads its own Joinville art, with no texture key shared', () => {
+    const romualdoStage = getStageConfig(legStageId(rivalLeg('romualdo')));
+    const aislanStage = getStageConfig(legStageId(rivalLeg('aislan')));
+    expect(aislanStage).not.toBe(romualdoStage);
+    const romualdoKeys = collectStageAssets([romualdoStage]).map((asset) => asset.key);
+    const aislanAssets = collectStageAssets([aislanStage]);
+    expect(aislanAssets.every((asset) => asset.path.startsWith('stages/joinville-zopu/'))).toBe(
       true,
     );
+    expect(aislanAssets.some((asset) => romualdoKeys.includes(asset.key))).toBe(false);
+    // Same arena: only the art differs.
+    expect(aislanStage).toMatchObject({
+      width: romualdoStage.width,
+      groundY: romualdoStage.groundY,
+      wallMargin: romualdoStage.wallMargin,
+    });
   });
   it('presents the local challenge after Romualdo without a flight', () => {
     const progress = reachAislan();
@@ -69,7 +77,7 @@ describe('Aislan shared location, independent encounter', () => {
     expect(tripForProgress(progress, STORY_MAP_LAYOUT.maps)?.requiresFlight).toBe(false);
     expect(storyMatchSetup(arriveForFight(progress), 'normal')).toMatchObject({
       cpuFighterId: 'aislan',
-      stageId: 'joinville',
+      stageId: 'joinville-zopu',
       mode: 'story',
     });
   });

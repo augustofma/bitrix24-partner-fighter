@@ -429,6 +429,13 @@ sem pedido explícito.**
 - [x] Transição local genérica sem voo e testes de assets, CPU, rotas e retry
 - [x] Playtest F2/teclado, cinco rivais e CPU, Story com/sem voo, derrota/retry e touch landscape
 
+## DONE (cenário JOINVILLE ZOPU do Aislan, branch `feature/aislan-joinville-stage`)
+
+- [x] Arte oficial preparada por `prepare_joinville_zopu.py` (faixa branca separada das nuvens
+      pela cor creme, logo verde pela própria cor), mesma composição do Joinville
+- [x] `joinville-zopu` no registro; o perfil do Aislan aponta para ele, Romualdo inalterado
+- [x] Testes de flyover, rotas e assets; playtest desktop e touch com o avião e a torcida
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

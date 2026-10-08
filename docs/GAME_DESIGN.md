@@ -155,7 +155,8 @@ Perfil equilibrado, mesmos valores-base do Isaque: vida 100, avanço/recuo 3,1/2
 pulo 16,5 e velocidade aérea 3,9. Seis normais, sem especial exclusivo.
 Dano e startup/ativo/recovery: soco 7 e 5/3/11; chute 11 e 10/4/17; soco agachado 5 e 5/3/9;
 rasteira 9 e 9/4/18; soco aéreo 7 e 5/6/10; chute aéreo 10 e 8/8/14.
-Aislan entra depois de Romualdo nas rotas, em Joinville, no mesmo cenário existente.
+Aislan entra depois de Romualdo nas rotas, em Joinville, no cenário JOINVILLE (ZOPU)
+(`joinville-zopu`, mesma arena; o Romualdo segue no Joinville da CRMThink).
 Encontros consecutivos no mesmo lugar apresentam diretamente o desafio, sem voo.
 A derrota mantém rival, localização, cenário e dificuldade para o retry.
 

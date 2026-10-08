@@ -89,8 +89,10 @@ Seis normais, sem especial; encontro da história na Espanha.
 Novo fighter equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e velocidade aérea 3,9.
 Seis normais, sem especial exclusivo. Arte original, atlas 1536×1120 (40 frames 192×224) e
 portrait 240×300; [fontes, prompts e preparo](scripts/aislan-art/README.md).
-Na história entra após Romualdo, na mesma Joinville e no stage `joinville`, sem duplicar imagens.
-O perfil define `encounterStageId` independentemente; basta trocar esse valor no futuro.
+Na história entra após Romualdo, na mesma Joinville, mas luta no cenário próprio
+**JOINVILLE (ZOPU)** (`joinville-zopu`): o mesmo pórtico com bandeirinhas e banners da ZOPU e o
+avião rebocando a faixa "zopu" ([arte e preparo](scripts/stage-art/joinville-zopu/README.md)). O
+Romualdo continua no Joinville da CRMThink. A escolha vem do `encounterStageId` do perfil.
 
 ## Stack
 
