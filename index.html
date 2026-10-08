@@ -10,7 +10,47 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Bitrix24 Partner Fighter</title>
-    <link rel="icon" href="data:," />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <script>
+      // Boot safety net, before the game bundle. A phone with a stale index.html cached (Pages
+      // caches it for minutes) asks for a bundle a new deploy removed: reload once, bypassing the
+      // cache. Any other startup error is printed on screen instead of leaving it black.
+      (function () {
+        var KEY = 'bpf-boot-reload';
+        function show(text) {
+          var el = document.getElementById('boot-status');
+          if (el) el.textContent = text;
+        }
+        window.addEventListener(
+          'error',
+          function (event) {
+            var target = event.target;
+            if (target && target.tagName === 'SCRIPT') {
+              var reloaded = false;
+              try {
+                reloaded = sessionStorage.getItem(KEY) === '1';
+                sessionStorage.setItem(KEY, '1');
+              } catch (e) {}
+              if (!reloaded) {
+                location.replace(location.pathname + '?v=' + Date.now());
+                return;
+              }
+              show('Não foi possível carregar o jogo. Recarregue a página.');
+              return;
+            }
+            if (event.message) show('Erro ao iniciar: ' + event.message);
+          },
+          true,
+        );
+        window.addEventListener('unhandledrejection', function (event) {
+          show(
+            'Erro ao iniciar: ' +
+              (event.reason && event.reason.message ? event.reason.message : event.reason),
+          );
+        });
+      })();
+    </script>
     <style>
       html,
       body {
@@ -31,6 +71,22 @@
       #game {
         width: 100%;
         height: 100%;
+      }
+
+      #boot-status {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        color: #ffd23f;
+        font:
+          900 18px/1.3 'Arial Black',
+          Impact,
+          sans-serif;
+        text-align: center;
+        pointer-events: none;
       }
 
       #rotate-overlay {
@@ -78,6 +134,8 @@
   </head>
   <body>
     <div id="game"></div>
+    <!-- Shown until the game boots (removed in main.ts); startup errors are written here. -->
+    <div id="boot-status">Carregando…</div>
     <div id="rotate-overlay" aria-live="polite">
       <div class="icon">📱</div>
       <div>Gire o dispositivo para jogar</div>

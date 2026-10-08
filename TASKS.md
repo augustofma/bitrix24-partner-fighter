@@ -632,6 +632,14 @@ sem pedido explícito.**
 - [x] Arte oficial em 1440×810 (`prepare_gabriel_mattozo_ending.py`), `gabriel-mattozo` em
       `STORY_ENDING_ART`: de novo todo personagem da história tem final próprio
 
+## DONE (abertura no celular, branch `feature/mobile-boot-hardening`)
+
+- [x] "Carregando…" em HTML desde o primeiro instante; erro de inicialização aparece na tela
+- [x] `index.html` velho em cache pedindo um bundle apagado: recarrega uma vez sem cache; o deploy
+      também mantém o bundle anterior no gh-pages
+- [x] Tela cheia (e paisagem travada) no primeiro toque em aparelhos touch; manifesto com
+      `display: fullscreen` e ícones para "Adicionar à tela inicial"
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Carregar cenários, endings e lutadores sob demanda (hoje o boot baixa tudo, ~48 MB)

@@ -30,6 +30,13 @@ jobs:
       - name: Publish dist/ to gh-pages
         run: |
           touch dist/.nojekyll
+          # Keep the previous build's bundle: a phone with the old index.html still cached (Pages
+          # caches it for minutes) would otherwise ask for a deleted script and show a black screen.
+          if git fetch -q --depth 1 origin gh-pages; then
+            for old in $(git show FETCH_HEAD:index.html | grep -o 'assets/[^"]*\.js'); do
+              [ -f "dist/$old" ] || git show "FETCH_HEAD:$old" > "dist/$old"
+            done
+          fi
           cd dist
           git init -q -b gh-pages
           git config user.name "github-actions[bot]"

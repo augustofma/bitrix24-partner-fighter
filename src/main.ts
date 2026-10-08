@@ -10,6 +10,7 @@ import { StoryMapScene } from './scenes/story/StoryMapScene';
 import { StageSelectScene } from './scenes/StageSelectScene';
 import { VersusScene } from './scenes/VersusScene';
 import { VictoryScene } from './scenes/VictoryScene';
+import { enableTapToFullscreen } from './utils/fullscreen';
 
 /** Max simultaneous touches (d-pad + 2 action buttons + spare). */
 const ACTIVE_POINTERS = 4;
@@ -49,6 +50,17 @@ const config: Phaser.Types.Core.GameConfig = {
 };
 
 const game = new Phaser.Game(config);
+enableTapToFullscreen();
+
+// The game draws its own loading screen from here on: drop the HTML placeholder (index.html).
+game.events.once(Phaser.Core.Events.READY, () => {
+  document.getElementById('boot-status')?.remove();
+  try {
+    sessionStorage.removeItem('bpf-boot-reload');
+  } catch {
+    // Storage blocked (private mode): the reload guard simply is not reset.
+  }
+});
 
 // Dev-only handle for debugging and automated smoke tests (stripped from production builds).
 if (import.meta.env.DEV) {
