@@ -24,7 +24,10 @@ import { SpecialEffects } from '../render/special/SpecialEffects';
 import { createStageView } from '../render/stage/createStageView';
 import { crowdReaction } from '../render/stage/crowdReaction';
 import type { StageBackdrop } from '../render/stage/StageBackdrop';
+import { matchAssets } from '../render/assets/sceneAssets';
 import { getStageConfig } from '../stages/stageRegistry';
+import { LoadingBar } from '../ui/LoadingBar';
+import { queueMissing, watchLoad } from './assetLoading';
 import type { InputSource } from '../types/input';
 import type { MatchResult, MatchSetup, RoundResult } from '../types/match';
 import { Announcer } from '../ui/Announcer';
@@ -74,6 +77,18 @@ export class FightScene extends Phaser.Scene {
 
   constructor() {
     super(SceneKeys.Fight);
+  }
+
+  /**
+   * Safety net: the VS screen normally loads the fight's art first (fighters, stage); whatever
+   * is still missing is fetched here, behind a loading bar.
+   */
+  preload(): void {
+    const setup = this.scene.settings.data as MatchSetup;
+    const fighters = [setup.playerFighterId, setup.cpuFighterId].map(getFighterConfig);
+    if (queueMissing(this, matchAssets(fighters, getStageConfig(setup.stageId))) === 0) return;
+    new LoadingBar(this);
+    watchLoad(this);
   }
 
   create(setup: MatchSetup): void {

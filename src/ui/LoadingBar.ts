@@ -8,9 +8,10 @@ const BAR_HEIGHT = 18;
 const BAR_Y = GAME_HEIGHT / 2 + 24;
 
 /**
- * Boot loading screen: title, a progress bar and the percentage, so a slow connection (the
- * whole game art is loaded up front) shows progress instead of a black screen. Uses a system
- * font: the game fonts are among the files still loading.
+ * Loading screen: title, a progress bar and the percentage, so a slow connection shows progress
+ * instead of a black screen. Drawn from a scene's `preload` (the boot, or a screen whose art is
+ * not cached yet) and removed when the load completes. Uses a system font: on boot the game
+ * fonts are among the files still loading.
  */
 export class LoadingBar {
   private readonly fill: Phaser.GameObjects.Rectangle;
@@ -18,15 +19,15 @@ export class LoadingBar {
 
   constructor(scene: Phaser.Scene) {
     const font = 'Arial Black, Impact, sans-serif';
-    scene.add
+    const title = scene.add
       .text(GAME_WIDTH / 2, BAR_Y - 64, STRINGS.titleTop, { fontFamily: font, fontSize: '30px' })
       .setColor('#2fe0ff')
       .setOrigin(0.5);
-    scene.add
+    const subtitle = scene.add
       .text(GAME_WIDTH / 2, BAR_Y - 32, STRINGS.titleBottom, { fontFamily: font, fontSize: '22px' })
       .setColor('#ffd23f')
       .setOrigin(0.5);
-    scene.add
+    const frame = scene.add
       .rectangle(GAME_WIDTH / 2, BAR_Y, BAR_WIDTH + 6, BAR_HEIGHT + 6, COLORS.panel)
       .setStrokeStyle(2, COLORS.neon);
     this.fill = scene.add
@@ -36,7 +37,12 @@ export class LoadingBar {
       .text(GAME_WIDTH / 2, BAR_Y + 30, STRINGS.loading(0), { fontFamily: font, fontSize: '14px' })
       .setColor('#ffffff')
       .setOrigin(0.5);
-    scene.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => this.update(progress));
+    const onProgress = (progress: number) => this.update(progress);
+    scene.load.on(Phaser.Loader.Events.PROGRESS, onProgress);
+    scene.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      scene.load.off(Phaser.Loader.Events.PROGRESS, onProgress);
+      for (const object of [title, subtitle, frame, this.fill, this.label]) object.destroy();
+    });
   }
 
   update(progress: number): void {

@@ -8,7 +8,10 @@ import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
+import { stageThumbnailAssets } from '../render/assets/sceneAssets';
 import { getSelectableStages } from '../stages/stageRegistry';
+import { LoadingBar } from '../ui/LoadingBar';
+import { queueMissing, watchLoad } from './assetLoading';
 import { quickFightStageId } from '../story/storyProfiles';
 import type { AIDifficulty, MatchSetup } from '../types/match';
 import type { StageConfig } from '../types/stage';
@@ -72,6 +75,13 @@ export class StageSelectScene extends Phaser.Scene {
 
   constructor() {
     super(SceneKeys.StageSelect);
+  }
+
+  /** Thumbnails: each stage's background art, fetched the first time the screen opens. */
+  preload(): void {
+    if (queueMissing(this, stageThumbnailAssets(getSelectableStages())) === 0) return;
+    new LoadingBar(this);
+    watchLoad(this);
   }
 
   create(data: StageSelectData): void {

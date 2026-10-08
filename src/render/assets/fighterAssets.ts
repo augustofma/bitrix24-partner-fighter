@@ -23,8 +23,15 @@ export function vfxTextureKey(path: string): string {
   return `vfx:${path}`;
 }
 
-/** Every texture declared by the roster, without duplicates (first declaration wins). */
-export function collectFighterAssets(roster: readonly FighterConfig[]): AssetRequest[] {
+/**
+ * Every texture declared by the roster, without duplicates (first declaration wins). With
+ * `sheets: false`, only the light ones (portraits, effect emblems): the sprite sheets are the
+ * heavy part and are loaded per fight.
+ */
+export function collectFighterAssets(
+  roster: readonly FighterConfig[],
+  { sheets = true }: { sheets?: boolean } = {},
+): AssetRequest[] {
   const requests = new Map<string, AssetRequest>();
   for (const { assets } of roster) {
     if (assets.portrait) {
@@ -38,7 +45,7 @@ export function collectFighterAssets(roster: readonly FighterConfig[]): AssetReq
         if (!requests.has(key)) requests.set(key, { type: 'image', key, path });
       }
     }
-    const sheet = assets.sprite?.sheet;
+    const sheet = sheets ? assets.sprite?.sheet : undefined;
     if (sheet && !requests.has(sheet.key)) {
       requests.set(sheet.key, {
         type: 'spritesheet',

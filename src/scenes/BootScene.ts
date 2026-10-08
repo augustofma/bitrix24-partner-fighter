@@ -1,28 +1,18 @@
 import Phaser from 'phaser';
 import { SceneKeys } from '../config/sceneKeys';
 import { ROSTER } from '../fighters/roster';
-import {
-  collectFighterAssets,
-  pixelArtTextureKeys,
-  type AssetRequest,
-} from '../render/assets/fighterAssets';
-import { collectStageAssets } from '../render/assets/stageAssets';
-import { collectStoryEndingAssets } from '../render/assets/storyEndingAssets';
-import { TITLE_ASSETS } from '../render/assets/titleAssets';
-import { BOOT_AUDIO_ASSETS } from '../render/assets/audioAssets';
-import { FONT_ASSETS } from '../render/assets/fontAssets';
-import { queueAsset } from '../render/assets/queueAsset';
-import { VICTORY_ASSETS } from '../render/assets/victoryAssets';
-import { STAGES } from '../stages/stageRegistry';
-import { LoadingBar } from '../ui/LoadingBar';
+import { bootAssets } from '../render/assets/sceneAssets';
 import { validateRosterAssets } from '../render/sprite/spriteValidation';
+import { LoadingBar } from '../ui/LoadingBar';
+import { queueMissing, watchLoad } from './assetLoading';
 
 /**
- * First scene: loads the title and victory screen art, the stages' art and every asset
- * declared by the roster (FighterConfig.assets), with no per-fighter code. Missing or broken
- * files are not fatal: fighters fall back to the placeholder renderer (see createFighterView),
- * and the title screen, victory screen and stages to their procedural look (see MenuScene,
- * VictoryScene, createStageView).
+ * First scene: loads what the menus need (fonts, title and victory art, portraits, the title
+ * music and the sounds), with no per-fighter code. The heavy art (sprite sheets, stage art,
+ * endings) is loaded later, right before the screen that uses it (see sceneAssets.ts). Missing
+ * or broken files are not fatal: fighters fall back to the placeholder renderer (see
+ * createFighterView), and the title screen, victory screen and stages to their procedural look
+ * (see MenuScene, VictoryScene, createStageView).
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -31,27 +21,11 @@ export class BootScene extends Phaser.Scene {
 
   preload(): void {
     new LoadingBar(this);
-    const assets: AssetRequest[] = [
-      ...FONT_ASSETS,
-      ...BOOT_AUDIO_ASSETS,
-      ...TITLE_ASSETS,
-      ...VICTORY_ASSETS,
-      ...collectStageAssets(STAGES),
-      ...collectFighterAssets(ROSTER),
-      ...collectStoryEndingAssets(ROSTER.map((fighter) => fighter.id)),
-    ];
-    for (const asset of assets) queueAsset(this, asset);
-    this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
-      console.warn(`[assets] Could not load "${file.key}" (${file.src}). Using fallback art.`);
-    });
+    queueMissing(this, bootAssets(ROSTER));
+    watchLoad(this);
   }
 
   create(): void {
-    for (const key of pixelArtTextureKeys(ROSTER)) {
-      if (this.textures.exists(key)) {
-        this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
-      }
-    }
     if (import.meta.env.DEV) reportAssetIssues();
     // The rest of the music loads in the background while the player is on the menus.
     this.scene.launch(SceneKeys.AudioLoader);

@@ -7,6 +7,7 @@ import { STRINGS } from '../config/strings';
 import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { createPortrait } from '../render/PortraitView';
+import { matchAssets } from '../render/assets/sceneAssets';
 import { getStageConfig } from '../stages/stageRegistry';
 import { getStoryLocation, locationLabel, locationName } from '../story/locations';
 import { currentLeg } from '../story/storyProgress';
@@ -14,6 +15,7 @@ import { fighterOrigin, isFinalBossEncounter, storyRouteFor } from '../story/sto
 import type { MatchSetup } from '../types/match';
 import { getStoryProgress } from './story/storyFlow';
 import { COLORS, arcadeText, bodyText, pixelText } from '../ui/theme';
+import { loadInBackground } from './assetLoading';
 import { fadeIn, goToScene } from './transitions';
 
 const DURATION_MS = 2600;
@@ -104,12 +106,37 @@ export class VersusScene extends Phaser.Scene {
         .setAlpha(0.85);
     }
     if (setup.mode === 'story') this.addStoryDetails(setup);
-    this.add
+    const skipHint = this.add
       .text(half, GAME_HEIGHT - 30, STRINGS.vsSkipHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
       .setAlpha(0.6);
 
-    const start = () => goToScene(this, SceneKeys.Fight, setup);
+    // The fight's art (both fighters, the stage, the story ending) downloads during the VS
+    // screen; if it is not in when the screen ends (or is skipped), it waits with a progress line.
+    const loading = this.add
+      .text(half, GAME_HEIGHT - 30, STRINGS.loading(0), bodyText(13, COLORS.gold))
+      .setOrigin(0.5)
+      .setVisible(false);
+    let ready = false;
+    let wantsStart = false;
+    const start = () => {
+      if (ready) {
+        goToScene(this, SceneKeys.Fight, setup);
+        return;
+      }
+      wantsStart = true;
+      skipHint.setVisible(false);
+      loading.setVisible(true);
+    };
+    loadInBackground(
+      this,
+      matchAssets([player, cpu], stage, setup.mode === 'story' ? player.id : undefined),
+      () => {
+        ready = true;
+        if (wantsStart) start();
+      },
+      (progress) => loading.setText(STRINGS.loading(progress)),
+    );
     this.time.delayedCall(DURATION_MS, start);
     const skip = () => {
       playSfx(this, 'menu-confirm');

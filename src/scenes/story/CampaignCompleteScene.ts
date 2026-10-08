@@ -9,6 +9,8 @@ import { getFighterConfig } from '../../fighters/roster';
 import { onKeys } from '../../input/menuKeys';
 import { VICTORY_ART } from '../../render/assets/victoryAssets';
 import { storyEndingAsset } from '../../render/assets/storyEndingAssets';
+import { LoadingBar } from '../../ui/LoadingBar';
+import { queueMissing, watchLoad } from '../assetLoading';
 import { createPortrait } from '../../render/PortraitView';
 import { getStoryLocation, isHomeCountry, locationName } from '../../story/locations';
 import { routeCities } from '../../story/storyProgress';
@@ -49,6 +51,15 @@ const ENDING_SHADE = { top: 150, bottom: 210, alpha: 0.62 } as const;
 export class CampaignCompleteScene extends Phaser.Scene {
   constructor() {
     super(SceneKeys.CampaignComplete);
+  }
+
+  /** Safety net: the ending is normally fetched with the campaign's fights (VS screen). */
+  preload(): void {
+    const fighterId = getStoryProgress(this)?.selectedFighter;
+    const ending = fighterId ? storyEndingAsset(fighterId) : undefined;
+    if (!ending || queueMissing(this, [ending]) === 0) return;
+    new LoadingBar(this);
+    watchLoad(this);
   }
 
   create(): void {
