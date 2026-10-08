@@ -76,12 +76,19 @@ João Guiotti (técnico, equilibrado) usa arte pixel-art própria, com óculos, 
 camiseta/tênis brancos. Atlas 1536×1120 (40 células 192×224), retrato 240×300 e alpha real.
 [Fontes e preparo](scripts/joao-guiotti-art/README.md). Romualdo também usa arte própria: cabeça raspada, óculos, barba grisalha e blazer azul-marinho.
 [Fontes e preparo do Romualdo](scripts/romualdo-art/README.md).
-Ambos ainda não têm especiais.
+João tem o especial **ALAIO VIBECODE!** e Romualdo o **GPTMAKER!** (F / ESP; veja abaixo).
 
 **ISAQUE FERREIRA** usa arte original com jaqueta bege, camiseta/calça pretas e tênis brancos.
 Perfil equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e deslocamento aéreo 3,9.
-Seis normais, sem especial e sem campanha própria nesta etapa.
+Seis normais e o especial **ALAIO VIBECODE!** (o mesmo do João).
 [Arte e preparo](scripts/isaque-ferreira-art/README.md).
+
+**ALAIO VIBECODE!** (João e Isaque, custo 30, só no chão): um editor de código digita atrás
+do ombro e duas ondas neon (magenta e ciano) levam tokens `</>` e `{ }` até o rival; no acerto,
+glitch com divisão RGB e um ✓ de "build passou". **GPTMAKER!** (Romualdo, custo 35, só no chão,
+o especial mais forte e mais lento): uma planta azul é projetada, um robozinho-agente é montado
+bloco a bloco atrás do ombro e dispara um feixe âmbar sobre um fluxo de nós; no acerto, explosão
+estelar, anel de engrenagem e blocos voando. Os dois têm emblema pixel-art original e som próprio.
 
 ## Stack
 

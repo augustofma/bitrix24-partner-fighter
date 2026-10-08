@@ -128,14 +128,14 @@ defesa como nos demais personagens. Guardas, cross-up, KO e vitória usam o moto
 
 **João Guiotti — São Paulo - SP.** Técnico e equilibrado: o jab mais rápido do elenco
 (startup 4) e boa mobilidade. Vida 100; caminhada 3,3/2,7 px/frame; pulo 16,8 com 4,1 px/frame
-no ar. Corpo padrão, arte pixel-art própria com óculos, blazer preto e camiseta branca, **sem especiais** por
-enquanto (a barra enche normalmente).
+no ar. Corpo padrão, arte pixel-art própria com óculos, blazer preto e camiseta branca, e o especial
+ALAIO VIBECODE! (veja "Especiais e energia").
 
 ### ISAQUE FERREIRA
 
 Perfil equilibrado, disponível na luta rápida e como CPU pelo roster genérico. Vida 100,
 caminhada 3,1 e recuo 2,5 px/frame, impulso de pulo 16,5 e velocidade aérea 3,9. Corpo padrão,
-sem especial. Sem perfil de campanha ou localização inventada; campanhas existentes preservadas.
+com o especial ALAIO VIBECODE! (o mesmo do João, veja "Especiais e energia").
 
 | Ataque      | Dano | Startup | Ativo | Recovery |
 | ----------- | ---- | ------- | ----- | -------- |
@@ -154,7 +154,7 @@ e mobilidade menor compensam o dano um pouco maior. Não substitui a validação
 **Romualdo — Joinville - SC.** Pesado: golpes mais fortes, mais knockback e recuperações
 maiores; o mais lento do elenco. Vida 100; caminhada 2,85/2,3 px/frame; pulo 16,2 com
 3,7 px/frame no ar. Arte pixel-art própria: cabeça raspada, óculos, barba grisalha e blazer azul-marinho.
-**Sem especiais** por enquanto.
+Especial: GPTMAKER! (veja "Especiais e energia").
 
 | Lutador  | Golpe         | Dano | Startup | Ativo | Recovery | Hitstun | Blockstun | Alcance |
 | -------- | ------------- | ---- | ------- | ----- | -------- | ------- | --------- | ------- |
@@ -221,6 +221,8 @@ Cada golpe tem um `level` no config, e a defesa depende dele (`GUARD_COVERAGE` e
 | Rasteira            | `low`      | Hitbox rente ao chão (y −28 a −4)                         |
 | Soco e chute aéreos | `overhead` | "Jump-in": vem de cima, exige defesa em pé                |
 | MINDHUB AGENT       | `mid`      | Descarga na altura do tronco                              |
+| ALAIO VIBECODE!     | `mid`      | Ondas de código na altura do tronco                       |
+| GPTMAKER!           | `mid`      | Feixe do agente, do peito à cabeça                        |
 
 Matriz (o golpe precisa antes **encostar** na hurtbox; a tabela decide se a guarda segura):
 
@@ -362,6 +364,19 @@ Comparado ao chute (10 de dano, 11/4/18), é bem mais forte e longo, porém lent
 ser visto e, bloqueado, deixa Filipe em desvantagem (24 de recovery contra 16 de blockstun).
 Visual: reaproveita os frames do soco; o efeito é o tema Mindhub (veja "VFX dos especiais").
 
+**ALAIO VIBECODE! (João Guiotti e Isaque Ferreira):** o mesmo golpe nos dois, cada um com o
+próprio id (`src/fighters/shared/alaioVibecode.ts`). Custo 30, somente no chão, nível `mid`,
+dano 17, chip 2, startup 12 / ativo 6 / recovery 24, hitstun 24, blockstun 15, knockback 8,
+pushback 5,5 e hitstop 11. Hitbox (26, -134, 136, 64): alcance de 162 px, contra ~100 dos
+chutes deles. Um passinho à frente (2 px/frame no startup/ativo), um único contato. Bloqueado,
+deixa o lutador em desvantagem (24 de recovery contra 15 de blockstun).
+
+**GPTMAKER! (Romualdo):** o especial pesado do elenco. Custo 35, somente no chão, nível `mid`,
+dano 21, chip 3, startup 17 / ativo 6 / recovery 27, hitstun 26, blockstun 17, knockback 10,
+pushback 6,5 e hitstop 13. Hitbox (30, -138, 130, 84): alcance de 160 px, do peito à cabeça.
+Não avança. É o que mais tira vida e o mais lento de sair, e o mais punível bloqueado (27 de
+recovery contra 17 de blockstun). Os dois reaproveitam os frames do soco.
+
 ### VFX dos especiais
 
 Cada especial tem a identidade do app ligado a ele, só na apresentação (frame data, dano, custo e
@@ -379,15 +394,30 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   o alvo; no disparo, descarga digital, rede neural com pulsos e o emblema do Mindhub chegando
   ao fim do alcance; no acerto, onda de choque quadrada/losango, linhas neurais com nós e o
   emblema; depois a rede desliga nó a nó e o símbolo se expande e some.
+- **ALAIO VIBECODE! (João, Isaque), vibe coding:** na carga, um editor de código abre atrás do
+  ombro e é digitado linha a linha em cores de sintaxe, com cursor piscando, ondas "vibe" magenta e
+  ciano pulsam na mão e tokens `</>` / `{ }` orbitam até ela; no disparo, duas ondas senoidais neon
+  trançadas vão da mão ao fim do alcance levando os tokens, com o emblema `</>` na ponta; no
+  acerto, glitch (faixas magenta/ciano deslocadas, divisão RGB), quadrado de pixels, anel roxo,
+  tokens voando, ✓ verde de "build passou" e o emblema (na defesa: menor, sem ✓ nem emblema);
+  depois o código sobe e se desfaz em pixels.
+- **GPTMAKER! (Romualdo), construtor de agentes de IA:** na carga, uma planta azul (grade de
+  blueprint) é projetada no alcance, engrenagens giram na mão, faíscas de quatro pontas piscam e
+  as peças de um robozinho-agente voam e se encaixam atrás do ombro, com olhos ciano e antena
+  âmbar; no disparo, o feixe âmbar com núcleo branco e tokens correndo sai da mão sobre um fluxo de
+  nós (o "workflow" do agente) que acende até o alvo, com o emblema do robô no fim; no acerto,
+  explosão estelar âmbar, anel de engrenagem, blocos se espalhando e faíscas (na defesa: menor,
+  sem emblema); depois o robô se desmonta e a planta apaga.
 
-Cada um também tem som próprio ao começar (`special-zap`, `special-mind`).
+Cada um também tem som próprio ao começar (`special-zap`, `special-mind`, `special-vibe`,
+`special-gpt`).
 A CPU também usa especiais (veja "Especiais da CPU"), pelas mesmas regras do jogador.
 
 ### SPECIAL READY (só visual)
 
 A barra entra em **SPECIAL READY** quando a energia alcança o custo do especial **mais barato**
-configurado para aquele lutador (Augusto: 30; Filipe: 35), nunca "barra cheia". Especiais com
-custo acima do máximo da barra não contam; lutadores sem especial (João, Romualdo, FIGHTER_A/B)
+configurado para aquele lutador (Augusto, João e Isaque: 30; Filipe e Romualdo: 35), nunca "barra
+cheia". Especiais com custo acima do máximo da barra não contam; lutadores sem especial (FIGHTER_A/B)
 nunca ficam READY. A restrição `groundOnly` não entra na conta, para o HUD não piscar a cada pulo.
 
 - **READY:** preenchimento neon mais claro com destaque branco, moldura dourada, glow que

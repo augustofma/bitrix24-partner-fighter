@@ -155,9 +155,13 @@ export interface FighterAssetManifest {
  * - `zapMessages`: messaging app look (24zap): green chat bubbles, send waves, read receipts.
  * - `mindNetwork`: AI look (Mindhub): a glowing brain-circuit sigil, circuit traces, a neural
  *   mesh and a digital discharge.
+ * - `vibeCode`: "vibe coding" look (ALAIO VIBECODE!): a code editor typing, neon sine waves
+ *   carrying </> tokens and a glitch burst.
+ * - `agentBuilder`: AI-agent builder look (GPTMAKER!): a blueprint grid, a robot assembled from
+ *   blocks, a workflow of nodes, an amber beam and a starburst.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
-export type SpecialEffectStyle = 'zapMessages' | 'mindNetwork';
+export type SpecialEffectStyle = 'zapMessages' | 'mindNetwork' | 'vibeCode' | 'agentBuilder';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

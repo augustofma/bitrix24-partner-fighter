@@ -1,5 +1,8 @@
 import type { FighterConfig } from '../types/fighter';
+import { alaioVibecode } from './shared/alaioVibecode';
 import { STANDARD_BODY } from './shared/standardBody';
+
+const VIBECODE = alaioVibecode('isaque-ferreira');
 
 /** Balanced newcomer: medium mobility, damage and recovery, using the standard body. */
 export const isaqueFerreira: FighterConfig = {
@@ -120,11 +123,12 @@ export const isaqueFerreira: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [VIBECODE.move],
   palette: { body: 0xc9b38d, accent: 0x4ec8ff, skin: 0xe0ac69, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/isaque-ferreira/portrait.png',
     pixelArt: true,
+    specialEffects: { [VIBECODE.move.id]: VIBECODE.effect },
     sprite: {
       sheet: {
         key: 'isaque-ferreira-sheet',
@@ -135,6 +139,7 @@ export const isaqueFerreira: FighterConfig = {
       // Eight transparent pixels below the grounded soles.
       visual: { scale: 1, offsetX: 0, offsetY: 8 },
       animations: {
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         idle: { frames: [0, 1, 2, 3], frameRate: 6 },
         walk: { frames: [4, 5, 6, 7, 8, 9], frameRate: 10 },
         jump: { frames: [10, 11, 12], jumpPhases: { rise: 1, apex: 1, fall: 1 } },

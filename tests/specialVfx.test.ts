@@ -9,6 +9,9 @@ import { FightSimulation, type SimulationEvent } from '../src/core/FightSimulati
 import { augusto } from '../src/fighters/augusto';
 import { fighterB } from '../src/fighters/fighterB';
 import { filipe } from '../src/fighters/filipe';
+import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
+import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
+import { romualdo } from '../src/fighters/romualdo';
 import { collectFighterAssets, vfxTextureKey } from '../src/render/assets/fighterAssets';
 import { SpecialEffects } from '../src/render/special/SpecialEffects';
 import { partnerArena } from '../src/stages/partnerArena';
@@ -120,6 +123,9 @@ describe('app-themed special VFX: timing and cleanup', () => {
   it.each([
     [augusto, 70, 'vfx:vfx/24zap-emblem.png'],
     [filipe, 140, 'vfx:vfx/mindhub-emblem.png'],
+    [joaoGuiotti, 120, 'vfx:vfx/vibecode-emblem.png'],
+    [isaqueFerreira, 120, 'vfx:vfx/vibecode-emblem.png'],
+    [romualdo, 120, 'vfx:vfx/gptmaker-emblem.png'],
   ] as const)(
     '%s: shows on the move, impact on hit, nothing left after',
     (config, distance, emblem) => {

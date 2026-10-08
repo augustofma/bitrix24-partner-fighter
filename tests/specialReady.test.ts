@@ -58,7 +58,7 @@ describe('SPECIAL READY threshold (from the configured specials)', () => {
   });
 
   it('fighters without specials are never ready, even with a full meter', () => {
-    for (const id of ['joao-guiotti', 'romualdo', 'fighter-a', 'fighter-b']) {
+    for (const id of ['fighter-a', 'fighter-b']) {
       const config = getFighterConfig(id);
       expect(specialReadyThreshold(config), id).toBeNull();
       expect(isSpecialReady(config, 100), id).toBe(false);

@@ -83,5 +83,7 @@ export const STRINGS = {
   special24Zap: '24ZAP COMBO',
   special24ZapEffect: '24ZAP!',
   specialMindhubAgent: 'MINDHUB AGENT',
+  specialAlaioVibecode: 'ALAIO VIBECODE!',
+  specialGptMaker: 'GPTMAKER!',
   debugHint: 'F2: hitboxes',
 } as const;
