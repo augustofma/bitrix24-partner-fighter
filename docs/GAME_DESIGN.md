@@ -186,6 +186,22 @@ muda colisões. Os normais têm dano moderadamente maior e recuperação mais lo
 
 Tempos em frames a 60 Hz. A IA e a seleção usam o config genérico do roster.
 
+### GABRIEL MATTOZO — GMC
+
+Selecionável na luta rápida, como jogador ou CPU. Sem perfil de história e sem especial
+exclusivo. Vida 100, avanço/recuo 3,4/2,8 px/frame, salto 16,8 e deslocamento aéreo 4,1.
+Corpo e caixas padrão. Mobilidade próxima à do Augusto e João; dano moderado e recovery
+maior que o de João em alguns golpes compensam startups rápidos. Tempos a 60 Hz:
+
+| Golpe       | Dano | Startup | Active | Recovery |
+| ----------- | ---: | ------: | -----: | -------: |
+| punch       |    6 |       4 |      3 |       10 |
+| kick        |   10 |       9 |      4 |       16 |
+| crouchPunch |    5 |       4 |      3 |        9 |
+| crouchKick  |    9 |       8 |      4 |       17 |
+| airPunch    |    6 |       5 |      6 |       10 |
+| airKick     |    9 |       7 |      8 |       13 |
+
 ### DMITRY — FINAL BOSS
 
 Chefe final controlado pela IA genérica. Vida 108, caminhada 3,0, recuo 2,4, impulso de salto

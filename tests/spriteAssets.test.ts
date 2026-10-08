@@ -237,6 +237,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/gabriel-mattozo/portrait.png'),
+        path: 'fighters/gabriel-mattozo/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'gabriel-mattozo-sheet',
+        path: 'fighters/gabriel-mattozo/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/dmitry/portrait.png'),
         path: 'fighters/dmitry/portrait.png',
       },
@@ -282,6 +294,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'aislan-sheet',
         'dmitry-sheet',
         'romulo-sheet',
+        'gabriel-mattozo-sheet',
+        portraitTextureKey('fighters/gabriel-mattozo/portrait.png'),
         portraitTextureKey('fighters/romulo/portrait.png'),
         portraitTextureKey('fighters/dmitry/portrait.png'),
         portraitTextureKey('fighters/aislan/portrait.png'),
