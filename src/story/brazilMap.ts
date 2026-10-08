@@ -103,7 +103,9 @@ export function locationToMap(
   rect: MapRect,
   bounds: GeoBounds = BRAZIL_BOUNDS,
 ): MapPoint {
-  return projectToMap(location.latitude, location.longitude, rect, bounds);
+  const point = projectToMap(location.latitude, location.longitude, rect, bounds);
+  const nudge = location.mapNudge;
+  return nudge ? { x: point.x + nudge.dx, y: point.y + nudge.dy } : point;
 }
 
 /** Any [longitude, latitude] outline in screen coordinates. */

@@ -38,6 +38,9 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   { fighterId: 'romualdo', home: 'joinville' },
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
   { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
+  // Rômulo is from Arrecife Digital (Recife) but lives in Castelo Branco, Portugal: that is his
+  // origin and where he is met, on the castle terrace (the place's stage).
+  { fighterId: 'romulo', home: 'castelo-branco' },
 ];
 
 /**

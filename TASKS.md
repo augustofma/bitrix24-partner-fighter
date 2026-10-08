@@ -541,6 +541,16 @@ sem pedido explícito.**
 - [x] Playtest de poses/debug, comparações com os sete fighters, Rômulo como P1 e CPU
 - [x] Teclado e smoke mobile landscape com multi-touch e cross-up
 
+## DONE (cenário CASTELO BRANCO e Rômulo no Modo História, branch `feature/castelo-branco-stage`)
+
+- [x] Rômulo do Codex (`feature/romulo-arrecife-fighter`) revisado e juntado
+- [x] Arte preparada por `prepare_castelo_branco.py` (avião, faixa e skyline separados; nuvens
+      por cor; linhas de reboque por `clear_boxes`) e cenário `castelo-branco` com avião e torcida
+- [x] Lista de fases com 7 cenários sem rolagem (linhas ~44 px)
+- [x] Lugar `castelo-branco` (Portugal) e perfil do Rômulo: campanha própria e etapa antes do
+      chefe final nas outras; marcador de Portugal em Lisboa e `mapNudge` para não sobrepor
+- [x] Testes de cenário, lugar, rotas e mapa; playtest da luta, do avião, do mapa e do final
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

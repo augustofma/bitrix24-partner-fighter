@@ -35,7 +35,7 @@ describe('story endings', () => {
   );
 
   it('the other story characters keep the standard ending (victory art and card)', () => {
-    const withEnding = ['augusto', 'romualdo', 'aislan'];
+    const withEnding = ['augusto', 'romualdo', 'aislan', 'romulo'];
     for (const { fighterId } of STORY_PROFILES) {
       expect(storyEndingAsset(fighterId) !== undefined).toBe(withEnding.includes(fighterId));
     }

@@ -99,6 +99,7 @@ describe('campaigns', () => {
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
+      { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities('augusto')).toEqual([
@@ -108,6 +109,7 @@ describe('campaigns', () => {
       'spain',
       'joinville',
       'joinville',
+      'castelo-branco',
       'russia',
     ]);
   });
@@ -119,6 +121,7 @@ describe('campaigns', () => {
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
+      { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities('filipe')).toEqual([
@@ -128,6 +131,7 @@ describe('campaigns', () => {
       'spain',
       'joinville',
       'joinville',
+      'castelo-branco',
       'russia',
     ]);
   });
@@ -141,6 +145,7 @@ describe('campaigns', () => {
       'romualdo',
       'isaque-ferreira',
       'aislan',
+      'romulo',
     ]);
     expect(() => startStory('fighter-a')).toThrow();
   });
@@ -210,13 +215,13 @@ describe('story progress', () => {
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
     let progress = startStory('filipe');
-    for (let leg = 0; leg < 6; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
+    for (let leg = 0; leg < 7; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
-      currentStage: 6,
+      currentStage: 7,
       currentLocation: 'russia',
       opponent: null,
-      completedStages: [0, 1, 2, 3, 4, 5],
+      completedStages: [0, 1, 2, 3, 4, 5, 6],
     });
     expect(recordStoryMatch(progress, true)).toBe(progress);
     expect(arriveForFight(progress)).toBe(progress);

@@ -99,7 +99,12 @@ estelar, anel de engrenagem e blocos voando. Os dois têm emblema pixel-art orig
 
 Selecionável na luta rápida, como jogador ou rival CPU. Vida 100, caminhada 3,0, recuo 2,4,
 salto 16,5 e velocidade aérea 3,9. Seis normais um pouco mais fortes, compensados por recuperação
-maior; sem especial exclusivo ou campanha nesta etapa. Corpo robusto preservado na arte.
+maior; sem especial exclusivo. Corpo robusto preservado na arte.
+É da Arrecife Digital, mas mora em **Castelo Branco, Portugal**: na história a campanha dele começa
+lá e as outras o enfrentam lá, no cenário próprio **CASTELO BRANCO** (o terraço das muralhas sobre
+a cidade, com torcida e o avião da faixa "Arrecife Digital";
+[arte e preparo](scripts/stage-art/castelo-branco/README.md)), logo antes do chefe final. Tem
+final ilustrado próprio (calçadão à beira-mar ao pôr do sol).
 Sprite RGBA 1536×1120 (40 células 192×224), portrait 240×300, scale 1 e offsets 0/8.
 [Fontes, prompts e preparo](scripts/romulo-art/README.md).
 

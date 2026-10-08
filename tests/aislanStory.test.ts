@@ -47,7 +47,9 @@ describe('Aislan shared location, independent encounter', () => {
     ({ fighterId }) => {
       const route = storyRouteFor(fighterId)!;
       expect(route.filter((l) => l.opponent === 'aislan')).toHaveLength(1);
-      expect(route.at(-2)?.opponent).toBe('aislan');
+      // After Romualdo, before Rômulo (Castelo Branco) and the final boss.
+      const order = route.map((l) => l.opponent).filter((id) => id !== 'romulo');
+      expect(order.at(-2)).toBe('aislan');
     },
   );
   it('each encounter loads its own Joinville art, with no texture key shared', () => {
@@ -97,8 +99,8 @@ describe('Aislan shared location, independent encounter', () => {
     expect(storyMatchSetup(retry, 'hard')).toEqual(storyMatchSetup(fight, 'hard'));
     expect(recordStoryMatch(fight, true)).toMatchObject({
       phase: 'travel',
-      opponent: 'dmitry',
-      nextLocation: 'russia',
+      opponent: 'romulo',
+      nextLocation: 'castelo-branco',
     });
   });
 });

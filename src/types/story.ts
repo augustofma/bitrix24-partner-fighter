@@ -24,6 +24,12 @@ export interface StoryLocation {
    * neighbours whose labels would overlap (e.g. Portugal and Spain).
    */
   mapLabel?: { side: 'left' | 'right'; dy: number };
+  /**
+   * Draws the marker this many screen px away from its real position (legibility only: places
+   * a few px apart on the world map, like Lisbon and Castelo Branco, would overlap). Flights
+   * leave from and land on the drawn marker; the real coordinates stay as they are.
+   */
+  mapNudge?: { dx: number; dy: number };
   /** Arena of fights held here (a StageConfig id); the default stage when omitted. */
   stageId?: string;
 }

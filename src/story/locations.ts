@@ -51,10 +51,26 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     kind: 'country',
     name: 'Portugal',
     country: 'Portugal',
-    latitude: 39.6,
-    longitude: -8.2,
-    // Next to Spain on the world map: its label goes below-left, Spain's above-right.
+    // Lisbon, on the coast: west of Castelo Branco and Spain, so the three markers stay apart.
+    latitude: 38.72,
+    longitude: -9.14,
+    // Next to Castelo Branco and Spain on the world map: its label goes below-left, Castelo
+    // Branco's above-left, Spain's above-right.
     mapLabel: { side: 'left', dy: 11 },
+  },
+  {
+    // Rômulo's city (he is from Arrecife Digital, but lives here). A city abroad: no region code.
+    id: 'castelo-branco',
+    kind: 'city',
+    name: 'Castelo Branco',
+    country: 'Portugal',
+    latitude: 39.82,
+    longitude: -7.49,
+    // A few px from Lisbon and Madrid on the world map: drawn a little north, label above-left.
+    mapNudge: { dx: 0, dy: -9 },
+    mapLabel: { side: 'left', dy: -9 },
+    // Fights here happen on the castle terrace over the town.
+    stageId: 'castelo-branco',
   },
   {
     id: 'spain',

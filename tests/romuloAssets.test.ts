@@ -12,12 +12,12 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Romulo PNG assets', () => {
-  it('keeps one roster entry, his own portrait, quick-fight eligibility', () => {
+  it('keeps one roster entry, his own portrait, and his story campaign (Castelo Branco)', () => {
     expect(ROSTER.filter((f) => f.id === 'romulo')).toEqual([romulo]);
     expect(romulo.assets.portrait).toBe('fighters/romulo/portrait.png');
     expect(romulo.playable).toBe(true);
     // No story profile is invented for the new fighter.
-    expect(hasStoryCampaign(romulo.id)).toBe(false);
+    expect(hasStoryCampaign(romulo.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(romulo, 40)).toEqual([]);
