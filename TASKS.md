@@ -458,8 +458,8 @@ sem pedido explícito.**
 - [x] Branch junta `feature/quick-fight-selection` (Aislan, Joinville ZOPU, seleção) e
       `feature/new-specials`
 - [x] FLUIDZ!: custo 30, chão, mid, 17 de dano, 13/7/23, alcance 164
-- [x] Tema de VFX `liquidFlow` (rosa, bolha, jato ondulante, splash com gravidade, poça), emblema
-      original `fluidz-emblem.png` e som `special-fluidz`
+- [x] Tema de VFX `liquidFlow` (roxo da Fluidz, bolha, jato ondulante, splash com gravidade, poça),
+      emblema da logo da Fluidz `fluidz-emblem.png` e som `special-fluidz`
 - [x] Testes de configuração, execução, defesa, VFX sem travamento/limpeza e CPU; playtest
 
 ## DONE (seleção pronta para mais lutadores, branch `feature/character-select-expanded-roster`)

@@ -1,12 +1,13 @@
 """
 Original pixel-art emblems for specials that have no supplied logo: ALAIO VIBECODE! (João
-Guiotti, Isaque Ferreira), GPTMAKER! (Romualdo) and FLUIDZ! (Aislan). Drawn here shape by shape (no source
+Guiotti, Isaque Ferreira) and GPTMAKER! (Romualdo). (FLUIDZ! uses the supplied Fluidz logo:
+scripts/vfx-art/prepare_app_emblems.py.) Drawn here shape by shape (no source
 image, no third-party logo): a neon "</>" code tile and an AI-agent robot tile, with the same
 size and 1 px dark outline as the other effect emblems.
 
     python3 scripts/vfx-art/draw_original_emblems.py
 
-Writes public/vfx/vibecode-emblem.png, gptmaker-emblem.png and fluidz-emblem.png.
+Writes public/vfx/vibecode-emblem.png and gptmaker-emblem.png.
 """
 
 from pathlib import Path
@@ -104,35 +105,11 @@ def gptmaker_emblem() -> Image.Image:
     return outline(tile)
 
 
-def fluidz_emblem() -> Image.Image:
-    """Pink tile with a glossy liquid drop and two splash droplets."""
-    tile = gradient_tile((255, 120, 190), (214, 24, 120))
-    draw = ImageDraw.Draw(tile)
-    deep = (120, 8, 64, 255)
-    pink = (255, 79, 163, 255)
-    light = (255, 190, 225, 255)
-    # The drop: a pointed top over a round belly (outline first, then fill).
-    for grow, color in ((2, deep), (0, WHITE)):
-        draw.polygon([(24, 8 - grow), (13 - grow, 26), (35 + grow, 26)], fill=color)
-        draw.ellipse((12 - grow, 18 - grow, 36 + grow, 42 + grow), fill=color)
-    draw.ellipse((15, 21, 33, 39), fill=light)
-    draw.ellipse((18, 26, 32, 40), fill=pink)
-    # Gloss.
-    draw.rectangle((16, 24, 18, 30), fill=WHITE)
-    # Splash droplets.
-    for x, y, r in ((40, 30, 3), (8, 34, 2)):
-        draw.ellipse((x - r - 1, y - r - 1, x + r + 1, y + r + 1), fill=deep)
-        draw.ellipse((x - r, y - r, x + r, y + r), fill=WHITE)
-    sparkle(draw, 39, 9, 3, WHITE)
-    return outline(tile)
-
-
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     vibecode_emblem().save(OUT / "vibecode-emblem.png")
     gptmaker_emblem().save(OUT / "gptmaker-emblem.png")
-    fluidz_emblem().save(OUT / "fluidz-emblem.png")
-    print("wrote vibecode-emblem.png, gptmaker-emblem.png, fluidz-emblem.png")
+    print("wrote vibecode-emblem.png, gptmaker-emblem.png")
 
 
 if __name__ == "__main__":

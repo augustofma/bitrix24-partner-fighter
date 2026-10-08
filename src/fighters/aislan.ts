@@ -4,7 +4,7 @@ import { STANDARD_BODY } from './shared/standardBody';
 
 /**
  * AISLAN - ZOPU. Balanced: medium mobility, damage and recovery, using the standard body, and
- * the pink liquid special FLUIDZ!.
+ * the purple liquid special FLUIDZ!.
  */
 export const aislan: FighterConfig = {
   id: 'aislan',
@@ -126,7 +126,7 @@ export const aislan: FighterConfig = {
   },
   specials: [
     {
-      // A gush of pink liquid: a rippling stream with a splash at the end of its reach.
+      // A gush of purple liquid: a rippling stream with a splash at the end of its reach.
       id: 'aislan.fluidz',
       displayName: STRINGS.specialFluidz,
       state: 'special',

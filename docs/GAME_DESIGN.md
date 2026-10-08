@@ -403,7 +403,7 @@ pushback 6,5 e hitstop 13. Hitbox (30, -138, 130, 84): alcance de 160 px, do pei
 Não avança. É o que mais tira vida e o mais lento de sair, e o mais punível bloqueado (27 de
 recovery contra 17 de blockstun). Os dois reaproveitam os frames do soco.
 
-**FLUIDZ! (Aislan):** um jato de líquido rosa. Custo 30, somente no chão, nível `mid`, dano 17,
+**FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
 ao peito. Inclina-se um pouco no jato (1,5 px/frame no startup/ativo), um único contato.
@@ -441,12 +441,12 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   nós (o "workflow" do agente) que acende até o alvo, com o emblema do robô no fim; no acerto,
   explosão estelar âmbar, anel de engrenagem, blocos se espalhando e faíscas (na defesa: menor,
   sem emblema); depois o robô se desmonta e a planta apaga.
-- **FLUIDZ! (Aislan), líquido rosa:** na carga, o líquido se junta à frente do corpo numa bolha
-  rosa que balança, gotas são puxadas para ela, bolhas sobem e uma gota pinga; no disparo, um
+- **FLUIDZ! (Aislan), líquido roxo da Fluidz:** na carga, o líquido se junta à frente do corpo
+  numa bolha roxa que balança, gotas são puxadas para ela, bolhas sobem e uma gota pinga; no disparo, um
   jato grosso e ondulante sai da mão até o fim do alcance, com reflexos brilhantes correndo nele,
   uma crista de onda na ponta e gotas espirrando; no acerto, splash: clarão, coroa de gotas
-  jogadas para cima e para a frente que caem com gravidade, ondas concêntricas e o emblema da gota
-  (na defesa: menor, sem emblema); depois o jato vira gotas que caem e uma poça rosa se espalha e
+  jogadas para cima e para a frente que caem com gravidade, ondas concêntricas e o emblema da Fluidz
+  (na defesa: menor, sem emblema); depois o jato vira gotas que caem e uma poça roxa se espalha e
   seca no chão.
 
 Cada um também tem som próprio ao começar (`special-zap`, `special-mind`, `special-vibe`,

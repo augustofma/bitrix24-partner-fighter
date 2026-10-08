@@ -532,9 +532,9 @@ registrada aqui:
 | `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                                  | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
 | `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                                   | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
 | `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
-| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`                       | Logos dos apps 24zap e Mindhub, fornecidos pelo dono do projeto para uso no jogo                | Uso autorizado pelo dono do projeto                               |
-| `public/vfx/24zap-*`, `mindhub-*`                                                 | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
-| `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`, `fluidz-emblem.png`      | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
+| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`, `fluidz-logo.jpg`    | Logos dos apps 24zap, Mindhub e Fluidz, fornecidos pelo dono do projeto para uso no jogo        | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/24zap-*`, `mindhub-*`, `fluidz-*`                                     | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`                           | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
 | `public/audio/sfx/*` (25 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                         | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`       | Original do projeto                                               |
@@ -553,9 +553,9 @@ registrada aqui:
 | `public/fonts/russo-one/*` (fonte Russo One)                                      | Jovanny Lemonad (Google Fonts)                                                                  | SIL Open Font License 1.1 (`public/fonts/russo-one/OFL.txt`)      |
 | `public/fonts/press-start-2p/*` (fonte Press Start 2P)                            | The Press Start 2P Project Authors / CodeMan38 (Google Fonts)                                   | SIL Open Font License 1.1 (`public/fonts/press-start-2p/OFL.txt`) |
 | `public/fonts/pixelify-sans/*` (fonte Pixelify Sans)                              | The Pixelify Sans Project Authors (Google Fonts)                                                | SIL Open Font License 1.1 (`public/fonts/pixelify-sans/OFL.txt`)  |
-| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`                       | Logos dos apps 24zap e Mindhub, fornecidos pelo dono do projeto para uso no jogo                | Uso autorizado pelo dono do projeto                               |
-| `public/vfx/24zap-*`, `mindhub-*`                                                 | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
-| `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`, `fluidz-emblem.png`      | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
+| `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`, `fluidz-logo.jpg`    | Logos dos apps 24zap, Mindhub e Fluidz, fornecidos pelo dono do projeto para uso no jogo        | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/24zap-*`, `mindhub-*`, `fluidz-*`                                     | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
+| `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`                           | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
 | `public/audio/sfx/*` (25 efeitos)                                                 | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                 | Compostas e sintetizadas por `scripts/music/compose.py`                                         | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                               | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`       | Original do projeto                                               |
@@ -586,10 +586,12 @@ como imagem lisa.
 - **GPTMAKER!:** âmbar (#FFB21F), laranja (#FF6E1E), azul-marinho, aço e ciano nos olhos do robô,
   com grade azul de blueprint. Emblema original: azulejo âmbar→laranja com um robozinho marinho de
   olhos ciano, antena e raio amarelo, e uma faísca branca. Nenhum dos dois imita logo de produto.
-- **FLUIDZ!:** rosa (#FF4FA3), rosa-choque (#FF2D8A), rosa-claro (#FFA6D2), magenta escuro
-  (#C2186B) nas sombras e brilhos brancos. O líquido é feito de fatias verticais (jato), "gotas"
-  de dois retângulos e bolhas que balançam; gotas do splash seguem gravidade. Emblema original:
-  azulejo em degradê rosa com uma gota branca brilhante e dois respingos.
+- **FLUIDZ!:** o roxo da logo da Fluidz (#635BFE), roxo vivo (#4B42F5), lilás (#B3AEFF) e
+  roxo escuro (#2A2299) nas sombras, com brilhos brancos. O líquido é feito de fatias verticais
+  (jato), "gotas" de dois retângulos e bolhas que balançam; gotas do splash seguem gravidade.
+  Emblema derivado da logo fornecida (`fluidz-logo.jpg`, por `prepare_app_emblems.py`): o
+  quadrado roxo cortado pela faixa diagonal escura, reduzido à grade de 48 px com cantos em
+  degrau e contorno escuro (sem o nome "fluidz").
 
 Os efeitos ficam em volta dos lutadores e nunca cobrem barras de vida, barra de especial ou
 controles touch.

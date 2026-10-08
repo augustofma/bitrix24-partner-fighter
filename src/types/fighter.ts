@@ -159,7 +159,7 @@ export interface FighterAssetManifest {
  *   carrying </> tokens and a glitch burst.
  * - `agentBuilder`: AI-agent builder look (GPTMAKER!): a blueprint grid, a robot assembled from
  *   blocks, a workflow of nodes, an amber beam and a starburst.
- * - `liquidFlow`: pink liquid look (FLUIDZ!): a wobbling blob, a rippling stream with a wave
+ * - `liquidFlow`: purple liquid look (FLUIDZ!): a wobbling blob, a rippling stream with a wave
  *   crest, a splash crown of drops with gravity and a puddle.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */

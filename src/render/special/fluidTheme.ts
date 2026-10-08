@@ -2,18 +2,19 @@ import type { ImpactFrame, MoveFrame, SpecialTheme } from './specialTheme';
 import { clamp01, disc, easeOutBack, easeOutCubic, hash01, lerp, type Graphics } from './vfxShapes';
 
 /*
- * FLUIDZ!: a pink liquid special. Charge: pink liquid gathers in the hand as a wobbling blob,
+ * FLUIDZ!: a purple liquid special (the Fluidz logo's colour). Charge: purple liquid gathers in the hand as a wobbling blob,
  * drops are pulled into it, bubbles rise and a drip falls from it. Execution: a thick, rippling
  * stream of liquid gushes from the hand to the end of the reach, with a rounded wave crest at the
- * head, glossy highlights running along it and drops splashing off. Hit: a splash: a pink flash,
+ * head, glossy highlights running along it and drops splashing off. Hit: a splash: a purple flash,
  * a crown of drops thrown up and out that fall back with gravity, a ripple and the emblem.
  * Dissipation: the stream breaks into falling drops and a puddle spreads and dries on the floor.
  */
 
-const PINK = 0xff4fa3;
-const HOT = 0xff2d8a;
-const LIGHT = 0xffa6d2;
-const DEEP = 0xc2186b;
+// The Fluidz logo's purple (#635BFE) and its shades.
+const PURPLE = 0x635bfe;
+const VIVID = 0x4b42f5;
+const LIGHT = 0xb3aeff;
+const DEEP = 0x2a2299;
 const WHITE = 0xffffff;
 /** Width of one vertical slice of the stream (px): it is drawn from rectangles only. */
 const SLICE = 4;
@@ -74,8 +75,8 @@ function stream(
     // Thicker toward the head, thinner at the hand where it leaves.
     const swell = 0.55 + 0.45 * clamp01(d / Math.max(1, length));
     const th = thickness * swell * (1 + 0.22 * Math.sin(phase * 1.7 + 1.3));
-    glow.fillStyle(PINK, 0.32 * alpha).fillRect(x, cy - th * 0.85, SLICE, th * 1.7);
-    g.fillStyle(i % 2 ? HOT : PINK, alpha).fillRect(x, cy - th / 2, SLICE, th);
+    glow.fillStyle(PURPLE, 0.32 * alpha).fillRect(x, cy - th * 0.85, SLICE, th * 1.7);
+    g.fillStyle(i % 2 ? VIVID : PURPLE, alpha).fillRect(x, cy - th / 2, SLICE, th);
     g.fillStyle(DEEP, 0.55 * alpha).fillRect(x, cy + th * 0.22, SLICE, th * 0.28);
     // Gloss: a highlight line that runs along the stream.
     if ((i + Math.floor(frame / 2)) % 5 < 3) {
@@ -101,13 +102,13 @@ function drawMove(f: MoveFrame): void {
         pool.x + Math.cos(angle) * distance,
         pool.y + Math.sin(angle) * distance * 0.8,
         3 + 2 * hash01(i, 82),
-        i % 3 ? PINK : LIGHT,
+        i % 3 ? PURPLE : LIGHT,
         clamp01(t * 2),
       );
     }
     // The gathering blob, its glow and a highlight.
-    disc(glow, pool.x, pool.y, 24 * grow + 6, PINK, 0.35 + 0.25 * t);
-    blob(g, pool.x, pool.y, 16 * grow, frame, PINK, 1);
+    disc(glow, pool.x, pool.y, 24 * grow + 6, PURPLE, 0.35 + 0.25 * t);
+    blob(g, pool.x, pool.y, 16 * grow, frame, PURPLE, 1);
     blob(g, pool.x - 3, pool.y - 4, 7 * grow, frame + 2, LIGHT, 0.9);
     g.fillStyle(WHITE, 0.9).fillRect(pool.x - 6, pool.y - 9 * grow, 4, 3);
     // Bubbles rising and a drip falling off the blob.
@@ -117,7 +118,7 @@ function drawMove(f: MoveFrame): void {
       glow.lineStyle(2, LIGHT, 0.8 * (1 - p)).strokeCircle(bx, pool.y - 10 - p * 50, 3 + i);
     }
     const drip = (t * 2) % 1;
-    drop(g, pool.x + dir * 4, pool.y + 14 * grow + drip * 40, 3, HOT, 1 - drip);
+    drop(g, pool.x + dir * 4, pool.y + 14 * grow + drip * 40, 3, VIVID, 1 - drip);
     f.emblem.show({ x: pool.x, y: pool.y - 42, scale: 0.8 * grow, alpha: clamp01(t * 1.5) });
     return;
   }
@@ -128,8 +129,8 @@ function drawMove(f: MoveFrame): void {
     const thickness = height * 0.62;
     stream(f, headX, thickness, frame, 1);
     // Wave crest at the head: a big blob with a curl of foam.
-    blob(glow, headX, hand.y, thickness * 0.75, frame, PINK, 0.4);
-    blob(g, headX, hand.y, thickness * 0.55, frame, PINK, 1);
+    blob(glow, headX, hand.y, thickness * 0.75, frame, PURPLE, 0.4);
+    blob(g, headX, hand.y, thickness * 0.55, frame, PURPLE, 1);
     blob(g, headX + dir * 4, hand.y - thickness * 0.2, thickness * 0.28, frame + 3, LIGHT, 1);
     g.fillStyle(WHITE, 0.95).fillRect(headX + dir * 6 - 3, hand.y - thickness * 0.38, 6, 3);
     // Drops splashing off the stream.
@@ -142,11 +143,11 @@ function drawMove(f: MoveFrame): void {
         along + dir * p * 18,
         hand.y - thickness * 0.4 - rise,
         2.5,
-        i % 2 ? LIGHT : HOT,
+        i % 2 ? LIGHT : VIVID,
         1 - p,
       );
     }
-    disc(glow, hand.x, hand.y, 18 + 6 * Math.sin(frame), PINK, 0.4);
+    disc(glow, hand.x, hand.y, 18 + 6 * Math.sin(frame), PURPLE, 0.4);
     if (!f.impacting)
       f.emblem.show({
         x: headX,
@@ -163,13 +164,13 @@ function drawMove(f: MoveFrame): void {
   for (let i = 0; i < 12; i++) {
     const x = lerp(hand.x, front.x, (i + 0.5) / 12) + dir * hash01(i, 85) * 6;
     const fall = hand.y + GRAVITY * 1.4 * t * t * (0.7 + 0.6 * hash01(i, 86));
-    if (fall < floor) drop(g, x, fall, 3 + 2 * hash01(i, 87), i % 2 ? PINK : HOT, fade);
+    if (fall < floor) drop(g, x, fall, 3 + 2 * hash01(i, 87), i % 2 ? PURPLE : VIVID, fade);
   }
   const spread = easeOutCubic(t);
   const cx = lerp(hand.x, front.x, 0.6);
   const halfWidth = (30 + 70 * spread) * (0.4 + 0.6 * fade);
-  glow.fillStyle(PINK, 0.3 * fade).fillRect(cx - halfWidth - 6, floor - 6, halfWidth * 2 + 12, 8);
-  g.fillStyle(HOT, 0.85 * fade).fillRect(cx - halfWidth, floor - 4, halfWidth * 2, 5);
+  glow.fillStyle(PURPLE, 0.3 * fade).fillRect(cx - halfWidth - 6, floor - 6, halfWidth * 2 + 12, 8);
+  g.fillStyle(VIVID, 0.85 * fade).fillRect(cx - halfWidth, floor - 4, halfWidth * 2, 5);
   g.fillStyle(LIGHT, 0.8 * fade).fillRect(cx - halfWidth * 0.5, floor - 4, halfWidth * 0.6, 2);
   if (!f.impacting)
     f.emblem.show({ x: front.x, y: front.y - 30 - t * 20, scale: 1 + 0.25 * t, alpha: fade });
@@ -181,9 +182,9 @@ function drawImpact(f: ImpactFrame): void {
   const fade = 1 - t;
   const size = blocked ? 0.6 : 1;
   if (t < 0.14) disc(glow, x, y, 40 * size, WHITE, 0.9 * (1 - t / 0.14));
-  blob(glow, x, y, (22 + 22 * out) * size, Math.floor(t * 30), PINK, 0.5 * fade);
+  blob(glow, x, y, (22 + 22 * out) * size, Math.floor(t * 30), PURPLE, 0.5 * fade);
   // Ripple rings.
-  glow.lineStyle(5, PINK, 0.85 * fade).strokeCircle(x, y, (14 + 90 * out) * size);
+  glow.lineStyle(5, PURPLE, 0.85 * fade).strokeCircle(x, y, (14 + 90 * out) * size);
   glow.lineStyle(2, LIGHT, 0.8 * fade).strokeCircle(x, y, (8 + 60 * out) * size);
   // Splash crown: drops thrown up and outward (mostly forward), falling back with gravity.
   const drops = blocked ? 7 : 16;
@@ -199,7 +200,7 @@ function drawImpact(f: ImpactFrame): void {
       px,
       py,
       (3 + 3 * hash01(i, 90)) * size * (1 - 0.3 * t),
-      i % 3 ? PINK : i % 2 ? HOT : LIGHT,
+      i % 3 ? PURPLE : i % 2 ? VIVID : LIGHT,
       fade,
     );
   }
