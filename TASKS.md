@@ -561,6 +561,11 @@ sem pedido explícito.**
 - [x] Arte oficial 4:3 cortada em 16:9 (`prepare_filipe_ending.py`), `filipe` em
       `STORY_ENDING_ART`; testes e playtest desktop e mobile
 
+## DONE (final ilustrado do João Guiotti, branch `feature/joao-story-ending`)
+
+- [x] Arte oficial em 1440×810 (`prepare_joao_guiotti_ending.py`), `joao-guiotti` em
+      `STORY_ENDING_ART`; testes e playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
