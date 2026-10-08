@@ -101,4 +101,7 @@ export const STRINGS = {
   specialAlaioStrike: 'ALAIO STRIKE!',
   specialN8n: 'N8N!',
   debugHint: 'F2: hitboxes',
+  /** Fixed controls bar at the bottom of the fight (keyboard players). */
+  fightControlsHint:
+    '← → andar    ↑ pular    ↓ agachar    A soco    S chute    D defesa    F especial',
 } as const;

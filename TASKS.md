@@ -620,6 +620,11 @@ sem pedido explícito.**
       `special-n8n`
 - [x] Testes de configuração, acerto, defesa, alcance e VFX; playtest no navegador
 
+## DONE (barra de comandos na luta, branch `feature/fight-controls-bar`)
+
+- [x] Barra fixa no pé da luta com os comandos do teclado (`ControlsHint`, mesmo estilo das
+      seleções); escondida com controles de toque
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)

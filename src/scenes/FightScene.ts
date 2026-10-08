@@ -3,7 +3,7 @@ import { gameMusic, gameSfx } from '../audio/gameAudio';
 import { MUSIC_FADE, stageMusic } from '../config/audio';
 import Phaser from 'phaser';
 import { DEBUG_TOGGLE_KEY, PLAYER_ONE_KEYS } from '../config/controls';
-import { GAME_HEIGHT } from '../config/display';
+import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
 import { SceneKeys } from '../config/sceneKeys';
 import { FIXED_STEP_MS, MAX_STEPS_PER_FRAME } from '../config/simulation';
 import { STRINGS } from '../config/strings';
@@ -28,6 +28,7 @@ import { getStageConfig } from '../stages/stageRegistry';
 import type { InputSource } from '../types/input';
 import type { MatchResult, MatchSetup, RoundResult } from '../types/match';
 import { Announcer } from '../ui/Announcer';
+import { ControlsHint } from '../ui/ControlsHint';
 import { FightHud } from '../ui/FightHud';
 import { PerfectCall } from '../ui/PerfectCall';
 import { COLORS, DEPTH, bodyText } from '../ui/theme';
@@ -48,6 +49,10 @@ const PERFECT_DELAY_MS = 1300;
  * reads controllers -> steps the simulation at a fixed 60 Hz -> renders the state.
  * No gameplay rules live here.
  */
+/** Fixed controls bar at the bottom of the screen (keyboard players). */
+const CONTROLS_BAR_HEIGHT = 24;
+const CONTROLS_BAR_Y = GAME_HEIGHT - CONTROLS_BAR_HEIGHT / 2;
+
 export class FightScene extends Phaser.Scene {
   private setup!: MatchSetup;
   private simulation!: FightSimulation;
@@ -100,6 +105,7 @@ export class FightScene extends Phaser.Scene {
       new AIController(aiProfileFor(setup.difficulty)),
     ];
     this.setupDebugOverlay();
+    this.createControlsBar();
 
     this.events.once('shutdown', () => {
       this.controllers.forEach((c) => c.destroy?.());
@@ -127,12 +133,39 @@ export class FightScene extends Phaser.Scene {
     return sources;
   }
 
+  /**
+   * The keys, always on screen at the bottom of the fight, so newcomers know what to press. Only
+   * for keyboard players: with touch controls the buttons already say it (and use that space).
+   */
+  private createControlsBar(): void {
+    if (this.touch) return;
+    this.add
+      .rectangle(GAME_WIDTH / 2, CONTROLS_BAR_Y, GAME_WIDTH, CONTROLS_BAR_HEIGHT, COLORS.ink, 0.55)
+      .setScrollFactor(0)
+      .setDepth(DEPTH.hud);
+    new ControlsHint(
+      this,
+      GAME_WIDTH / 2,
+      CONTROLS_BAR_Y,
+      STRINGS.fightControlsHint,
+      GAME_WIDTH,
+    ).container
+      .setScrollFactor(0)
+      .setDepth(DEPTH.hud)
+      .setAlpha(0.95);
+  }
+
   private setupDebugOverlay(): void {
     this.debugOverlay = new DebugOverlay(this, readUrlFlag('debug') ?? false);
     onKeys(this, [DEBUG_TOGGLE_KEY], () => this.debugOverlay.toggle());
     if (import.meta.env.DEV) {
       this.add
-        .text(8, GAME_HEIGHT - 8, STRINGS.debugHint, bodyText(11, COLORS.white))
+        .text(
+          8,
+          GAME_HEIGHT - CONTROLS_BAR_HEIGHT - 4,
+          STRINGS.debugHint,
+          bodyText(11, COLORS.white),
+        )
         .setOrigin(0, 1)
         .setAlpha(0.4)
         .setScrollFactor(0)

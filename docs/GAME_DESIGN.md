@@ -69,7 +69,9 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
      ser nele. A lista de fases se ajusta à quantidade de cenários (linhas mais baixas quando há
      mais fases; acima de 7, a lista rola).
      É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.
-4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
+4. **Luta:** melhor de 3. No teclado, uma barra fixa no pé da tela mostra os comandos o tempo todo
+   (← → andar, ↑ pular, ↓ agachar, A soco, S chute, D defesa, F especial); com controles de toque
+   ela não aparece (os botões já dizem). Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do
    vencedor, a linha "VOCÊ VENCEU!/VOCÊ PERDEU · motivo do último round · placar (ex.: 2 x 1)" e
