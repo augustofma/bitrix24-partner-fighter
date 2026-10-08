@@ -177,6 +177,7 @@ tests/                    Vitest: lutador, combate, arena, round, partida, IA, d
                           especiais, determinismo, seleção, animação/assets de sprite
 scripts/                  Ferramentas offline de preparação de assets
   aislan-art/             Fontes e normalização offline do Aislan
+  gabriel-mattozo-art/    Fontes e normalização offline do Gabriel Mattozo
   romulo-art/             Fontes e normalização offline do Rômulo
   dmitry-art/             Fontes, prompts e normalização offline do chefe final
   isaque-ferreira-art/     Fontes originais e normalização offline do Isaque

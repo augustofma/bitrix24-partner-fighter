@@ -715,3 +715,17 @@ PNG RGBA 1536×1120, grade 8×5 de 192×224; retrato RGBA 240×300. Baseline 216
 proporcional por pose em Pillow/NumPy offline, sem dependência nova no jogo. A rasteira usa a
 pose recolhida de recuperação também no startup; o chute aéreo foi elevado para acompanhar
 melhor a hitbox existente. Arte não muda timing nem colisões.
+
+## Gabriel Mattozo — GMC
+
+Arte original gerada com ImageGen integrado, usando as duas fotos e o pôster oficial
+fornecidos e autorizados pelo usuário nesta tarefa. Sem assets externos ou logos copiados.
+Óculos pretos, cabelo alto/fade, barba curta, corpo magro, hoodie bege, jeans azul escuro,
+tênis branco e crachá preservados. Fontes e prompts completos em
+[scripts/gabriel-mattozo-art](../scripts/gabriel-mattozo-art/README.md).
+
+PNG RGBA 1536×1120, 40 células 192×224 (8×5); portrait RGBA 240×300. Normalização offline
+reproduzível com Pillow/NumPy e utilitários já existentes: isolamento do alpha, recorte por
+pose, escala proporcional e ancoragem. Baseline 216, margem ≥4; scale 1 e offsets 0/8.
+Base para a direita; flipX genérico. Golpes sincronizados por fases do config; seis normais,
+sem arte de especial. KO deitado reduzido proporcionalmente para caber, sem cortar membros.

@@ -551,7 +551,19 @@ sem pedido explícito.**
       chefe final nas outras; marcador de Portugal em Lisboa e `mapNudge` para não sobrepor
 - [x] Testes de cenário, lugar, rotas e mapa; playtest da luta, do avião, do mapa e do final
 
+## DONE (Gabriel Mattozo — GMC, branch `feature/gabriel-mattozo-fighter`)
+
+- [x] Novo fighter configurável, oitavo selecionável na luta rápida como jogador e CPU
+- [x] Perfil ágil, vida 100, seis normais, sem especial exclusivo ou Story Route
+- [x] Arte original com óculos, hoodie bege e corpo magro; atlas RGBA 1536×1120, portrait 240×300
+- [x] 40 frames normalizados, margens e baseline validados; fontes, prompts e preparo offline
+- [x] Testes de roster, carregamento, animações, simulação, seleção, CPU e determinismo
+- [x] Playtest desktop, F2, poses, sete confrontos, Gabriel CPU, touch e cross-up
+- [x] Comparação visual com os oito fighters existentes; escala 1 e offsets 0/8
+
 ## NEXT (próximas tarefas recomendadas)
+
+- [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
        cada frame (~4% da CPU num celular lento, sem relação com especiais); trocar por
