@@ -44,6 +44,7 @@ const PREVIEW_ENTER_MS = 160;
 interface StageRow {
   container: Phaser.GameObjects.Container;
   frame: Phaser.GameObjects.Graphics;
+  hit: Phaser.GameObjects.Zone;
   stage: StageConfig;
 }
 
@@ -172,6 +173,16 @@ export class StageSelectScene extends Phaser.Scene {
       inner: COLORS.violet,
       shadow: 6,
     });
+    // Tapping the big picture fights there (the stage shown is the one selected).
+    this.add
+      .zone(
+        preview.left + preview.width / 2,
+        preview.top + preview.height / 2,
+        preview.width,
+        preview.height,
+      )
+      .setInteractive({ useHandCursor: true })
+      .on('pointerup', () => this.confirm());
   }
 
   private createRows(): void {
@@ -193,12 +204,14 @@ export class StageSelectScene extends Phaser.Scene {
           this.add.text(textX, list.rowHeight / 2 + 8, stage.location, bodyText(10, COLORS.neon)),
         );
       }
-      container.setSize(list.width, list.rowHeight);
-      container.setInteractive(
-        new Phaser.Geom.Rectangle(0, 0, list.width, list.rowHeight),
-        Phaser.Geom.Rectangle.Contains,
-      );
-      container.on('pointerup', () => {
+      // The tap target is a zone covering the whole row. A hit area set on the container
+      // itself is offset by half its size (containers are centred on their position), which
+      // left the right half of each row, its name, dead to taps.
+      const hit = this.add
+        .zone(list.width / 2, list.rowHeight / 2, list.width, list.rowHeight)
+        .setInteractive({ useHandCursor: true });
+      container.add(hit);
+      hit.on('pointerup', () => {
         // First tap selects, a tap on the selected stage confirms (like the fighter cards).
         if (this.selectedIndex === index) this.confirm();
         else {
@@ -207,7 +220,7 @@ export class StageSelectScene extends Phaser.Scene {
           this.refresh(true);
         }
       });
-      this.rows.push({ container, frame, stage });
+      this.rows.push({ container, frame, hit, stage });
     });
   }
 
@@ -259,7 +272,7 @@ export class StageSelectScene extends Phaser.Scene {
       const shown = index >= start && index < start + list.visibleRows;
       const selected = index === this.selectedIndex;
       row.container.setVisible(shown);
-      if (row.container.input) row.container.input.enabled = shown;
+      if (row.hit.input) row.hit.input.enabled = shown;
       row.container.setY(listRowY(index - start) - list.rowHeight / 2);
       row.frame.clear();
       drawArcadeFrame(row.frame, 0, 0, list.width, list.rowHeight, {

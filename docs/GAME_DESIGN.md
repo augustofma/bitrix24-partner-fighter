@@ -40,7 +40,8 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    topo, nome e lugar embaixo, e a lista dos cenários ilustrados à direita (Partner Summit,
    Recife, Joinville, Joinville ZOPU, Praça Vermelha; a Partner Arena provisória fica fora).
    Começa no cenário sugerido pela cidade dos lutadores (regra abaixo). ↑ ↓ ← → percorrem
-   (circular), tocar seleciona e tocar de novo confirma, LUTAR! ou Enter vai ao VS e Esc /
+   (circular), tocar uma fase (em qualquer ponto da linha) seleciona e tocar de novo confirma,
+   tocar a prévia grande também luta na fase mostrada, LUTAR! ou Enter vai ao VS e Esc /
    VOLTAR volta ao passo do rival com os dois lutadores.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
    O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
