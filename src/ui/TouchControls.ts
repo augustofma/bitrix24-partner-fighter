@@ -12,6 +12,7 @@ import {
 import type { InputAction, InputReadContext, InputSource, InputState } from '../types/input';
 import { specialButtonStyle } from './hud/specialReady';
 import { COLORS, DEPTH, arcadeText } from './theme';
+import { TouchCircle, ringTexture } from './TouchCircle';
 import { VirtualJoystick } from './VirtualJoystick';
 
 interface ButtonLayout {
@@ -24,7 +25,7 @@ interface ButtonLayout {
 interface TouchButton {
   /** Pointer ids currently holding this button (multi-touch). */
   pointers: Set<number>;
-  circle: Phaser.GameObjects.Arc;
+  circle: TouchCircle;
 }
 
 const RADIUS = 36;
@@ -63,7 +64,7 @@ export class TouchControls implements InputSource {
   private readonly joystick: VirtualJoystick;
   private readonly jumpLatch = new JumpLatch();
   private specialReady = false;
-  private readyRing: Phaser.GameObjects.Arc | null = null;
+  private readyRing: Phaser.GameObjects.Image | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
     for (const layout of LAYOUT) this.createButton(layout);
@@ -139,11 +140,11 @@ export class TouchControls implements InputSource {
     return this.specialReady;
   }
 
-  private ensureReadyRing(circle: Phaser.GameObjects.Arc): Phaser.GameObjects.Arc {
+  private ensureReadyRing(circle: TouchCircle): Phaser.GameObjects.Image {
     if (!this.readyRing) {
       this.readyRing = this.scene.add
-        .circle(circle.x, circle.y, RADIUS + READY_RING_GAP)
-        .setStrokeStyle(3, COLORS.gold, 1)
+        .image(circle.x, circle.y, ringTexture(this.scene, RADIUS + READY_RING_GAP, 3))
+        .setTint(COLORS.gold)
         .setScrollFactor(0)
         .setDepth(DEPTH.touch)
         .setVisible(false);
@@ -160,8 +161,8 @@ export class TouchControls implements InputSource {
   }
 
   private createButton({ action, label, x, y }: ButtonLayout): void {
-    const circle = this.scene.add
-      .circle(x, y, RADIUS, COLORS.ink, IDLE_ALPHA)
+    const circle = new TouchCircle(this.scene, x, y, RADIUS)
+      .setFillStyle(COLORS.ink, IDLE_ALPHA)
       .setStrokeStyle(3, COLORS.white, 0.6);
     const text = this.scene.add
       .text(x, y, label, arcadeText(label.length > 1 ? 13 : 24, COLORS.white))
@@ -172,16 +173,17 @@ export class TouchControls implements InputSource {
     const button: TouchButton = { pointers: new Set(), circle };
     this.buttons.set(action, button);
 
-    const hitArea = new Phaser.Geom.Circle(RADIUS, RADIUS, RADIUS + HIT_PADDING);
-    circle.setInteractive(hitArea, Phaser.Geom.Circle.Contains);
-    circle.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+    const hit = circle.fill;
+    const hitArea = new Phaser.Geom.Circle(hit.width / 2, hit.height / 2, RADIUS + HIT_PADDING);
+    hit.setInteractive(hitArea, Phaser.Geom.Circle.Contains);
+    hit.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
       button.pointers.add(pointer.id);
       this.latched.add(action);
       this.refresh(button);
     });
     // Finger lifted, or slid off the button.
     for (const event of ['pointerup', 'pointerout']) {
-      circle.on(event, (pointer: Phaser.Input.Pointer) => {
+      hit.on(event, (pointer: Phaser.Input.Pointer) => {
         button.pointers.delete(pointer.id);
         this.refresh(button);
       });

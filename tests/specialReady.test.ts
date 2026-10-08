@@ -100,12 +100,22 @@ describe('touch ESP button', () => {
   function fakeScene() {
     const made: Record<string, unknown>[] = [];
     const object = (x = 0, y = 0) => {
-      const state: Record<string, unknown> = { x, y, visible: true, alpha: 1, stroke: null };
+      const state: Record<string, unknown> = {
+        x,
+        y,
+        visible: true,
+        alpha: 1,
+        tint: null,
+        texture: null,
+        width: 76,
+        height: 76,
+      };
       const proxy: Record<string, unknown> = new Proxy(state, {
         get(target, key: string) {
           if (key in target) return target[key];
           return (...args: unknown[]) => {
-            if (key === 'setStrokeStyle') target.stroke = args;
+            if (key === 'setTint') target.tint = args[0];
+            if (key === 'setTexture') target.texture = args[0];
             if (key === 'setVisible') target.visible = args[0];
             if (key === 'setAlpha') target.alpha = args[0];
             return proxy;
@@ -117,7 +127,16 @@ describe('touch ESP button', () => {
     };
     const tweens = { add: vi.fn(), killTweensOf: vi.fn() };
     const scene = {
-      add: { circle: object, text: object, graphics: object },
+      add: { image: (x: number, y: number) => object(x, y), text: object, graphics: object },
+      make: {
+        graphics: () => ({
+          fillStyle: () => ({ fillCircle: vi.fn() }),
+          lineStyle: () => ({ strokeCircle: vi.fn() }),
+          generateTexture: vi.fn(),
+          destroy: vi.fn(),
+        }),
+      },
+      textures: { exists: () => false },
       input: { on: vi.fn(), off: vi.fn() },
       game: { events: { on: vi.fn(), off: vi.fn() } },
       events: { once: vi.fn() },
@@ -135,10 +154,11 @@ describe('touch ESP button', () => {
     const ring = made[before]!;
     expect(ring.visible).toBe(true);
     expect(tweens.add).toHaveBeenCalledTimes(1);
-    const espStroke = made.find(
-      (o) => Array.isArray(o.stroke) && o.stroke[1] === SPECIAL_BUTTON_READY.strokeColor,
-    );
+    // The ESP button's outline: thicker, in the READY color.
+    const espStroke = made.find((o) => o.tint === SPECIAL_BUTTON_READY.strokeColor);
     expect(espStroke).toBeDefined();
+    expect(espStroke!.alpha).toBe(SPECIAL_BUTTON_READY.strokeAlpha);
+    expect(espStroke!.texture).toContain(`:${SPECIAL_BUTTON_READY.strokeWidth}`);
 
     // Calling every frame with the same state does nothing new.
     touch.setSpecialReady(true);
@@ -146,11 +166,9 @@ describe('touch ESP button', () => {
 
     touch.setSpecialReady(false);
     expect(ring.visible).toBe(false);
-    expect(espStroke!.stroke).toEqual([
-      SPECIAL_BUTTON_IDLE.strokeWidth,
-      SPECIAL_BUTTON_IDLE.strokeColor,
-      SPECIAL_BUTTON_IDLE.strokeAlpha,
-    ]);
+    expect(espStroke!.tint).toBe(SPECIAL_BUTTON_IDLE.strokeColor);
+    expect(espStroke!.alpha).toBe(SPECIAL_BUTTON_IDLE.strokeAlpha);
+    expect(espStroke!.texture).toContain(`:${SPECIAL_BUTTON_IDLE.strokeWidth}`);
   });
 
   it('style: lit border and glow only when ready', () => {

@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { JoystickTracker, type JoystickDirection } from '../input/joystick';
 import { COLORS, DEPTH } from './theme';
+import { TouchCircle } from './TouchCircle';
 
 const BASE_RADIUS = 62;
 const KNOB_RADIUS = 26;
@@ -23,8 +24,8 @@ const RETURN_MS = 110;
  */
 export class VirtualJoystick {
   private readonly tracker: JoystickTracker;
-  private readonly base: Phaser.GameObjects.Arc;
-  private readonly knob: Phaser.GameObjects.Arc;
+  private readonly base: TouchCircle;
+  private readonly knob: TouchCircle;
   private returnTween: Phaser.Tweens.Tween | null = null;
   private lastDirection: JoystickDirection | null = null;
 
@@ -36,8 +37,8 @@ export class VirtualJoystick {
     private readonly onDirectionChange: (direction: JoystickDirection | null) => void,
   ) {
     this.tracker = new JoystickTracker(x, y, TRAVEL_RADIUS, ACTIVATION_RADIUS);
-    this.base = scene.add.circle(x, y, BASE_RADIUS, COLORS.navyDeep, IDLE_BASE_ALPHA);
-    this.knob = scene.add.circle(x, y, KNOB_RADIUS, COLORS.neon, IDLE_KNOB_ALPHA);
+    this.base = new TouchCircle(scene, x, y, BASE_RADIUS);
+    this.knob = new TouchCircle(scene, x, y, KNOB_RADIUS);
     for (const object of [this.base, this.knob]) object.setScrollFactor(0).setDepth(DEPTH.touch);
     this.refresh();
 
@@ -89,7 +90,7 @@ export class VirtualJoystick {
     } else {
       // Inputs are already released; only the knob glides home.
       this.returnTween = this.scene.tweens.add({
-        targets: this.knob,
+        targets: [this.knob.fill, this.knob.ring],
         x: this.x,
         y: this.y,
         duration: RETURN_MS,
