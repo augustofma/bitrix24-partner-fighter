@@ -1,8 +1,9 @@
 """Builds the installable app icons (web manifest) from the title logo.
 
 Input : public/ui/title/logo.png (the title screen logo layer, transparent background)
-Output: public/icons/icon-192.png and public/icons/icon-512.png: the logo centred on the game's
-        night navy, square, with a safe margin so maskable crops never cut it.
+Output: public/icons/icon-{180,192,512}.png (180 is the iOS home screen icon): the logo
+        centred on the game's night navy, square, with a safe margin so maskable crops never
+        cut it.
 
 Offline tool only (not part of the build). Requires Python 3 + Pillow:
     python scripts/app-icon/prepare_app_icon.py
@@ -22,7 +23,7 @@ SAFE = 0.8  # Share of the side the logo may use (maskable icons keep the centra
 def main() -> None:
     logo = Image.open(LOGO).convert('RGBA')
     OUT.mkdir(parents=True, exist_ok=True)
-    for size in (192, 512):
+    for size in (180, 192, 512):
         icon = Image.new('RGBA', (size, size), BACKGROUND)
         scale = size * SAFE / max(logo.size)
         art = logo.resize((round(logo.width * scale), round(logo.height * scale)), Image.LANCZOS)

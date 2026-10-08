@@ -640,6 +640,13 @@ sem pedido explícito.**
 - [x] Tela cheia (e paisagem travada) no primeiro toque em aparelhos touch; manifesto com
       `display: fullscreen` e ícones para "Adicionar à tela inicial"
 
+## DONE (iOS, branch `feature/ios-fullscreen`)
+
+- [x] iPad: tela cheia no toque pela API prefixada do Safari
+- [x] iPhone (Safari não tem tela cheia para páginas): aviso de "Adicionar à Tela de Início";
+      instalado, abre como app em tela cheia (`apple-touch-icon` 180, barra de status translúcida)
+- [ ] Testar num iPhone/iPad de verdade (aqui só emulação no Chromium; sem WebKit no ambiente)
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Carregar cenários, endings e lutadores sob demanda (hoje o boot baixa tudo, ~48 MB)

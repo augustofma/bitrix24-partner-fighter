@@ -5,6 +5,9 @@
 export const STRINGS = {
   titleTop: 'BITRIX24',
   titleBottom: 'PARTNER FIGHTER',
+  /** iPhone (no fullscreen for pages): how to install the game for a fullscreen app. */
+  iosFullscreenHint:
+    'Tela cheia no iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”',
   /** Boot loading screen label (progress from 0 to 1). */
   loading: (progress: number) =>
     `CARREGANDO  ${Math.round(Math.min(Math.max(progress, 0), 1) * 100)}%`,
