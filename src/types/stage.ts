@@ -94,11 +94,16 @@ export interface StageFlyover {
   skyline: StageImage;
   /** Size of the flying group (plane, banner, lines): below 1 it looks further away. */
   scale: number;
+  /**
+   * Which way the plane flies, as it faces in the art. 'left' (default): plane on the left,
+   * banner trailing to its right. 'right': plane on the right, banner trailing to its left.
+   */
+  direction?: 'left' | 'right';
   /** Where the tow lines leave the plane (relative to the plane's top-left, unscaled art px). */
   hook: { x: number; y: number };
   /** Where the two tow lines hold the banner's leading edge: y of top and bottom (unscaled). */
   bannerAttach: readonly [number, number];
-  /** Gap between the plane's tail and the banner's left edge (unscaled art px). */
+  /** Gap between the plane's tail and the banner's leading edge (unscaled art px). */
   bannerGap: number;
   /** Banner top relative to the plane's top (unscaled art px). */
   bannerOffsetY: number;

@@ -598,6 +598,14 @@ sem pedido explícito.**
       Romualdo: rota Espanha → Curitiba → Joinville
 - [x] Testes de cenário, lugar, rotas e mapa; playtest da luta, do avião, do mapa e da seleção
 
+## DONE (cenário PORTUGAL da luta do Filipe, branch `feature/portugal-stage`)
+
+- [x] Arte 4:3 cortada em 16:9 e preparada espelhada (`prepare_portugal.py`); opções novas do
+      preparo: `plane_min_y`, `sky_min_value`, `sky_max_hue`, `clear_ring`
+- [x] Voo para a direita na animação (`direction: 'right'`), faixa atrás do avião
+- [x] Cenário `portugal` no lugar Portugal (luta do Filipe) e na seleção (9 fases, sem rolagem)
+- [x] Testes atualizados; playtest da luta e do voo
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)

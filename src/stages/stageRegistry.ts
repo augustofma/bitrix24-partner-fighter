@@ -6,12 +6,14 @@ import { joinvilleZopu } from './joinvilleZopu';
 import { bitrix24Moscow } from './bitrix24Moscow';
 import { casteloBranco } from './casteloBranco';
 import { curitiba } from './curitiba';
+import { portugal } from './portugal';
 import { recife } from './recife';
 import { russia } from './russia';
 
 export const STAGES: readonly StageConfig[] = [
   partnerSummit,
   recife,
+  portugal,
   joinville,
   joinvilleZopu,
   russia,

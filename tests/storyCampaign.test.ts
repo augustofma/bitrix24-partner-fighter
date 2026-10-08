@@ -224,7 +224,7 @@ describe('Recife in the campaigns', () => {
       expect(() => getStageConfig(stageId)).not.toThrow();
     }
     const augustoFirst = storyMatchSetup(arriveForFight(startStory('augusto')), 'normal');
-    expect(augustoFirst.stageId).toBe(DEFAULT_STAGE_ID); // Portugal: no stage yet
+    expect(augustoFirst.stageId).toBe('portugal'); // Filipe, on the seaside promenade
     expect(legStageId({ opponent: 'joao-guiotti', destination: 'russia' })).toBe(DEFAULT_STAGE_ID);
     expect(legStageId({ opponent: 'romualdo', destination: 'joinville' })).toBe('joinville');
     expect(getStoryLocation('recife').stageId).toBe('recife');

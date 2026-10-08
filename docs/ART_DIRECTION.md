@@ -436,6 +436,15 @@ beira-mar olhando o pôr do sol sobre a praia e os prédios
 cadastrada para o id `romulo`; aparece quando o lutador entrar no elenco. O Romulo está à esquerda
 e o título, à direita, não o cobre.
 
+## Cenário: PORTUGAL (Filipe)
+
+Arte oficial fornecida pelo dono do projeto: o calçadão de pedra portuguesa sobre o litoral, com
+falésias, a cidade branca, veleiros, estandartes e a grade da Arrecife Digital
+([scripts/stage-art/portugal/README.md](../scripts/stage-art/portugal/README.md)). É onde se luta
+contra o Filipe na história. Único cenário em que o avião voa para a **direita**, como na arte
+(`direction: 'right'`): a faixa vai atrás dele, à esquerda, e ondula na ponta solta. Torcida em
+grupos entre as floreiras; `top` −64 põe os pés no mosaico, à frente da grade.
+
 ## Cenário: CASTELO BRANCO (Rômulo)
 
 Arte oficial fornecida pelo dono do projeto: o terraço das muralhas sobre Castelo Branco, em
@@ -622,6 +631,7 @@ registrada aqui:
 | `scripts/stage-art/joinville-zopu/source.png` e `public/stages/joinville-zopu/*`                    | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_joinville_zopu.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/bitrix24-moscow/source.png` e `public/stages/bitrix24-moscow/*`                  | Arte oficial fornecida pelo usuário; redimensionada por `prepare_bitrix24_moscow.py`            | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/castelo-branco/source.webp` e `public/stages/castelo-branco/*`                   | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_castelo_branco.py`          | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/portugal/source.webp` e `public/stages/portugal/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_portugal.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |

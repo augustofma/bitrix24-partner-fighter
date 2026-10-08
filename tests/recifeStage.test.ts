@@ -171,7 +171,7 @@ describe('RECIFE is picked by place, never by fighter', () => {
     expect(stageIdForLocation('recife')).toBe('recife');
     expect(legStageId({ opponent: 'romualdo', destination: 'recife' })).toBe('recife');
     // Places without their own stage use the default; an explicit leg stage still wins.
-    for (const place of ['sao-paulo', 'portugal', 'russia']) {
+    for (const place of ['sao-paulo', 'russia', 'spain']) {
       expect(stageIdForLocation(place)).toBe(DEFAULT_STAGE_ID);
     }
     expect(

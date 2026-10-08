@@ -73,6 +73,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     // Next to Castelo Branco and Spain on the world map: its label goes below-left, Castelo
     // Branco's above-left, Spain's above-right.
     mapLabel: { side: 'left', dy: 11 },
+    // Fights here (Filipe's) happen on the seaside promenade.
+    stageId: 'portugal',
   },
   {
     // Rômulo's city (he is from Arrecife Digital, but lives here). A city abroad: no region code.

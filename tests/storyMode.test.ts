@@ -38,7 +38,7 @@ import {
   startStory,
   storyMatchSetup,
 } from '../src/story/storyProgress';
-import { DEFAULT_STAGE_ID, getStageConfig } from '../src/stages/stageRegistry';
+import { getStageConfig } from '../src/stages/stageRegistry';
 
 describe('origins (all from configuration)', () => {
   it.each([
@@ -179,7 +179,7 @@ describe('story progress', () => {
     expect(storyMatchSetup(fight, 'hard')).toEqual({
       playerFighterId: 'augusto',
       cpuFighterId: 'filipe',
-      stageId: DEFAULT_STAGE_ID,
+      stageId: 'portugal',
       difficulty: 'hard',
       mode: 'story',
     });

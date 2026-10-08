@@ -21,8 +21,8 @@ export const STAGE_SELECT_LAYOUT = {
 export const STAGE_LIST_RULES = {
   gap: 4,
   maxRowHeight: 62,
-  /** 8 stages fit without scrolling (rows ~41 px); more than that scrolls. */
-  minRowHeight: 40,
+  /** 9 stages fit without scrolling (rows ~36 px); more than that scrolls. */
+  minRowHeight: 36,
   /** Thumbnail: the row height minus this, at the art's ~16:9 crop ratio of the list. */
   thumbInset: 10,
   thumbAspect: 100 / 52,

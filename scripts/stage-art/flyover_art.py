@@ -54,6 +54,16 @@ class FlyoverStage:
     extra_sky: Optional[Callable] = None
     # Lowest source row of the plane (clouds right under its wheels are left in the sky).
     plane_max_y: Optional[int] = None
+    # Highest source row of the plane (a cloud right above it is left in the sky).
+    plane_min_y: Optional[int] = None
+    # Minimum brightness of the sky (0..1) when separating the flying group: raise it when the
+    # banner is a blue close to the sky's, only darker.
+    sky_min_value: float = 0.6
+    # Largest hue (degrees) of the sky: lower it when the banner is a purer blue than the sky.
+    sky_max_hue: float = 235
+    # Sky cleared around the flying group (source px); wider when its edge is dark and would
+    # stain the inpainted sky.
+    clear_ring: int = CLEAR_RING
     # (label, (x0, y0, x1, y1)) source boxes printed at display scale for the crowd config.
     crowd_boxes: tuple = field(default_factory=tuple)
     # Source boxes cleared from the sky whatever their colour: e.g. tow lines drawn in a blue
@@ -80,11 +90,11 @@ def orange_mask(image):
     return (hue > 8) & (hue < 45) & (sat > 0.45)
 
 
-def sky_mask(image):
+def sky_mask(image, min_value=0.6, max_hue=235):
     """Clear, bright blue sky (the plane, banner and lines are anything else; their dark-blue
     outlines and lettering are blue too, but dark)."""
     hue, sat, val = hsv(image)
-    return (hue > 190) & (hue < 235) & (sat > 0.45) & (val > 0.6)
+    return (hue > 190) & (hue < max_hue) & (sat > 0.45) & (val > min_value)
 
 
 def fill_holes(mask, box):
@@ -173,7 +183,7 @@ def prepare(stage):
     image = Image.open(SOURCE).convert('RGB')
     x0, y0, x1, y1 = SKY_BOX
     group = np.zeros(image.size[::-1], bool)
-    sky = sky_mask(image)
+    sky = sky_mask(image, stage.sky_min_value, stage.sky_max_hue)
     if stage.extra_sky is not None:
         sky |= stage.extra_sky(image)
     group[y0:y1, x0:x1] = ~sky[y0:y1, x0:x1]
@@ -188,6 +198,8 @@ def prepare(stage):
 
     if stage.plane_max_y is not None:
         group[stage.plane_max_y :, x0:PLANE_MAX_X] = False
+    if stage.plane_min_y is not None:
+        group[: stage.plane_min_y, x0:PLANE_MAX_X] = False
     whole_plane = large_components(split(group, x0, PLANE_MAX_X), 200)
     propeller = split(whole_plane, x0, PROPELLER_MAX_X)
     plane = split(whole_plane, PROPELLER_MAX_X, PLANE_MAX_X)
@@ -197,7 +209,7 @@ def prepare(stage):
 
     size = (round(image.width * DISPLAY_SCALE), round(image.height * DISPLAY_SCALE))
     OUT.mkdir(parents=True, exist_ok=True)
-    hole = dilate(group, CLEAR_RING)
+    hole = dilate(group, stage.clear_ring)
     inpaint(image, hole).resize(size, Image.LANCZOS).save(
         OUT / 'background.jpg', quality=92, optimize=True
     )

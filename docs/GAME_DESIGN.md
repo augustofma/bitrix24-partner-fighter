@@ -692,7 +692,8 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   marcador de Portugal (Filipe) fica em Lisboa e o de Castelo Branco um pouco ao norte, para os
   três da Península Ibérica não se sobreporem. Cada viagem parte de onde a
   campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário
-  RECIFE); os outros lugares usam o Partner Summit até terem cenário próprio.
+  RECIFE); em Portugal, contra o Filipe, no calçadão à beira-mar (cenário PORTUGAL); os outros
+  lugares usam o Partner Summit até terem cenário próprio.
 - **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
   (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.
 - **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
