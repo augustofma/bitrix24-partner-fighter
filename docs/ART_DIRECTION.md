@@ -446,6 +446,15 @@ Mesmo preparo e mesma animação do Recife: o avião cruza o céu atrás da árv
 bandeiras; a torcida pula em grupos e reage aos golpes. `top` −62 põe os pés no calçamento do
 terraço, à frente do muro.
 
+## Cenário: CURITIBA (Gabriel Mattozo)
+
+Arte oficial fornecida pelo dono do projeto: o Jardim Botânico de Curitiba, com a estufa de vidro,
+o chafariz, os jardins, os prédios ao fundo, estandartes e tendas da GMC e a torcida atrás da grade
+roxa ([scripts/stage-art/curitiba/README.md](../scripts/stage-art/curitiba/README.md)). Mesmo
+preparo e animação do Recife: o avião roxo com a faixa "GMC" voa alto, menor, atrás dos prédios e
+das cúpulas da estufa; a torcida pula em três faixas (os postes ficam parados). `top` −40 põe os
+pés no calçamento em mosaico.
+
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
 Arte oficial fornecida pelo dono do projeto: o salão da sede da Bitrix24 em Moscou, com o
@@ -613,6 +622,7 @@ registrada aqui:
 | `scripts/stage-art/joinville-zopu/source.png` e `public/stages/joinville-zopu/*`                    | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_joinville_zopu.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/bitrix24-moscow/source.png` e `public/stages/bitrix24-moscow/*`                  | Arte oficial fornecida pelo usuário; redimensionada por `prepare_bitrix24_moscow.py`            | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/castelo-branco/source.webp` e `public/stages/castelo-branco/*`                   | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_castelo_branco.py`          | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/aislan/source.webp` e `public/story/endings/aislan.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_aislan_ending.py`    | Arte do projeto, aprovada pelo usuário                            |

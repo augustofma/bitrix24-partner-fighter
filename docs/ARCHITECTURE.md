@@ -361,7 +361,7 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   história** (padrão = `home`), lido por `storyLocationId(id)`. É dali que a campanha dele
   COMEÇA e é ali que as outras campanhas o ENFRENTAM. Hoje: Augusto em Recife, Filipe em
   Portugal (é de Recife), João Guiotti na Rússia (é de São Paulo), Isaque Ferreira na Espanha
-  (sem origem oficial cadastrada), Romualdo em Joinville, Rômulo em Castelo Branco (Portugal,
+  (sem origem oficial cadastrada), Romualdo em Joinville, Gabriel Mattozo em Curitiba (PR), Rômulo em Castelo Branco (Portugal,
   onde mora; é da Arrecife Digital). `mapNudge` desloca um marcador alguns px no mapa-múndi só
   para legibilidade (Castelo Branco, a poucos px de Lisboa e Madri); voos saem e chegam nele.
 - **Campanhas geradas (nada escrito por personagem):** `storyRouteFor(id)` =

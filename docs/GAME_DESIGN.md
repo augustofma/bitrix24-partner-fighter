@@ -686,7 +686,9 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   Espanha (Isaque) → Joinville (Romualdo). Romualdo: Joinville → Recife (Augusto) → Portugal
   (Filipe) → Rússia (João) → Espanha (Isaque). Isaque: Espanha → Recife → Portugal → Rússia →
   Joinville. Com o Rômulo, toda campanha passa ainda por **Castelo Branco** (Portugal, onde ele
-  mora), no cenário CASTELO BRANCO, logo antes do chefe final; a dele começa lá. No mapa-múndi o
+  mora), no cenário CASTELO BRANCO, logo antes do chefe final; a dele começa lá. O Gabriel Mattozo é de
+  **Curitiba** (cenário CURITIBA, no Jardim Botânico): as campanhas passam por lá depois da
+  Espanha e antes de Joinville; a dele começa lá. No mapa-múndi o
   marcador de Portugal (Filipe) fica em Lisboa e o de Castelo Branco um pouco ao norte, para os
   três da Península Ibérica não se sobreporem. Cada viagem parte de onde a
   campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário

@@ -35,6 +35,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   },
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
+  // Gabriel Mattozo (GMC) is from Curitiba: met at the Jardim Botânico (the place's stage).
+  { fighterId: 'gabriel-mattozo', home: 'curitiba' },
   { fighterId: 'romualdo', home: 'joinville' },
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
   { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },

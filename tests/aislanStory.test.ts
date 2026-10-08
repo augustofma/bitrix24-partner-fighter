@@ -84,10 +84,11 @@ describe('Aislan shared location, independent encounter', () => {
     });
   });
   it('flies from the actual previous location when Joinville has not been reached', () => {
+    // Romualdo's campaign meets Gabriel Mattozo in Curitiba right before Aislan.
     const progress = reachAislan('romualdo');
-    expect(progress.currentLocation).toBe('spain');
+    expect(progress.currentLocation).toBe('curitiba');
     const trip = tripForProgress(progress, STORY_MAP_LAYOUT.maps)!;
-    expect(trip.from.id).toBe('spain');
+    expect(trip.from.id).toBe('curitiba');
     expect(trip.to.id).toBe('joinville');
     expect(trip.requiresFlight).toBe(true);
   });

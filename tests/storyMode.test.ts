@@ -97,6 +97,7 @@ describe('campaigns', () => {
       { opponent: 'filipe', destination: 'portugal' },
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
+      { opponent: 'gabriel-mattozo', destination: 'curitiba' },
       { opponent: 'romualdo', destination: 'joinville' },
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
       { opponent: 'romulo', destination: 'castelo-branco' },
@@ -107,6 +108,7 @@ describe('campaigns', () => {
       'portugal',
       'russia',
       'spain',
+      'curitiba',
       'joinville',
       'joinville',
       'castelo-branco',
@@ -119,6 +121,7 @@ describe('campaigns', () => {
       { opponent: 'augusto', destination: 'recife' },
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
+      { opponent: 'gabriel-mattozo', destination: 'curitiba' },
       { opponent: 'romualdo', destination: 'joinville' },
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
       { opponent: 'romulo', destination: 'castelo-branco' },
@@ -129,6 +132,7 @@ describe('campaigns', () => {
       'recife',
       'russia',
       'spain',
+      'curitiba',
       'joinville',
       'joinville',
       'castelo-branco',
@@ -146,6 +150,7 @@ describe('campaigns', () => {
       'isaque-ferreira',
       'aislan',
       'romulo',
+      'gabriel-mattozo',
     ]);
     expect(() => startStory('fighter-a')).toThrow();
   });
@@ -208,20 +213,20 @@ describe('story progress', () => {
     const fourth = recordStoryMatch(arriveForFight(third), true);
     expect(fourth).toMatchObject({
       currentLocation: 'spain',
-      nextLocation: 'joinville',
-      opponent: 'romualdo',
+      nextLocation: 'curitiba',
+      opponent: 'gabriel-mattozo',
     });
   });
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
     let progress = startStory('filipe');
-    for (let leg = 0; leg < 7; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
+    for (let leg = 0; leg < 8; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
-      currentStage: 7,
+      currentStage: 8,
       currentLocation: 'russia',
       opponent: null,
-      completedStages: [0, 1, 2, 3, 4, 5, 6],
+      completedStages: [0, 1, 2, 3, 4, 5, 6, 7],
     });
     expect(recordStoryMatch(progress, true)).toBe(progress);
     expect(arriveForFight(progress)).toBe(progress);

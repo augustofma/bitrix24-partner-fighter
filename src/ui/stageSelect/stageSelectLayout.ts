@@ -12,17 +12,17 @@ export const STAGE_SELECT_LAYOUT = {
   /** Name and place of the highlighted stage, under the preview. */
   caption: { x: 328, nameY: 452, locationY: 482 },
   /** Area of the stage list; its rows are sized from the number of stages (stageList). */
-  listArea: { left: 648, top: 76, width: 290, height: 346 },
+  listArea: { left: 648, top: 76, width: 290, height: 356 },
   fightButton: { x: 793, y: 464, width: 290, height: 56 },
   footerY: 522,
 } as const;
 
 /** Row limits of the stage list: tall rows for a few stages, compact (not tiny) for more. */
 export const STAGE_LIST_RULES = {
-  gap: 6,
+  gap: 4,
   maxRowHeight: 62,
-  /** 7 stages fit without scrolling (rows ~44 px, still a comfortable tap target). */
-  minRowHeight: 44,
+  /** 8 stages fit without scrolling (rows ~41 px); more than that scrolls. */
+  minRowHeight: 40,
   /** Thumbnail: the row height minus this, at the art's ~16:9 crop ratio of the list. */
   thumbInset: 10,
   thumbAspect: 100 / 52,

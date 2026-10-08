@@ -588,6 +588,16 @@ sem pedido explícito.**
 - [x] Playtest desktop, F2, poses, sete confrontos, Gabriel CPU, touch e cross-up
 - [x] Comparação visual com os oito fighters existentes; escala 1 e offsets 0/8
 
+## DONE (cenário CURITIBA e Gabriel Mattozo no Modo História, branch `feature/curitiba-stage`)
+
+- [x] Gabriel Mattozo do Codex revisado e juntado à `main` atual
+- [x] Arte preparada por `prepare_curitiba.py` (avião roxo e faixa "GMC" separados;
+      `pale_solid_from` para os prédios claros cobrirem o avião) e cenário `curitiba`
+- [x] Lista de fases com 8 cenários sem rolagem (linhas ~41 px)
+- [x] Lugar `curitiba` (PR, separado de Joinville no mapa) e perfil do Gabriel antes do
+      Romualdo: rota Espanha → Curitiba → Joinville
+- [x] Testes de cenário, lugar, rotas e mapa; playtest da luta, do avião, do mapa e da seleção
+
 ## NEXT (próximas tarefas recomendadas)
 
 - [ ] Validar desempenho do Gabriel em celular físico; smoke emulado usou SwiftShader (~15 FPS)

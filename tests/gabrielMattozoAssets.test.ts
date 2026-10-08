@@ -12,12 +12,11 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Gabriel Mattozo PNG assets', () => {
-  it('keeps one roster entry, his own portrait, without inventing a story campaign', () => {
+  it('keeps one roster entry, his own portrait, and his story campaign (Curitiba)', () => {
     expect(ROSTER.filter((f) => f.id === 'gabriel-mattozo')).toEqual([gabrielMattozo]);
     expect(gabrielMattozo.assets.portrait).toBe('fighters/gabriel-mattozo/portrait.png');
     expect(gabrielMattozo.playable).toBe(true);
-    // No story profile is invented for the new fighter.
-    expect(hasStoryCampaign(gabrielMattozo.id)).toBe(false);
+    expect(hasStoryCampaign(gabrielMattozo.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(gabrielMattozo, 40)).toEqual([]);

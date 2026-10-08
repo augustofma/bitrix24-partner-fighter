@@ -147,8 +147,8 @@ describe('the trip to Spain and the fight there', () => {
       phase: 'travel',
       currentStage: fight.currentStage + 1,
       currentLocation: 'spain',
-      nextLocation: 'joinville',
-      opponent: 'romualdo',
+      nextLocation: 'curitiba',
+      opponent: 'gabriel-mattozo',
     });
   });
 
@@ -157,8 +157,8 @@ describe('the trip to Spain and the fight there', () => {
     expect(recordStoryMatch(fight, true)).toMatchObject({
       phase: 'travel',
       currentLocation: 'spain',
-      nextLocation: 'joinville',
-      opponent: 'aislan',
+      nextLocation: 'curitiba',
+      opponent: 'gabriel-mattozo',
     });
   });
 

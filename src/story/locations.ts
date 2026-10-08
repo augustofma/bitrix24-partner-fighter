@@ -44,6 +44,22 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     // Fights in Joinville happen at the city's gate.
     stageId: 'joinville',
   },
+  {
+    // Gabriel Mattozo's city. A few px from Joinville on both maps: drawn a little north-west,
+    // label to the left (Joinville's goes right).
+    id: 'curitiba',
+    kind: 'city',
+    name: 'Curitiba',
+    country: HOME_COUNTRY,
+    region: 'Paraná',
+    regionCode: 'PR',
+    latitude: -25.43,
+    longitude: -49.27,
+    mapNudge: { dx: -6, dy: -7 },
+    mapLabel: { side: 'left', dy: -6 },
+    // Fights here happen at the Jardim Botânico.
+    stageId: 'curitiba',
+  },
   // Countries are marked at a central, recognizable point (Russia: around Moscow, where the
   // European side meets the map's frame).
   {

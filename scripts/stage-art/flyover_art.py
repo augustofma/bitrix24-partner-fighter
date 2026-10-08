@@ -60,6 +60,9 @@ class FlyoverStage:
     # the sky mask takes for sky. Keep them between plane_max_x and banner_min_x: they are only
     # removed from the background (the lines are redrawn in code), never part of a layer.
     clear_boxes: tuple = field(default_factory=tuple)
+    # Display row from which pale, unsaturated pixels stop counting as sky in the skyline (they
+    # are pale towers there, not clouds). None: pale counts as sky everywhere (clouds).
+    pale_solid_from: Optional[int] = None
 
 
 def hsv(image):
@@ -130,14 +133,15 @@ def flood(mask, seeds, rows):
     return reach
 
 
-def skyline(background, rows, extra_sky=None):
+def skyline(background, rows, extra_sky=None, pale_solid_from=None):
     """The architecture against the sky: open sky and clouds are reached from the top edge;
     what is left and grows from the bottom of the band (buildings, domes, palms, poles) is
     opaque. Floating clouds stay transparent, so they never hide the banner."""
     hue, sat, val = hsv(background)
-    open_sky = ((hue > 185) & (hue < 240) & (sat > 0.3) & (val > 0.55)) | (
-        (val > 0.78) & (sat < 0.38)
-    )
+    pale = (val > 0.78) & (sat < 0.38)
+    if pale_solid_from is not None:
+        pale[pale_solid_from:] = False
+    open_sky = ((hue > 185) & (hue < 240) & (sat > 0.3) & (val > 0.55)) | pale
     if extra_sky is not None:
         open_sky |= extra_sky(background)
     width = open_sky.shape[1]
@@ -199,7 +203,12 @@ def prepare(stage):
     )
     print(f'background: {size[0]}x{size[1]}')
     # From the saved JPEG itself, so the occluder's pixels are exactly what is on screen.
-    skyline(Image.open(OUT / 'background.jpg').convert('RGB'), SKYLINE_ROWS, stage.extra_sky).save(
+    skyline(
+        Image.open(OUT / 'background.jpg').convert('RGB'),
+        SKYLINE_ROWS,
+        stage.extra_sky,
+        stage.pale_solid_from,
+    ).save(
         OUT / 'skyline.png', optimize=True
     )
     print(f'skyline occluder: {size[0]}x{SKYLINE_ROWS}')

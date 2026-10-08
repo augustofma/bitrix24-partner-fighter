@@ -103,6 +103,9 @@ Selecionável como jogador e CPU na luta rápida; sem especial exclusivo ou Stor
 Arte própria com óculos pretos, hoodie bege, jeans escuro e tênis branco. Atlas 1536×1120
 (40 frames 192×224), portrait 240×300, scale 1 e offsets 0/8.
 [Fontes, prompts e preparo](scripts/gabriel-mattozo-art/README.md).
+É de **Curitiba - PR**: na história a campanha dele começa lá e as outras o enfrentam lá, no
+cenário próprio **CURITIBA** (o Jardim Botânico, com a estufa, torcida e o avião da faixa "GMC";
+[arte e preparo](scripts/stage-art/curitiba/README.md)).
 
 ## RÔMULO — ARRECIFE DIGITAL
 
