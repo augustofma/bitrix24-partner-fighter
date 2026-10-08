@@ -15,14 +15,16 @@ proporção, escala nearest-neighbor e âncora horizontal por pose. Altura em p�
 216 e margem mínima 4 px. Poses aéreas mantêm elevação; o soco aéreo foi elevado mais 20 px
 após a conferência com F2, sem mudar hitboxes. Retrato ajustado proporcionalmente, sem flip.
 
-Saídas: `public/fighters/dmitry/sprite.png` RGBA 1536×1120, 40 células 192×224; portrait RGBA
+Saídas: `public/fighters/dmitry/sprite.png` RGBA 1536×1344, 41 poses em células 192×224 (sexta
+linha: só o frame 40); portrait RGBA
 240×300. Config visual: scale 1, offsetX 0, offsetY 8. Nenhum frame vazio ou conteúdo na borda.
 
 ## Frame map
 
 0–3 idle; 4–9 walk; 10 rise; 11 apex; 12 fall; 13 crouch; 14–16 punch;
 17–19 kick; 20–22 crouchPunch; 23–25 crouchKick; 26–28 airPunch; 29–31 airKick;
-32 block; 33 crouchBlock; 34–35 hurt; 36 início KO, 37 queda, 38 chão; 39 victory.
+32 block; 33 crouchBlock; 34–35 hurt; 36 início KO, 37 queda, 38 chão; 39 victory;
+40 special (ALAIO STRIKE!, punho erguido).
 Fases de ataques/pulo 1/1/1; sprite base olha à direita, flipX pelo renderer existente.
 
 ## Playtest
@@ -45,5 +47,13 @@ QA alternaram IA e input neutro; o combate usou a simulação real. Nenhum erro 
 
 Limitações: pequenas variações de volume entre desenhos, correspondência aproximada dos membros
 às hitboxes. Mobile testado por emulação; desempenho físico não medido (headless ~30 FPS).
-Sem especial exclusivo e sem seleção/desbloqueio do chefe nesta versão. O boss sem especial
-perdeu as seis comparações com essas seeds; balanceamento humano fica para uma rodada posterior.
+Sem seleção/desbloqueio do chefe nesta versão. As seis comparações acima foram feitas antes do
+especial; balanceamento humano fica para uma rodada posterior.
+
+## Pose do ALAIO STRIKE! (frame 40)
+
+O punho erguido ao céu não existe na fonte: `add_special_frame` no `prepare.py` o monta com os
+pixels do próprio Dmitry, sem redesenhar nada. Parte do soco estendido (frame 15), recorta o braço
+pelo polígono `SPECIAL_ARM`, gira 56° para cima em torno do ombro (`SPECIAL_PIVOT`), devolve a
+cabeça por cima (`SPECIAL_HEAD`, o braço nunca cobre o rosto) e apaga sobras soltas do contorno.
+Pés na mesma baseline 216. Os 40 frames da fonte não mudam.

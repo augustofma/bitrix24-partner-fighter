@@ -98,5 +98,6 @@ export const STRINGS = {
   specialAlaioVibecode: 'ALAIO VIBECODE!',
   specialGptMaker: 'GPTMAKER!',
   specialFluidz: 'FLUIDZ!',
+  specialAlaioStrike: 'ALAIO STRIKE!',
   debugHint: 'F2: hitboxes',
 } as const;

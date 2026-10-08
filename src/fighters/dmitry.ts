@@ -1,7 +1,11 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** A modestly tougher boss: heavier normals paid for with longer recovery. */
+/**
+ * A modestly tougher boss: heavier normals paid for with longer recovery, and the boss
+ * special ALAIO STRIKE!: lightning over the whole stage that only a guard stops.
+ */
 export const dmitry: FighterConfig = {
   id: 'dmitry',
   name: 'dmitry',
@@ -120,11 +124,45 @@ export const dmitry: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // Final boss special: he raises his fist and lightning falls on the WHOLE stage. Distance
+      // or jumping do not save the rival: the hitbox covers the arena from any position and
+      // facing (symmetric: x = -width / 2). Only a guard does (mid: standing or crouching); an
+      // airborne rival cannot guard, so a jump is caught too.
+      id: 'dmitry.alaioStrike',
+      displayName: STRINGS.specialAlaioStrike,
+      state: 'special',
+      level: 'mid',
+      meterCost: 50,
+      groundOnly: true,
+      advanceSpeed: 0,
+      damage: 24,
+      chipDamage: 4,
+      // A long, loud wind-up (the storm rolls in): time to see it coming and guard.
+      startupFrames: 24,
+      activeFrames: 8,
+      // Very punishable when guarded: 34 recovery against 18 blockstun.
+      recoveryFrames: 34,
+      hitbox: { x: -1600, y: -1000, width: 3200, height: 1000 },
+      hitstunFrames: 30,
+      blockstunFrames: 18,
+      knockback: 7,
+      blockPushback: 5,
+      hitstopFrames: 16,
+    },
+  ],
   palette: { body: 0x172e50, accent: 0x6db9eb, skin: 0xedc3a1, outline: 0x0b0820 },
   assets: {
     portrait: 'fighters/dmitry/portrait.png',
     pixelArt: true,
+    specialEffects: {
+      'dmitry.alaioStrike': {
+        style: 'skyLightning',
+        label: STRINGS.specialAlaioStrike,
+        sound: 'special-alaio-strike',
+      },
+    },
     sprite: {
       sheet: {
         key: 'dmitry-sheet',
@@ -150,6 +188,8 @@ export const dmitry: FighterConfig = {
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
         victory: { frames: [39] },
+        // ALAIO STRIKE!: guard up, then the fist raised to the sky (frame 40) until it ends.
+        special: { frames: [14, 40, 40], attackPhases: { startup: 1, active: 1, recovery: 1 } },
       },
     },
   },

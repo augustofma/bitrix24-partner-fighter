@@ -6,6 +6,7 @@ import { COLORS, DEPTH, arcadeText } from '../../ui/theme';
 import { vfxTextureKey } from '../assets/fighterAssets';
 import { AGENT_THEME } from './agentTheme';
 import { FLUID_THEME } from './fluidTheme';
+import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
@@ -17,6 +18,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   vibeCode: VIBE_THEME,
   agentBuilder: AGENT_THEME,
   liquidFlow: FLUID_THEME,
+  skyLightning: LIGHTNING_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;

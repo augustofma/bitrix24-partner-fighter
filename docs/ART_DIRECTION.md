@@ -635,6 +635,12 @@ como imagem lisa.
   quadrado roxo cortado pela faixa diagonal escura, reduzido à grade de 48 px com cantos em
   degrau e contorno escuro (sem o nome "fluidz").
 
+- **ALAIO STRIKE!:** raios ciano (#7DF9FF) com miolo branco e faíscas amarelas (#FFF27A),
+  nuvem roxo-acinzentada (#2B2440, #4B4170, borda #8A7FC0) e escurecimento azul-noite. Raios em
+  zigue-zague (segmentos com galhos curtos), nuvem de "puffs" em pixel com rosto de desenho
+  animado. É o único efeito que ocupa o estágio inteiro: usa a área visível da câmera, não o
+  hitbox, e a nuvem fica atrás das barras do HUD (nunca por cima).
+
 Os efeitos ficam em volta dos lutadores e nunca cobrem barras de vida, barra de especial ou
 controles touch.
 
@@ -653,7 +659,9 @@ Identidade: homem maduro de pele clara, cabelo curto grisalho/castanho claro, se
 marinho, camiseta escura, jeans azul, crachá azul com cordão branco; fones discretos no retrato.
 Postura séria e controlada, proporções naturais; sem armadura ou musculatura exagerada.
 
-Sprite original em PNG RGBA 1536×1120, 8×5 células 192×224, 40 poses. Retrato próprio RGBA
+Sprite original em PNG RGBA 1536×1344, 8×6 células 192×224, 41 poses: as 40 da fonte e a pose do
+ALAIO STRIKE! (frame 40, punho erguido ao céu), montada pelo `prepare.py` com os pixels do próprio
+soco (frame 15): o braço estendido é girado para cima no ombro e a cabeça fica por cima. Retrato próprio RGBA
 240×300. Baseline 216, margem mínima 4 px, scale 1, offsetX 0, offsetY 8. Frames aéreos têm
 âncoras elevadas; fases de ataque/pulo 1/1/1. Preparação local reproduzível com Pillow/NumPy,
 sem dependência adicionada ao jogo. Licença/proveniência: geração original para o projeto a

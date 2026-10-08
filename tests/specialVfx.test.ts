@@ -13,6 +13,7 @@ import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
 import { aislan } from '../src/fighters/aislan';
+import { dmitry } from '../src/fighters/dmitry';
 import { collectFighterAssets, vfxTextureKey } from '../src/render/assets/fighterAssets';
 import { SpecialEffects } from '../src/render/special/SpecialEffects';
 import { partnerArena } from '../src/stages/partnerArena';
@@ -159,6 +160,31 @@ describe('app-themed special VFX: timing and cleanup', () => {
       expect({ ...created, images: created.images.length }).toEqual(objectsAfterSetup);
     },
   );
+
+  it('Dmitry ALAIO STRIKE!: hits across the stage, plays its thunder, creates nothing', () => {
+    const { scene, created, time } = fakeScene();
+    const effects = new SpecialEffects(scene);
+    const objectsAfterSetup = { ...created, images: created.images.length };
+    const sim = specialFight(dmitry, 600);
+    const start = stepFrames(sim, 1, press({ special: true })).find(
+      (e) => e.type === 'specialStart',
+    ) as SimulationEvent;
+    expect(combatSfx(start, sim.fighters)).toEqual(['special-alaio-strike']);
+    let sawImpact = false;
+    for (let frames = 0; frames < 140; frames++) {
+      for (const event of sim.step([idle(), idle()])) {
+        if (event.type === 'hit' || event.type === 'koHit') {
+          effects.impact(event, sim.fighters[event.attackerIndex]);
+          sawImpact = true;
+        }
+      }
+      time.now += 1000 / 60;
+      effects.sync(sim.fighters);
+    }
+    expect(sawImpact).toBe(true);
+    expect(sim.fighters[0].state).not.toBe('special');
+    expect({ ...created, images: created.images.length }).toEqual(objectsAfterSetup);
+  });
 
   it('an interrupted special leaves nothing on screen (e.g. the round resets)', () => {
     const { scene, created } = fakeScene();

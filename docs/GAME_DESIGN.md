@@ -172,7 +172,8 @@ e mobilidade menor compensam o dano um pouco maior. Não substitui a validação
 ### DMITRY — FINAL BOSS
 
 Chefe final controlado pela IA genérica. Vida 108, caminhada 3,0, recuo 2,4, impulso de salto
-16,5 e velocidade aérea 3,9. Corpo padrão; não há imunidade, especial exclusivo ou regra no core.
+16,5 e velocidade aérea 3,9. Corpo padrão; não há imunidade nem regra no core. Especial de chefe
+ALAIO STRIKE! (veja "Especiais e energia").
 Normais ligeiramente mais fortes, com startup e recovery maiores. Frame data a 60 Hz:
 
 | Golpe       | Dano | Startup | Active | Recovery |
@@ -426,6 +427,14 @@ pushback 6,5 e hitstop 13. Hitbox (30, -138, 130, 84): alcance de 160 px, do pei
 Não avança. É o que mais tira vida e o mais lento de sair, e o mais punível bloqueado (27 de
 recovery contra 17 de blockstun). Os dois reaproveitam os frames do soco.
 
+**ALAIO STRIKE! (Dmitry, chefe final):** raios do céu no estágio inteiro. Custo 50, somente no
+chão, nível `mid`, dano 24, chip 4, startup 24 / ativo 8 / recovery 34, hitstun 30, blockstun 18,
+knockback 7, pushback 5 e hitstop 16. Hitbox (-1600, -1000, 3200, 1000), simétrica: cobre a arena
+toda (1440 px) do chão ao céu, de qualquer posição e virado para qualquer lado. Distância, fugir
+ou pular não adiantam (no ar não há defesa); **só a defesa** (em pé ou agachado) evita o dano,
+deixando 4 de chip. Startup longo (a tempestade avisa) e muito punível na defesa (34 de recovery
+contra 18 de blockstun). A CPU usa a qualquer distância. Pose: o punho erguido (frame 40).
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -464,6 +473,13 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   nós (o "workflow" do agente) que acende até o alvo, com o emblema do robô no fim; no acerto,
   explosão estelar âmbar, anel de engrenagem, blocos se espalhando e faíscas (na defesa: menor,
   sem emblema); depois o robô se desmonta e a planta apaga.
+- **ALAIO STRIKE! (Dmitry), tempestade avacalhada:** na carga, o Dmitry ergue o punho, faíscas
+  estalam nele, o estágio escurece e uma nuvem de tempestade gorda, de cara brava (olhos
+  franzidos e boca em zigue-zague), rola pela tela inteira; no disparo, clarão e raios do céu ao
+  chão por todo o estágio visível, com faíscas onde caem e um raio grosso no punho; no acerto, um
+  raio cai em cima do rival, com explosão elétrica e faíscas (na defesa: um estalo menor na
+  guarda); depois a nuvem vai embora e sobe fumaça. Som: tempestade, chiado "zzzt", trovão e
+  estrondo longo.
 - **FLUIDZ! (Aislan), líquido roxo da Fluidz:** na carga, o líquido se junta à frente do corpo
   numa bolha roxa que balança, gotas são puxadas para ela, bolhas sobem e uma gota pinga; no disparo, um
   jato grosso e ondulante sai da mão até o fim do alcance, com reflexos brilhantes correndo nele,

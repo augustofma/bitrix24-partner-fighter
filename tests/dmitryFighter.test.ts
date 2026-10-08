@@ -13,7 +13,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Dmitry fighter integration', () => {
-  it('has unique ids, a balanced standard-body profile and no exclusive special', () => {
+  it('has unique ids, a balanced standard-body profile and one boss special', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(dmitry.stats).toEqual({
       maxHealth: 108,
@@ -22,7 +22,7 @@ describe('Dmitry fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(dmitry.specials).toEqual([]);
+    expect(dmitry.specials.map((s) => s.id)).toEqual(['dmitry.alaioStrike']);
     expect(Object.values(dmitry.attacks).map((a) => a.damage)).toEqual([8, 12, 6, 10, 8, 11]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

@@ -19,13 +19,14 @@ describe('Dmitry PNG assets', () => {
     // The boss is not a regular campaign protagonist.
     expect(hasStoryCampaign(dmitry.id)).toBe(false);
   });
-  it('uses the real sheet with all animation frames inside its 40 cells', () => {
-    expect(validateSpriteAssets(dmitry, 40)).toEqual([]);
-    expect(selectSpriteAssets(dmitry, 40)).toBe(dmitry.assets.sprite);
+  it('uses the real sheet with all animation frames inside its 41 posed cells', () => {
+    // 48 cells (6 rows of 8): 40 source poses + the ALAIO STRIKE! pose (frame 40).
+    expect(validateSpriteAssets(dmitry, 48)).toEqual([]);
+    expect(selectSpriteAssets(dmitry, 48)).toBe(dmitry.assets.sprite);
     const frames = Object.values(dmitry.assets.sprite!.animations).flatMap((a) => a.frames);
-    expect(new Set(frames).size).toBe(40);
+    expect(new Set(frames).size).toBe(41);
     expect(Math.min(...frames)).toBe(0);
-    expect(Math.max(...frames)).toBe(39);
+    expect(Math.max(...frames)).toBe(40);
   });
   it('has a genuine transparent portrait at 240x300', () => {
     const image = readRgbaPng(`public/${dmitry.assets.portrait}`);
@@ -33,13 +34,18 @@ describe('Dmitry PNG assets', () => {
     expect(image.alpha(0, 0)).toBe(0);
     expect(image.alpha(120, 150)).toBeGreaterThan(0);
   });
-  it('contains exactly 40 nonempty, isolated RGBA cells with safe margins', () => {
+  it('contains 41 nonempty, isolated RGBA cells with safe margins (the rest empty)', () => {
     const sheet = dmitry.assets.sprite!.sheet;
     const image = readRgbaPng(`public/${sheet.path}`);
-    expect([image.width, image.height]).toEqual([1536, 1120]);
+    expect([image.width, image.height]).toEqual([1536, 1344]);
     expect([sheet.frameWidth, sheet.frameHeight]).toEqual([192, 224]);
-    expect((image.width / sheet.frameWidth) * (image.height / sheet.frameHeight)).toBe(40);
-    for (let frame = 0; frame < 40; frame++) {
+    expect((image.width / sheet.frameWidth) * (image.height / sheet.frameHeight)).toBe(48);
+    for (let frame = 41; frame < 48; frame++) {
+      for (let y = 0; y < 224; y += 4)
+        for (let x = 0; x < 192; x += 4)
+          expect(image.alpha((frame % 8) * 192 + x, Math.floor(frame / 8) * 224 + y)).toBe(0);
+    }
+    for (let frame = 0; frame <= 40; frame++) {
       let opaque = 0,
         marginContent = 0,
         bottom = 0;
@@ -76,6 +82,7 @@ const FRAME_MAP: Partial<Record<FighterStateId, number[]>> = {
   hurt: [34, 35],
   knockout: [36, 37, 38],
   victory: [39],
+  special: [14, 40, 40],
 };
 
 describe('Dmitry animation contract', () => {

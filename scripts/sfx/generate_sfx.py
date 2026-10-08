@@ -335,6 +335,30 @@ def sfx_special_fluidz(rng):
     return mix(bloops, at(pour, 0.04), at(splash, 0.22), drops, at(thud, 0.22))
 
 
+
+def sfx_special_alaio_strike(rng):
+    """ALAIO STRIKE!: the storm gathers (a rising rumble and electric crackle on the raised
+    fist), then a huge thunderclap when the lightning falls (~0.4 s, the move's active frames)
+    and a long rolling rumble across the stage, with a cartoon "zzzt" buzz on top."""
+    gather_len = 0.4
+    t = seconds(gather_len)
+    gather = lowpass(rng.uniform(-1, 1, len(t)), 220) * np.linspace(0.1, 1, len(t)) ** 2 * 1.6
+    crackle_len = 0.38
+    n = int(crackle_len * SR)
+    crackle = highpass(rng.uniform(-1, 1, n), 3500) * (rng.uniform(0, 1, n) > 0.93) * np.linspace(0.2, 0.7, n)
+    zzzt_len = 0.3
+    zt = seconds(zzzt_len)
+    zzzt = lowpass(saw(2 * np.pi * np.cumsum(120 + 60 * np.sin(2 * np.pi * 23 * zt)) / SR, 24), 2600)
+    zzzt = zzzt * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 31 * zt))) * np.linspace(0.1, 0.35, len(zt))
+    clap = highpass(rng.uniform(-1, 1, int(0.12 * SR)), 1200) * decay(0.12, 26)
+    boom = np.sin(sweep(130, 34, 0.5)) * decay(0.5, 5) * 1.1
+    roll_len = 1.0
+    rt = seconds(roll_len)
+    roll = lowpass(rng.uniform(-1, 1, len(rt)), 160) * decay(roll_len, 2.6)
+    roll = roll * (0.6 + 0.4 * np.sin(2 * np.pi * 5 * rt + 1.2)) * 2.2
+    return mix(gather, at(crackle, 0.02), at(zzzt, 0.08), at(clap, 0.4), at(boom, 0.4), at(roll, 0.44))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -361,6 +385,7 @@ EFFECTS = {
     "special-vibe": sfx_special_vibe,
     "special-gpt": sfx_special_gpt,
     "special-fluidz": sfx_special_fluidz,
+    "special-alaio-strike": sfx_special_alaio_strike,
 }
 
 

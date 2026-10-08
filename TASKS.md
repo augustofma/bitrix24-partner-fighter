@@ -509,6 +509,15 @@ sem pedido explícito.**
 - [x] Arte oficial em 1440×810 (`prepare_romualdo_ending.py`), `endingArt` no perfil do Romualdo
 - [x] Testes do asset; playtest desktop e mobile
 
+## DONE (ALAIO STRIKE!, especial do chefe final Dmitry, branch `feature/dmitry-final-boss-integration`)
+
+- [x] Especial `dmitry.alaioStrike`: hitbox simétrica que cobre a arena toda, nível `mid`, custo
+      50, dano 24, chip 4; só a defesa evita (no ar não há defesa)
+- [x] Pose nova (frame 40, punho erguido) montada no `prepare.py` com os pixels do soco
+- [x] Tema de VFX `skyLightning` (nuvem brava, raios no estágio visível) e som
+      `special-alaio-strike`
+- [x] Testes de alcance, defesa em pé/agachado, pulo, fuga, CPU, VFX e sprite; playtest no navegador
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a
