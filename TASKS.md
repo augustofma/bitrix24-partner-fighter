@@ -551,6 +551,11 @@ sem pedido explícito.**
       chefe final nas outras; marcador de Portugal em Lisboa e `mapNudge` para não sobrepor
 - [x] Testes de cenário, lugar, rotas e mapa; playtest da luta, do avião, do mapa e do final
 
+## DONE (seta do anúncio da viagem, branch `feature/route-title-arrow`)
+
+- [x] "→" dos títulos de luta desenhado como forma (a fonte não tem seta): mesmas camadas das
+      letras (sombra, contorno, degradê de fogo, inclinação), no meio das maiúsculas
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

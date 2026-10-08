@@ -64,6 +64,66 @@ const LIGHT_STREAKS_PER_100PX = 0.8;
 
 const TEXTURE_PREFIX = 'fight-title:';
 
+/**
+ * "→" in a title (e.g. "RECIFE → JOINVILLE") is drawn as a shape, not as a glyph: the display
+ * font has no arrow (the browser borrowed another font's, smaller and off the baseline). The
+ * shape goes through the same layers as the letters (shadow, outline, gradient) and sits on the
+ * middle of the capitals. Sizes relative to the font size.
+ */
+const ARROW = '→';
+const ARROW_SHAPE = {
+  length: 0.9,
+  /** Middle of the capitals, above the baseline. */
+  centerY: 0.37,
+  shaftHalf: 0.11,
+  headHalf: 0.3,
+  headLength: 0.38,
+  /** Space between the arrow and the words on each side. */
+  gap: 0.3,
+} as const;
+
+/** A title's pieces in order: words and arrows, with their x and width (canvas px). */
+type TitleRun = { kind: 'text'; text: string; x: number } | { kind: 'arrow'; x: number };
+
+function layoutRuns(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  size: number,
+): { runs: TitleRun[]; width: number } {
+  const pieces = text.split(ARROW).map((piece) => piece.trim());
+  const runs: TitleRun[] = [];
+  let x = 0;
+  pieces.forEach((piece, i) => {
+    if (i > 0) {
+      x += size * ARROW_SHAPE.gap;
+      runs.push({ kind: 'arrow', x });
+      x += size * (ARROW_SHAPE.length + ARROW_SHAPE.gap);
+    }
+    if (piece) {
+      runs.push({ kind: 'text', text: piece, x });
+      x += ctx.measureText(piece).width;
+    }
+  });
+  return { runs, width: x };
+}
+
+/** Block arrow pointing right, starting at x, centered on the capitals' middle. */
+function arrowPath(ctx: CanvasRenderingContext2D, x: number, baseline: number, size: number) {
+  const { length, centerY, shaftHalf, headHalf, headLength } = ARROW_SHAPE;
+  const mid = baseline - size * centerY;
+  const tip = x + size * length;
+  const neck = tip - size * headLength;
+  ctx.beginPath();
+  ctx.moveTo(x, mid - size * shaftHalf);
+  ctx.lineTo(neck, mid - size * shaftHalf);
+  ctx.lineTo(neck, mid - size * headHalf);
+  ctx.lineTo(tip, mid);
+  ctx.lineTo(neck, mid + size * headHalf);
+  ctx.lineTo(neck, mid + size * shaftHalf);
+  ctx.lineTo(x, mid + size * shaftHalf);
+  ctx.closePath();
+}
+
 /** Scale that fits a title of `width` into `maxWidth` (never enlarges). */
 export function fitTitleScale(width: number, maxWidth: number): number {
   return width > maxWidth ? maxWidth / width : 1;
@@ -100,7 +160,7 @@ function drawTitle(text: string, colors: PaletteColors): HTMLCanvasElement {
   const measure = canvas.getContext('2d');
   if (!measure) return canvas;
   measure.font = font;
-  const textWidth = measure.measureText(text).width;
+  const { runs, width: textWidth } = layoutRuns(measure, text, size);
   const pad = size * PADDING;
   canvas.width = Math.ceil(textWidth + size * SLANT + pad * 2);
   canvas.height = Math.ceil(size * 1.1 + pad * 2);
@@ -118,28 +178,39 @@ function drawTitle(text: string, colors: PaletteColors): HTMLCanvasElement {
     ctx.restore();
   };
 
+  /** Strokes and/or fills every word and arrow of the title, shifted by (dx, dy). */
+  const paintRuns = (stroke: boolean, fill: boolean, dx = 0, dy = 0) => {
+    for (const run of runs) {
+      if (run.kind === 'text') {
+        if (stroke) ctx.strokeText(run.text, run.x + dx, baseline + dy);
+        if (fill) ctx.fillText(run.text, run.x + dx, baseline + dy);
+      } else {
+        arrowPath(ctx, run.x + dx, baseline + dy, size);
+        if (stroke) ctx.stroke();
+        if (fill) ctx.fill();
+      }
+    }
+  };
+
   slanted(() => {
     ctx.fillStyle = SHADOW_COLOR;
     ctx.strokeStyle = SHADOW_COLOR;
     ctx.lineWidth = size * OUTLINE_WIDTH;
-    const sx = size * SHADOW_OFFSET.x;
-    const sy = baseline + size * SHADOW_OFFSET.y;
-    ctx.strokeText(text, sx, sy);
-    ctx.fillText(text, sx, sy);
+    paintRuns(true, true, size * SHADOW_OFFSET.x, size * SHADOW_OFFSET.y);
   });
   slanted(() => {
     ctx.strokeStyle = OUTLINE_COLOR;
     ctx.lineWidth = size * OUTLINE_WIDTH;
-    ctx.strokeText(text, 0, baseline);
+    paintRuns(true, false);
     ctx.strokeStyle = colors.innerLine;
     ctx.lineWidth = size * INNER_LINE_WIDTH;
-    ctx.strokeText(text, 0, baseline);
+    paintRuns(true, false);
   });
   slanted(() => {
     const gradient = ctx.createLinearGradient(0, baseline - size * 0.78, 0, baseline);
     for (const [stop, color] of colors.gradient) gradient.addColorStop(stop, color);
     ctx.fillStyle = gradient;
-    ctx.fillText(text, 0, baseline);
+    paintRuns(false, true);
   });
   paintBrushStreaks(ctx, canvas.width, baseline, size, titleSeed(text));
   return canvas;
