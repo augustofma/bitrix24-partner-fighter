@@ -312,6 +312,8 @@ export class MenuScene extends Phaser.Scene {
       .text(centerX, 392, STRINGS.pressStart, arcadeText(16, COLORS.white))
       .setOrigin(0.5);
     this.tweens.add({ targets: hint, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
+    // Hidden under the mode menu like the illustrated hint.
+    this.hint = [hint];
 
     this.add
       .text(centerX, GAME_HEIGHT - 44, STRINGS.disclaimer, bodyText(13, COLORS.white))

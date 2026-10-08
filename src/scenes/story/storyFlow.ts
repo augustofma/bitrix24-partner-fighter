@@ -10,12 +10,14 @@ import {
 } from '../../story/storyProgress';
 import { isAIDifficulty, type AIDifficulty, type MatchResult } from '../../types/match';
 import type { StoryProgress } from '../../types/story';
-import { goToScene } from '../transitions';
+import { goToScene, isLeaving } from '../transitions';
 
 /*
  * Glue between the story campaign (pure, src/story/) and the scenes: the current
  * StoryProgress lives in the game registry for the session, and these helpers move the
- * player between the existing scenes. Quick fights never call them.
+ * player between the existing scenes. Quick fights never call them. While a scene is already
+ * fading out (e.g. Enter then Esc within the fade), the helpers change nothing: the progress
+ * must match the transition that really happens.
  */
 
 type SceneLike = Pick<Phaser.Scene, 'registry'>;
@@ -36,14 +38,19 @@ function storyDifficulty(scene: SceneLike): AIDifficulty {
 
 /** Character chosen: a fresh campaign, starting with the first trip on the map. */
 export function beginStory(scene: Phaser.Scene, fighterId: string): void {
+  if (isLeaving(scene)) return;
   setStoryProgress(scene, startStory(fighterId));
   goToScene(scene, SceneKeys.StoryMap);
 }
 
 /** The plane landed: present the rival (VS screen), then the regular match. */
 export function arriveAndFight(scene: Phaser.Scene): void {
+  if (isLeaving(scene)) return;
   const progress = getStoryProgress(scene);
-  if (!progress) return goToScene(scene, SceneKeys.Menu);
+  if (!progress) {
+    goToScene(scene, SceneKeys.Menu);
+    return;
+  }
   const fight = arriveForFight(progress);
   setStoryProgress(scene, fight);
   goToScene(scene, SceneKeys.Versus, storyMatchSetup(fight, storyDifficulty(scene)));
@@ -67,26 +74,36 @@ export function finishStoryMatch(scene: SceneLike, result: MatchResult): StoryPr
 /** After a won story match: the next trip, or the campaign's ending. */
 export function continueStory(scene: Phaser.Scene): void {
   const progress = getStoryProgress(scene);
-  if (!progress) return goToScene(scene, SceneKeys.Menu);
+  if (!progress) {
+    goToScene(scene, SceneKeys.Menu);
+    return;
+  }
   goToScene(scene, progress.phase === 'complete' ? SceneKeys.CampaignComplete : SceneKeys.StoryMap);
 }
 
 /** Lost (or drew): the same fight again, without replaying the campaign. */
 export function retryStoryFight(scene: Phaser.Scene): void {
   const progress = getStoryProgress(scene);
-  if (!progress || progress.phase !== 'fight') return goToScene(scene, SceneKeys.Menu);
+  if (!progress || progress.phase !== 'fight') {
+    goToScene(scene, SceneKeys.Menu);
+    return;
+  }
   goToScene(scene, SceneKeys.Versus, storyMatchSetup(progress, storyDifficulty(scene)));
 }
 
 /** Same character, campaign from the start. */
 export function restartStory(scene: Phaser.Scene): void {
   const progress = getStoryProgress(scene);
-  if (!progress) return goToScene(scene, SceneKeys.Menu);
+  if (!progress) {
+    goToScene(scene, SceneKeys.Menu);
+    return;
+  }
   beginStory(scene, progress.selectedFighter);
 }
 
 /** Leaves story mode (the campaign is dropped) and returns to the main menu. */
 export function quitStory(scene: Phaser.Scene): void {
+  if (isLeaving(scene)) return;
   setStoryProgress(scene, null);
   goToScene(scene, SceneKeys.Menu);
 }

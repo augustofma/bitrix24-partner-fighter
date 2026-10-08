@@ -73,7 +73,11 @@ vi.mock('../src/ui/select/ArcadeButton', () => ({
     flash() {}
   },
 }));
-vi.mock('../src/scenes/transitions', () => ({ fadeIn: vi.fn(), goToScene: ui.goToScene }));
+vi.mock('../src/scenes/transitions', () => ({
+  fadeIn: vi.fn(),
+  goToScene: ui.goToScene,
+  isLeaving: () => false,
+}));
 vi.mock('../src/audio/gameAudio', () => ({
   gameMusic: () => ({ play: vi.fn() }),
   playSfx: ui.playSfx,

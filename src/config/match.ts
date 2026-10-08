@@ -21,3 +21,6 @@ export const MAX_ROUNDS = 9;
 
 /** CPU difficulty selected when the player has not chosen one in this session. */
 export const DEFAULT_AI_DIFFICULTY: AIDifficulty = 'normal';
+
+/** Quick fight picks: your fighter, the rival (character select), then the stage. */
+export const QUICK_FIGHT_STEPS = 3;

@@ -28,7 +28,7 @@ export const STRINGS = {
   campaignComplete: 'CAMPANHA CONCLUÍDA',
   campaignCheer: 'BRASIL DOMINADO!',
   campaignCheerWorld: 'MUNDO DOMINADO!',
-  campaignRoute: (cities: readonly string[]) => cities.join('  →  '),
+  campaignRoute: (cities: readonly string[]) => cities.join(' → '),
   confirm: 'CONFIRMAR',
   pressStart: 'PRESSIONE ENTER OU TOQUE',
   /** Under the title's START button (as in the approved art). */
@@ -83,6 +83,8 @@ export const STRINGS = {
   reasonKo: 'Vitória por nocaute',
   reasonTimeout: 'Vitória por tempo',
   backToMenu: 'VOLTAR AO MENU',
+  rematch: 'REVANCHE',
+  newFight: 'NOVA LUTA',
   touchPunch: 'SOCO',
   touchKick: 'CHUTE',
   touchBlock: 'DEF',

@@ -1,7 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const nav = vi.hoisted(() => ({ goToScene: vi.fn() }));
-vi.mock('../src/scenes/transitions', () => ({ goToScene: nav.goToScene, fadeIn: vi.fn() }));
+const nav = vi.hoisted(() => ({ goToScene: vi.fn(), leaving: false }));
+vi.mock('../src/scenes/transitions', () => ({
+  goToScene: nav.goToScene,
+  fadeIn: vi.fn(),
+  isLeaving: () => nav.leaving,
+}));
 
 import { RegistryKeys } from '../src/config/registryKeys';
 import { SceneKeys } from '../src/config/sceneKeys';
@@ -34,7 +38,10 @@ const result = (setup: MatchSetup, winnerIndex: 0 | 1 | null): MatchResult => ({
   roundWins: winnerIndex === 0 ? [2, 0] : [0, 2],
 });
 
-beforeEach(() => nav.goToScene.mockClear());
+beforeEach(() => {
+  nav.goToScene.mockClear();
+  nav.leaving = false;
+});
 
 describe('story flow between the existing scenes', () => {
   it('picking a fighter starts its campaign and opens the travel map', () => {
@@ -109,5 +116,23 @@ describe('story flow between the existing scenes', () => {
     expect(finishStoryMatch(scene, result(quick, 0))).toBe(before);
     expect(getStoryProgress(scene)).toBe(before);
     expect(finishStoryMatch(fakeScene(), result(quick, 0))).toBeNull();
+  });
+});
+
+describe('story flow during a scene transition', () => {
+  it('Enter then Esc within the fade: the campaign is kept (regression)', () => {
+    const scene = fakeScene();
+    beginStory(scene, 'augusto');
+    arriveAndFight(scene); // Enter: fading out to the VS
+    const fight = getStoryProgress(scene);
+    expect(fight?.phase).toBe('fight');
+    nav.leaving = true; // the fade is still running
+    quitStory(scene); // Esc: ignored, like the transition it would start
+    expect(getStoryProgress(scene)).toBe(fight);
+    arriveAndFight(scene); // a second Enter changes nothing either
+    expect(getStoryProgress(scene)).toBe(fight);
+    nav.leaving = false;
+    quitStory(scene); // a real Esc later still leaves story mode
+    expect(getStoryProgress(scene)).toBeNull();
   });
 });

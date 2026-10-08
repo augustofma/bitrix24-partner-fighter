@@ -95,7 +95,11 @@ vi.mock('../src/ui/select/HeroPanel', () => ({
     }
   },
 }));
-vi.mock('../src/scenes/transitions', () => ({ fadeIn: vi.fn(), goToScene: ui.goToScene }));
+vi.mock('../src/scenes/transitions', () => ({
+  fadeIn: vi.fn(),
+  goToScene: ui.goToScene,
+  isLeaving: () => false,
+}));
 vi.mock('../src/audio/gameAudio', () => ({
   gameMusic: () => ({ play: vi.fn(), playSting: vi.fn(), stop: vi.fn() }),
   playSfx: ui.playSfx,

@@ -69,7 +69,8 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
 5. **Vitória:** arena ilustrada com "<NOME> VENCEU!" (ou EMPATE), o card com o retrato do
    vencedor, a linha "VOCÊ VENCEU!/VOCÊ PERDEU · motivo do último round · placar (ex.: 2 x 1)" e
-   o botão VOLTAR AO MENU (clique, toque, Enter, Espaço ou Esc).
+   os botões REVANCHE (a mesma luta: lutadores, fase e dificuldade), NOVA LUTA (volta à seleção,
+   no lutador usado) e VOLTAR AO MENU. Enter / Espaço fazem a revanche; Esc volta ao menu.
 
 ## Sistema de combate
 

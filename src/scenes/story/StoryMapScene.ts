@@ -137,6 +137,8 @@ export class StoryMapScene extends Phaser.Scene {
 
   /** Enter/tap: skip the flight, or go on to the fight once landed. */
   private proceed(byPlayer = true): void {
+    // Before take-off (the start card) there is nothing to skip yet: no sound for a no-op.
+    if (!this.landed && !this.flight) return;
     if (byPlayer && !this.leaving) playSfx(this, 'menu-confirm');
     if (!this.landed) {
       this.flight?.complete();

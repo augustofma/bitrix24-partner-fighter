@@ -10,7 +10,7 @@ import { onKeys } from '../input/menuKeys';
 import { VICTORY_ART } from '../render/assets/victoryAssets';
 import { POSES } from '../render/placeholder/poses';
 import { createPortrait } from '../render/PortraitView';
-import type { MatchResult } from '../types/match';
+import type { MatchResult, MatchSetup } from '../types/match';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
 import { ArtButton } from '../ui/ArtButton';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
@@ -79,7 +79,7 @@ export class VictoryScene extends Phaser.Scene {
     ] as const;
     const content = victoryContent(result, sides);
     const actions = this.withSounds(
-      setup.mode === 'story' ? this.storyActions(result) : this.quickActions(),
+      setup.mode === 'story' ? this.storyActions(result) : this.quickActions(setup),
     );
     const hasArt = Object.values(VICTORY_ART).every(({ key }) => this.textures.exists(key));
     if (hasArt) this.createIllustrated(content, actions);
@@ -105,10 +105,27 @@ export class VictoryScene extends Phaser.Scene {
     };
   }
 
-  /** Quick fight: one way out, back to the menu (the art's own button). */
-  private quickActions(): ScreenActions {
+  /**
+   * Quick fight: REVANCHE (the same fighters, stage and difficulty, through the VS), NOVA LUTA
+   * (back to the fighter select) or VOLTAR AO MENU. Enter is the rematch, Esc the menu.
+   */
+  private quickActions(setup: MatchSetup): ScreenActions {
+    const rematch = () => goToScene(this, SceneKeys.Versus, setup);
+    const newFight = () =>
+      goToScene(this, SceneKeys.CharacterSelect, {
+        mode: 'quick',
+        playerFighterId: setup.playerFighterId,
+      });
     const back = () => goToScene(this, SceneKeys.Menu);
-    return { buttons: [], primary: back, cancel: back };
+    return {
+      buttons: [
+        { label: STRINGS.rematch, onSelect: rematch },
+        { label: STRINGS.newFight, onSelect: newFight },
+        { label: STRINGS.backToMenu, onSelect: back },
+      ],
+      primary: rematch,
+      cancel: back,
+    };
   }
 
   /**

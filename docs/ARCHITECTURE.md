@@ -260,10 +260,11 @@ Com as camadas de `VICTORY_ASSETS` carregadas, a cena monta: fundo da arena, efe
 tudo), card do vencedor, título, linha de resultado e o botão `ArtButton`. Todo texto vem de
 `victoryContent(result, sides)`, que só lê o `MatchResult` real (vencedor, motivo do último
 round, placar) e é testado sem Phaser. Os botões (`ArcadeButton`) dependem do modo: luta
-rápida tem VOLTAR AO MENU; na história, vitória mostra CONTINUAR e derrota mostra TENTAR
+rápida tem REVANCHE (o mesmo `MatchSetup` de volta ao VS), NOVA LUTA (seleção, já no lutador
+usado) e VOLTAR AO MENU; na história, vitória mostra CONTINUAR e derrota mostra TENTAR
 NOVAMENTE e SAIR PARA O MENU. Entrada em sequência (~1,1 s): título com pop e
-bounce, card com fade e subida, resultado deslizando, botão por último. Clique, toque, Enter,
-Espaço, Esc e Backspace usam o mesmo `back` (`goToScene` para o menu). Sem a arte, a cena usa
+bounce, card com fade e subida, resultado deslizando, botões por último. Enter / Espaço fazem a
+ação principal (revanche, continuar ou tentar de novo); Esc / Backspace saem para o menu. Sem a arte, a cena usa
 o visual procedural anterior.
 
 ## Fluxo entre cenas
@@ -286,15 +287,20 @@ MenuScene → CharacterSelectScene{mode: story} → StoryMapScene → VersusScen
 
 Os dados passam pelo `scene.start(key, data)`:
 
-| De → Para                | Dado                                                                      |
-| ------------------------ | ------------------------------------------------------------------------- |
-| CharacterSelect → Versus | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`, `difficulty`) |
-| Versus → Fight           | `MatchSetup`                                                              |
-| Fight → Victory          | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)                 |
-| Select → StoryMap        | nada: o `StoryProgress` fica no registry (`RegistryKeys.storyProgress`)   |
-| StoryMap → Versus        | `storyMatchSetup(progress, dificuldade)` (`mode: 'story'`)                |
+| De → Para                     | Dado                                                                              |
+| ----------------------------- | --------------------------------------------------------------------------------- |
+| CharacterSelect → StageSelect | `StageSelectData` (`playerFighterId`, `cpuFighterId`, `difficulty`) (luta rápida) |
+| StageSelect → Versus          | `MatchSetup` (`playerFighterId`, `cpuFighterId`, `stageId`, `difficulty`)         |
+| StageSelect → CharacterSelect | `{ mode: 'quick', step: 'rival', playerFighterId, cpuFighterId }` (Esc)           |
+| Victory → Versus              | o mesmo `MatchSetup` (REVANCHE)                                                   |
+| Versus → Fight                | `MatchSetup`                                                                      |
+| Fight → Victory               | `MatchResult` (`MatchSetup` + vencedor + motivo + placar)                         |
+| Select → StoryMap             | nada: o `StoryProgress` fica no registry (`RegistryKeys.storyProgress`)           |
+| StoryMap → Versus             | `storyMatchSetup(progress, dificuldade)` (`mode: 'story'`)                        |
 
-Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
+Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla; devolve `false` se
+já havia uma transição). As funções da história (`storyFlow.ts`) checam `isLeaving()` antes de
+mexer no progresso: Enter e Esc apertados dentro do mesmo fade não perdem a campanha.
 
 A seleção deriva os cards de `getPlayableFighters()` (o `ROSTER` filtrado por
 `FighterConfig.playable`), nos dois modos. A grade vem de `rosterGrid(quantidade)`
@@ -323,7 +329,7 @@ um único jogável, usa o primeiro lutador diferente. Na história, um jogável 
 (`playable: false`, hoje FIGHTER_A e FIGHTER_B) ficam no roster para testes e ferramentas, mas
 nunca aparecem. As cenas continuam recebendo apenas `MatchSetup`.
 
-A seleção também escolhe a dificuldade da CPU (`DifficultySelector`: ↑/↓, botões `<` `>` ou
+A seleção também escolhe a dificuldade da CPU (`DifficultySelector`: Q / E, botões `<` `>` ou
 toque na opção) e a grava em `MatchSetup.difficulty`. A última escolha fica no registry do
 Phaser (`this.registry`, chave `RegistryKeys.aiDifficulty`), que dura a sessão do jogo e é
 compartilhado pelas cenas; não há variável global solta. Valor ausente ou inválido volta para

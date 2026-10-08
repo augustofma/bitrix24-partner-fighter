@@ -3,6 +3,7 @@ import { gameMusic, playSfx } from '../audio/gameAudio';
 import { SCENE_MUSIC } from '../config/audio';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_WIDTH } from '../config/display';
+import { QUICK_FIGHT_STEPS } from '../config/match';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { getFighterConfig } from '../fighters/roster';
@@ -160,7 +161,12 @@ export class StageSelectScene extends Phaser.Scene {
       { fill: COLORS.navyDeep, fillAlpha: 0.9, border: COLORS.magenta, inner: COLORS.violet },
     );
     this.add
-      .text(stepBadge.x, topBarY, STRINGS.selectStep(3, 3), arcadeText(17, COLORS.white))
+      .text(
+        stepBadge.x,
+        topBarY,
+        STRINGS.selectStep(QUICK_FIGHT_STEPS, QUICK_FIGHT_STEPS),
+        arcadeText(17, COLORS.white),
+      )
       .setOrigin(0.5);
   }
 

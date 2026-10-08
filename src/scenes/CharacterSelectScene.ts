@@ -3,7 +3,7 @@ import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../config/controls';
 import { GAME_WIDTH } from '../config/display';
-import { DEFAULT_AI_DIFFICULTY } from '../config/match';
+import { DEFAULT_AI_DIFFICULTY, QUICK_FIGHT_STEPS } from '../config/match';
 import { RegistryKeys } from '../config/registryKeys';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
@@ -38,8 +38,8 @@ const TITLE_SHINE_MS = 1400;
 const TITLE_SHINE_DELAY_MS = 2200;
 const FOOTER_HEIGHT = 28;
 const TITLE_GLOW_BLUR = 10;
-/** Quick fight: pick your fighter, then the rival, then the stage (StageSelectScene). */
-const QUICK_FIGHT_STEPS = 3;
+/** How far the plate behind the cards reaches past them (px). */
+const GRID_BACKING_PAD = 6;
 const DIFFICULTY_EASIER_KEYS = ['Q'];
 const DIFFICULTY_HARDER_KEYS = ['E'];
 
@@ -92,6 +92,9 @@ export class CharacterSelectScene extends Phaser.Scene {
 
   create(data?: CharacterSelectData): void {
     this.mode = data?.mode ?? 'quick';
+    // The scene instance is reused: top-bar labels from a previous visit are gone.
+    this.pageLabel = null;
+    this.opponentLabel = null;
     this.step = 'player';
     this.player = null;
     fadeIn(this);
@@ -111,6 +114,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     }
 
     this.createTopBar();
+    this.createGridBacking();
     this.cards = [];
     this.createCards();
     this.hero = new HeroPanel(this, ROSTER);
@@ -232,6 +236,29 @@ export class CharacterSelectScene extends Phaser.Scene {
         .text(opponentBadge.x, topBarY, '', arcadeText(17, COLORS.white))
         .setOrigin(0.5);
     }
+  }
+
+  /**
+   * A dark plate behind the cards: the gaps between them show it instead of the busy map
+   * (whose little lit houses read as stray pixels between the cards).
+   */
+  private createGridBacking(): void {
+    const { gridArea } = SELECT_LAYOUT;
+    const plate = this.add.graphics();
+    drawArcadeFrame(
+      plate,
+      gridArea.left - GRID_BACKING_PAD,
+      gridArea.top - GRID_BACKING_PAD,
+      gridArea.width + GRID_BACKING_PAD * 2,
+      gridArea.height + GRID_BACKING_PAD * 2,
+      {
+        fill: COLORS.navyDeep,
+        fillAlpha: 0.82,
+        border: COLORS.indigo,
+        inner: COLORS.navyDeep,
+        shadow: 0,
+      },
+    );
   }
 
   private createCards(): void {
