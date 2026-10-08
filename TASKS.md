@@ -436,6 +436,14 @@ sem pedido explícito.**
 - [x] `joinville-zopu` no registro; o perfil do Aislan aponta para ele, Romualdo inalterado
 - [x] Testes de flyover, rotas e assets; playtest desktop e touch com o avião e a torcida
 
+## DONE (luta rápida com escolha de rival e fase, branch `feature/quick-fight-selection`)
+
+- [x] Seleção em dois passos (seu lutador, rival; espelho permitido), selo PASSO n DE 3, P1/CPU
+- [x] `StageSelectScene`: prévia com a arte do cenário, lista dos cenários ilustrados
+      (`getSelectableStages`), sugestão inicial por `quickFightStageId`, toque e teclado
+- [x] Esc volta um passo mantendo as escolhas; testes de fluxo, layout e recorte; playtest
+      desktop e touch até a luta no cenário escolhido
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

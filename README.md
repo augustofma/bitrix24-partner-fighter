@@ -9,8 +9,10 @@ _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o prime
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
 JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA e AISLAN. A história exige também um perfil de campanha;
-Todos os seis estão disponíveis na história e na luta rápida. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
-enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Isaque, Isaque enfrenta Aislan, Aislan enfrenta Augusto). `FIGHTER_A` (sprite
+Todos os seis estão disponíveis na história e na luta rápida. Na **LUTA RÁPIDA** são três
+passos: **seu lutador**, **o rival** (qualquer jogável, inclusive o mesmo; começa sugerindo o
+próximo do roster) e **a fase** (todos os cenários ilustrados, com prévia; começa no cenário da
+cidade dos lutadores). Esc volta um passo. `FIGHTER_A` (sprite
 demo) e `FIGHTER_B` (placeholder) continuam no código para testes e desenvolvimento, com
 `playable: false`, e não aparecem na seleção.
 
@@ -146,23 +148,24 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 
 **Teclado (Player 1)**
 
-| Ação               | Tecla                                          |
-| ------------------ | ---------------------------------------------- |
-| Mover              | ← / →                                          |
-| Pular              | ↑                                              |
-| Agachar            | ↓                                              |
-| Soco               | A                                              |
-| Chute              | S                                              |
-| Especial           | F (gasta a barra de especial)                  |
-| Defender           | D                                              |
-| Defesa agachada    | ↓ + D                                          |
-| Soco agachado      | ↓ + A                                          |
-| Rasteira           | ↓ + S                                          |
-| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)   |
-| Menus              | Enter / Espaço confirma, ← / → modo, Esc volta |
-| Seleção            | ← / → lutador, ↑ / ↓ dificuldade da CPU        |
-| Som                | M liga/desliga música e efeitos                |
-| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)      |
+| Ação               | Tecla                                                         |
+| ------------------ | ------------------------------------------------------------- |
+| Mover              | ← / →                                                         |
+| Pular              | ↑                                                             |
+| Agachar            | ↓                                                             |
+| Soco               | A                                                             |
+| Chute              | S                                                             |
+| Especial           | F (gasta a barra de especial)                                 |
+| Defender           | D                                                             |
+| Defesa agachada    | ↓ + D                                                         |
+| Soco agachado      | ↓ + A                                                         |
+| Rasteira           | ↓ + S                                                         |
+| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)                  |
+| Menus              | Enter / Espaço confirma, ← / → modo, Esc volta                |
+| Seleção            | ← / → lutador (seu, depois o rival), ↑ / ↓ dificuldade da CPU |
+| Fase               | ↑ / ↓ / ← / → cenário, Enter luta, Esc volta ao rival         |
+| Som                | M liga/desliga música e efeitos                               |
+| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)                     |
 
 **Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões
 SOCO / CHUTE / DEF / ESP à direita, com multi-touch (ex.: joystick ↗ + CHUTE; ↓ + DEF;

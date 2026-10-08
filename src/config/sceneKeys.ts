@@ -3,6 +3,7 @@ export const SceneKeys = {
   AudioLoader: 'AudioLoaderScene',
   Menu: 'MenuScene',
   CharacterSelect: 'CharacterSelectScene',
+  StageSelect: 'StageSelectScene',
   Versus: 'VersusScene',
   Fight: 'FightScene',
   Victory: 'VictoryScene',

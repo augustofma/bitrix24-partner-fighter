@@ -7,17 +7,13 @@ import { DEFAULT_AI_DIFFICULTY } from '../config/match';
 import { RegistryKeys } from '../config/registryKeys';
 import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
-import { ROSTER, getPlayableFighters, pickCpuOpponent } from '../fighters/roster';
+import { ROSTER, getFighterConfig, getPlayableFighters, pickCpuOpponent } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import type { FighterConfig } from '../types/fighter';
-import { isAIDifficulty, type AIDifficulty, type GameMode, type MatchSetup } from '../types/match';
+import { isAIDifficulty, type AIDifficulty, type GameMode } from '../types/match';
 import { getStoryLocation, locationLabel } from '../story/locations';
-import {
-  campaignStartLocation,
-  hasStoryCampaign,
-  isStoryRival,
-  quickFightStageId,
-} from '../story/storyProfiles';
+import { campaignStartLocation, hasStoryCampaign, isStoryRival } from '../story/storyProfiles';
+import type { StageSelectData } from './StageSelectScene';
 import { beginStory } from './story/storyFlow';
 import { DifficultySelector } from '../ui/DifficultySelector';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
@@ -39,12 +35,28 @@ const TITLE_SHINE_MS = 1400;
 const TITLE_SHINE_DELAY_MS = 2200;
 const FOOTER_HEIGHT = 28;
 const TITLE_GLOW_BLUR = 10;
+/** Quick fight: pick your fighter, then the rival, then the stage (StageSelectScene). */
+const QUICK_FIGHT_STEPS = 3;
+
+/** Which pick this screen is making: in story mode only 'player' is used. */
+export type SelectStep = 'player' | 'rival';
+
+export interface CharacterSelectData {
+  mode?: GameMode;
+  /** Quick fight: open on the rival step (coming back from the stage select). */
+  step?: SelectStep;
+  playerFighterId?: string;
+  /** Preselected card (the player's on the first step, the rival's on the second). */
+  cpuFighterId?: string;
+}
 
 /**
  * Arcade roster screen built from the playable fighters (ROSTER filtered by `playable`):
  * illustrated map background, a paged grid of fighter cards, a hero panel for the highlighted
  * fighter, the CPU difficulty and a SELECIONAR button. Works for any number of fighters (pages
  * of CARDS_PER_PAGE); in story mode a playable fighter without a campaign is shown locked.
+ * Quick fight runs two picks on this screen (your fighter, then the rival; mirror matches are
+ * allowed) and hands both to the stage select. ESC on the rival step goes back to the first.
  */
 export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
@@ -58,13 +70,20 @@ export class CharacterSelectScene extends Phaser.Scene {
   private opponentLabel: Phaser.GameObjects.Text | null = null;
   /** Quick fight (any playable fighter) or story (playable fighters with a campaign). */
   private mode: GameMode = 'quick';
+  private step: SelectStep = 'player';
+  /** Quick fight: the fighter picked on the first step. */
+  private player: FighterConfig | null = null;
+  private titleText!: Phaser.GameObjects.Text;
+  private hintText!: Phaser.GameObjects.Text;
 
   constructor() {
     super(SceneKeys.CharacterSelect);
   }
 
-  create(data?: { mode?: GameMode }): void {
+  create(data?: CharacterSelectData): void {
     this.mode = data?.mode ?? 'quick';
+    this.step = 'player';
+    this.player = null;
     fadeIn(this);
     gameMusic(this).play(SCENE_MUSIC.characterSelect);
     createSelectBackground(this);
@@ -72,6 +91,13 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.fighters = getPlayableFighters();
     this.selectedIndex = this.fighters.findIndex((fighter) => this.canPick(fighter));
     if (this.selectedIndex < 0) throw new Error('The roster has no playable fighter.');
+    if (this.mode === 'quick' && data?.step === 'rival' && data.playerFighterId) {
+      this.step = 'rival';
+      this.player = getFighterConfig(data.playerFighterId);
+      this.selectIfPlayable(data.cpuFighterId ?? pickCpuOpponent(this.player.id).id);
+    } else if (data?.playerFighterId) {
+      this.selectIfPlayable(data.playerFighterId);
+    }
 
     this.createTopBar();
     this.cards = [];
@@ -103,7 +129,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.add
       .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.navyDeep, 0.85)
       .setStrokeStyle(2, COLORS.royal);
-    this.add
+    this.hintText = this.add
       .text(GAME_WIDTH / 2, footerY, STRINGS.selectHint, bodyText(13, COLORS.white))
       .setOrigin(0.5)
       .setAlpha(0.92);
@@ -152,13 +178,8 @@ export class CharacterSelectScene extends Phaser.Scene {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
-    this.add
-      .text(
-        title.x,
-        topBarY,
-        this.mode === 'story' ? STRINGS.storySelectTitle : STRINGS.selectTitle,
-        arcadeText(30, COLORS.gold),
-      )
+    this.titleText = this.add
+      .text(title.x, topBarY, STRINGS.selectTitle, arcadeText(30, COLORS.gold))
       .setOrigin(0.5)
       .setShadow(0, 0, css(COLORS.magenta), TITLE_GLOW_BLUR, true, true);
 
@@ -261,26 +282,57 @@ export class CharacterSelectScene extends Phaser.Scene {
     const fighter = this.fighters[this.selectedIndex];
     if (!fighter) return;
     const page = Math.floor(this.selectedIndex / CARDS_PER_PAGE);
+    const rivalStep = this.step === 'rival';
     this.cards.forEach((card, index) => {
       card.setShown(cardSlot(index).page === page);
+      // Picking the rival: the highlight reads CPU and the P1 fighter keeps its tag.
+      card.setMarkerLabels(
+        rivalStep ? STRINGS.cpuOnly : STRINGS.playerOneTag,
+        rivalStep && card.config === this.player ? STRINGS.playerOneTag : null,
+      );
       card.setSelected(index === this.selectedIndex);
     });
     this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(this.fighters.length)));
     this.opponentLabel?.setText(this.badgeText(fighter));
+    this.titleText.setText(this.titleFor());
+    this.hintText.setText(
+      this.step === 'rival' && this.player
+        ? STRINGS.selectRivalHint(this.player.displayName)
+        : STRINGS.selectHint,
+    );
     this.hero.show(fighter);
   }
 
-  /** Quick fight: the CPU opponent. Story: where the campaign starts (the fighter's place). */
+  private titleFor(): string {
+    if (this.mode === 'story') return STRINGS.storySelectTitle;
+    return this.step === 'rival' ? STRINGS.selectRivalTitle : STRINGS.selectTitle;
+  }
+
+  /** Quick fight: the step (1, 2 of 3). Story: where the campaign starts (the fighter's place). */
   private badgeText(fighter: FighterConfig): string {
     if (this.mode === 'story' && hasStoryCampaign(fighter.id)) {
       const start = getStoryLocation(campaignStartLocation(fighter.id));
       return STRINGS.storyStart(locationLabel(start));
     }
-    return STRINGS.selectOpponent(pickCpuOpponent(fighter.id).displayName);
+    return STRINGS.selectStep(this.step === 'rival' ? 2 : 1, QUICK_FIGHT_STEPS);
+  }
+
+  private selectIfPlayable(fighterId: string): void {
+    const index = this.fighters.findIndex((f) => f.id === fighterId && this.canPick(f));
+    if (index >= 0) this.selectedIndex = index;
   }
 
   private back(): void {
     playSfx(this, 'menu-back');
+    if (this.step === 'rival' && this.player) {
+      // Back to the first pick, on the fighter chosen there.
+      const player = this.player;
+      this.step = 'player';
+      this.player = null;
+      this.selectIfPlayable(player.id);
+      this.refreshSelection();
+      return;
+    }
     goToScene(this, SceneKeys.Menu);
   }
 
@@ -294,15 +346,21 @@ export class CharacterSelectScene extends Phaser.Scene {
       beginStory(this, player.id);
       return;
     }
-    const cpu = pickCpuOpponent(player.id);
-    const setup: MatchSetup = {
-      playerFighterId: player.id,
-      cpuFighterId: cpu.id,
-      // The fighters' home city picks the arena (e.g. Recife -> Marco Zero).
-      stageId: quickFightStageId(player.id, cpu.id),
+    if (this.step === 'player') {
+      // Second pick: the rival, starting on the roster's suggestion (the next fighter).
+      this.step = 'rival';
+      this.player = player;
+      this.selectIfPlayable(pickCpuOpponent(player.id).id);
+      this.cameras.main.flash(120, 255, 255, 255);
+      this.refreshSelection();
+      return;
+    }
+    const data: StageSelectData = {
+      playerFighterId: this.player?.id ?? player.id,
+      cpuFighterId: player.id,
       difficulty: this.difficulty.value,
     };
     this.cameras.main.flash(150, 255, 255, 255);
-    goToScene(this, SceneKeys.Versus, setup);
+    goToScene(this, SceneKeys.StageSelect, data);
   }
 }

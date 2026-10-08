@@ -160,8 +160,11 @@ src/
       ArcadeButton.ts     Botão arcade (primário/secundário, hover, pressão, pulso)
       RosterCard.ts       Card da grade (retrato, nome, P1, brilho, CPU, "EM BREVE")
       HeroPanel.ts        Painel de destaque do lutador selecionado
+    stageSelect/
+      stageSelectLayout.ts  Geometria da tela de fase, janela da lista e recorte "cover"
   scenes/                 Fluxo do jogo (Phaser)
-    BootScene, MenuScene, CharacterSelectScene, VersusScene, FightScene, VictoryScene
+    BootScene, MenuScene, CharacterSelectScene, StageSelectScene, VersusScene, FightScene,
+    VictoryScene
     story/                StoryMapScene, CampaignCompleteScene e storyFlow.ts (cola entre as
                           cenas e o StoryProgress no registry)
     transitions.ts        Fade entre cenas
@@ -244,8 +247,10 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   `FightScene`. Nada é criado por frame (testes contam objetos com uma cena falsa).
 - **Qual cenário:** o lugar decide, nunca o lutador. `StoryLocation.stageId` diz o cenário das
   lutas naquele lugar (`recife` → `'recife'`); na história, `legStageId(leg)` usa o `stageId`
-  da etapa ou o do destino. Na luta rápida, `quickFightStageId` usa o cenário da cidade do rival
-  ou, se ele não tiver cidade, a do jogador; lugares sem cenário usam o padrão.
+  da etapa ou o do destino. Na luta rápida o jogador escolhe a fase (`StageSelectScene`, entre
+  `getSelectableStages()`: os cenários com `art`); `quickFightStageId` (cenário da cidade do
+  rival ou, se ele não tiver cidade, a do jogador; lugares sem cenário usam o padrão) só decide
+  a fase destacada ao abrir.
 
 ## Tela de vitória (VictoryScene)
 
@@ -263,7 +268,8 @@ o visual procedural anterior.
 
 ```
 LUTA RÁPIDA
-BootScene → MenuScene → CharacterSelectScene → VersusScene → FightScene → VictoryScene
+BootScene → MenuScene → CharacterSelectScene (seu lutador → rival) → StageSelectScene
+          → VersusScene → FightScene → VictoryScene
                 ▲                                                              │
                 └──────────────────────────────────────────────────────────────┘
 
@@ -296,9 +302,12 @@ topo (no lugar do selo do adversário), mantendo o layout utilizável com 8–16
 Toda a apresentação fica em `src/ui/select/`; a cena só orquestra seleção, teclado e
 `MatchSetup`. Nada ali usa imagens novas: fundo, molduras e botões são desenhados em código,
 e os retratos vêm de `createPortrait` (o mesmo caminho de VS e vitória).
-`pickCpuOpponent` (luta rápida) devolve o próximo jogável depois do jogador na ordem do roster
-(circular), então todo jogável também é adversário da CPU; com um único jogável, usa o primeiro
-lutador diferente. Na história, um jogável é escolhível se tiver perfil de história
+Na luta rápida a cena faz duas escolhas (`step`: `player`, depois `rival`) e entrega
+`StageSelectData` (os dois ids e a dificuldade) à `StageSelectScene`, que monta o `MatchSetup` com
+a fase. Voltar da fase reabre a seleção em `step: 'rival'` com os dois lutadores.
+`pickCpuOpponent` devolve o próximo jogável depois do jogador na ordem do roster (circular): é o
+rival sugerido ao abrir o passo do rival (qualquer jogável pode ser escolhido, até o mesmo); com
+um único jogável, usa o primeiro lutador diferente. Na história, um jogável é escolhível se tiver perfil de história
 (`isStoryEligible`); os outros cards aparecem bloqueados ("EM BREVE"). Placeholders de teste
 (`playable: false`, hoje FIGHTER_A e FIGHTER_B) ficam no roster para testes e ferramentas, mas
 nunca aparecem. As cenas continuam recebendo apenas `MatchSetup`.
@@ -415,6 +424,7 @@ As cenas só dizem qual faixa querem; quem decide é o `MusicManager` (um por jo
 | ------------------------------------ | -------------------------------------------------------- |
 | MenuScene                            | `play(SCENE_MUSIC.menu)`                                 |
 | CharacterSelectScene                 | `play(SCENE_MUSIC.characterSelect)`                      |
+| StageSelectScene                     | `play(SCENE_MUSIC.characterSelect)` (mesma faixa, segue) |
 | StoryMapScene                        | `play(SCENE_MUSIC.storyMap)` (continua durante o voo)    |
 | VersusScene                          | nada: segue a música da tela anterior                    |
 | FightScene                           | `play(stageMusic(stage), 700)`; no `matchOver`, `stop()` |

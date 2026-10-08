@@ -41,6 +41,15 @@ export const STRINGS = {
   selectHint: '← → lutador    ↑ ↓ dificuldade    ENTER selecionar    ESC voltar',
   selectButton: 'SELECIONAR',
   selectOpponent: (name: string) => `VS  ${name}`,
+  /** Quick fight is three steps: your fighter, the rival, the stage. */
+  selectStep: (step: number, total: number) => `PASSO ${step} DE ${total}`,
+  selectRivalTitle: 'ESCOLHA O RIVAL',
+  selectRivalHint: (player: string) =>
+    `P1: ${player}    ← → rival    ↑ ↓ dificuldade    ENTER selecionar    ESC voltar`,
+  stageSelectTitle: 'ESCOLHA A FASE',
+  stageSelectHint: '↑ ↓ ← → fase    ENTER lutar    ESC voltar',
+  stageSelectMatch: (player: string, cpu: string) => `${player}  VS  ${cpu}`,
+  stageSelectButton: 'LUTAR!',
   back: 'VOLTAR',
   playerOneTag: 'P1',
   comingSoon: 'EM BREVE',

@@ -13,7 +13,7 @@ Visão futura: um elenco de 8 a 16 personagens caricaturais inspirados no ecossi
 ## Game loop
 
 ```
-LUTA RÁPIDA: Menu → Seleção → Tela VS → Luta (melhor de 3) → Tela de vitória → Menu
+LUTA RÁPIDA: Menu → Seleção (seu lutador, rival) → Fase → Tela VS → Luta (melhor de 3) → Vitória → Menu
 HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória → Mapa ... → Campanha concluída
 ```
 
@@ -28,14 +28,26 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    destaque mostra retrato ampliado, nome, descrição e barras PODER / VELOCIDADE / ALCANCE
    (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
    há várias páginas) percorrem os jogáveis; tocar um card seleciona e tocar de novo
-   confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. O selo "VS ..."
-   mostra o adversário: o próximo jogável do roster (circular). Abaixo da grade, o
+   confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. Abaixo da grade, o
    painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
+   Na luta rápida a seleção tem dois passos (selo "PASSO 1 DE 3" / "PASSO 2 DE 3"): primeiro o
+   seu lutador; depois **"ESCOLHA O RIVAL"**, na mesma grade, começando no próximo jogável do
+   roster (circular) mas aceitando qualquer jogável, inclusive o mesmo (espelho). No passo do
+   rival o destaque diz CPU e o card do seu lutador mantém o P1; o rodapé lembra quem é o P1.
+   Esc / VOLTAR no passo do rival volta ao primeiro passo, no lutador escolhido.
+   **Fase ("ESCOLHA A FASE", passo 3 de 3, só na luta rápida):** prévia grande do cenário
+   destacado (a própria arte de fundo), com a luta ("JOÃO GUIOTTI VS AISLAN") numa faixa no
+   topo, nome e lugar embaixo, e a lista dos cenários ilustrados à direita (Partner Summit,
+   Recife, Joinville, Joinville ZOPU, Praça Vermelha; a Partner Arena provisória fica fora).
+   Começa no cenário sugerido pela cidade dos lutadores (regra abaixo). ↑ ↓ ← → percorrem
+   (circular), tocar seleciona e tocar de novo confirma, LUTAR! ou Enter vai ao VS e Esc /
+   VOLTAR volta ao passo do rival com os dois lutadores.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
    O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
    Zero** (RECIFE); de **Joinville** (Romualdo), no **pórtico de Joinville** (JOINVILLE); os
-   demais, no **Bitrix24 Partner Summit**. Na luta rápida vale a cidade do
-   rival ou, se ele não tiver cidade, a do jogador; na história, o destino da etapa. O VS
+   demais, no **Bitrix24 Partner Summit**. Na luta rápida essa é só a sugestão da tela de fase
+   (cidade do rival ou, se ele não tiver cidade, a do jogador) e vale a fase escolhida; na
+   história, o destino da etapa. O VS
    mostra o nome do cenário e o lugar ("MARCO ZERO - RECIFE, PE").
    - **Partner Summit:** o público pula em onda e comemora mais rápido quando um round tem
      vencedor; o presidente, sentado no palco, olha ao redor e gesticula (e acena ao fim do

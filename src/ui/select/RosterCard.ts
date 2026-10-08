@@ -27,6 +27,9 @@ export class RosterCard {
   private readonly frame: Phaser.GameObjects.Graphics;
   private readonly glow: Phaser.GameObjects.Rectangle;
   private readonly marker: Phaser.GameObjects.Container;
+  private markerText!: Phaser.GameObjects.Text;
+  private selectedLabel: string = STRINGS.playerOneTag;
+  private pinnedLabel: string | null = null;
   private selected = false;
   private readonly selectable: boolean;
 
@@ -71,12 +74,29 @@ export class RosterCard {
     this.setSelected(false);
   }
 
+  /**
+   * Marker texts: on the selected card (P1 by default; CPU while the rival is picked) and,
+   * when `pinned` is given, kept on this card while it is not selected (the fighter already
+   * picked as P1).
+   */
+  setMarkerLabels(selected: string, pinned: string | null = null): void {
+    this.selectedLabel = selected;
+    this.pinnedLabel = pinned;
+    this.updateMarker();
+  }
+
+  private updateMarker(): void {
+    const label = this.selected ? this.selectedLabel : this.pinnedLabel;
+    this.marker.setVisible(label !== null);
+    if (label !== null) this.markerText.setText(label);
+  }
+
   setSelected(selected: boolean): void {
     const changed = selected !== this.selected;
     this.selected = selected;
     this.drawFrame();
     this.glow.setVisible(selected);
-    this.marker.setVisible(selected);
+    this.updateMarker();
     if (this.config && this.selectable) this.container.setAlpha(selected ? 1 : DIMMED_ALPHA);
     if (changed) {
       this.scene.tweens.add({
@@ -172,9 +192,9 @@ export class RosterCard {
     const x = -WIDTH / 2 + 4;
     const y = -HEIGHT / 2 - 6;
     const badge = scene.add.rectangle(0, 0, 38, 22, COLORS.magenta).setStrokeStyle(3, COLORS.ink);
-    const text = scene.add
+    this.markerText = scene.add
       .text(0, 0, STRINGS.playerOneTag, arcadeText(15, COLORS.white))
       .setOrigin(0.5);
-    return scene.add.container(x + 19, y + 11, [badge, text]);
+    return scene.add.container(x + 19, y + 11, [badge, this.markerText]);
   }
 }

@@ -14,6 +14,8 @@ const ART_DIR = 'stages/joinville-zopu';
 export const joinvilleZopu: StageConfig = {
   ...joinville,
   id: 'joinville-zopu',
+  // Told apart from Romualdo's JOINVILLE in the stage select.
+  displayName: 'JOINVILLE ZOPU',
   // Used only by the procedural fallback when the art is not loaded.
   palette: { ...joinville.palette, accent: 0x22c55e },
   music: DEFAULT_STAGE_MUSIC,

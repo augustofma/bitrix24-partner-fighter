@@ -7,6 +7,7 @@ import { FightScene } from './scenes/FightScene';
 import { MenuScene } from './scenes/MenuScene';
 import { CampaignCompleteScene } from './scenes/story/CampaignCompleteScene';
 import { StoryMapScene } from './scenes/story/StoryMapScene';
+import { StageSelectScene } from './scenes/StageSelectScene';
 import { VersusScene } from './scenes/VersusScene';
 import { VictoryScene } from './scenes/VictoryScene';
 
@@ -38,6 +39,7 @@ const config: Phaser.Types.Core.GameConfig = {
     AudioLoaderScene,
     MenuScene,
     CharacterSelectScene,
+    StageSelectScene,
     StoryMapScene,
     VersusScene,
     FightScene,

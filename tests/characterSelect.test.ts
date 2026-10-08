@@ -142,6 +142,8 @@ beforeEach(() => {
 });
 
 function openScene(mode: 'quick' | 'story' = 'quick') {
+  // Only this scene's texts (an earlier scene's options must not answer a lookup).
+  ui.texts.length = 0;
   const scene = new CharacterSelectScene();
   scene.create({ mode });
   const cards = (scene as unknown as { cards: RosterCard[] }).cards;
@@ -152,6 +154,11 @@ const fake = (card: RosterCard | undefined) =>
   card?.container as unknown as ReturnType<typeof ui.display> | undefined;
 const lastHero = () => ui.hero.at(-1);
 const lastSetup = () => ui.goToScene.mock.lastCall?.[2] as { difficulty: string } | undefined;
+/** Quick fight: ENTER picks your fighter, ENTER again picks the (suggested) rival. */
+const pickBoth = () => {
+  ui.keys.get('ENTER')?.();
+  ui.keys.get('ENTER')?.();
+};
 
 describe('CharacterSelectScene roster integration', () => {
   it('builds a card per PLAYABLE fighter (roster filtered by `playable`) plus filler slots', () => {
@@ -182,33 +189,77 @@ describe('CharacterSelectScene roster integration', () => {
   });
 
   it.each(getPlayableFighters())(
-    'quick fight with %s: VS with a playable CPU and the stage of the fighters’ city',
+    'quick fight with %s: pick it, then any rival (suggested: a playable CPU), then the stage',
     (fighter) => {
-      const { cards } = openScene();
+      const { scene, cards } = openScene();
       const card = cards.find((c) => c.config === fighter);
+      const step = () => (scene as unknown as { step: string }).step;
+      // First tap selects (the first card is already selected: its tap confirms).
       fake(card)?.handlers.get('pointerup')?.();
-      fake(card)?.handlers.get('pointerup')?.();
-      const setup = ui.goToScene.mock.lastCall?.[2] as Record<string, string>;
-      expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.Versus);
-      expect(setup.playerFighterId).toBe(fighter.id);
-      const cpu = ROSTER.find((f) => f.id === setup.cpuFighterId);
+      if (step() === 'player') fake(card)?.handlers.get('pointerup')?.();
+      expect(step()).toBe('rival');
+      // First pick done: still on this screen, now picking the rival.
+      expect(ui.goToScene).not.toHaveBeenCalled();
+      expect(ui.texts.some((t) => t.text === STRINGS.selectRivalTitle)).toBe(true);
+      ui.keys.get('ENTER')?.();
+      expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.StageSelect);
+      const data = ui.goToScene.mock.lastCall?.[2] as Record<string, string>;
+      expect(data.playerFighterId).toBe(fighter.id);
+      const cpu = ROSTER.find((f) => f.id === data.cpuFighterId);
       expect(cpu?.playable).toBe(true);
       expect(cpu?.id).not.toBe(fighter.id);
     },
   );
 
-  it('first tap selects, a tap on the selected card confirms the right MatchSetup', () => {
+  it('the rival is free to choose (mirror match included), not just the suggestion', () => {
     const { scene, cards } = openScene();
-    const card = cards[getPlayableFighters().indexOf(augusto)];
-    expect(fake(card)?.input?.enabled).toBe(true);
-    fake(card)?.handlers.get('pointerup')?.();
-    expect(ui.goToScene).toHaveBeenCalledWith(scene, SceneKeys.Versus, {
+    const augustoCard = cards[getPlayableFighters().indexOf(augusto)];
+    fake(augustoCard)?.handlers.get('pointerup')?.(); // selected already: picks Augusto
+    // Rival step: the roster's suggestion (the next fighter) is highlighted.
+    expect(lastHero()).toBe(filipe);
+    const romualdoCard = cards[getPlayableFighters().indexOf(romualdo)];
+    fake(romualdoCard)?.handlers.get('pointerup')?.();
+    fake(romualdoCard)?.handlers.get('pointerup')?.();
+    expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.StageSelect, {
       playerFighterId: augusto.id,
-      // The CPU is the next playable fighter.
-      cpuFighterId: filipe.id,
-      // Filipe is from Recife: the fight happens at the Marco Zero.
-      stageId: 'recife',
+      cpuFighterId: romualdo.id,
       difficulty: 'normal',
+    });
+    const mirror = openScene();
+    fake(mirror.cards[0])?.handlers.get('pointerup')?.();
+    fake(mirror.cards[0])?.handlers.get('pointerup')?.();
+    fake(mirror.cards[0])?.handlers.get('pointerup')?.();
+    expect(ui.goToScene.mock.lastCall?.[2]).toMatchObject({
+      playerFighterId: augusto.id,
+      cpuFighterId: augusto.id,
+    });
+  });
+
+  it('ESC on the rival step goes back to the first pick, on the fighter chosen there', () => {
+    openScene();
+    ui.keys.get('RIGHT')?.(); // Filipe
+    ui.keys.get('ENTER')?.();
+    ui.keys.get('ESC')?.();
+    expect(ui.goToScene).not.toHaveBeenCalled();
+    expect(lastHero()).toBe(filipe);
+    expect(ui.texts.some((t) => t.text === STRINGS.selectTitle)).toBe(true);
+    ui.keys.get('ESC')?.();
+    expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.Menu);
+  });
+
+  it('coming back from the stage select reopens the rival step with both fighters', () => {
+    const scene = new CharacterSelectScene();
+    scene.create({
+      mode: 'quick',
+      step: 'rival',
+      playerFighterId: joaoGuiotti.id,
+      cpuFighterId: aislan.id,
+    });
+    expect(lastHero()).toBe(aislan);
+    ui.keys.get('ENTER')?.();
+    expect(ui.goToScene.mock.lastCall?.[2]).toMatchObject({
+      playerFighterId: joaoGuiotti.id,
+      cpuFighterId: aislan.id,
     });
   });
 
@@ -219,16 +270,17 @@ describe('CharacterSelectScene roster integration', () => {
     expect(lastHero()).toBe(getPlayableFighters()[1]);
   });
 
-  it('SELECIONAR and ENTER confirm; VOLTAR and ESC go back to the menu', () => {
+  it('SELECIONAR and ENTER confirm each pick; VOLTAR and ESC step back, then to the menu', () => {
     const { scene } = openScene();
     ui.buttons.get(STRINGS.selectButton)?.();
-    expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Versus, expect.anything());
     ui.keys.get('ENTER')?.();
-    expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Versus, expect.anything());
+    expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.StageSelect, expect.anything());
+    ui.buttons.get(STRINGS.back)?.(); // rival step -> first pick
     ui.buttons.get(STRINGS.back)?.();
     expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Menu);
+    openScene();
     ui.keys.get('ESC')?.();
-    expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.Menu);
+    expect(ui.goToScene.mock.lastCall?.[1]).toBe(SceneKeys.Menu);
   });
 
   it('menu sounds: move on a real change, confirm on select, back on leave', () => {
@@ -246,9 +298,11 @@ describe('CharacterSelectScene roster integration', () => {
     expect(ui.playSfx.mock.calls.every((call) => call[0] === scene)).toBe(true);
   });
 
-  it('shows the CPU opponent picked by the roster rule', () => {
+  it('the badge shows the step (1 of 3, then 2 of 3)', () => {
     openScene();
-    expect(ui.texts.some((t) => t.text === STRINGS.selectOpponent(filipe.displayName))).toBe(true);
+    expect(ui.texts.some((t) => t.text === STRINGS.selectStep(1, 3))).toBe(true);
+    ui.keys.get('ENTER')?.();
+    expect(ui.texts.some((t) => t.text === STRINGS.selectStep(2, 3))).toBe(true);
   });
 
   it.each([8, 16])('keeps %s playable fighters reachable with hidden cards disabled', (count) => {
@@ -323,7 +377,7 @@ describe('CharacterSelectScene CPU difficulty', () => {
   it('defaults to NORMAL and shows the three options', () => {
     openScene();
     for (const d of ['easy', 'normal', 'hard'] as const) expect(optionText(d)).toBeDefined();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('normal');
   });
 
@@ -331,25 +385,28 @@ describe('CharacterSelectScene CPU difficulty', () => {
     openScene();
     ui.keys.get('UP')?.();
     ui.keys.get('UP')?.();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('hard');
+    openScene();
     for (let i = 0; i < 5; i++) ui.keys.get('DOWN')?.();
     ui.keys.get('RIGHT')?.();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()).toMatchObject({ difficulty: 'easy', playerFighterId: ROSTER[1]?.id });
   });
 
   it('the < > buttons and a tap on an option work by touch', () => {
     openScene();
     ui.buttons.get(STRINGS.previousDifficulty)?.();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('easy');
+    openScene();
     ui.buttons.get(STRINGS.nextDifficulty)?.();
     ui.buttons.get(STRINGS.nextDifficulty)?.();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('hard');
+    openScene();
     optionText('normal')?.handlers.get('pointerup')?.();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('normal');
   });
 
@@ -358,14 +415,14 @@ describe('CharacterSelectScene CPU difficulty', () => {
     ui.keys.get('DOWN')?.();
     expect(ui.registry.get(RegistryKeys.aiDifficulty)).toBe('easy');
     openScene();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('easy');
   });
 
   it('ignores an invalid registry value and falls back to NORMAL', () => {
     ui.registry.set(RegistryKeys.aiDifficulty, 'impossible');
     openScene();
-    ui.keys.get('ENTER')?.();
+    pickBoth();
     expect(lastSetup()?.difficulty).toBe('normal');
   });
 });
