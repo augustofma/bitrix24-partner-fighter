@@ -1,6 +1,12 @@
 import { ROSTER } from '../fighters/roster';
 import { DEFAULT_STAGE_ID } from '../stages/stageRegistry';
-import type { StoryCharacterProfile, StoryLeg, StoryLocation, StoryRoute } from '../types/story';
+import type {
+  StoryCharacterProfile,
+  StoryFinalBoss,
+  StoryLeg,
+  StoryLocation,
+  StoryRoute,
+} from '../types/story';
 import { getStoryLocation, stageIdForLocation } from './locations';
 
 /*
@@ -33,6 +39,25 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Met in Joinville too, but at the ZOPU-dressed gate (Romualdo keeps the CRMThink one).
   { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville-zopu' },
 ];
+
+/**
+ * The final boss: Dmitry, at the Bitrix24 office in Moscow. That stage is used in the story
+ * only for this fight (no StoryLocation points to it). Until Dmitry's FighterConfig is in the
+ * ROSTER the leg is simply absent; adding him needs no change here. He must not get a regular
+ * STORY_PROFILES entry (he would be fought twice).
+ */
+export const STORY_FINAL_BOSS: StoryFinalBoss = {
+  fighterId: 'dmitry',
+  destination: 'russia',
+  stageId: 'bitrix24-moscow',
+};
+
+/** The final boss leg of `fighterId`'s campaign, when the boss exists and is someone else. */
+export function finalBossLeg(fighterId: string): StoryLeg | undefined {
+  const { fighterId: boss, destination, stageId } = STORY_FINAL_BOSS;
+  if (fighterId === boss || !ROSTER.some((config) => config.id === boss)) return undefined;
+  return { opponent: boss, destination, stageId };
+}
 
 export function getStoryProfile(fighterId: string): StoryCharacterProfile | undefined {
   return STORY_PROFILES.find((profile) => profile.fighterId === fighterId);
@@ -73,7 +98,9 @@ export function isStoryEligible(fighterId: string): boolean {
 export function campaignOpponents(fighterId: string): string[] {
   const profile = requireProfile(fighterId);
   const order = profile.opponentOrder ?? STORY_PROFILES.map((p) => p.fighterId);
-  return order.filter((id) => id !== fighterId && isStoryEligible(id));
+  return order.filter(
+    (id) => id !== fighterId && id !== STORY_FINAL_BOSS.fighterId && isStoryEligible(id),
+  );
 }
 
 /** A leg against `opponent`, at that rival's place in the story (and its encounter arena). */
@@ -86,7 +113,9 @@ export function rivalLeg(opponent: string): StoryLeg {
 export function storyRouteFor(fighterId: string): StoryRoute | undefined {
   if (!isStoryEligible(fighterId)) return undefined;
   const route = campaignOpponents(fighterId).map(rivalLeg);
-  return route.length > 0 ? route : undefined;
+  if (route.length === 0) return undefined;
+  const boss = finalBossLeg(fighterId);
+  return boss ? [...route, boss] : route;
 }
 
 export function hasStoryCampaign(fighterId: string): boolean {
@@ -95,7 +124,9 @@ export function hasStoryCampaign(fighterId: string): boolean {
 
 /** Fighters met as rivals in some campaign. */
 export function isStoryRival(fighterId: string): boolean {
-  return STORY_PROFILES.some((profile) => campaignOpponents(profile.fighterId).includes(fighterId));
+  return STORY_PROFILES.some((profile) =>
+    storyRouteFor(profile.fighterId)?.some((leg) => leg.opponent === fighterId),
+  );
 }
 
 /** Official home of a fighter (undefined for fighters outside the story). */

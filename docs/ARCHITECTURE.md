@@ -163,7 +163,8 @@ src/
       RosterCard.ts       Card da grade (retrato, nome, P1, brilho, CPU, "EM BREVE")
       HeroPanel.ts        Painel de destaque do lutador selecionado
     stageSelect/
-      stageSelectLayout.ts  Geometria da tela de fase, janela da lista e recorte "cover"
+      stageSelectLayout.ts  Geometria da tela de fase: lista calculada pela quantidade de fases
+                            (stageList), janela da lista e recorte "cover"
   scenes/                 Fluxo do jogo (Phaser)
     BootScene, MenuScene, CharacterSelectScene, StageSelectScene, VersusScene, FightScene,
     VictoryScene
@@ -252,7 +253,9 @@ barreira à frente e `performers` (recortes que giram em torno de um pivô, com 
   da etapa ou o do destino. Na luta rápida o jogador escolhe a fase (`StageSelectScene`, entre
   `getSelectableStages()`: os cenários com `art`); `quickFightStageId` (cenário da cidade do
   rival ou, se ele não tiver cidade, a do jogador; lugares sem cenário usam o padrão) só decide
-  a fase destacada ao abrir.
+  a fase destacada ao abrir. A lista vem de `stageList(quantidade)`: todas as fases cabem de uma
+  vez com linhas entre `STAGE_LIST_RULES.minRowHeight` e `maxRowHeight`; acima disso a lista
+  rola (`listWindowStart`). Adicionar um cenário com `art` não exige mudar a tela.
 
 ## Tela de vitória (VictoryScene)
 
@@ -367,6 +370,12 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
   Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
   Recife vira destino para todos que não começam lá.
+- **Chefe final:** `STORY_FINAL_BOSS` (`{ fighterId: 'dmitry', destination: 'russia', stageId:
+'bitrix24-moscow' }`) é dado, não lógica por personagem. `finalBossLeg(id)` devolve essa etapa
+  quando o chefe está no `ROSTER` e não é o próprio jogador; `storyRouteFor` a põe no fim de toda
+  campanha e `campaignOpponents` nunca o inclui no meio. O chefe não tem perfil em
+  `STORY_PROFILES` (não tem campanha), mas `isStoryRival` o reconhece. O stage dele não é
+  `stageId` de nenhum lugar, então só aparece na história por essa etapa.
 - `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
   `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
   (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo

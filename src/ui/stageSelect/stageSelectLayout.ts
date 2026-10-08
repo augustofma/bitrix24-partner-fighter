@@ -11,23 +11,64 @@ export const STAGE_SELECT_LAYOUT = {
   preview: { left: 24, top: 76, width: 608, height: 346 },
   /** Name and place of the highlighted stage, under the preview. */
   caption: { x: 328, nameY: 452, locationY: 482 },
-  list: { left: 648, top: 76, width: 290, rowHeight: 62, gap: 9, visibleRows: 5 },
-  thumb: { width: 100, height: 52 },
+  /** Area of the stage list; its rows are sized from the number of stages (stageList). */
+  listArea: { left: 648, top: 76, width: 290, height: 346 },
   fightButton: { x: 793, y: 464, width: 290, height: 56 },
   footerY: 522,
 } as const;
 
+/** Row limits of the stage list: tall rows for a few stages, compact (not tiny) for more. */
+export const STAGE_LIST_RULES = {
+  gap: 8,
+  maxRowHeight: 62,
+  minRowHeight: 46,
+  /** Thumbnail: the row height minus this, at the art's ~16:9 crop ratio of the list. */
+  thumbInset: 10,
+  thumbAspect: 100 / 52,
+} as const;
+
+export interface StageList {
+  left: number;
+  top: number;
+  width: number;
+  rowHeight: number;
+  gap: number;
+  /** Rows shown at once: every stage when they fit, else a scrolling window. */
+  visibleRows: number;
+  thumbWidth: number;
+  thumbHeight: number;
+}
+
+/** The list for `count` stages: as many rows as fit at minRowHeight, each as tall as allowed. */
+export function stageList(count: number): StageList {
+  const { left, top, width, height } = STAGE_SELECT_LAYOUT.listArea;
+  const { gap, maxRowHeight, minRowHeight, thumbInset, thumbAspect } = STAGE_LIST_RULES;
+  const fit = Math.max(1, Math.floor((height + gap) / (minRowHeight + gap)));
+  const visibleRows = Math.max(1, Math.min(count, fit));
+  const rowHeight = Math.min(maxRowHeight, (height - gap * (visibleRows - 1)) / visibleRows);
+  const thumbHeight = rowHeight - thumbInset;
+  return {
+    left,
+    top,
+    width,
+    rowHeight,
+    gap,
+    visibleRows,
+    thumbWidth: thumbHeight * thumbAspect,
+    thumbHeight,
+  };
+}
+
 /** First stage shown in the list so the selected one is visible (centered when it can be). */
-export function listWindowStart(selected: number, count: number): number {
-  const rows = STAGE_SELECT_LAYOUT.list.visibleRows;
+export function listWindowStart(selected: number, count: number, list: StageList): number {
+  const rows = list.visibleRows;
   if (count <= rows) return 0;
   return Math.min(Math.max(0, selected - Math.floor(rows / 2)), count - rows);
 }
 
 /** Center y of list row `row` (0 = top of the visible window). */
-export function listRowY(row: number): number {
-  const { top, rowHeight, gap } = STAGE_SELECT_LAYOUT.list;
-  return top + rowHeight / 2 + row * (rowHeight + gap);
+export function listRowY(row: number, list: StageList): number {
+  return list.top + list.rowHeight / 2 + row * (list.rowHeight + list.gap);
 }
 
 /**

@@ -3,6 +3,7 @@ import { partnerArena } from './partnerArena';
 import { partnerSummit } from './partnerSummit';
 import { joinville } from './joinville';
 import { joinvilleZopu } from './joinvilleZopu';
+import { bitrix24Moscow } from './bitrix24Moscow';
 import { recife } from './recife';
 import { russia } from './russia';
 
@@ -12,6 +13,7 @@ export const STAGES: readonly StageConfig[] = [
   joinville,
   joinvilleZopu,
   russia,
+  bitrix24Moscow,
   partnerArena,
 ];
 

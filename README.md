@@ -106,6 +106,16 @@ Na história entra após Romualdo, na mesma Joinville, mas luta no cenário pró
 avião rebocando a faixa "zopu" ([arte e preparo](scripts/stage-art/joinville-zopu/README.md)). O
 Romualdo continua no Joinville da CRMThink. A escolha vem do `encounterStageId` do perfil.
 
+## BITRIX24 MOSCOU — chefe final
+
+Cenário **BITRIX24 MOSCOU** (`bitrix24-moscow`): o salão da sede da Bitrix24 em Moscou, com o
+Kremlin e o Moscow City atrás do vidro, o urso, os troféus e o logo no piso
+([arte e preparo](scripts/stage-art/bitrix24-moscow/README.md)). É o cenário do **Dmitry**, o chefe
+final do Modo História (`STORY_FINAL_BOSS`). Na luta rápida pode ser escolhido na seleção de
+fase. Na história só aparece na última luta, contra o Dmitry: quando o `FighterConfig` dele
+entrar no roster, toda campanha ganha essa etapa final, sem nada escrito por personagem. Enquanto
+ele não existe, as campanhas seguem iguais.
+
 ## Stack
 
 | Ferramenta                           | Versão | Papel                                 |

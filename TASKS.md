@@ -470,6 +470,15 @@ sem pedido explícito.**
 - [x] ↑ ↓ entre linhas (`moveInGrid`, cruzando páginas), dificuldade em Q / E, ◀ ▶ por página
 - [x] Testes com roster atual + 3 entradas só de teste, 1920x1080, 1280x720 e 844x390; playtest
 
+## DONE (cenário BITRIX24 MOSCOU do chefe final Dmitry, branch `feature/dmitry-boss-stage`)
+
+- [x] Arte oficial redimensionada por `prepare_bitrix24_moscow.py`; `bitrix24-moscow` no registro
+      e na seleção de fase da luta rápida
+- [x] `STORY_FINAL_BOSS`: com o Dmitry no roster, toda campanha termina contra ele em Moscou
+      nesse cenário (único uso na história); sem ele, rotas iguais
+- [x] Lista de fases calculada pela quantidade (`stageList`), sem linha escondida com 6 fases
+- [x] Testes com um Dmitry só de teste; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

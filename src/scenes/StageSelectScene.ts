@@ -20,6 +20,8 @@ import {
   coverCrop,
   listRowY,
   listWindowStart,
+  stageList,
+  type StageList,
 } from '../ui/stageSelect/stageSelectLayout';
 import { COLORS, arcadeText, bodyText, css } from '../ui/theme';
 import type { CharacterSelectData } from './CharacterSelectScene';
@@ -57,6 +59,8 @@ interface StageRow {
  */
 export class StageSelectScene extends Phaser.Scene {
   private stages: readonly StageConfig[] = [];
+  /** List geometry derived from the number of stages offered (see stageList). */
+  private list!: StageList;
   private selectedIndex = 0;
   private match!: StageSelectData;
   private rows: StageRow[] = [];
@@ -72,6 +76,7 @@ export class StageSelectScene extends Phaser.Scene {
   create(data: StageSelectData): void {
     this.match = data;
     this.stages = getSelectableStages();
+    this.list = stageList(this.stages.length);
     if (this.stages.length === 0) throw new Error('No illustrated stage to select.');
     const suggested = quickFightStageId(data.playerFighterId, data.cpuFighterId);
     this.selectedIndex = Math.max(
@@ -192,22 +197,33 @@ export class StageSelectScene extends Phaser.Scene {
   }
 
   private createRows(): void {
-    const { list, thumb } = STAGE_SELECT_LAYOUT;
+    const list = this.list;
     this.stages.forEach((stage, index) => {
       const container = this.add.container(list.left, 0);
       const frame = this.add.graphics();
       container.add(frame);
-      const thumbTop = (list.rowHeight - thumb.height) / 2;
+      const thumbTop = (list.rowHeight - list.thumbHeight) / 2;
       container.add(
-        this.stageImage(stage, ROW_INSET + 4, thumbTop, thumb.width, thumb.height, THUMB_BIAS),
+        this.stageImage(
+          stage,
+          ROW_INSET + 4,
+          thumbTop,
+          list.thumbWidth,
+          list.thumbHeight,
+          THUMB_BIAS,
+        ),
       );
-      const textX = ROW_INSET + thumb.width + 16;
+      const textX = ROW_INSET + list.thumbWidth + 16;
       container.add(
-        this.add.text(textX, list.rowHeight / 2 - 10, stage.displayName, arcadeText(14)),
+        this.add
+          .text(textX, list.rowHeight / 2 - 9, stage.displayName, arcadeText(14))
+          .setOrigin(0, 0.5),
       );
       if (stage.location) {
         container.add(
-          this.add.text(textX, list.rowHeight / 2 + 8, stage.location, bodyText(10, COLORS.neon)),
+          this.add
+            .text(textX, list.rowHeight / 2 + 9, stage.location, bodyText(10, COLORS.neon))
+            .setOrigin(0, 0.5),
         );
       }
       // The tap target is a zone covering the whole row. A hit area set on the container
@@ -272,14 +288,14 @@ export class StageSelectScene extends Phaser.Scene {
   private refresh(animate: boolean): void {
     const stage = this.stages[this.selectedIndex];
     if (!stage) return;
-    const { list } = STAGE_SELECT_LAYOUT;
-    const start = listWindowStart(this.selectedIndex, this.stages.length);
+    const list = this.list;
+    const start = listWindowStart(this.selectedIndex, this.stages.length, list);
     this.rows.forEach((row, index) => {
       const shown = index >= start && index < start + list.visibleRows;
       const selected = index === this.selectedIndex;
       row.container.setVisible(shown);
       if (row.hit.input) row.hit.input.enabled = shown;
-      row.container.setY(listRowY(index - start) - list.rowHeight / 2);
+      row.container.setY(listRowY(index - start, list) - list.rowHeight / 2);
       row.frame.clear();
       drawArcadeFrame(row.frame, 0, 0, list.width, list.rowHeight, {
         fill: selected ? COLORS.violet : COLORS.navyDeep,

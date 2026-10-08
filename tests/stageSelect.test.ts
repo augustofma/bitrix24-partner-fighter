@@ -96,6 +96,8 @@ import {
   STAGE_SELECT_LAYOUT,
   coverCrop,
   listWindowStart,
+  stageList,
+  STAGE_LIST_RULES,
 } from '../src/ui/stageSelect/stageSelectLayout';
 
 const MATCH = { playerFighterId: 'augusto', cpuFighterId: 'filipe', difficulty: 'hard' } as const;
@@ -178,7 +180,7 @@ describe('StageSelectScene', () => {
 
   it('every row is tappable over its whole width (regression: the name half was dead)', () => {
     openScene();
-    const { list } = STAGE_SELECT_LAYOUT;
+    const list = stageList(getSelectableStages().length);
     const rows = ui.zones.slice(1);
     expect(rows).toHaveLength(getSelectableStages().length);
     for (const zone of rows) {
@@ -232,12 +234,19 @@ describe('StageSelectScene', () => {
 });
 
 describe('stage select layout', () => {
+  it('every stage of today fits in the list at once (no hidden row)', () => {
+    const count = getSelectableStages().length;
+    expect(stageList(count).visibleRows).toBe(count);
+  });
+
   it('keeps the selected stage inside the visible list window', () => {
-    const rows = STAGE_SELECT_LAYOUT.list.visibleRows;
-    expect(listWindowStart(3, rows)).toBe(0);
+    const rows = stageList(100).visibleRows;
+    expect(listWindowStart(3, rows, stageList(rows))).toBe(0);
     for (const count of [rows + 1, rows + 4]) {
+      const list = stageList(count);
+      expect(list.visibleRows).toBe(rows);
       for (let selected = 0; selected < count; selected++) {
-        const start = listWindowStart(selected, count);
+        const start = listWindowStart(selected, count, list);
         expect(selected).toBeGreaterThanOrEqual(start);
         expect(selected).toBeLessThan(start + rows);
         expect(start + rows).toBeLessThanOrEqual(count);
@@ -245,13 +254,21 @@ describe('stage select layout', () => {
     }
   });
 
-  it('the list fits between the top bar and the button, beside the preview', () => {
-    const { list, preview, fightButton } = STAGE_SELECT_LAYOUT;
-    const bottom = list.top + list.visibleRows * list.rowHeight + (list.visibleRows - 1) * list.gap;
-    expect(bottom).toBeLessThanOrEqual(fightButton.y - fightButton.height / 2);
-    expect(preview.left + preview.width).toBeLessThan(list.left);
-    expect(list.left + list.width).toBeLessThanOrEqual(960);
-  });
+  it.each(Array.from({ length: 12 }, (_, i) => i + 1))(
+    '%s stages: the list fits between the top bar and the button, rows never tiny',
+    (count) => {
+      const { preview, fightButton } = STAGE_SELECT_LAYOUT;
+      const list = stageList(count);
+      const bottom =
+        list.top + list.visibleRows * list.rowHeight + (list.visibleRows - 1) * list.gap;
+      expect(bottom).toBeLessThanOrEqual(fightButton.y - fightButton.height / 2 + 1e-6);
+      expect(list.rowHeight).toBeGreaterThanOrEqual(STAGE_LIST_RULES.minRowHeight);
+      expect(list.rowHeight).toBeLessThanOrEqual(STAGE_LIST_RULES.maxRowHeight);
+      expect(list.thumbHeight).toBeLessThan(list.rowHeight);
+      expect(preview.left + preview.width).toBeLessThan(list.left);
+      expect(list.left + list.width).toBeLessThanOrEqual(960);
+    },
+  );
 
   it('cover crop fills the box without distortion', () => {
     const { scale, crop } = coverCrop(1075, 605, 100, 52, 0.35);

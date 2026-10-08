@@ -41,6 +41,16 @@ export interface StoryLeg {
   stageId?: string;
 }
 
+/**
+ * The campaigns' final boss: met after every rival, at `destination`, in its own arena. Its
+ * leg exists only once a fighter with `fighterId` is in the roster (a boss may be CPU-only).
+ */
+export interface StoryFinalBoss {
+  fighterId: string;
+  destination: string;
+  stageId: string;
+}
+
 /** Ordered legs of a campaign; the last leg's win completes it. */
 export type StoryRoute = readonly StoryLeg[];
 

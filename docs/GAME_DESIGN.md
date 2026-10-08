@@ -64,6 +64,10 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
      "Bitrix24" passando atrás das torres e cúpulas. Escolhido pelo encontro, não pelo país.
    - **Joinville:** a mesma torcida animada (dos dois lados do pórtico) e o mesmo voo, com a
      faixa "CRMThink" passando ao fundo, atrás do telhado e das palmeiras.
+   - **Bitrix24 Moscou:** o salão da sede da Bitrix24, com o Kremlin e o Moscow City atrás do
+     vidro. É o cenário do Dmitry, o chefe final da história; na luta rápida qualquer luta pode
+     ser nele. A lista de fases se ajusta à quantidade de cenários (linhas mais baixas quando há
+     mais fases; acima de 7, a lista rola).
      É só visual: a arena (largura, chão, paredes) é a mesma em todos os cenários.
 4. **Luta:** melhor de 3. Cada round: "ROUND n" (ou "FINAL ROUND") → "FIGHT!" (2 s sem
    controle) → combate → "K.O." ou "TIME OVER". Quem vence 2 rounds vence a partida.
@@ -625,6 +629,10 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
 - **Luta:** melhor de 3, regras normais.
 - **Vitória:** CONTINUAR leva à próxima viagem. **Derrota:** TENTAR NOVAMENTE repete só aquela
   luta (mesmo rival, cenário e dificuldade); SAIR PARA O MENU encerra a campanha.
+- **Chefe final (Dmitry):** quando o Dmitry entrar no elenco, toda campanha termina numa luta
+  contra ele em Moscou, no cenário **BITRIX24 MOSCOU**, que na história só é usado nessa luta.
+  Ele não é rival comum (não aparece no meio das rotas) e não tem campanha própria. Antes dele
+  existir, as rotas acima não mudam.
 - **Final:** "CAMPANHA CONCLUÍDA" com a rota percorrida, JOGAR NOVAMENTE (recomeça com o mesmo
   lutador) ou VOLTAR AO MENU.
 - O progresso dura a sessão e é independente da luta rápida.
