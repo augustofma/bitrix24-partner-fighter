@@ -47,7 +47,7 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    VOLTAR volta ao passo do rival com os dois lutadores.
 3. **VS:** apresenta os dois lutadores e o cenário por cerca de 2,6 s (pode pular).
    O cenário vem do lugar da luta: quem é de **Recife** (Augusto, Filipe) luta no **Marco
-   Zero** (RECIFE); de **Joinville** (Romualdo), no **pórtico de Joinville** (JOINVILLE); os
+   Zero** (RECIFE); de **Joinville** (Romualdo), no **pórtico de Joinville** (JOINVILLE CRMTHINK); os
    demais, no **Bitrix24 Partner Summit**. Na luta rápida essa é só a sugestão da tela de fase
    (cidade do rival ou, se ele não tiver cidade, a do jogador) e vale a fase escolhida; na
    história, o destino da etapa. O VS
