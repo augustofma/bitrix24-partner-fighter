@@ -556,6 +556,11 @@ sem pedido explícito.**
 - [x] "→" dos títulos de luta desenhado como forma (a fonte não tem seta): mesmas camadas das
       letras (sombra, contorno, degradê de fogo, inclinação), no meio das maiúsculas
 
+## DONE (final ilustrado do Filipe, branch `feature/filipe-story-ending`)
+
+- [x] Arte oficial 4:3 cortada em 16:9 (`prepare_filipe_ending.py`), `filipe` em
+      `STORY_ENDING_ART`; testes e playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

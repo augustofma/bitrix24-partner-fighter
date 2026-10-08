@@ -391,6 +391,13 @@ olhando o pôr do sol no Marco Zero do Recife (coluna, rio, prédios coloridos d
   botões.
 - O título fica menor e à direita, sobre o céu: o Augusto está à esquerda e nunca é coberto.
 
+## Final do Modo História: FILIPE
+
+Arte oficial fornecida pelo dono do projeto: o Filipe, de costas, de blazer escuro, num miradouro
+de Lisboa olhando o pôr do sol sobre a cidade, o Tejo e a ponte, com o castelo e a bandeira de
+Portugal ao fundo ([scripts/story-ending-art/filipe/README.md](../scripts/story-ending-art/filipe/README.md)).
+Fonte 4:3, mesmo corte do final do Aislan: cabeça e céu mantidos, título à direita sem cobri-lo.
+
 ## Final do Modo História: ROMUALDO
 
 Arte oficial fornecida pelo dono do projeto: o Romualdo, de costas, de blazer azul e jeans, num
@@ -595,6 +602,7 @@ registrada aqui:
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`   | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/aislan/source.webp` e `public/story/endings/aislan.jpg`     | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_aislan_ending.py`    | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/story-ending-art/filipe/source.webp` e `public/story/endings/filipe.jpg`     | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_filipe_ending.py`    | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romulo/source.webp` e `public/story/endings/romulo.jpg`     | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romulo_ending.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/recife/source.png` e `public/stages/recife/*`                      | Arte oficial fornecida pelo usuário; camadas separadas localmente por `prepare_recife.py`       | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/partner-summit/source.webp` e `public/stages/partner-summit/*`     | Arte fornecida pelo usuário; camadas separadas localmente por `prepare_partner_summit.py`       | Arte do projeto, aprovada pelo usuário                            |
