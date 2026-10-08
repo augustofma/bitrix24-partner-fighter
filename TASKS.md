@@ -462,6 +462,14 @@ sem pedido explícito.**
       original `fluidz-emblem.png` e som `special-fluidz`
 - [x] Testes de configuração, execução, defesa, VFX sem travamento/limpeza e CPU; playtest
 
+## DONE (seleção pronta para mais lutadores, branch `feature/character-select-expanded-roster`)
+
+- [x] Grade calculada pela quantidade (`rosterGrid`): 6 → 3 × 2, 9 (atual + 3) → 5 × 2 numa
+      página só; paginação genérica só acima de 12
+- [x] `RosterCard` com tamanho da grade e nome em duas linhas em card estreito
+- [x] ↑ ↓ entre linhas (`moveInGrid`, cruzando páginas), dificuldade em Q / E, ◀ ▶ por página
+- [x] Testes com roster atual + 3 entradas só de teste, 1920x1080, 1280x720 e 844x390; playtest
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

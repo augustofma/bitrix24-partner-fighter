@@ -24,7 +24,8 @@ o custo é descontado ao iniciar, mesmo errando; segurar F não repete. A barra 
 os rounds e zera numa nova partida.
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
 A seleção tem visual de fliperama brasileiro: mapa pixel-art procedural ao fundo, grade de
-cards (3 × 2 por página, com paginação automática quando o roster cresce), painel de destaque
+cards calculada pela quantidade de lutadores (6 → 3 × 2; 7–8 → 4 × 2; 9–10 → 5 × 2; 11–12 →
+6 × 2; acima disso, páginas), painel de destaque
 com retrato ampliado e barras de PODER / VELOCIDADE / ALCANCE derivadas do config, botões
 VOLTAR e SELECIONAR. Não há posições específicas por personagem.
 Na mesma tela escolhe-se a dificuldade da CPU (FÁCIL, NORMAL ou DIFÍCIL; padrão NORMAL, a
@@ -156,24 +157,24 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 
 **Teclado (Player 1)**
 
-| Ação               | Tecla                                                         |
-| ------------------ | ------------------------------------------------------------- |
-| Mover              | ← / →                                                         |
-| Pular              | ↑                                                             |
-| Agachar            | ↓                                                             |
-| Soco               | A                                                             |
-| Chute              | S                                                             |
-| Especial           | F (gasta a barra de especial)                                 |
-| Defender           | D                                                             |
-| Defesa agachada    | ↓ + D                                                         |
-| Soco agachado      | ↓ + A                                                         |
-| Rasteira           | ↓ + S                                                         |
-| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)                  |
-| Menus              | Enter / Espaço confirma, ← / → modo, Esc volta                |
-| Seleção            | ← / → lutador (seu, depois o rival), ↑ / ↓ dificuldade da CPU |
-| Fase               | ↑ / ↓ / ← / → cenário, Enter luta, Esc volta ao rival         |
-| Som                | M liga/desliga música e efeitos                               |
-| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)                     |
+| Ação               | Tecla                                                                          |
+| ------------------ | ------------------------------------------------------------------------------ |
+| Mover              | ← / →                                                                          |
+| Pular              | ↑                                                                              |
+| Agachar            | ↓                                                                              |
+| Soco               | A                                                                              |
+| Chute              | S                                                                              |
+| Especial           | F (gasta a barra de especial)                                                  |
+| Defender           | D                                                                              |
+| Defesa agachada    | ↓ + D                                                                          |
+| Soco agachado      | ↓ + A                                                                          |
+| Rasteira           | ↓ + S                                                                          |
+| Soco / chute aéreo | ↑ e, no ar, A / S (→ + ↑ para pulo diagonal)                                   |
+| Menus              | Enter / Espaço confirma, ← / → modo, Esc volta                                 |
+| Seleção            | ← / → e ↑ / ↓ lutador na grade (seu, depois o rival), Q / E dificuldade da CPU |
+| Fase               | ↑ / ↓ / ← / → cenário, Enter luta, Esc volta ao rival                          |
+| Som                | M liga/desliga música e efeitos                                                |
+| Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)                                      |
 
 **Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões
 SOCO / CHUTE / DEF / ESP à direita, com multi-touch (ex.: joystick ↗ + CHUTE; ↓ + DEF;

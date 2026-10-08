@@ -154,7 +154,8 @@ src/
                           (estilo por papel: veredito / detalhe / placar, ver resultRole)
       VictoryEffects.ts   Confete pixelado, quadradinhos subindo e brilhos (partículas leves)
     select/               Visual da seleção de personagem (Phaser, exceto os módulos puros)
-      selectLayout.ts     PURO: geometria da tela, posição de cada card, páginas e slots vazios
+      selectLayout.ts     PURO: grade calculada pelo tamanho do roster (rosterGrid), posição de
+                          cada card, páginas, slots vazios e navegação (moveInGrid)
       fighterRatings.ts   PURO: barras PODER/VELOCIDADE/ALCANCE derivadas do FighterConfig
       SelectBackground.ts Mapa pixel-art procedural (gerado uma vez como textura) + nuvens
       arcadeFrame.ts      Moldura pixel-art (contorno, borda dupla, cantos em degrau)
@@ -296,10 +297,19 @@ Os dados passam pelo `scene.start(key, data)`:
 Toda troca de cena usa `goToScene()` (fade, protegido contra chamada dupla).
 
 A seleção deriva os cards de `getPlayableFighters()` (o `ROSTER` filtrado por
-`FighterConfig.playable`), nos dois modos, numa grade 3 × 2 por página (`selectLayout.ts`);
-navegar troca a página automaticamente, os cards ocultos não recebem input e slots vazios
-completam a última página. Com mais de uma página aparecem ◀ ▶ e o indicador de página no
-topo (no lugar do selo do adversário), mantendo o layout utilizável com 8–16 personagens.
+`FighterConfig.playable`), nos dois modos. A grade vem de `rosterGrid(quantidade)`
+(`selectLayout.ts`, puro): testa colunas × linhas dentro de `SELECT_LAYOUT.gridArea` e escolhe,
+nesta ordem, menos páginas (uma, enquanto o retrato do card tiver pelo menos
+`CARD_RULES.minPortrait`), retratos maiores, menos slots vazios e menos linhas. O card nunca
+passa de 196 × 166 (o tamanho original). Hoje: 6 → 3 × 2; 7–8 → 4 × 2; 9–10 → 5 × 2; 11–12 →
+6 × 2; 13 ou mais → páginas (4 × 2 ou 5 × 2). O `RosterCard` recebe o tamanho da grade; nome
+longo em card estreito vai em duas linhas. `moveInGrid` decide a navegação: ← → percorrem o
+roster em ordem (circular, trocando de página), ↑ ↓ mudam de linha na mesma coluna (passando de
+página e dando a volta) e pulam o que o modo não oferece. A dificuldade fica em Q / E (e nos
+botões < >). Cards ocultos não recebem input e slots vazios completam a última página. Com mais
+de uma página aparecem ◀ ▶ (página anterior / seguinte) e o indicador "1/2" no topo, no lugar do
+selo do passo. Novo lutador = config + retrato + sprite + entrada no `ROSTER`; nada muda na cena
+nem no layout.
 Toda a apresentação fica em `src/ui/select/`; a cena só orquestra seleção, teclado e
 `MatchSetup`. Nada ali usa imagens novas: fundo, molduras e botões são desenhados em código,
 e os retratos vêm de `createPortrait` (o mesmo caminho de VS e vitória).

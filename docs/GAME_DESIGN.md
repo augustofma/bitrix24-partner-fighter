@@ -21,15 +21,17 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    RÁPIDA (← → escolhem, Enter confirma, Esc fecha). Os passos abaixo são da luta rápida; o
    Modo História tem seção própria.
 2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelos lutadores jogáveis
-   (roster filtrado por `playable`; 3 × 2 por página, com paginação ◀ ▶ quando passam de 6;
-   slots "EM BREVE" completam a página). Augusto é a seleção inicial; todos os jogáveis podem
+   (roster filtrado por `playable`). A grade se ajusta à quantidade: 6 → 3 × 2, 7–8 → 4 × 2,
+   9–10 → 5 × 2, 11–12 → 6 × 2 (cards menores, nomes longos em duas linhas); só acima disso há
+   páginas, com ◀ ▶ e "1/2" no topo. Slots "EM BREVE" completam a última linha. Augusto é a seleção inicial; todos os jogáveis podem
    ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
    destaque mostra retrato ampliado, nome e barras PODER / VELOCIDADE / ALCANCE
-   (só apresentação, calculadas do config em relação ao roster). ← → (ou ◀ ▶ no topo quando
-   há várias páginas) percorrem os jogáveis; tocar um card seleciona e tocar de novo
+   (só apresentação, calculadas do config em relação ao roster). ← → percorrem os jogáveis em
+   ordem e ↑ ↓ trocam de linha na mesma coluna (passando de página; ◀ ▶ no topo trocam de página
+   quando há várias); tocar um card seleciona e tocar de novo
    confirma, assim como SELECIONAR ou Enter. VOLTAR ou Esc volta ao menu. Abaixo da grade, o
-   painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (↑ ↓ ou toque; veja "Dificuldade").
+   painel "DIFICULDADE < FÁCIL NORMAL DIFÍCIL >" (Q / E ou toque; veja "Dificuldade").
    Na luta rápida a seleção tem dois passos (selo "PASSO 1 DE 3" / "PASSO 2 DE 3"): primeiro o
    seu lutador; depois **"ESCOLHA O RIVAL"**, na mesma grade, começando no próximo jogável do
    roster (circular) mas aceitando qualquer jogável, inclusive o mesmo (espelho). No passo do
@@ -503,8 +505,8 @@ State machine simples (sem aprendizado de máquina), com modos: `approach`, `ret
 
 ### Dificuldade
 
-Escolhida na seleção de personagem: **FÁCIL**, **NORMAL** (padrão) ou **DIFÍCIL**. ↑/↓ no
-teclado, ou os botões `<` `>` e um toque na opção. A última escolha fica guardada durante a
+Escolhida na seleção de personagem: **FÁCIL**, **NORMAL** (padrão) ou **DIFÍCIL**. Q / E no
+teclado (↑ ↓ andam pela grade), ou os botões `<` `>` e um toque na opção. A última escolha fica guardada durante a
 sessão (registry do Phaser; recarregar a página volta ao NORMAL). O HUD não mostra a
 dificuldade.
 
@@ -657,7 +659,7 @@ acima da música; **M** silencia tudo. Lista e níveis em
 | Soco               | A                                          | SOCO (direita da tela)              |
 | Chute              | S                                          | CHUTE                               |
 | Especial           | F                                          | ESP                                 |
-| Dificuldade (sel.) | ↑ / ↓ na seleção de personagem             | `<` `>` ou tocar opção              |
+| Dificuldade (sel.) | Q / E na seleção de personagem             | `<` `>` ou tocar opção              |
 | Defender           | D                                          | DEF                                 |
 | Soco / chute aéreo | ↑, depois A / S (→ + ↑ para pulo diagonal) | Joystick ↗ / ↖, depois SOCO / CHUTE |
 | Defesa agachada    | ↓ + D                                      | Joystick ↓ + DEF                    |

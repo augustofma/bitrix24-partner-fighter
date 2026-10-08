@@ -4,11 +4,13 @@ import { createPortrait } from '../../render/PortraitView';
 import type { FighterConfig } from '../../types/fighter';
 import { COLORS, arcadeText } from '../theme';
 import { drawArcadeFrame } from './arcadeFrame';
-import { SELECT_LAYOUT } from './selectLayout';
+import { CARD_RULES } from './selectLayout';
 
-const { cardWidth: WIDTH, cardHeight: HEIGHT } = SELECT_LAYOUT.grid;
-const NAME_PLATE_HEIGHT = 28;
-const ART_INSET = 7;
+const { namePlateHeight: NAME_PLATE_HEIGHT, artInset: ART_INSET } = CARD_RULES;
+/** Name plate type: one line at this size, else two lines (first / last name) at the smaller. */
+const NAME_SIZE = 15;
+const NAME_SIZE_TWO_LINES = 11;
+const NAME_SIDE_PAD = 4;
 const GLOW_PAD = 7;
 const SELECTED_SCALE = 1.05;
 const SELECT_TWEEN_MS = 120;
@@ -20,7 +22,8 @@ const LOCKED_BORDER = 0x2b2f78;
 /**
  * One square of the roster grid: portrait over a palette-tinted backdrop, a name plate and,
  * when selected, a gold border, pulsing glow and the P1 marker. `config` null draws an empty
- * "coming soon" slot that only completes the grid.
+ * "coming soon" slot that only completes the grid. Its size comes from the grid
+ * (`rosterGrid`), so it works for any roster size.
  */
 export class RosterCard {
   readonly container: Phaser.GameObjects.Container;
@@ -32,6 +35,8 @@ export class RosterCard {
   private pinnedLabel: string | null = null;
   private selected = false;
   private readonly selectable: boolean;
+  private readonly width: number;
+  private readonly height: number;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -39,13 +44,16 @@ export class RosterCard {
     y: number,
     readonly config: FighterConfig | null,
     onPress: () => void,
-    /** Whether this mode lets the player pick it, and the tag shown when it does not. */
-    options: { selectable?: boolean; lockedTag?: string } = {},
+    /** Card size (from the grid), whether this mode lets the player pick it, and the tag shown
+     * when it does not. */
+    options: { width: number; height: number; selectable?: boolean; lockedTag?: string },
   ) {
+    this.width = options.width;
+    this.height = options.height;
     this.selectable = options.selectable ?? config?.playable ?? false;
     this.container = scene.add.container(x, y);
     this.glow = scene.add
-      .rectangle(0, 0, WIDTH + GLOW_PAD * 2, HEIGHT + GLOW_PAD * 2, COLORS.neon, 0.6)
+      .rectangle(0, 0, this.width + GLOW_PAD * 2, this.height + GLOW_PAD * 2, COLORS.neon, 0.6)
       .setVisible(false);
     this.frame = scene.add.graphics();
     this.container.add([this.glow, this.frame]);
@@ -67,7 +75,7 @@ export class RosterCard {
 
     if (config && this.selectable) {
       this.container
-        .setSize(WIDTH, HEIGHT)
+        .setSize(this.width, this.height)
         .setInteractive({ useHandCursor: true })
         .on('pointerup', onPress);
     }
@@ -120,7 +128,7 @@ export class RosterCard {
   private drawFrame(): void {
     const locked = !this.config || !this.selectable;
     this.frame.clear();
-    drawArcadeFrame(this.frame, -WIDTH / 2, -HEIGHT / 2, WIDTH, HEIGHT, {
+    drawArcadeFrame(this.frame, -this.width / 2, -this.height / 2, this.width, this.height, {
       fill: COLORS.navy,
       border: this.selected ? COLORS.gold : locked ? LOCKED_BORDER : COLORS.royal,
       inner: this.selected ? COLORS.neon : COLORS.navyDeep,
@@ -130,9 +138,9 @@ export class RosterCard {
 
   private addFighter(config: FighterConfig, lockedTag: string): void {
     const scene = this.scene;
-    const artWidth = WIDTH - ART_INSET * 2;
-    const artHeight = HEIGHT - ART_INSET * 2 - NAME_PLATE_HEIGHT;
-    const artTop = -HEIGHT / 2 + ART_INSET;
+    const artWidth = this.width - ART_INSET * 2;
+    const artHeight = this.height - ART_INSET * 2 - NAME_PLATE_HEIGHT;
+    const artTop = -this.height / 2 + ART_INSET;
 
     // Palette-tinted bands behind the portrait (lighter at the top, like stage lighting).
     const backdrop = scene.add.graphics();
@@ -152,7 +160,7 @@ export class RosterCard {
       showName: false,
       framed: false,
     });
-    const plateY = HEIGHT / 2 - ART_INSET - NAME_PLATE_HEIGHT / 2;
+    const plateY = this.height / 2 - ART_INSET - NAME_PLATE_HEIGHT / 2;
     const plate = scene.add.rectangle(
       0,
       plateY,
@@ -161,19 +169,38 @@ export class RosterCard {
       COLORS.navyDeep,
       0.92,
     );
-    const name = scene.add
-      .text(0, plateY, config.displayName, arcadeText(15, COLORS.white))
-      .setOrigin(0.5);
-    if (name.width > artWidth - 8) name.setScale((artWidth - 8) / name.width);
+    const name = this.createName(config.displayName, plateY, artWidth - NAME_SIDE_PAD * 2);
     this.container.add([backdrop, portrait, plate, name]);
 
     if (!this.selectable) {
       this.container.setAlpha(LOCKED_ALPHA);
       const tag = scene.add
-        .text(WIDTH / 2 - 10, -HEIGHT / 2 + 10, lockedTag, arcadeText(15, COLORS.magenta))
+        .text(this.width / 2 - 10, -this.height / 2 + 10, lockedTag, arcadeText(15, COLORS.magenta))
         .setOrigin(1, 0);
       this.container.add(tag);
     }
+  }
+
+  /**
+   * The name on the plate: one line when it fits; on a narrow card a two-word name goes on two
+   * lines at a smaller size ("ISAQUE / FERREIRA") instead of shrinking to an unreadable line.
+   * Whatever still does not fit is scaled down to the plate.
+   */
+  private createName(text: string, y: number, maxWidth: number): Phaser.GameObjects.Text {
+    const scene = this.scene;
+    const name = scene.add.text(0, y, text, arcadeText(NAME_SIZE, COLORS.white)).setOrigin(0.5);
+    const words = text.split(' ');
+    if (name.width > maxWidth && words.length > 1) {
+      const split = Math.ceil(words.length / 2);
+      name
+        .setText(`${words.slice(0, split).join(' ')}\n${words.slice(split).join(' ')}`)
+        .setStyle(arcadeText(NAME_SIZE_TWO_LINES, COLORS.white))
+        .setAlign('center')
+        .setLineSpacing(-3);
+    }
+    const scale = Math.min(1, maxWidth / name.width, NAME_PLATE_HEIGHT / name.height);
+    if (scale < 1) name.setScale(scale);
+    return name;
   }
 
   private addEmptySlot(): void {
@@ -182,15 +209,15 @@ export class RosterCard {
       .text(0, -14, STRINGS.lockedSlot, arcadeText(54, COLORS.royal, COLORS.ink))
       .setOrigin(0.5);
     const label = scene.add
-      .text(0, HEIGHT / 2 - 24, STRINGS.comingSoon, arcadeText(13, COLORS.neon))
+      .text(0, this.height / 2 - 24, STRINGS.comingSoon, arcadeText(13, COLORS.neon))
       .setOrigin(0.5);
     this.container.add([mark, label]).setAlpha(LOCKED_ALPHA);
   }
 
   private createMarker(): Phaser.GameObjects.Container {
     const scene = this.scene;
-    const x = -WIDTH / 2 + 4;
-    const y = -HEIGHT / 2 - 6;
+    const x = -this.width / 2 + 4;
+    const y = -this.height / 2 - 6;
     const badge = scene.add.rectangle(0, 0, 38, 22, COLORS.magenta).setStrokeStyle(3, COLORS.ink);
     this.markerText = scene.add
       .text(0, 0, STRINGS.playerOneTag, arcadeText(15, COLORS.white))

@@ -22,11 +22,14 @@ import { HeroPanel } from '../ui/select/HeroPanel';
 import { RosterCard } from '../ui/select/RosterCard';
 import { createSelectBackground } from '../ui/select/SelectBackground';
 import {
-  CARDS_PER_PAGE,
   SELECT_LAYOUT,
   cardSlot,
   fillerSlots,
+  moveInGrid,
   pageCount,
+  rosterGrid,
+  type GridDirection,
+  type RosterGrid,
 } from '../ui/select/selectLayout';
 import { COLORS, arcadeText, bodyText, css } from '../ui/theme';
 import { fadeIn, goToScene } from './transitions';
@@ -37,6 +40,8 @@ const FOOTER_HEIGHT = 28;
 const TITLE_GLOW_BLUR = 10;
 /** Quick fight: pick your fighter, then the rival, then the stage (StageSelectScene). */
 const QUICK_FIGHT_STEPS = 3;
+const DIFFICULTY_EASIER_KEYS = ['Q'];
+const DIFFICULTY_HARDER_KEYS = ['E'];
 
 /** Which pick this screen is making: in story mode only 'player' is used. */
 export type SelectStep = 'player' | 'rival';
@@ -53,8 +58,11 @@ export interface CharacterSelectData {
 /**
  * Arcade roster screen built from the playable fighters (ROSTER filtered by `playable`):
  * illustrated map background, a paged grid of fighter cards, a hero panel for the highlighted
- * fighter, the CPU difficulty and a SELECIONAR button. Works for any number of fighters (pages
- * of CARDS_PER_PAGE); in story mode a playable fighter without a campaign is shown locked.
+ * fighter, the CPU difficulty and a SELECIONAR button. Works for any number of fighters: the grid
+ * (columns, rows, card size, pages) comes from `rosterGrid(fighters.length)`, so a new roster
+ * entry shows up without touching this scene; in story mode a playable fighter without a
+ * campaign is shown locked. ← → walk the roster, ↑ ↓ move between rows (and pages), Q / E change
+ * the CPU difficulty.
  * Quick fight runs two picks on this screen (your fighter, then the rival; mirror matches are
  * allowed) and hands both to the stage select. ESC on the rival step goes back to the first.
  */
@@ -62,6 +70,8 @@ export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
   /** What this screen offers: the playable fighters, in roster order. */
   private fighters: readonly FighterConfig[] = [];
+  /** Grid derived from the number of fighters offered (see rosterGrid). */
+  private grid!: RosterGrid;
   private cards: RosterCard[] = [];
   private hero!: HeroPanel;
   private difficulty!: DifficultySelector;
@@ -89,6 +99,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     createSelectBackground(this);
 
     this.fighters = getPlayableFighters();
+    this.grid = rosterGrid(this.fighters.length);
     this.selectedIndex = this.fighters.findIndex((fighter) => this.canPick(fighter));
     if (this.selectedIndex < 0) throw new Error('The roster has no playable fighter.');
     if (this.mode === 'quick' && data?.step === 'rival' && data.playerFighterId) {
@@ -134,10 +145,13 @@ export class CharacterSelectScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setAlpha(0.92);
 
-    onKeys(this, ['LEFT'], () => this.moveSelection(-1));
-    onKeys(this, ['RIGHT'], () => this.moveSelection(1));
-    onKeys(this, ['UP'], () => this.difficulty.step(1));
-    onKeys(this, ['DOWN'], () => this.difficulty.step(-1));
+    onKeys(this, ['LEFT'], () => this.moveSelection('left'));
+    onKeys(this, ['RIGHT'], () => this.moveSelection('right'));
+    onKeys(this, ['UP'], () => this.moveSelection('up'));
+    onKeys(this, ['DOWN'], () => this.moveSelection('down'));
+    // ↑ ↓ now walk the grid's rows; the difficulty has its own keys (and the < > buttons).
+    onKeys(this, DIFFICULTY_EASIER_KEYS, () => this.difficulty.step(-1));
+    onKeys(this, DIFFICULTY_HARDER_KEYS, () => this.difficulty.step(1));
     onKeys(this, MENU_CONFIRM_KEYS, () => {
       this.selectButton.flash();
       this.confirm();
@@ -183,14 +197,14 @@ export class CharacterSelectScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setShadow(0, 0, css(COLORS.magenta), TITLE_GLOW_BLUR, true, true);
 
-    if (pageCount(this.fighters.length) > 1) {
+    if (pageCount(this.fighters.length, this.grid) > 1) {
       const style = { width: pager.buttonWidth, height: pager.height, fontSize: 20 } as const;
       new ArcadeButton(
         this,
         pager.x - pager.gap,
         topBarY,
         STRINGS.previousFighter,
-        () => this.moveSelection(-1),
+        () => this.changePage(-1),
         { ...style, variant: 'secondary' },
       );
       new ArcadeButton(
@@ -198,7 +212,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         pager.x + pager.gap,
         topBarY,
         STRINGS.nextFighter,
-        () => this.moveSelection(1),
+        () => this.changePage(1),
         { ...style, variant: 'secondary' },
       );
       this.pageLabel = this.add
@@ -221,8 +235,9 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   private createCards(): void {
+    const size = { width: this.grid.cardWidth, height: this.grid.cardHeight };
     this.fighters.forEach((config, index) => {
-      const { x, y } = cardSlot(index);
+      const { x, y } = cardSlot(index, this.grid);
       this.cards.push(
         new RosterCard(
           this,
@@ -238,13 +253,13 @@ export class CharacterSelectScene extends Phaser.Scene {
               this.refreshSelection();
             }
           },
-          { selectable: this.canPick(config), lockedTag: this.lockedTag(config) },
+          { ...size, selectable: this.canPick(config), lockedTag: this.lockedTag(config) },
         ),
       );
     });
-    for (let filler = 0; filler < fillerSlots(this.fighters.length); filler++) {
-      const { x, y } = cardSlot(this.fighters.length + filler);
-      this.cards.push(new RosterCard(this, x, y, null, () => undefined));
+    for (let filler = 0; filler < fillerSlots(this.fighters.length, this.grid); filler++) {
+      const { x, y } = cardSlot(this.fighters.length + filler, this.grid);
+      this.cards.push(new RosterCard(this, x, y, null, () => undefined, size));
     }
   }
 
@@ -264,14 +279,33 @@ export class CharacterSelectScene extends Phaser.Scene {
     return isAIDifficulty(saved) ? saved : DEFAULT_AI_DIFFICULTY;
   }
 
-  private moveSelection(step: number): void {
-    const count = this.fighters.length;
-    for (let i = 1; i <= count; i++) {
-      const candidate = (this.selectedIndex + step * i + count * i) % count;
-      const config = this.fighters[candidate];
-      if (config && this.canPick(config)) {
-        if (candidate !== this.selectedIndex) playSfx(this, 'menu-move');
-        this.selectedIndex = candidate;
+  private isPickable(index: number): boolean {
+    const config = this.fighters[index];
+    return config !== undefined && this.canPick(config);
+  }
+
+  private moveSelection(direction: GridDirection): void {
+    const next = moveInGrid(this.selectedIndex, direction, this.fighters.length, this.grid, (i) =>
+      this.isPickable(i),
+    );
+    if (next === this.selectedIndex) return;
+    playSfx(this, 'menu-move');
+    this.selectedIndex = next;
+    this.refreshSelection();
+  }
+
+  /** ◀ ▶ of the pager: the first fighter this mode offers on the previous / next page. */
+  private changePage(step: number): void {
+    const pages = pageCount(this.fighters.length, this.grid);
+    const page = cardSlot(this.selectedIndex, this.grid).page;
+    for (let i = 1; i <= pages; i++) {
+      const target = (((page + step * i) % pages) + pages) % pages;
+      const start = target * this.grid.perPage;
+      const end = Math.min(this.fighters.length, start + this.grid.perPage);
+      for (let index = start; index < end; index++) {
+        if (!this.isPickable(index)) continue;
+        if (index !== this.selectedIndex) playSfx(this, 'menu-move');
+        this.selectedIndex = index;
         this.refreshSelection();
         return;
       }
@@ -281,10 +315,10 @@ export class CharacterSelectScene extends Phaser.Scene {
   private refreshSelection(): void {
     const fighter = this.fighters[this.selectedIndex];
     if (!fighter) return;
-    const page = Math.floor(this.selectedIndex / CARDS_PER_PAGE);
+    const page = cardSlot(this.selectedIndex, this.grid).page;
     const rivalStep = this.step === 'rival';
     this.cards.forEach((card, index) => {
-      card.setShown(cardSlot(index).page === page);
+      card.setShown(cardSlot(index, this.grid).page === page);
       // Picking the rival: the highlight reads CPU and the P1 fighter keeps its tag.
       card.setMarkerLabels(
         rivalStep ? STRINGS.cpuOnly : STRINGS.playerOneTag,
@@ -292,7 +326,9 @@ export class CharacterSelectScene extends Phaser.Scene {
       );
       card.setSelected(index === this.selectedIndex);
     });
-    this.pageLabel?.setText(STRINGS.selectPage(page + 1, pageCount(this.fighters.length)));
+    this.pageLabel?.setText(
+      STRINGS.selectPage(page + 1, pageCount(this.fighters.length, this.grid)),
+    );
     this.opponentLabel?.setText(this.badgeText(fighter));
     this.titleText.setText(this.titleFor());
     this.hintText.setText(

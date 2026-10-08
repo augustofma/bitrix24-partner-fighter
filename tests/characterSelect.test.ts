@@ -126,7 +126,7 @@ import { aislan } from '../src/fighters/aislan';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { CharacterSelectScene } from '../src/scenes/CharacterSelectScene';
 import type { RosterCard } from '../src/ui/select/RosterCard';
-import { CARDS_PER_PAGE, SELECT_LAYOUT } from '../src/ui/select/selectLayout';
+import { SELECT_LAYOUT, cardSlot, rosterGrid } from '../src/ui/select/selectLayout';
 import { campaignOpponents, campaignStartLocation } from '../src/story/storyProfiles';
 import type { StoryProgress } from '../src/types/story';
 
@@ -168,7 +168,7 @@ describe('CharacterSelectScene roster integration', () => {
     expect(ui.portraits).toEqual(playable);
     expect(cards.map((card) => card.config)).toEqual([
       ...playable,
-      ...Array<null>(CARDS_PER_PAGE - playable.length).fill(null),
+      ...Array<null>(rosterGrid(playable.length).perPage - playable.length).fill(null),
     ]);
     expect(lastHero()).toBe(augusto);
     for (const card of cards.filter((c) => !c.config)) expect(fake(card)?.input).toBeUndefined();
@@ -288,8 +288,8 @@ describe('CharacterSelectScene roster integration', () => {
     const sounds = () => ui.playSfx.mock.calls.map((call) => call[1]);
     ui.keys.get('RIGHT')?.();
     expect(sounds()).toEqual(['menu-move']);
-    ui.keys.get('UP')?.(); // difficulty NORMAL -> DIFÍCIL
-    ui.keys.get('UP')?.(); // already at the end: no change, no sound
+    ui.keys.get('E')?.(); // difficulty NORMAL -> DIFÍCIL
+    ui.keys.get('E')?.(); // already at the end: no change, no sound
     expect(sounds()).toEqual(['menu-move', 'menu-move']);
     ui.keys.get('ENTER')?.();
     expect(sounds().at(-1)).toBe('menu-confirm');
@@ -305,42 +305,46 @@ describe('CharacterSelectScene roster integration', () => {
     expect(ui.texts.some((t) => t.text === STRINGS.selectStep(2, 3))).toBe(true);
   });
 
-  it.each([8, 16])('keeps %s playable fighters reachable with hidden cards disabled', (count) => {
-    // The production roster is readonly; the fixture mutation is scoped and restored.
-    const roster = ROSTER as FighterConfig[];
-    const original = [...roster];
-    try {
-      for (let index = 0; getPlayableFighters().length < count; index++) {
-        roster.push({ ...augusto, id: `test-${index}`, displayName: `TEST_${index}` });
-      }
-      const { cards } = openScene();
-      const visited = new Set<FighterConfig>();
-      const gridRight = SELECT_LAYOUT.hero.left;
-      for (let step = 0; step < count; step++) {
-        const selected = lastHero();
-        if (selected) visited.add(selected);
-        const selectedCard = cards.find((card) => card.config === selected);
-        expect(fake(selectedCard)?.visible).toBe(true);
-        expect(cards.filter((card) => fake(card)?.visible)).toHaveLength(CARDS_PER_PAGE);
-        for (const card of cards) {
-          const { x, visible, input } = fake(card) ?? ui.display();
-          if (visible) {
-            expect(x - SELECT_LAYOUT.grid.cardWidth / 2).toBeGreaterThanOrEqual(0);
-            expect(x + SELECT_LAYOUT.grid.cardWidth / 2).toBeLessThan(gridRight);
-          } else if (input) {
-            expect(input.enabled).toBe(false);
-          }
+  it.each([8, 9, 16, 30])(
+    'keeps %s playable fighters reachable with hidden cards disabled',
+    (count) => {
+      // The production roster is readonly; the fixture mutation is scoped and restored.
+      const roster = ROSTER as FighterConfig[];
+      const original = [...roster];
+      try {
+        for (let index = 0; getPlayableFighters().length < count; index++) {
+          roster.push({ ...augusto, id: `test-${index}`, displayName: `TEST_${index}` });
         }
-        ui.keys.get('RIGHT')?.();
+        const { cards } = openScene();
+        const visited = new Set<FighterConfig>();
+        const gridRight = SELECT_LAYOUT.hero.left;
+        const grid = rosterGrid(count);
+        for (let step = 0; step < count; step++) {
+          const selected = lastHero();
+          if (selected) visited.add(selected);
+          const selectedCard = cards.find((card) => card.config === selected);
+          expect(fake(selectedCard)?.visible).toBe(true);
+          expect(cards.filter((card) => fake(card)?.visible)).toHaveLength(grid.perPage);
+          for (const card of cards) {
+            const { x, visible, input } = fake(card) ?? ui.display();
+            if (visible) {
+              expect(x - grid.cardWidth / 2).toBeGreaterThanOrEqual(0);
+              expect(x + grid.cardWidth / 2).toBeLessThan(gridRight);
+            } else if (input) {
+              expect(input.enabled).toBe(false);
+            }
+          }
+          ui.keys.get('RIGHT')?.();
+        }
+        // Every playable fighter is reachable; placeholders never are.
+        expect(visited.size).toBe(count);
+        expect(visited.has(fighterA)).toBe(false);
+        expect(visited.has(fighterB)).toBe(false);
+      } finally {
+        roster.splice(0, roster.length, ...original);
       }
-      // Every playable fighter is reachable; placeholders never are.
-      expect(visited.size).toBe(count);
-      expect(visited.has(fighterA)).toBe(false);
-      expect(visited.has(fighterB)).toBe(false);
-    } finally {
-      roster.splice(0, roster.length, ...original);
-    }
-  });
+    },
+  );
 });
 
 describe('CharacterSelectScene story mode', () => {
@@ -381,14 +385,14 @@ describe('CharacterSelectScene CPU difficulty', () => {
     expect(lastSetup()?.difficulty).toBe('normal');
   });
 
-  it('↑/↓ change the difficulty (clamped at the ends) and ←/→ still change the fighter', () => {
+  it('Q/E change the difficulty (clamped at the ends) and ←/→ still change the fighter', () => {
     openScene();
-    ui.keys.get('UP')?.();
-    ui.keys.get('UP')?.();
+    ui.keys.get('E')?.();
+    ui.keys.get('E')?.();
     pickBoth();
     expect(lastSetup()?.difficulty).toBe('hard');
     openScene();
-    for (let i = 0; i < 5; i++) ui.keys.get('DOWN')?.();
+    for (let i = 0; i < 5; i++) ui.keys.get('Q')?.();
     ui.keys.get('RIGHT')?.();
     pickBoth();
     expect(lastSetup()).toMatchObject({ difficulty: 'easy', playerFighterId: ROSTER[1]?.id });
@@ -412,7 +416,7 @@ describe('CharacterSelectScene CPU difficulty', () => {
 
   it('remembers the last choice in the game registry for the next visit', () => {
     openScene();
-    ui.keys.get('DOWN')?.();
+    ui.keys.get('Q')?.();
     expect(ui.registry.get(RegistryKeys.aiDifficulty)).toBe('easy');
     openScene();
     pickBoth();
@@ -424,5 +428,160 @@ describe('CharacterSelectScene CPU difficulty', () => {
     openScene();
     pickBoth();
     expect(lastSetup()?.difficulty).toBe('normal');
+  });
+});
+
+describe('CharacterSelectScene with room for more fighters (roster + 3 test-only entries)', () => {
+  /**
+   * Runs `body` with three extra playable entries (and one non-playable one) appended to the
+   * roster. Test-only: built from Augusto's config with fake ids, never part of the game, and
+   * the roster is restored afterwards.
+   */
+  function withExpandedRoster(body: (added: FighterConfig[]) => void): void {
+    const roster = ROSTER as FighterConfig[];
+    const original = [...roster];
+    const added = [1, 2, 3].map((n) => ({
+      ...augusto,
+      id: `test-new-${n}`,
+      displayName: `NOVO LUTADOR ${n}`,
+    }));
+    const hidden = { ...augusto, id: 'test-dev-only', displayName: 'DEV ONLY', playable: false };
+    try {
+      roster.push(...added, hidden);
+      body(added);
+    } finally {
+      roster.splice(0, roster.length, ...original);
+    }
+  }
+  const current = getPlayableFighters().length;
+
+  it("renders today's roster as cards on one page, in roster order", () => {
+    const { cards } = openScene();
+    expect(cards.filter((c) => c.config).map((c) => c.config)).toEqual(getPlayableFighters());
+    expect(cards.every((c) => fake(c)?.visible)).toBe(true);
+  });
+
+  it('roster + 3: every new entry gets a card on the same page, laid out by the grid', () => {
+    withExpandedRoster((added) => {
+      const { cards } = openScene();
+      const fighters = cards.filter((c) => c.config).map((c) => c.config);
+      expect(fighters).toHaveLength(current + 3);
+      expect(fighters.slice(-3)).toEqual(added);
+      const grid = rosterGrid(current + 3);
+      expect(grid.pages).toBe(1);
+      // All cards (fighters + "coming soon" fillers) visible at the grid's slots, no overlap.
+      cards.forEach((card, index) => {
+        const display = fake(card)!;
+        expect(display.visible).toBe(true);
+        expect(display.x).toBeCloseTo(cardSlot(index, grid).x);
+        expect(display.y).toBeCloseTo(cardSlot(index, grid).y);
+        const { gridArea } = SELECT_LAYOUT;
+        expect(display.x - grid.cardWidth / 2).toBeGreaterThanOrEqual(gridArea.left - 1e-6);
+        expect(display.x + grid.cardWidth / 2).toBeLessThanOrEqual(
+          gridArea.left + gridArea.width + 1e-6,
+        );
+      });
+      const keys = new Set(cards.map((c) => `${fake(c)!.x},${fake(c)!.y}`));
+      expect(keys.size).toBe(cards.length);
+    });
+  });
+
+  it('roster + 3: development-only (playable: false) entries never get a card', () => {
+    withExpandedRoster(() => {
+      const { cards } = openScene();
+      const ids = cards.map((c) => c.config?.id);
+      expect(ids).not.toContain('test-dev-only');
+      expect(ids).not.toContain(fighterA.id);
+      expect(ids).not.toContain(fighterB.id);
+    });
+  });
+
+  it('roster + 3: ↑ ↓ move between rows, ← → reach the first and the last fighter', () => {
+    withExpandedRoster((added) => {
+      openScene();
+      const grid = rosterGrid(current + 3);
+      const playable = getPlayableFighters();
+      ui.keys.get('DOWN')?.();
+      expect(lastHero()).toBe(playable[grid.columns]);
+      ui.keys.get('UP')?.();
+      expect(lastHero()).toBe(playable[0]);
+      ui.keys.get('LEFT')?.(); // wraps to the last one
+      expect(lastHero()).toBe(added[2]);
+      ui.keys.get('RIGHT')?.(); // and back to the first
+      expect(lastHero()).toBe(playable[0]);
+    });
+  });
+
+  it('roster + 3: a tap selects any card and a second tap confirms that fighter', () => {
+    withExpandedRoster(() => {
+      for (const fighter of getPlayableFighters()) {
+        const { scene, cards } = openScene();
+        ui.goToScene.mockClear();
+        const card = cards.find((c) => c.config === fighter);
+        expect(fake(card)?.input?.enabled).toBe(true);
+        fake(card)?.handlers.get('pointerup')?.();
+        // The first card opens selected, so its first tap already confirms.
+        if ((scene as unknown as { step: string }).step === 'player') {
+          expect(lastHero()).toBe(fighter);
+          fake(card)?.handlers.get('pointerup')?.();
+        }
+        expect((scene as unknown as { player: FighterConfig }).player).toBe(fighter);
+      }
+    });
+  });
+
+  it('roster + 3: the CPU can be any fighter, including a new one, with the chosen difficulty', () => {
+    withExpandedRoster((added) => {
+      const { scene, cards } = openScene();
+      ui.keys.get('E')?.(); // DIFÍCIL
+      ui.keys.get('ENTER')?.(); // P1: Augusto
+      const newCard = cards.find((c) => c.config === added[1]);
+      fake(newCard)?.handlers.get('pointerup')?.();
+      fake(newCard)?.handlers.get('pointerup')?.();
+      expect(ui.goToScene).toHaveBeenLastCalledWith(scene, SceneKeys.StageSelect, {
+        playerFighterId: augusto.id,
+        cpuFighterId: added[1]!.id,
+        difficulty: 'hard',
+      });
+    });
+  });
+
+  it('a roster too big for one page: ◀ ▶ change page, the page label follows', () => {
+    const roster = ROSTER as FighterConfig[];
+    const original = [...roster];
+    try {
+      for (let n = 0; getPlayableFighters().length < 30; n++) {
+        roster.push({ ...augusto, id: `test-page-${n}`, displayName: `TESTE ${n}` });
+      }
+      const grid = rosterGrid(30);
+      expect(grid.pages).toBeGreaterThan(1);
+      openScene();
+      expect(ui.texts.some((t) => t.text === STRINGS.selectPage(1, grid.pages))).toBe(true);
+      ui.buttons.get(STRINGS.nextFighter)?.();
+      expect(lastHero()).toBe(getPlayableFighters()[grid.perPage]);
+      expect(ui.texts.some((t) => t.text === STRINGS.selectPage(2, grid.pages))).toBe(true);
+      ui.buttons.get(STRINGS.previousFighter)?.();
+      expect(lastHero()).toBe(getPlayableFighters()[0]);
+    } finally {
+      roster.splice(0, roster.length, ...original);
+    }
+  });
+
+  it('roster + 3 in story mode: new entries without a campaign are shown but locked', () => {
+    withExpandedRoster((added) => {
+      const { cards } = openScene('story');
+      for (const fighter of added) {
+        const card = cards.find((c) => c.config === fighter);
+        expect(card).toBeDefined();
+        expect(fake(card)?.input).toBeUndefined();
+      }
+      // Navigation never lands on them.
+      const visited = new Set<FighterConfig | undefined>();
+      for (let i = 0; i < 20; i++) {
+        ui.keys.get(i % 2 ? 'DOWN' : 'RIGHT')?.();
+        visited.add(lastHero());
+      }
+      for (const fighter of added) expect(visited.has(fighter)).toBe(false);
+    });
   });
 });

@@ -11,7 +11,7 @@ import { getStageConfig } from '../src/stages/stageRegistry';
 import { hasStoryCampaign, isStoryEligible, quickFightStageId } from '../src/story/storyProfiles';
 import { startStory } from '../src/story/storyProgress';
 import { GAME_HEIGHT, GAME_WIDTH } from '../src/config/display';
-import { CARDS_PER_PAGE, SELECT_LAYOUT, cardSlot, pageCount } from '../src/ui/select/selectLayout';
+import { SELECT_LAYOUT, cardSlot, pageCount, rosterGrid } from '../src/ui/select/selectLayout';
 
 const playable = getPlayableFighters();
 
@@ -104,15 +104,18 @@ describe('playable roster (data-driven)', () => {
   it.each([4, 5, 6, 7, 12])(
     'the select grid keeps %s fighters on screen, without overlaps',
     (n) => {
-      const { grid, hero } = SELECT_LAYOUT;
-      const slots = Array.from({ length: pageCount(n) * CARDS_PER_PAGE }, (_, i) => cardSlot(i));
+      const { hero } = SELECT_LAYOUT;
+      const grid = rosterGrid(n);
+      const slots = Array.from({ length: pageCount(n, grid) * grid.perPage }, (_, i) =>
+        cardSlot(i, grid),
+      );
       for (const slot of slots) {
         expect(slot.x - grid.cardWidth / 2).toBeGreaterThanOrEqual(0);
         expect(slot.x + grid.cardWidth / 2).toBeLessThanOrEqual(hero.left);
         expect(slot.y - grid.cardHeight / 2).toBeGreaterThanOrEqual(0);
         expect(slot.y + grid.cardHeight / 2).toBeLessThanOrEqual(GAME_HEIGHT);
       }
-      for (let page = 0; page < pageCount(n); page++) {
+      for (let page = 0; page < pageCount(n, grid); page++) {
         const onPage = slots.filter((s) => s.page === page);
         const keys = new Set(onPage.map((s) => `${s.x},${s.y}`));
         expect(keys.size).toBe(onPage.length);
