@@ -20,6 +20,7 @@ export const STRINGS = {
   storyLeg: (current: number, total: number) => `ETAPA ${current}/${total}`,
   storyNextDestination: 'PRÓXIMO DESTINO',
   storyNextChallenge: 'PRÓXIMO DESAFIO',
+  storyFinalBoss: 'FINAL BOSS',
   storyContinue: 'CONTINUAR',
   storyRetry: 'TENTAR NOVAMENTE',
   storyQuit: 'SAIR PARA O MENU',

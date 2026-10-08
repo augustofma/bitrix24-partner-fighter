@@ -65,7 +65,8 @@ exterior usam um mapa-múndi pixel-art; as nacionais, o mapa do Brasil). Com Aug
 3. **Rússia → Espanha:** luta contra **ISAQUE FERREIRA** (enfrentado na Espanha).
 4. **Espanha → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
 5. **Joinville → próximo desafio local:** luta contra **AISLAN — ZOPU**, sem novo voo.
-6. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
+6. **Joinville → Rússia:** luta contra **DMITRY — FINAL BOSS**, no escritório BITRIX24 MOSCOU.
+7. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
 
 Com João: Rússia → **Recife** (Augusto, no cenário Marco Zero) → Portugal (Filipe) → Espanha
 (Isaque) → Joinville (Romualdo). Cada viagem sai de onde a campanha está; o VS mostra o lugar da luta.
@@ -112,9 +113,10 @@ Cenário **BITRIX24 MOSCOU** (`bitrix24-moscow`): o salão da sede da Bitrix24 e
 Kremlin e o Moscow City atrás do vidro, o urso, os troféus e o logo no piso
 ([arte e preparo](scripts/stage-art/bitrix24-moscow/README.md)). É o cenário do **Dmitry**, o chefe
 final do Modo História (`STORY_FINAL_BOSS`). Na luta rápida pode ser escolhido na seleção de
-fase. Na história só aparece na última luta, contra o Dmitry: quando o `FighterConfig` dele
-entrar no roster, toda campanha ganha essa etapa final, sem nada escrito por personagem. Enquanto
-ele não existe, as campanhas seguem iguais.
+fase. Na história só aparece na última luta, contra o Dmitry. Toda campanha termina nessa etapa.
+O chefe fica fora da seleção comum (`playable: false`), sem campanha própria ou especial exclusivo.
+Vida 108; caminhada 3,0/2,4; salto 16,5/3,9. Sprite 1536×1120 (40 células 192×224),
+portrait 240×300, scale 1 e offsets 0/8. [Arte e reprodução](scripts/dmitry-art/README.md).
 
 ## Stack
 

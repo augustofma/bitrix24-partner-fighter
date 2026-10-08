@@ -479,6 +479,17 @@ sem pedido explícito.**
 - [x] Lista de fases calculada pela quantidade (`stageList`), sem linha escondida com 6 fases
 - [x] Testes com um Dmitry só de teste; playtest desktop e mobile
 
+## DONE (Dmitry — chefe final, branch `feature/dmitry-final-boss`)
+
+- [x] Auditoria da base `feature/dmitry-boss-stage`: escritório e configuração de boss reutilizados
+- [x] FighterConfig próprio, vida 108, seis normais, sem especial; CPU e core genéricos intactos
+- [x] Sprite original RGBA 1536×1120/40 células e portrait 240×300; fontes e preparo reproduzíveis
+- [x] Animações completas, escala 1 e offsets 0/8; poses aéreas elevadas e KO no chão
+- [x] Boss oculto na seleção comum, última etapa de todas as campanhas, selo no mapa e VS
+- [x] Retry preserva encontro/escritório; vitória conclui campanha pelo fluxo existente
+- [x] Testes de assets, roster, simulação, CPU, determinismo, rotas e ausência de ID no core
+- [x] Playtest Chrome desktop e touch emulado: poses/F2/flipX, seis rivais, Story/retry/final
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

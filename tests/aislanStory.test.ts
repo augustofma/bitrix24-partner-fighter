@@ -47,7 +47,7 @@ describe('Aislan shared location, independent encounter', () => {
     ({ fighterId }) => {
       const route = storyRouteFor(fighterId)!;
       expect(route.filter((l) => l.opponent === 'aislan')).toHaveLength(1);
-      expect(route.at(-1)?.opponent).toBe('aislan');
+      expect(route.at(-2)?.opponent).toBe('aislan');
     },
   );
   it('each encounter loads its own Joinville art, with no texture key shared', () => {
@@ -95,6 +95,10 @@ describe('Aislan shared location, independent encounter', () => {
     expect(retry).toBe(fight);
     expect(retry.currentLocation).toBe('joinville');
     expect(storyMatchSetup(retry, 'hard')).toEqual(storyMatchSetup(fight, 'hard'));
-    expect(recordStoryMatch(fight, true).phase).toBe('complete');
+    expect(recordStoryMatch(fight, true)).toMatchObject({
+      phase: 'travel',
+      opponent: 'dmitry',
+      nextLocation: 'russia',
+    });
   });
 });

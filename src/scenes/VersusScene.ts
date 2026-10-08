@@ -10,7 +10,7 @@ import { createPortrait } from '../render/PortraitView';
 import { getStageConfig } from '../stages/stageRegistry';
 import { getStoryLocation, locationLabel, locationName } from '../story/locations';
 import { currentLeg } from '../story/storyProgress';
-import { fighterOrigin, storyRouteFor } from '../story/storyProfiles';
+import { fighterOrigin, isFinalBossEncounter, storyRouteFor } from '../story/storyProfiles';
 import type { MatchSetup } from '../types/match';
 import { getStoryProgress } from './story/storyFlow';
 import { COLORS, arcadeText, bodyText, pixelText } from '../ui/theme';
@@ -28,6 +28,7 @@ const ORIGIN_Y = 462;
 const STAGE_LABEL_Y = 40;
 /** Story fights: where the fight happens, under the VS. */
 const PLACE_Y = 352;
+const BOSS_LABEL_Y = 310;
 
 /**
  * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where
@@ -140,6 +141,16 @@ export class VersusScene extends Phaser.Scene {
     const route = storyRouteFor(setup.playerFighterId);
     const leg = progress ? currentLeg(progress) : undefined;
     if (leg) {
+      if (isFinalBossEncounter(leg)) {
+        this.add
+          .text(
+            GAME_WIDTH / 2,
+            BOSS_LABEL_Y,
+            STRINGS.storyFinalBoss,
+            arcadeText(22, COLORS.magenta),
+          )
+          .setOrigin(0.5);
+      }
       const place = this.add
         .text(
           GAME_WIDTH / 2,

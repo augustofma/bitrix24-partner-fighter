@@ -52,6 +52,11 @@ export const STORY_FINAL_BOSS: StoryFinalBoss = {
   stageId: 'bitrix24-moscow',
 };
 
+/** Presentation label comes from the configured boss, never a fighter id in a scene. */
+export function isFinalBossEncounter(leg: StoryLeg): boolean {
+  return leg.opponent === STORY_FINAL_BOSS.fighterId;
+}
+
 /** The final boss leg of `fighterId`'s campaign, when the boss exists and is someone else. */
 export function finalBossLeg(fighterId: string): StoryLeg | undefined {
   const { fighterId: boss, destination, stageId } = STORY_FINAL_BOSS;

@@ -225,6 +225,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/dmitry/portrait.png'),
+        path: 'fighters/dmitry/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'dmitry-sheet',
+        path: 'fighters/dmitry/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/fighter-a/portrait.png'),
         path: 'fighters/fighter-a/portrait.png',
       },
@@ -256,6 +268,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'romualdo-sheet',
         'isaque-ferreira-sheet',
         'aislan-sheet',
+        'dmitry-sheet',
+        portraitTextureKey('fighters/dmitry/portrait.png'),
         portraitTextureKey('fighters/aislan/portrait.png'),
         portraitTextureKey('fighters/isaque-ferreira/portrait.png'),
         portraitTextureKey('fighters/romualdo/portrait.png'),

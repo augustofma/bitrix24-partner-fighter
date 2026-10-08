@@ -20,7 +20,7 @@ import {
 } from '../../story/locations';
 import { viewShows } from '../../story/mapViews';
 import { currentLeg } from '../../story/storyProgress';
-import { legDeparture, storyRouteFor } from '../../story/storyProfiles';
+import { isFinalBossEncounter, legDeparture, storyRouteFor } from '../../story/storyProfiles';
 import type { StoryProgress } from '../../types/story';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
@@ -388,7 +388,12 @@ export class StoryMapScene extends Phaser.Scene {
     const { panel, challenge, portrait, name, origin, button } = STORY_MAP_LAYOUT;
     const items: (Phaser.GameObjects.Text | Phaser.GameObjects.Container)[] = [
       this.add
-        .text(panel.x, challenge.y, STRINGS.storyNextChallenge, arcadeText(22, COLORS.gold))
+        .text(
+          panel.x,
+          challenge.y,
+          isFinalBossEncounter(leg) ? STRINGS.storyFinalBoss : STRINGS.storyNextChallenge,
+          arcadeText(22, COLORS.gold),
+        )
         .setOrigin(0.5),
       createPortrait(this, panel.x, portrait.y, rival, {
         width: portrait.width,

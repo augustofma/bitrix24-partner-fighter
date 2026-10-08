@@ -177,6 +177,7 @@ tests/                    Vitest: lutador, combate, arena, round, partida, IA, d
                           especiais, determinismo, seleção, animação/assets de sprite
 scripts/                  Ferramentas offline de preparação de assets
   aislan-art/             Fontes e normalização offline do Aislan
+  dmitry-art/             Fontes, prompts e normalização offline do chefe final
   isaque-ferreira-art/     Fontes originais e normalização offline do Isaque
   romualdo-art/            Fontes originais e normalização reproduzível da arte de Romualdo
   joao-guiotti-art/        Fontes originais e normalização reproduzível da arte de João
@@ -370,7 +371,10 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
   Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
   Recife vira destino para todos que não começam lá.
-- **Chefe final:** `STORY_FINAL_BOSS` (`{ fighterId: 'dmitry', destination: 'russia', stageId:
+- **Chefe final:** o config real `src/fighters/dmitry.ts` está no roster com `playable: false`.
+  `isFinalBossEncounter(leg)` compara o encontro à configuração e fornece às cenas de mapa/VS
+  o selo FINAL BOSS, sem IDs de personagens nas cenas ou no motor.
+  `STORY_FINAL_BOSS` (`{ fighterId: 'dmitry', destination: 'russia', stageId:
 'bitrix24-moscow' }`) é dado, não lógica por personagem. `finalBossLeg(id)` devolve essa etapa
   quando o chefe está no `ROSTER` e não é o próprio jogador; `storyRouteFor` a põe no fim de toda
   campanha e `campaignOpponents` nunca o inclui no meio. O chefe não tem perfil em

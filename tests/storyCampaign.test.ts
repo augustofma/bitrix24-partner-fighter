@@ -70,13 +70,17 @@ describe('rivals are generated, never written per campaign', () => {
       const opponents = campaignOpponents(fighterId);
       expect(opponents).not.toContain(fighterId);
       expect([...opponents].sort()).toEqual(PLAYABLE.filter((id) => id !== fighterId).sort());
-      expect(storyRouteFor(fighterId)!.map((leg) => leg.opponent)).toEqual(opponents);
+      expect(
+        storyRouteFor(fighterId)!
+          .slice(0, -1)
+          .map((leg) => leg.opponent),
+      ).toEqual(opponents);
     }
   });
 
   it('each rival is met at its own story place', () => {
     for (const fighterId of PLAYABLE) {
-      for (const leg of storyRouteFor(fighterId)!) {
+      for (const leg of storyRouteFor(fighterId)!.slice(0, -1)) {
         expect(leg.destination).toBe(storyLocationId(leg.opponent));
       }
     }
@@ -90,6 +94,7 @@ describe('rivals are generated, never written per campaign', () => {
       'spain',
       'joinville',
       'joinville',
+      'russia',
     ]);
     expect(campaignOpponents('augusto')).toEqual([
       'filipe',
@@ -108,6 +113,7 @@ describe('rivals are generated, never written per campaign', () => {
       'spain',
       'joinville',
       'joinville',
+      'russia',
     ]);
     expect(campaignOpponents('joao-guiotti')).toEqual([
       'augusto',
@@ -126,6 +132,7 @@ describe('rivals are generated, never written per campaign', () => {
       'russia',
       'spain',
       'joinville',
+      'russia',
     ]);
     expect(campaignOpponents('romualdo')).toEqual([
       'augusto',
@@ -145,6 +152,7 @@ describe('rivals are generated, never written per campaign', () => {
       'russia',
       'joinville',
       'joinville',
+      'russia',
     ]);
   });
 });
@@ -219,7 +227,7 @@ describe('no rule depends on a specific fighter', () => {
       'src/scenes/VersusScene.ts',
       'src/scenes/FightScene.ts',
     ];
-    const ids = [...PLAYABLE, 'fighter-a', 'fighter-b'];
+    const ids = [...PLAYABLE, 'dmitry', 'fighter-a', 'fighter-b'];
     for (const file of files) {
       const source = readFileSync(join(__dirname, '..', file), 'utf8');
       for (const id of ids) {

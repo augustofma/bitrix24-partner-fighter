@@ -26,7 +26,13 @@ import { partnerArena } from '../src/stages/partnerArena';
 import { recife } from '../src/stages/recife';
 import { DEFAULT_STAGE_ID, STAGES, getStageConfig } from '../src/stages/stageRegistry';
 import { STORY_LOCATIONS, stageIdForLocation } from '../src/story/locations';
-import { STORY_PROFILES, quickFightStageId, storyRouteFor } from '../src/story/storyProfiles';
+import {
+  STORY_FINAL_BOSS,
+  STORY_PROFILES,
+  isFinalBossEncounter,
+  quickFightStageId,
+  storyRouteFor,
+} from '../src/story/storyProfiles';
 import { legStageId } from '../src/story/storyProgress';
 import type { AttackConfig } from '../src/types/fighter';
 import type { StageConfig } from '../src/types/stage';
@@ -179,7 +185,11 @@ describe('RECIFE is picked by place, never by fighter', () => {
         const encounterStage = STORY_PROFILES.find(
           (p) => p.fighterId === leg.opponent,
         )?.encounterStageId;
-        expect(legStageId(leg)).toBe(encounterStage ?? stageIdForLocation(leg.destination));
+        expect(legStageId(leg)).toBe(
+          isFinalBossEncounter(leg)
+            ? STORY_FINAL_BOSS.stageId
+            : (encounterStage ?? stageIdForLocation(leg.destination)),
+        );
       }
     }
   });

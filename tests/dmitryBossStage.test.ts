@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { augusto } from '../src/fighters/augusto';
+import { dmitry } from '../src/fighters/dmitry';
 import { ROSTER, getPlayableFighters } from '../src/fighters/roster';
 import { collectStageAssets } from '../src/render/assets/stageAssets';
 import { bitrix24Moscow } from '../src/stages/bitrix24Moscow';
@@ -13,6 +13,7 @@ import {
   campaignOpponents,
   hasStoryCampaign,
   isStoryRival,
+  isFinalBossEncounter,
   quickFightStageId,
   storyRouteFor,
 } from '../src/story/storyProfiles';
@@ -28,15 +29,16 @@ const STAGE = 'bitrix24-moscow';
 const usesStage = (fighterId: string) =>
   (storyRouteFor(fighterId) ?? []).filter((leg) => leg.stageId === STAGE);
 
-/**
- * Runs `body` with a test-only Dmitry (built from Augusto's config) in the roster, as the boss
- * will be added later. Never part of the game: the roster is restored afterwards.
- */
+/** Temporarily varies only the selection flag of the real boss. */
 function withDmitry(playable: boolean, body: () => void): void {
   const roster = ROSTER as FighterConfig[];
   const original = [...roster];
   try {
-    roster.push({ ...augusto, id: STORY_FINAL_BOSS.fighterId, displayName: 'DMITRY', playable });
+    roster.splice(
+      roster.findIndex((f) => f.id === dmitry.id),
+      1,
+      { ...dmitry, playable },
+    );
     body();
   } finally {
     roster.splice(0, roster.length, ...original);
@@ -75,17 +77,23 @@ describe('BITRIX24 MOSCOU stage', () => {
   });
 
   it('without Dmitry in the roster no campaign uses it (and the campaigns are unchanged)', () => {
-    expect(ROSTER.some((f) => f.id === STORY_FINAL_BOSS.fighterId)).toBe(false);
-    for (const { fighterId } of STORY_PROFILES) {
-      expect(usesStage(fighterId)).toEqual([]);
-      expect(storyRouteFor(fighterId)?.map((leg) => leg.opponent)).toEqual(
-        campaignOpponents(fighterId),
-      );
+    const roster = ROSTER as FighterConfig[];
+    const index = roster.findIndex((f) => f.id === dmitry.id);
+    roster.splice(index, 1);
+    try {
+      for (const { fighterId } of STORY_PROFILES) {
+        expect(usesStage(fighterId)).toEqual([]);
+        expect(storyRouteFor(fighterId)?.map((leg) => leg.opponent)).toEqual(
+          campaignOpponents(fighterId),
+        );
+      }
+    } finally {
+      roster.splice(index, 0, dmitry);
     }
   });
 });
 
-describe('Dmitry, the story’s final boss (test-only roster entry)', () => {
+describe('Dmitry, the story’s final boss', () => {
   it.each([false, true])(
     'playable: %s: every campaign ends against him in Moscow, on this stage only',
     (playable) => {
@@ -124,6 +132,11 @@ describe('Dmitry, the story’s final boss (test-only roster entry)', () => {
         stageId: STAGE,
         mode: 'story',
       });
+      const retry = recordStoryMatch(fight, false);
+      expect(retry).toBe(fight);
+      expect(storyMatchSetup(retry, 'hard')).toEqual(storyMatchSetup(fight, 'hard'));
+      expect(isFinalBossEncounter(storyRouteFor('augusto')!.at(-1)!)).toBe(true);
+      expect(isFinalBossEncounter(storyRouteFor('augusto')![0]!)).toBe(false);
       expect(recordStoryMatch(fight, true).phase).toBe('complete');
     });
   });

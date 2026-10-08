@@ -169,6 +169,24 @@ com o especial ALAIO VIBECODE! (o mesmo do João, veja "Especiais e energia").
 Alcance, stun e knockback seguem a referência intermediária de João; startup/recovery maiores
 e mobilidade menor compensam o dano um pouco maior. Não substitui a validação de equilíbrio com jogadores.
 
+### DMITRY — FINAL BOSS
+
+Chefe final controlado pela IA genérica. Vida 108, caminhada 3,0, recuo 2,4, impulso de salto
+16,5 e velocidade aérea 3,9. Corpo padrão; não há imunidade, especial exclusivo ou regra no core.
+Normais ligeiramente mais fortes, com startup e recovery maiores. Frame data a 60 Hz:
+
+| Golpe       | Dano | Startup | Active | Recovery |
+| ----------- | ---: | ------: | -----: | -------: |
+| punch       |    8 |       6 |      3 |       13 |
+| kick        |   12 |      11 |      4 |       19 |
+| crouchPunch |    6 |       6 |      3 |       11 |
+| crouchKick  |   10 |      10 |      4 |       20 |
+| airPunch    |    8 |       6 |      6 |       12 |
+| airKick     |   11 |       9 |      8 |       16 |
+
+É a sexta e última luta das seis campanhas atuais. Derrota mantém etapa, rival, dificuldade e
+escritório; vitória encerra a campanha pelo fluxo existente. Não há desbloqueio nesta versão.
+
 ### AISLAN — ZOPU
 
 Perfil equilibrado, mesmos valores-base do Isaque: vida 100, avanço/recuo 3,1/2,5 px/frame,
@@ -629,10 +647,10 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
 - **Luta:** melhor de 3, regras normais.
 - **Vitória:** CONTINUAR leva à próxima viagem. **Derrota:** TENTAR NOVAMENTE repete só aquela
   luta (mesmo rival, cenário e dificuldade); SAIR PARA O MENU encerra a campanha.
-- **Chefe final (Dmitry):** quando o Dmitry entrar no elenco, toda campanha termina numa luta
+- **Chefe final (Dmitry):** toda campanha termina numa luta
   contra ele em Moscou, no cenário **BITRIX24 MOSCOU**, que na história só é usado nessa luta.
-  Ele não é rival comum (não aparece no meio das rotas) e não tem campanha própria. Antes dele
-  existir, as rotas acima não mudam.
+  Ele não é rival comum (não aparece no meio das rotas) e não tem campanha própria. Fica fora da seleção
+  comum (`playable: false`); mapa e VS mostram FINAL BOSS.
 - **Final:** "CAMPANHA CONCLUÍDA" com a rota percorrida, JOGAR NOVAMENTE (recomeça com o mesmo
   lutador) ou VOLTAR AO MENU.
 - O progresso dura a sessão e é independente da luta rápida.

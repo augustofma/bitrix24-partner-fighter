@@ -615,3 +615,21 @@ octógono de três retângulos), triângulos e traços: nada de `fillRoundedRect
 de combinar com o estilo, isso evita a triangulação de caminhos do Phaser (earcut), que custava
 centenas de ms com balões de tamanho negativo ou minúsculo no pop-in e travava o jogo ~1 s no
 especial (corrigido; teste em `tests/specialStutter.test.ts`).
+
+## DMITRY — FINAL BOSS
+
+Arte original criada com ImageGen integrado a partir das duas fotos reais e do pôster fornecidos
+pelo usuário para esta tarefa. Nenhum sprite de franquia ou asset externo foi copiado. Fontes e
+prompts preservados em [scripts/dmitry-art](../scripts/dmitry-art/README.md).
+Identidade: homem maduro de pele clara, cabelo curto grisalho/castanho claro, sem barba, jaqueta
+marinho, camiseta escura, jeans azul, crachá azul com cordão branco; fones discretos no retrato.
+Postura séria e controlada, proporções naturais; sem armadura ou musculatura exagerada.
+
+Sprite original em PNG RGBA 1536×1120, 8×5 células 192×224, 40 poses. Retrato próprio RGBA
+240×300. Baseline 216, margem mínima 4 px, scale 1, offsetX 0, offsetY 8. Frames aéreos têm
+âncoras elevadas; fases de ataque/pulo 1/1/1. Preparação local reproduzível com Pillow/NumPy,
+sem dependência adicionada ao jogo. Licença/proveniência: geração original para o projeto a
+partir das referências enviadas pelo usuário; sem material de jogos comerciais.
+
+O escritório BITRIX24 MOSCOU já existente é reutilizado integralmente. Nenhum cenário foi
+regenerado. O personagem aparece no mapa, VS, luta e resultado como chefe final oculto na seleção.

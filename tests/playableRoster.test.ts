@@ -26,8 +26,12 @@ describe('playable roster (data-driven)', () => {
       'isaque-ferreira',
       'aislan',
     ]);
-    // Test/demo placeholders stay in the roster (code and tests use them) but are not offered.
-    expect(ROSTER.filter((f) => !f.playable).map((f) => f.id)).toEqual(['fighter-a', 'fighter-b']);
+    // The final boss and test/demo placeholders stay in the roster (code and tests use them) but are not offered.
+    expect(ROSTER.filter((f) => !f.playable).map((f) => f.id)).toEqual([
+      'dmitry',
+      'fighter-a',
+      'fighter-b',
+    ]);
   });
 
   it('quick fight: any playable fighter gets a playable CPU opponent and a real stage', () => {
