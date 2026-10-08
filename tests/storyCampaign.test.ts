@@ -83,12 +83,20 @@ describe('rivals are generated, never written per campaign', () => {
   });
 
   it('Augusto: Recife -> Portugal (Filipe) -> Russia (João) -> Spain (Isaque) -> Joinville', () => {
-    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'spain', 'joinville']);
+    expect(routeCities('augusto')).toEqual([
+      'recife',
+      'portugal',
+      'russia',
+      'spain',
+      'joinville',
+      'joinville',
+    ]);
     expect(campaignOpponents('augusto')).toEqual([
       'filipe',
       'joao-guiotti',
       'isaque-ferreira',
       'romualdo',
+      'aislan',
     ]);
   });
 
@@ -99,22 +107,32 @@ describe('rivals are generated, never written per campaign', () => {
       'portugal',
       'spain',
       'joinville',
+      'joinville',
     ]);
     expect(campaignOpponents('joao-guiotti')).toEqual([
       'augusto',
       'filipe',
       'isaque-ferreira',
       'romualdo',
+      'aislan',
     ]);
   });
 
   it('Romualdo: Joinville -> Recife -> Portugal -> Russia -> Spain (Isaque)', () => {
-    expect(routeCities('romualdo')).toEqual(['joinville', 'recife', 'portugal', 'russia', 'spain']);
+    expect(routeCities('romualdo')).toEqual([
+      'joinville',
+      'recife',
+      'portugal',
+      'russia',
+      'spain',
+      'joinville',
+    ]);
     expect(campaignOpponents('romualdo')).toEqual([
       'augusto',
       'filipe',
       'joao-guiotti',
       'isaque-ferreira',
+      'aislan',
     ]);
   });
 
@@ -125,6 +143,7 @@ describe('rivals are generated, never written per campaign', () => {
       'recife',
       'portugal',
       'russia',
+      'joinville',
       'joinville',
     ]);
   });
@@ -151,8 +170,10 @@ describe('travel: the campaign is always where the last fight was', () => {
 
   it('no trip flies to the place it leaves from', () => {
     for (const id of PLAYABLE) {
-      const cities = routeCities(id);
-      for (let i = 1; i < cities.length; i++) expect(cities[i]).not.toBe(cities[i - 1]);
+      for (const progress of playThrough(id).filter((p) => p.phase === 'travel')) {
+        const trip = tripForProgress(progress, STORY_MAP_LAYOUT.maps)!;
+        expect(trip.requiresFlight).toBe(trip.from.id !== trip.to.id);
+      }
     }
   });
 });

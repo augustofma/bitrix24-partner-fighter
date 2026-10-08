@@ -30,6 +30,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Isaque Ferreira has no official origin yet: only his place in the story, Spain.
   { fighterId: 'isaque-ferreira', encounter: 'spain' },
   { fighterId: 'romualdo', home: 'joinville' },
+  // Shared location and current arena, independently configurable for a future stage.
+  { fighterId: 'aislan', encounter: 'joinville', encounterStageId: 'joinville' },
 ];
 
 export function getStoryProfile(fighterId: string): StoryCharacterProfile | undefined {

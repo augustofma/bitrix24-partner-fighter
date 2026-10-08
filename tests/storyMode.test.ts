@@ -98,8 +98,16 @@ describe('campaigns', () => {
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
+      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville' },
     ]);
-    expect(routeCities('augusto')).toEqual(['recife', 'portugal', 'russia', 'spain', 'joinville']);
+    expect(routeCities('augusto')).toEqual([
+      'recife',
+      'portugal',
+      'russia',
+      'spain',
+      'joinville',
+      'joinville',
+    ]);
   });
 
   it('Filipe (never against himself): Portugal -> Recife -> Russia -> Spain -> Joinville', () => {
@@ -108,13 +116,28 @@ describe('campaigns', () => {
       { opponent: 'joao-guiotti', destination: 'russia', stageId: 'russia' },
       { opponent: 'isaque-ferreira', destination: 'spain' },
       { opponent: 'romualdo', destination: 'joinville' },
+      { opponent: 'aislan', destination: 'joinville', stageId: 'joinville' },
     ]);
-    expect(routeCities('filipe')).toEqual(['portugal', 'recife', 'russia', 'spain', 'joinville']);
+    expect(routeCities('filipe')).toEqual([
+      'portugal',
+      'recife',
+      'russia',
+      'spain',
+      'joinville',
+      'joinville',
+    ]);
   });
 
   it('every story character is playable in story mode; others are not', () => {
     const playable = ROSTER.filter((config) => hasStoryCampaign(config.id)).map((c) => c.id);
-    expect(playable).toEqual(['augusto', 'filipe', 'joao-guiotti', 'romualdo', 'isaque-ferreira']);
+    expect(playable).toEqual([
+      'augusto',
+      'filipe',
+      'joao-guiotti',
+      'romualdo',
+      'isaque-ferreira',
+      'aislan',
+    ]);
     expect(() => startStory('fighter-a')).toThrow();
   });
 });
@@ -183,13 +206,13 @@ describe('story progress', () => {
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
     let progress = startStory('filipe');
-    for (let leg = 0; leg < 4; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
+    for (let leg = 0; leg < 5; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
-      currentStage: 4,
+      currentStage: 5,
       currentLocation: 'joinville',
       opponent: null,
-      completedStages: [0, 1, 2, 3],
+      completedStages: [0, 1, 2, 3, 4],
     });
     expect(recordStoryMatch(progress, true)).toBe(progress);
     expect(arriveForFight(progress)).toBe(progress);

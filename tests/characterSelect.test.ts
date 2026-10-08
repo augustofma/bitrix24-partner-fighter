@@ -122,6 +122,7 @@ import { filipe } from '../src/fighters/filipe';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { ROSTER, getPlayableFighters } from '../src/fighters/roster';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { CharacterSelectScene } from '../src/scenes/CharacterSelectScene';
 import type { RosterCard } from '../src/ui/select/RosterCard';
@@ -163,7 +164,7 @@ describe('CharacterSelectScene roster integration', () => {
       ...Array<null>(CARDS_PER_PAGE - playable.length).fill(null),
     ]);
     expect(lastHero()).toBe(augusto);
-    expect(fake(cards.at(-1))?.input).toBeUndefined();
+    for (const card of cards.filter((c) => !c.config)) expect(fake(card)?.input).toBeUndefined();
   });
 
   it('offers all complete fighters; hides playable:false placeholders', () => {
@@ -289,7 +290,7 @@ describe('CharacterSelectScene roster integration', () => {
 });
 
 describe('CharacterSelectScene story mode', () => {
-  it.each([augusto, filipe, joaoGuiotti, romualdo, isaqueFerreira])(
+  it.each([augusto, filipe, joaoGuiotti, romualdo, isaqueFerreira, aislan])(
     '%s can start a campaign: correct fighter, start place and rivals',
     (fighter) => {
       const { cards } = openScene('story');

@@ -24,6 +24,7 @@ describe('playable roster (data-driven)', () => {
       'joao-guiotti',
       'romualdo',
       'isaque-ferreira',
+      'aislan',
     ]);
     // Test/demo placeholders stay in the roster (code and tests use them) but are not offered.
     expect(ROSTER.filter((f) => !f.playable).map((f) => f.id)).toEqual(['fighter-a', 'fighter-b']);

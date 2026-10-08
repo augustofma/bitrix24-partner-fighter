@@ -6,6 +6,7 @@ import { createRng } from '../src/core/random';
 import { augusto } from '../src/fighters/augusto';
 import { joaoGuiotti } from '../src/fighters/joaoGuiotti';
 import { romualdo } from '../src/fighters/romualdo';
+import { aislan } from '../src/fighters/aislan';
 import { isaqueFerreira } from '../src/fighters/isaqueFerreira';
 import { ROSTER, getFighterConfig } from '../src/fighters/roster';
 import { partnerArena } from '../src/stages/partnerArena';
@@ -53,7 +54,7 @@ describe('João Guiotti and Romualdo', () => {
     expect(joaoGuiotti.stats.maxHealth).toBe(romualdo.stats.maxHealth);
   });
 
-  it.each([...NEW_FIGHTERS, isaqueFerreira])(
+  it.each([...NEW_FIGHTERS, isaqueFerreira, aislan])(
     '$id goes through every state in a real simulation',
     (config) => {
       const sim = new FightSimulation({

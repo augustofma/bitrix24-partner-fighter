@@ -57,6 +57,8 @@ export interface Trip {
   rect: MapRect;
   path: FlightPath;
   international: boolean;
+  /** Consecutive rivals can share a place: present the challenge without a flight. */
+  requiresFlight: boolean;
 }
 
 /**
@@ -76,5 +78,13 @@ export function tripForProgress(
     locationToMap(from, rect, view.bounds),
     locationToMap(to, rect, view.bounds),
   );
-  return { from, to, view, rect, path, international: isInternationalTrip(from, to) };
+  return {
+    from,
+    to,
+    view,
+    rect,
+    path,
+    international: isInternationalTrip(from, to),
+    requiresFlight: from.id !== to.id,
+  };
 }

@@ -270,6 +270,16 @@ Sem logos ou crachá. Sheet RGBA 1536×1120, 8×5 células 192×224; portrait RG
 Scale 1, offsets 0/8, baseline 216 e margens mínimas 4 px; fases de ataques e pulo 1/1/1.
 [Fontes, prompts, mapa e preparação](../scripts/isaque-ferreira-art/README.md).
 
+## AISLAN — ZOPU
+
+Arte original gerada com ImageGen integrado a partir da foto real e pôster aprovados.
+Cabelo preto médio, barba cheia, blazer azul xadrez, camisa azul-marinho, calça cinza-clara,
+cinto e tênis brancos. Sem logos ou crachá para preservar leitura.
+Sheet RGBA 1536×1120, 40 células 192×224; portrait RGBA 240×300. Scale 1, offsets 0/8,
+baseline 216 e margem mínima 4 px. Idle gerado separadamente para manter a guarda constante.
+[Fontes originais, prompts e preparação](../scripts/aislan-art/README.md).
+Arte original do projeto, sem sprites de terceiros ou cópias de cenários.
+
 ## Tela inicial
 
 Arte oficial aprovada: arena neon com globo, holofotes, troféu e telões, **João Guiotti** à

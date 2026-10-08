@@ -170,6 +170,7 @@ tests/                    Vitest: lutador, combate, arena, round, partida, IA, d
                           ataques aéreos e agachados, níveis de ataque × guarda, cross-up,
                           especiais, determinismo, seleção, animação/assets de sprite
 scripts/                  Ferramentas offline de preparação de assets
+  aislan-art/             Fontes e normalização offline do Aislan
   isaque-ferreira-art/     Fontes originais e normalização offline do Isaque
   romualdo-art/            Fontes originais e normalização reproduzível da arte de Romualdo
   joao-guiotti-art/        Fontes originais e normalização reproduzível da arte de João
@@ -668,6 +669,14 @@ O critério é só geometria (`pushboxFor`), sem nada específico de personagem:
 livre (`idle`, `walk`, `crouch`) ou de guarda (`block`, `crouchBlock`). Nunca no ar e nunca
 durante ataques: um golpe aéreo mantém sprite e hitbox na direção inicial mesmo cruzando o
 adversário; a correção acontece no primeiro frame livre após o landing.
+
+### Encontros consecutivos no mesmo lugar
+
+`Trip.requiresFlight` compara os IDs dos lugares de partida e destino. A `StoryMapScene`
+apresenta diretamente o desafio quando forem iguais, sem criar avião ou tween de voo.
+O progresso continua usando as mesmas funções de chegada, luta e retry. Aislan usa
+`encounter: joinville` e `encounterStageId: joinville`, após Romualdo na ordem de perfis.
+Não há alias de personagem: o stage do encounter pode mudar independentemente do lugar.
 
 ## CPU (AIController)
 

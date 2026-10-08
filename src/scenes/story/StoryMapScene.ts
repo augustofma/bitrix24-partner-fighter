@@ -101,20 +101,27 @@ export class StoryMapScene extends Phaser.Scene {
     this.drawPlaces(trip.from.id, trip.to.id);
     this.createRouteHeader(locationName(trip.from), locationName(trip.to));
 
-    // The plane waits where the campaign is (on the first trip: the fighter's own place).
-    const plane = this.createPlane(trip.path.from);
-    let takeoffMs = TAKEOFF_DELAY_MS;
-    if (progress.currentStage === 0 && progress.completedStages.length === 0) {
-      const start = this.showStart();
-      takeoffMs += START_CARD_MS;
-      this.time.delayedCall(START_CARD_MS, () => {
-        this.hideCard(start);
-        this.time.delayedCall(DESTINATION_OUT_MS, () => this.showDestination());
-      });
+    this.flight = null;
+    if (!trip.requiresFlight) {
+      this.landed = true;
+      this.showChallenge();
+      this.time.delayedCall(AUTO_CONTINUE_MS, () => this.proceed(false));
     } else {
-      this.showDestination();
+      // The plane waits where the campaign is (on the first trip: the fighter's own place).
+      const plane = this.createPlane(trip.path.from);
+      let takeoffMs = TAKEOFF_DELAY_MS;
+      if (progress.currentStage === 0 && progress.completedStages.length === 0) {
+        const start = this.showStart();
+        takeoffMs += START_CARD_MS;
+        this.time.delayedCall(START_CARD_MS, () => {
+          this.hideCard(start);
+          this.time.delayedCall(DESTINATION_OUT_MS, () => this.showDestination());
+        });
+      } else {
+        this.showDestination();
+      }
+      this.time.delayedCall(takeoffMs, () => this.fly(plane, trip.path));
     }
-    this.time.delayedCall(takeoffMs, () => this.fly(plane, trip.path));
 
     const proceed = () => this.proceed();
     onKeys(this, MENU_CONFIRM_KEYS, proceed);
@@ -142,7 +149,12 @@ export class StoryMapScene extends Phaser.Scene {
 
   private createRouteHeader(from: string, to: string): void {
     const { panel, routeTitle, leg } = STORY_MAP_LAYOUT;
-    const title = createFightTitle(this, panel.x, routeTitle.y, STRINGS.storyTrip(from, to));
+    const title = createFightTitle(
+      this,
+      panel.x,
+      routeTitle.y,
+      from === to ? to : STRINGS.storyTrip(from, to),
+    );
     title.setScale(title.scaleX * fitTitleScale(title.displayWidth, routeTitle.maxWidth));
     const route = storyRouteFor(this.progress.selectedFighter) ?? [];
     this.add

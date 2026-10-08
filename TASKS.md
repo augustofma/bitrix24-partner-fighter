@@ -421,6 +421,14 @@ sem pedido explícito.**
 - [x] Testes do cenário, do encontro, retry, rounds e luta rápida; playtest desktop, 1080p e
       mobile (viagem → VS → luta, derrota → retry, FINAL ROUND)
 
+## DONE (Aislan — ZOPU)
+
+- [x] FighterConfig novo, roster, arte completa e portrait próprios, sem especial exclusivo
+- [x] Pipeline offline reproduzível, 40 células RGBA com margens e fases 1/1/1
+- [x] Encounter após Romualdo em Joinville, compartilhando stage sem duplicar arte
+- [x] Transição local genérica sem voo e testes de assets, CPU, rotas e retry
+- [x] Playtest F2/teclado, cinco rivais e CPU, Story com/sem voo, derrota/retry e touch landscape
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

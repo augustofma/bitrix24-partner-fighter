@@ -8,9 +8,9 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
-JOÃO GUIOTTI, ROMUALDO e ISAQUE FERREIRA. A história exige também um perfil de campanha;
-Isaque está disponível na luta rápida. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
-enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Isaque, Isaque enfrenta Augusto). `FIGHTER_A` (sprite
+JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA e AISLAN. A história exige também um perfil de campanha;
+Todos os seis estão disponíveis na história e na luta rápida. Na LUTA RÁPIDA a CPU é o próximo jogável do roster (Augusto
+enfrenta Filipe, Filipe enfrenta João, ..., Romualdo enfrenta Isaque, Isaque enfrenta Aislan, Aislan enfrenta Augusto). `FIGHTER_A` (sprite
 demo) e `FIGHTER_B` (placeholder) continuam no código para testes e desenvolvimento, com
 `playable: false`, e não aparecem na seleção.
 
@@ -61,7 +61,8 @@ exterior usam um mapa-múndi pixel-art; as nacionais, o mapa do Brasil). Com Aug
 2. **Portugal → Rússia:** luta contra **JOÃO GUIOTTI** (de São Paulo - SP, enfrentado na Rússia).
 3. **Rússia → Espanha:** luta contra **ISAQUE FERREIRA** (enfrentado na Espanha).
 4. **Espanha → Joinville:** luta contra **ROMUALDO** (Joinville - SC).
-5. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
+5. **Joinville → próximo desafio local:** luta contra **AISLAN — ZOPU**, sem novo voo.
+6. **CAMPANHA CONCLUÍDA**, com JOGAR NOVAMENTE ou VOLTAR AO MENU.
 
 Com João: Rússia → **Recife** (Augusto, no cenário Marco Zero) → Portugal (Filipe) → Espanha
 (Isaque) → Joinville (Romualdo). Cada viagem sai de onde a campanha está; o VS mostra o lugar da luta.
@@ -80,8 +81,16 @@ Ambos ainda não têm especiais.
 
 **ISAQUE FERREIRA** usa arte original com jaqueta bege, camiseta/calça pretas e tênis brancos.
 Perfil equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e deslocamento aéreo 3,9.
-Seis normais, sem especial e sem campanha própria nesta etapa.
+Seis normais, sem especial; encontro da história na Espanha.
 [Arte e preparo](scripts/isaque-ferreira-art/README.md).
+
+## AISLAN — ZOPU
+
+Novo fighter equilibrado: vida 100, caminhada 3,1, recuo 2,5, pulo 16,5 e velocidade aérea 3,9.
+Seis normais, sem especial exclusivo. Arte original, atlas 1536×1120 (40 frames 192×224) e
+portrait 240×300; [fontes, prompts e preparo](scripts/aislan-art/README.md).
+Na história entra após Romualdo, na mesma Joinville e no stage `joinville`, sem duplicar imagens.
+O perfil define `encounterStageId` independentemente; basta trocar esse valor no futuro.
 
 ## Stack
 

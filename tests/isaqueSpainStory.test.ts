@@ -152,11 +152,13 @@ describe('the trip to Spain and the fight there', () => {
     });
   });
 
-  it('when Isaque is the last rival, beating him completes the campaign in Spain', () => {
+  it('after Isaque, the added rival keeps departure in Spain', () => {
     const fight = arriveForFight(untilIsaque('romualdo'));
     expect(recordStoryMatch(fight, true)).toMatchObject({
-      phase: 'complete',
+      phase: 'travel',
       currentLocation: 'spain',
+      nextLocation: 'joinville',
+      opponent: 'aislan',
     });
   });
 
