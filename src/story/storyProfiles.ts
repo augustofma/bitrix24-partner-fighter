@@ -22,7 +22,8 @@ import { getStoryLocation, stageIdForLocation } from './locations';
  * it playable in story mode and a rival in the other campaigns.
  */
 export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
-  { fighterId: 'augusto', home: 'recife' },
+  // Ending: Augusto watching the sunset on the Recife waterfront, back home.
+  { fighterId: 'augusto', home: 'recife', endingArt: 'story/endings/augusto.jpg' },
   // Filipe is from Recife, but in the story he is in Portugal.
   { fighterId: 'filipe', home: 'recife', encounter: 'portugal' },
   // João Guiotti is from São Paulo, but in the story he is in Russia.

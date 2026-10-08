@@ -13,7 +13,7 @@ const ART_DIR = 'stages/joinville';
  */
 export const joinville: StageConfig = {
   id: 'joinville',
-  displayName: 'JOINVILLE',
+  displayName: 'JOINVILLE CRMTHINK',
   location: 'PÓRTICO DE JOINVILLE - SC',
   width: partnerArena.width,
   groundY: partnerArena.groundY,

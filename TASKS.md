@@ -490,6 +490,14 @@ sem pedido explícito.**
 - [x] Testes de assets, roster, simulação, CPU, determinismo, rotas e ausência de ID no core
 - [x] Playtest Chrome desktop e touch emulado: poses/F2/flipX, seis rivais, Story/retry/final
 
+## DONE (final ilustrado do Augusto no Modo História, branch `feature/augusto-story-ending`)
+
+- [x] Arte oficial em 1440×810 (`prepare_augusto_ending.py`), `endingArt` no perfil do Augusto
+- [x] `CampaignCompleteScene`: ilustração em tela cheia com zoom lento, título à direita, sem
+      card; tecla na introdução só mostra os botões; outros personagens com o final padrão
+- [x] Rota do final sem lugar repetido em sequência (Joinville → Joinville)
+- [x] Testes do asset e dos perfis; playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 0. [ ] **Desempenho mobile:** os botões touch (`Arc` preenchidos) também passam pelo earcut a

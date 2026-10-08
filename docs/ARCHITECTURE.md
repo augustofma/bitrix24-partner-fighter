@@ -371,6 +371,10 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
   Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
   Recife vira destino para todos que não começam lá.
+- **Final ilustrado:** `endingArt` opcional no perfil (caminho em `public/`). O `BootScene`
+  carrega todos com `collectStoryEndingAssets(STORY_PROFILES)`; a `CampaignCompleteScene` usa
+  `storyEndingAsset(perfil)` e, se a textura existe, troca a arte de vitória e o card pela
+  ilustração. Sem a arte, o final padrão. A rota mostrada junta lugares repetidos em sequência.
 - **Chefe final:** o config real `src/fighters/dmitry.ts` está no roster com `playable: false`.
   `isFinalBossEncounter(leg)` compara o encontro à configuração e fornece às cenas de mapa/VS
   o selo FINAL BOSS, sem IDs de personagens nas cenas ou no motor.
