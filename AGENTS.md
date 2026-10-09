@@ -11,6 +11,7 @@ Estas regras existem para que qualquer um consiga continuar o trabalho com segur
    explicitamente fora de escopo (FUTURE).
 3. Para regras de jogo, consulte [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md). Para arte e assets,
    [docs/ART_DIRECTION.md](docs/ART_DIRECTION.md).
+4. Vai colocar um personagem novo? Siga o checklist [docs/NEW_FIGHTER.md](docs/NEW_FIGHTER.md).
 
 ## Regras de arquitetura
 
@@ -31,8 +32,9 @@ Estas regras existem para que qualquer um consiga continuar o trabalho com segur
   o estado da luta.
 - **Arte nunca define gameplay.** Sprites e retratos entram só por `FighterConfig.assets`
   (veja `docs/ART_DIRECTION.md`). Colisão vem das caixas do config e timing vem do frame data,
-  nunca da arte. Não carregue assets de personagem fora da `BootScene` nem crie lógica por
-  personagem no renderer.
+  nunca da arte. Não carregue assets de personagem à mão: o que cada tela precisa sai do config
+  (`src/render/assets/sceneAssets.ts`: retratos no boot, sprite sheets na tela VS). Nem crie
+  lógica por personagem no renderer.
 - **Sem valores mágicos.** Constantes ficam em `src/config/` (globais) ou no topo do arquivo que as
   usa (locais, com nome descritivo). Textos visíveis ao usuário ficam em `src/config/strings.ts`.
 - **Sem dependências circulares.** Tipos compartilhados ficam em `src/types/`.

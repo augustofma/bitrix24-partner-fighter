@@ -13,7 +13,7 @@ export const GALLERY_LAYOUT = {
   /** Name plate under each thumbnail. */
   nameHeight: 28,
   gap: 16,
-  maxColumns: 4,
+  maxColumns: 5,
   /** Ending art is 16:9. */
   thumbAspect: 16 / 9,
 } as const;
@@ -32,17 +32,27 @@ export interface GalleryGrid {
   cards: GalleryCard[];
 }
 
-/**
- * Cards for `count` entries: up to 4 per row, as large as fits the area (16:9 thumbnails plus a
- * name plate), centred. Top-left corners.
- */
-export function galleryGrid(count: number, layout = GALLERY_LAYOUT): GalleryGrid {
-  const { area, gap, nameHeight, maxColumns, thumbAspect } = layout;
-  const columns = Math.max(1, Math.min(maxColumns, count));
+/** Card width for `count` entries in `columns` columns (16:9 thumbnail + name plate). */
+function cardWidthFor(count: number, columns: number, layout: typeof GALLERY_LAYOUT): number {
+  const { area, gap, nameHeight, thumbAspect } = layout;
   const rows = Math.max(1, Math.ceil(count / columns));
   const byWidth = (area.width - gap * (columns - 1)) / columns;
   const byHeight = ((area.height - gap * (rows - 1)) / rows - nameHeight) * thumbAspect;
-  const width = Math.floor(Math.min(byWidth, byHeight));
+  return Math.floor(Math.min(byWidth, byHeight));
+}
+
+/**
+ * Cards for `count` entries: the number of columns (up to 5) that gives the largest cards,
+ * fewer columns on a tie (8 entries: 4 x 2; 9 or 10: 5 x 2), centred. Top-left corners.
+ */
+export function galleryGrid(count: number, layout = GALLERY_LAYOUT): GalleryGrid {
+  const { area, gap, nameHeight, maxColumns, thumbAspect } = layout;
+  let columns = 1;
+  for (let c = 2; c <= Math.min(maxColumns, Math.max(1, count)); c++) {
+    if (cardWidthFor(count, c, layout) > cardWidthFor(count, columns, layout)) columns = c;
+  }
+  const rows = Math.max(1, Math.ceil(count / columns));
+  const width = cardWidthFor(count, columns, layout);
   const thumbHeight = Math.round(width / thumbAspect);
   const cardHeight = thumbHeight + nameHeight;
   const spanX = columns * width + (columns - 1) * gap;

@@ -154,10 +154,15 @@ describe('gallery layout', () => {
     expect(cards[4]!.y).toBeGreaterThan(cards[0]!.y + cards[0]!.thumbHeight + nameHeight);
   });
 
-  it('grows with the roster (more rows, smaller cards)', () => {
+  it('grows with the roster: 9 or 10 in two rows of five, more in three rows', () => {
+    for (const count of [9, 10]) {
+      expect(galleryGrid(count)).toMatchObject({ columns: 5, rows: 2 });
+    }
     const twelve = galleryGrid(12);
     expect(twelve.rows).toBe(3);
     expect(twelve.cards[0]!.width).toBeLessThan(galleryGrid(8).cards[0]!.width);
+    // Never cards wider than with fewer entries.
+    expect(galleryGrid(10).cards[0]!.width).toBeLessThanOrEqual(galleryGrid(8).cards[0]!.width);
   });
 
   it('keyboard moves wrap around rows and columns', () => {

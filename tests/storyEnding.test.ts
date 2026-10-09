@@ -40,19 +40,14 @@ describe('story endings', () => {
     expect(jpegSize(publicFile(asset!.path))).toEqual([1440, 810]);
   });
 
-  it('every story character has an illustrated ending', () => {
-    const withEnding = [
-      'augusto',
-      'filipe',
-      'joao-guiotti',
-      'isaque-ferreira',
-      'gabriel-mattozo',
-      'romualdo',
-      'aislan',
-      'romulo',
-    ];
+  it('every registered ending is a real 16:9 file (a new fighter may arrive without one)', () => {
+    // Fighters without an ending get the standard one (victory art and card), so a new story
+    // character can join before its illustration is ready.
     for (const { fighterId } of STORY_PROFILES) {
-      expect(storyEndingAsset(fighterId) !== undefined).toBe(withEnding.includes(fighterId));
+      const asset = storyEndingAsset(fighterId);
+      if (!asset) continue;
+      expect(existsSync(publicFile(asset.path)), fighterId).toBe(true);
+      expect(jpegSize(publicFile(asset.path)), fighterId).toEqual([1440, 810]);
     }
     expect(storyEndingAsset('nobody')).toBeUndefined();
   });

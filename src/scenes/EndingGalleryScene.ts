@@ -268,12 +268,16 @@ export class EndingGalleryScene extends Phaser.Scene {
       );
     const name = getFighterConfig(entry.fighterId).displayName;
     const all = this.entries.every((e) => e.unlocked);
+    // Unlocked before its illustration exists (a new fighter): the card shows the portrait.
+    const open = storyEndingAsset(entry.fighterId)
+      ? STRINGS.galleryOpenHint(name)
+      : STRINGS.galleryNoArt(name);
     this.caption
       .setText(
         entry.unlocked
           ? all
-            ? `${STRINGS.galleryAllUnlocked}  ${STRINGS.galleryOpenHint(name)}`
-            : STRINGS.galleryOpenHint(name)
+            ? `${STRINGS.galleryAllUnlocked}  ${open}`
+            : open
           : STRINGS.galleryLockedHint(name),
       )
       .setColor(css(entry.unlocked ? COLORS.gold : COLORS.white));

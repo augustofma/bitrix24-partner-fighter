@@ -673,6 +673,14 @@ sem pedido explícito.**
 - [x] `FighterConfig.unlock: 'all-endings'`: com os 8 finais, o Dmitry entra na luta rápida;
       teaser na galeria e anúncio na tela de campanha concluída
 
+## DONE (pronto para receber personagem novo, branch `feature/new-fighter-ready`)
+
+- [x] Checklist `docs/NEW_FIGHTER.md` (lutador, arte, Modo História, opcionais, testes) e link no
+      AGENTS.md; regra de assets atualizada para o carregamento sob demanda
+- [x] Galeria escolhe as colunas (até 5) pelo maior card: 9 ou 10 finais em 5×2
+- [x] Personagem novo pode entrar sem final ilustrado (teste e legenda da galeria aceitam)
+- [x] Ensaio com um 9º personagem temporário: seleção 5×2, campanha própria, galeria 3/9
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

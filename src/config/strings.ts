@@ -21,6 +21,7 @@ export const STRINGS = {
   galleryLockedHint: (name: string) => `Zere o Modo História com ${name} para liberar`,
   galleryOpenHint: (name: string) => `ENTER ou toque para ver o final de ${name}`,
   galleryAllUnlocked: 'TODOS OS FINAIS LIBERADOS!',
+  galleryNoArt: (name: string) => `Final de ${name} liberado: ilustração em breve`,
   galleryHint: '← → ↑ ↓ escolher    ENTER ver final    ESC voltar',
   galleryViewerHint: '← → outro final    ESC ou toque para voltar',
   /** Complete gallery: the hidden fighters it unlocks (e.g. the final boss). */
