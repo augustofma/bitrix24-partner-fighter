@@ -303,6 +303,13 @@ libera o final quando a vitória conclui a campanha e marca `RegistryKeys.newEnd
 (aberta pelo botão GALERIA do menu) carrega no `preload` só as ilustrações liberadas e monta a
 grade com `galleryGrid` (`ui/gallery/galleryLayout.ts`: até 4 por linha, 16:9 + placa de nome).
 
+**Lutador liberado pela galeria:** `FighterConfig.unlock: 'all-endings'` (dado no config, hoje
+só o `dmitry`, que segue `playable: false`) torna o lutador disponível na luta rápida quando
+`allEndingsUnlocked`. `isFighterAvailable` / `availableFighters` (`endingGallery.ts`) decidem; a
+`CharacterSelectScene` usa `availableFighters` na luta rápida e `getPlayableFighters` no Modo
+História. `galleryRewardFighters` alimenta o teaser da galeria e o anúncio na
+`CampaignCompleteScene`. Nenhuma cena testa ids.
+
 ## Fluxo entre cenas
 
 ```

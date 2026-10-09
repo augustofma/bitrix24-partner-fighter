@@ -9,7 +9,13 @@ import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
 import { portraitTextureKey } from '../render/assets/fighterAssets';
 import { storyEndingAsset } from '../render/assets/storyEndingAssets';
-import { galleryEntries, loadUnlockedEndings, type GalleryEntry } from '../story/endingGallery';
+import {
+  allEndingsUnlocked,
+  galleryEntries,
+  galleryRewardFighters,
+  loadUnlockedEndings,
+  type GalleryEntry,
+} from '../story/endingGallery';
 import { ControlsHint } from '../ui/ControlsHint';
 import {
   GALLERY_LAYOUT,
@@ -78,6 +84,7 @@ export class EndingGalleryScene extends Phaser.Scene {
     this.caption = this.add
       .text(GAME_WIDTH / 2, GALLERY_LAYOUT.caption.y, '', bodyText(16, COLORS.white))
       .setOrigin(0.5);
+    this.createRewardLine();
     const { footerY } = GALLERY_LAYOUT;
     this.add
       .rectangle(GAME_WIDTH / 2, footerY, GAME_WIDTH, FOOTER_HEIGHT, COLORS.navyDeep, 0.85)
@@ -105,6 +112,26 @@ export class EndingGalleryScene extends Phaser.Scene {
       else this.back();
     });
     this.setFocus(this.focus);
+  }
+
+  /**
+   * The gallery's prize: a hidden fighter (the final boss) unlocked with every ending. Teased
+   * while incomplete, announced once complete.
+   */
+  private createRewardLine(): void {
+    const rewards = galleryRewardFighters();
+    if (rewards.length === 0) return;
+    const complete = allEndingsUnlocked(loadUnlockedEndings());
+    const names = rewards.map((fighter) => fighter.displayName).join(' E ');
+    this.add
+      .text(
+        GAME_WIDTH / 2,
+        GALLERY_LAYOUT.reward.y,
+        complete ? STRINGS.galleryReward(names) : STRINGS.galleryRewardTeaser,
+        complete ? arcadeText(16, COLORS.gold) : bodyText(13, COLORS.neon),
+      )
+      .setOrigin(0.5)
+      .setShadow(0, 0, css(COLORS.ink), 6, true, true);
   }
 
   private createTopBar(): void {

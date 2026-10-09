@@ -17,6 +17,10 @@ import {
 } from '../src/scenes/story/storyFlow';
 import {
   UNLOCKED_ENDINGS_KEY,
+  allEndingsUnlocked,
+  availableFighters,
+  galleryRewardFighters,
+  isFighterAvailable,
   galleryEntries,
   loadUnlockedEndings,
   resetSessionUnlocks,
@@ -165,5 +169,37 @@ describe('gallery layout', () => {
     expect(moveInGallery(2, 'up', 8, 4)).toBe(6);
     // A short last row: going up from the top lands on the last card of that column or before.
     expect(moveInGallery(3, 'up', 6, 4)).toBe(5);
+  });
+});
+
+describe('the complete gallery unlocks the final boss as a playable fighter', () => {
+  const storyIds = () => galleryEntries([]).map((entry) => entry.fighterId);
+  const dmitry = () => ROSTER.find((fighter) => fighter.id === 'dmitry')!;
+
+  it('the boss is hidden until every ending is unlocked', () => {
+    const all = storyIds();
+    expect(dmitry().playable).toBe(false);
+    expect(allEndingsUnlocked([])).toBe(false);
+    expect(allEndingsUnlocked(all.slice(0, -1))).toBe(false);
+    expect(isFighterAvailable(dmitry(), all.slice(0, -1))).toBe(false);
+    expect(availableFighters(all.slice(0, -1))).not.toContain(dmitry());
+    expect(allEndingsUnlocked(all)).toBe(true);
+    expect(isFighterAvailable(dmitry(), all)).toBe(true);
+    expect(availableFighters(all)).toContain(dmitry());
+  });
+
+  it('is the only reward; placeholders never become available', () => {
+    expect(galleryRewardFighters()).toEqual([dmitry()]);
+    const available = availableFighters(storyIds());
+    expect(available.some((fighter) => fighter.id.startsWith('fighter-'))).toBe(false);
+    // Every playable fighter stays available, in roster order, with the boss added.
+    expect(available).toEqual(
+      ROSTER.filter((fighter) => fighter.playable || fighter.id === 'dmitry'),
+    );
+  });
+
+  it('he still has no story campaign (he stays the final boss there)', () => {
+    expect(hasStoryCampaign('dmitry')).toBe(false);
+    expect(galleryEntries(storyIds()).some((entry) => entry.fighterId === 'dmitry')).toBe(false);
   });
 });

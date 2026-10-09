@@ -668,6 +668,11 @@ sem pedido explícito.**
 - [x] Final liberado ao zerar a campanha, salvo em `localStorage` (`endingGallery.ts`);
       "NOVO FINAL NA GALERIA x/8" na tela de campanha concluída
 
+## DONE (Dmitry liberado pela galeria, branch `feature/dmitry-unlock`)
+
+- [x] `FighterConfig.unlock: 'all-endings'`: com os 8 finais, o Dmitry entra na luta rápida;
+      teaser na galeria e anúncio na tela de campanha concluída
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

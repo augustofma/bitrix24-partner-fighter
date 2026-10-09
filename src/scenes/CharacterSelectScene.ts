@@ -11,6 +11,7 @@ import { ROSTER, getFighterConfig, getPlayableFighters, pickCpuOpponent } from '
 import { onKeys } from '../input/menuKeys';
 import type { FighterConfig } from '../types/fighter';
 import { isAIDifficulty, type AIDifficulty, type GameMode } from '../types/match';
+import { availableFighters, isFighterAvailable, loadUnlockedEndings } from '../story/endingGallery';
 import { getStoryLocation, locationLabel } from '../story/locations';
 import { campaignStartLocation, hasStoryCampaign, isStoryRival } from '../story/storyProfiles';
 import type { StageSelectData } from './StageSelectScene';
@@ -71,6 +72,8 @@ export class CharacterSelectScene extends Phaser.Scene {
   private selectedIndex = 0;
   /** What this screen offers: the playable fighters, in roster order. */
   private fighters: readonly FighterConfig[] = [];
+  /** Story endings in the gallery: they decide which hidden fighters quick fights offer. */
+  private unlockedEndings: readonly string[] = [];
   /** Grid derived from the number of fighters offered (see rosterGrid). */
   private grid!: RosterGrid;
   private cards: RosterCard[] = [];
@@ -102,7 +105,10 @@ export class CharacterSelectScene extends Phaser.Scene {
     gameMusic(this).play(SCENE_MUSIC.characterSelect);
     createSelectBackground(this);
 
-    this.fighters = getPlayableFighters();
+    // Quick fights also offer hidden fighters already unlocked (e.g. the boss, gallery complete).
+    this.unlockedEndings = loadUnlockedEndings();
+    this.fighters =
+      this.mode === 'story' ? getPlayableFighters() : availableFighters(this.unlockedEndings);
     this.grid = rosterGrid(this.fighters.length);
     this.selectedIndex = this.fighters.findIndex((fighter) => this.canPick(fighter));
     if (this.selectedIndex < 0) throw new Error('The roster has no playable fighter.');
@@ -290,7 +296,9 @@ export class CharacterSelectScene extends Phaser.Scene {
 
   /** Every card is a playable fighter; story mode also needs a campaign (a story profile). */
   private canPick(config: FighterConfig): boolean {
-    return this.mode === 'story' ? hasStoryCampaign(config.id) : config.playable;
+    return this.mode === 'story'
+      ? hasStoryCampaign(config.id)
+      : isFighterAvailable(config, this.unlockedEndings);
   }
 
   private lockedTag(config: FighterConfig): string {

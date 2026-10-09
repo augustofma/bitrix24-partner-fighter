@@ -23,6 +23,9 @@ export const STRINGS = {
   galleryAllUnlocked: 'TODOS OS FINAIS LIBERADOS!',
   galleryHint: '← → ↑ ↓ escolher    ENTER ver final    ESC voltar',
   galleryViewerHint: '← → outro final    ESC ou toque para voltar',
+  /** Complete gallery: the hidden fighters it unlocks (e.g. the final boss). */
+  galleryReward: (names: string) => `${names} LIBERADO NA LUTA RÁPIDA!`,
+  galleryRewardTeaser: 'Libere todos os finais para desbloquear um lutador secreto',
   /** Campaign ending: this fighter's ending just went into the gallery. */
   galleryNewUnlock: (unlocked: number, total: number) =>
     `NOVO FINAL NA GALERIA  ${unlocked}/${total}`,

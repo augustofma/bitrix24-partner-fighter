@@ -1,4 +1,5 @@
 import { ROSTER } from '../fighters/roster';
+import type { FighterConfig } from '../types/fighter';
 import { hasStoryCampaign } from './storyProfiles';
 
 /*
@@ -71,6 +72,31 @@ export function galleryEntries(unlocked: readonly string[]): GalleryEntry[] {
     fighterId: fighter.id,
     unlocked: unlocked.includes(fighter.id),
   }));
+}
+
+/** Every story ending is unlocked (the gallery is complete). */
+export function allEndingsUnlocked(unlocked: readonly string[]): boolean {
+  const entries = galleryEntries(unlocked);
+  return entries.length > 0 && entries.every((entry) => entry.unlocked);
+}
+
+/**
+ * Whether a fighter can be picked in quick fights: the playable ones, plus hidden ones whose
+ * unlock condition is met (FighterConfig.unlock; 'all-endings': the gallery is complete).
+ */
+export function isFighterAvailable(config: FighterConfig, unlocked: readonly string[]): boolean {
+  if (config.playable) return true;
+  return config.unlock === 'all-endings' && allEndingsUnlocked(unlocked);
+}
+
+/** The quick fight roster for these unlocks, in roster order. */
+export function availableFighters(unlocked: readonly string[]): FighterConfig[] {
+  return ROSTER.filter((config) => isFighterAvailable(config, unlocked));
+}
+
+/** Hidden fighters the complete gallery unlocks (e.g. to announce them). */
+export function galleryRewardFighters(): FighterConfig[] {
+  return ROSTER.filter((config) => !config.playable && config.unlock === 'all-endings');
 }
 
 /** Test helper: forgets this session's unlocks. */

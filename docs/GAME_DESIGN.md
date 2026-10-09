@@ -693,6 +693,11 @@ do Modo História, com o contador "x/8 LIBERADOS" no topo:
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
+- **Lutador secreto:** com os 8 finais liberados, o **Dmitry** (chefe final) vira jogável na
+  LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
+  todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
+  concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
+  chefe final (não tem campanha).
 - Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/8" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.

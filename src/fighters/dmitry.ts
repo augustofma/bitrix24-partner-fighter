@@ -12,6 +12,8 @@ export const dmitry: FighterConfig = {
   displayName: 'DMITRY',
   description: 'Bitrix24 - Final Boss',
   playable: false,
+  // The final boss turns playable (quick fights) once every story ending is unlocked.
+  unlock: 'all-endings',
   stats: {
     maxHealth: 108,
     walkSpeed: 3.0,

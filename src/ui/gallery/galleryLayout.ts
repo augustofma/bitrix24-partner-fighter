@@ -6,7 +6,9 @@ export const GALLERY_LAYOUT = {
   counter: { x: 822, width: 220, height: 42 },
   /** Where the cards go; their size comes from the number of entries (galleryGrid). */
   area: { left: 36, top: 82, width: 888, height: 368 },
-  caption: { y: 470 },
+  caption: { y: 466 },
+  /** The hidden fighter teaser / reward line. */
+  reward: { y: 492 },
   footerY: 522,
   /** Name plate under each thumbnail. */
   nameHeight: 28,

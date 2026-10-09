@@ -14,7 +14,12 @@ import { LoadingBar } from '../../ui/LoadingBar';
 import { queueMissing, watchLoad } from '../assetLoading';
 import { createPortrait } from '../../render/PortraitView';
 import { getStoryLocation, isHomeCountry, locationName } from '../../story/locations';
-import { galleryEntries, loadUnlockedEndings } from '../../story/endingGallery';
+import {
+  allEndingsUnlocked,
+  galleryEntries,
+  galleryRewardFighters,
+  loadUnlockedEndings,
+} from '../../story/endingGallery';
 import { routeCities } from '../../story/storyProgress';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
@@ -42,6 +47,8 @@ const ENDING_ZOOM = { scale: 1.06, ms: 14000 } as const;
 const ENDING_TITLE = { x: 655, y: 66, maxWidth: 520 } as const;
 /** "NOVO FINAL NA GALERIA" line, under the ending title. */
 const UNLOCK_BADGE_Y = 122;
+/** The hidden fighter reward line, under the badge. */
+const REWARD_LINE_DY = 30;
 const ENDING_SHADE = { top: 150, bottom: 210, alpha: 0.62 } as const;
 
 /**
@@ -199,24 +206,35 @@ export class CampaignCompleteScene extends Phaser.Scene {
 
   /**
    * "NOVO FINAL NA GALERIA x/y" when this campaign unlocked its fighter's ending for the first
-   * time (recorded by the story flow), under the title. Null otherwise.
+   * time (recorded by the story flow), under the title; when that completed the gallery, also
+   * the hidden fighters it unlocks ("DMITRY LIBERADO NA LUTA RÁPIDA!"). Null otherwise.
    */
-  private createUnlockBadge(ending: boolean): Phaser.GameObjects.Text | null {
+  private createUnlockBadge(ending: boolean): Phaser.GameObjects.Container | null {
     const isNew = this.registry.get(RegistryKeys.newEndingUnlocked) === true;
     this.registry.set(RegistryKeys.newEndingUnlocked, false);
     if (!isNew) return null;
-    const entries = galleryEntries(loadUnlockedEndings());
+    const unlockedIds = loadUnlockedEndings();
+    const entries = galleryEntries(unlockedIds);
     const unlocked = entries.filter((entry) => entry.unlocked).length;
     const at = ending ? { x: ENDING_TITLE.x, y: UNLOCK_BADGE_Y } : { x: GAME_WIDTH / 2, y: 18 };
-    return this.add
-      .text(
-        at.x,
-        at.y,
-        STRINGS.galleryNewUnlock(unlocked, entries.length),
-        arcadeText(18, COLORS.neon),
-      )
-      .setOrigin(0.5)
-      .setShadow(0, 0, css(COLORS.ink), 6, true, true);
+    const badge = this.add.container(at.x, at.y);
+    badge.add(
+      this.add
+        .text(0, 0, STRINGS.galleryNewUnlock(unlocked, entries.length), arcadeText(18, COLORS.neon))
+        .setOrigin(0.5)
+        .setShadow(0, 0, css(COLORS.ink), 6, true, true),
+    );
+    const rewards = galleryRewardFighters();
+    if (allEndingsUnlocked(unlockedIds) && rewards.length > 0) {
+      const names = rewards.map((fighter) => fighter.displayName).join(' E ');
+      badge.add(
+        this.add
+          .text(0, REWARD_LINE_DY, STRINGS.galleryReward(names), arcadeText(20, COLORS.gold))
+          .setOrigin(0.5)
+          .setShadow(0, 0, css(COLORS.magenta), 8, true, true),
+      );
+    }
+    return badge;
   }
 
   /** The champion's ending illustration, full screen and slowly zooming, with dark bands. */

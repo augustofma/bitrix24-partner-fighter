@@ -257,6 +257,9 @@ export interface SpriteVisualConfig {
   offsetY?: number;
 }
 
+/** Condition that turns a hidden fighter playable (see FighterConfig.unlock). */
+export type FighterUnlock = 'all-endings';
+
 /**
  * Everything that defines a character. Adding a character = adding one of these to the roster.
  * The engine never branches on a specific fighter id.
@@ -273,6 +276,11 @@ export interface FighterConfig {
    * the CPU as an opponent. Test/demo placeholders set false (they stay usable in code/tests).
    */
   playable: boolean;
+  /**
+   * A hidden fighter (playable: false) that becomes playable in quick fights once the player
+   * meets this condition. 'all-endings': every story ending is in the gallery.
+   */
+  unlock?: FighterUnlock;
   stats: FighterStats;
   boxes: FighterBoxes;
   /** Standing, crouching and air normals. Each AttackConfig.state should match its slot. */
