@@ -7,4 +7,6 @@ export const RegistryKeys = {
   aiDifficulty: 'aiDifficulty',
   /** The story campaign in progress (StoryProgress), or nothing outside story mode. */
   storyProgress: 'storyProgress',
+  /** Set when the last completed campaign unlocked a new ending in the gallery. */
+  newEndingUnlocked: 'newEndingUnlocked',
 } as const;

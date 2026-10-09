@@ -14,6 +14,18 @@ export const STRINGS = {
   play: 'JOGAR',
   modeStory: 'HISTÓRIA',
   modeQuickFight: 'LUTA RÁPIDA',
+  modeGallery: 'GALERIA',
+  galleryTitle: 'GALERIA DE FINAIS',
+  galleryCount: (unlocked: number, total: number) => `${unlocked}/${total} LIBERADOS`,
+  galleryLocked: 'BLOQUEADO',
+  galleryLockedHint: (name: string) => `Zere o Modo História com ${name} para liberar`,
+  galleryOpenHint: (name: string) => `ENTER ou toque para ver o final de ${name}`,
+  galleryAllUnlocked: 'TODOS OS FINAIS LIBERADOS!',
+  galleryHint: '← → ↑ ↓ escolher    ENTER ver final    ESC voltar',
+  galleryViewerHint: '← → outro final    ESC ou toque para voltar',
+  /** Campaign ending: this fighter's ending just went into the gallery. */
+  galleryNewUnlock: (unlocked: number, total: number) =>
+    `NOVO FINAL NA GALERIA  ${unlocked}/${total}`,
   modeHint: '← → escolher    ENTER confirmar    ESC voltar',
   storySelectTitle: 'MODO HISTÓRIA',
   storyOrigin: (label: string) => `ORIGEM  ${label}`,

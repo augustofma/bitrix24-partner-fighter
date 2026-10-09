@@ -661,27 +661,33 @@ sem pedido explícito.**
 - [x] Cada campanha: 4 rivais sorteados (sem repetir, nunca o próprio) e o chefe final;
       sorteio ao começar, guardado em `StoryProgress.route` (retry e mapa usam a mesma rota)
 
+## DONE (galeria de finais, branch `feature/endings-gallery`)
+
+- [x] GALERIA no menu (`EndingGalleryScene`): um card por personagem da história, contador
+      x/8, final em tela cheia para os liberados, silhueta e dica para os bloqueados
+- [x] Final liberado ao zerar a campanha, salvo em `localStorage` (`endingGallery.ts`);
+      "NOVO FINAL NA GALERIA x/8" na tela de campanha concluída
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
 2. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).
-3. [ ] Galeria de finais liberados no menu.
-4. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
+3. [ ] **Playtest e balanceamento:** ajustar frame data, velocidade, dano e os três perfis
        (`EASY_AI`, `NORMAL_AI`, `HARD_AI`) com pessoas reais; a FÁCIL ainda pode estar difícil
        para iniciantes.
-5. [ ] 2 jogadores no mesmo aparelho e suporte a gamepad.
-6. [ ] Comandos de entrada por especial (ex.: ↓↘→ + soco), mantendo o botão de especial.
-7. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
+4. [ ] 2 jogadores no mesmo aparelho e suporte a gamepad.
+5. [ ] Comandos de entrada por especial (ex.: ↓↘→ + soco), mantendo o botão de especial.
+6. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
-8. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
-9. [ ] Contador de combo e pausa de impacto nos golpes fortes.
-10. [ ] Som ambiente de torcida por cenário.
-11. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo) e
+7. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
+8. [ ] Contador de combo e pausa de impacto nos golpes fortes.
+9. [ ] Som ambiente de torcida por cenário.
+10. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo) e
         remapeamento de teclas salvo em `localStorage`.
-12. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
-13. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
-14. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
-15. [ ] Mais cidades no mapa do Modo História.
+11. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
+12. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
+13. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
+14. [ ] Mais cidades no mapa do Modo História.
 
 ## FUTURE (não implementar agora)
 

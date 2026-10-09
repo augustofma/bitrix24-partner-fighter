@@ -683,6 +683,20 @@ sem uso ~78%, ~34% e ~14% do tempo.
 - Limite de segurança: no máximo 9 rounds por partida (empates repetidos). Atingido o limite,
   vence quem tiver mais rounds; com placar igual, a partida termina empatada.
 
+## Galeria de finais
+
+No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
+do Modo História, com o contador "x/8 LIBERADOS" no topo:
+
+- **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
+  toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
+  liberados, ESC ou toque voltam.
+- **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
+  Modo História com <NOME> para liberar".
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/8" no
+  final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
+  ao armazenamento, valem só até fechar o jogo.
+
 ## Modo História
 
 Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da luta rápida.

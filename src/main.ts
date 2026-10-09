@@ -7,6 +7,7 @@ import { FightScene } from './scenes/FightScene';
 import { MenuScene } from './scenes/MenuScene';
 import { PauseScene } from './scenes/PauseScene';
 import { CampaignCompleteScene } from './scenes/story/CampaignCompleteScene';
+import { EndingGalleryScene } from './scenes/EndingGalleryScene';
 import { StoryMapScene } from './scenes/story/StoryMapScene';
 import { StageSelectScene } from './scenes/StageSelectScene';
 import { VersusScene } from './scenes/VersusScene';
@@ -48,6 +49,7 @@ const config: Phaser.Types.Core.GameConfig = {
     PauseScene,
     VictoryScene,
     CampaignCompleteScene,
+    EndingGalleryScene,
   ],
 };
 

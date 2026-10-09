@@ -102,6 +102,7 @@ export class MenuScene extends Phaser.Scene {
     const modes = new ModeMenu(this, at.x, at.y, [
       { label: STRINGS.modeStory, onSelect: () => startMode('story') },
       { label: STRINGS.modeQuickFight, onSelect: () => startMode('quick') },
+      { label: STRINGS.modeGallery, onSelect: () => goToScene(this, SceneKeys.EndingGallery) },
     ]);
     this.bindModeMenu(modes, play);
   }

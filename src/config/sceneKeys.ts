@@ -10,4 +10,5 @@ export const SceneKeys = {
   Victory: 'VictoryScene',
   StoryMap: 'StoryMapScene',
   CampaignComplete: 'CampaignCompleteScene',
+  EndingGallery: 'EndingGalleryScene',
 } as const;

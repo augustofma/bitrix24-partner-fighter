@@ -292,6 +292,17 @@ bounce, card com fade e subida, resultado deslizando, botões por último. Enter
 ação principal (revanche, continuar ou tentar de novo); Esc / Backspace saem para o menu. Sem a arte, a cena usa
 o visual procedural anterior.
 
+## Galeria de finais
+
+`src/story/endingGallery.ts` (puro): `loadUnlockedEndings` / `unlockEnding` guardam os ids dos
+lutadores com final liberado em `localStorage` (`bpf-unlocked-endings`, JSON; storage
+injetável nos testes; sem storage, vale a sessão) e `galleryEntries` lista um item por lutador
+com campanha (`hasStoryCampaign`), na ordem do roster. `finishStoryMatch` (`storyFlow.ts`)
+libera o final quando a vitória conclui a campanha e marca `RegistryKeys.newEndingUnlocked`, que a
+`CampaignCompleteScene` usa para mostrar "NOVO FINAL NA GALERIA x/y". A `EndingGalleryScene`
+(aberta pelo botão GALERIA do menu) carrega no `preload` só as ilustrações liberadas e monta a
+grade com `galleryGrid` (`ui/gallery/galleryLayout.ts`: até 4 por linha, 16:9 + placa de nome).
+
 ## Fluxo entre cenas
 
 ```

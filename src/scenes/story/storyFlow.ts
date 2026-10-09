@@ -9,6 +9,7 @@ import {
   storyMatchSetup,
 } from '../../story/storyProgress';
 import { isAIDifficulty, type AIDifficulty, type MatchResult } from '../../types/match';
+import { unlockEnding } from '../../story/endingGallery';
 import type { StoryProgress } from '../../types/story';
 import { goToScene, isLeaving } from '../transitions';
 
@@ -68,6 +69,10 @@ export function finishStoryMatch(scene: SceneLike, result: MatchResult): StoryPr
   }
   const next = recordStoryMatch(progress, result.winnerIndex === 0);
   setStoryProgress(scene, next);
+  // The campaign was just completed: its ending goes into the gallery (for good).
+  if (next.phase === 'complete') {
+    scene.registry.set(RegistryKeys.newEndingUnlocked, unlockEnding(next.selectedFighter));
+  }
   return next;
 }
 

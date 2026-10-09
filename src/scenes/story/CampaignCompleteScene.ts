@@ -3,6 +3,7 @@ import { SCENE_MUSIC } from '../../config/audio';
 import Phaser from 'phaser';
 import { MENU_BACK_KEYS, MENU_CONFIRM_KEYS } from '../../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../../config/display';
+import { RegistryKeys } from '../../config/registryKeys';
 import { SceneKeys } from '../../config/sceneKeys';
 import { STRINGS } from '../../config/strings';
 import { getFighterConfig } from '../../fighters/roster';
@@ -13,11 +14,13 @@ import { LoadingBar } from '../../ui/LoadingBar';
 import { queueMissing, watchLoad } from '../assetLoading';
 import { createPortrait } from '../../render/PortraitView';
 import { getStoryLocation, isHomeCountry, locationName } from '../../story/locations';
+import { galleryEntries, loadUnlockedEndings } from '../../story/endingGallery';
 import { routeCities } from '../../story/storyProgress';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
 import { VictoryCard } from '../../ui/victory/VictoryCard';
 import { createVictoryEffects } from '../../ui/victory/VictoryEffects';
+import { COLORS, arcadeText, css } from '../../ui/theme';
 import { VICTORY_LAYOUT } from '../../ui/victory/victoryLayout';
 import { createResultLine, createVictoryTitle } from '../../ui/victory/victoryText';
 import { fadeIn } from '../transitions';
@@ -37,6 +40,8 @@ const ENDING_ZOOM = { scale: 1.06, ms: 14000 } as const;
  * the champion (who stands on the left in the illustrations).
  */
 const ENDING_TITLE = { x: 655, y: 66, maxWidth: 520 } as const;
+/** "NOVO FINAL NA GALERIA" line, under the ending title. */
+const UNLOCK_BADGE_Y = 122;
 const ENDING_SHADE = { top: 150, bottom: 210, alpha: 0.62 } as const;
 
 /**
@@ -149,7 +154,8 @@ export class CampaignCompleteScene extends Phaser.Scene {
     );
     row.add([first, second]);
 
-    const items = [title, cardRoot, cheer, row].filter((item) => item !== null);
+    const unlockBadge = this.createUnlockBadge(ending);
+    const items = [title, unlockBadge, cardRoot, cheer, row].filter((item) => item !== null);
     for (const item of items) item.setAlpha(0);
     // Over an ending illustration the buttons only answer once they are on screen: a key still
     // held from the last fight's victory reveals them instead of skipping the ending.
@@ -189,6 +195,28 @@ export class CampaignCompleteScene extends Phaser.Scene {
       }),
     );
     onKeys(this, MENU_BACK_KEYS, whenRevealed(menu));
+  }
+
+  /**
+   * "NOVO FINAL NA GALERIA x/y" when this campaign unlocked its fighter's ending for the first
+   * time (recorded by the story flow), under the title. Null otherwise.
+   */
+  private createUnlockBadge(ending: boolean): Phaser.GameObjects.Text | null {
+    const isNew = this.registry.get(RegistryKeys.newEndingUnlocked) === true;
+    this.registry.set(RegistryKeys.newEndingUnlocked, false);
+    if (!isNew) return null;
+    const entries = galleryEntries(loadUnlockedEndings());
+    const unlocked = entries.filter((entry) => entry.unlocked).length;
+    const at = ending ? { x: ENDING_TITLE.x, y: UNLOCK_BADGE_Y } : { x: GAME_WIDTH / 2, y: 18 };
+    return this.add
+      .text(
+        at.x,
+        at.y,
+        STRINGS.galleryNewUnlock(unlocked, entries.length),
+        arcadeText(18, COLORS.neon),
+      )
+      .setOrigin(0.5)
+      .setShadow(0, 0, css(COLORS.ink), 6, true, true);
   }
 
   /** The champion's ending illustration, full screen and slowly zooming, with dark bands. */
