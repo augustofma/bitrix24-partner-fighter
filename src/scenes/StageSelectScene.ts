@@ -39,6 +39,8 @@ export interface StageSelectData {
 }
 
 const FOOTER_HEIGHT = 28;
+/** Rows at least this tall show the place under the stage name. */
+const TWO_LINE_ROW_HEIGHT = 34;
 const TITLE_GLOW_BLUR = 10;
 /** Frame border inside the preview / list rows, around the stage image. */
 const PREVIEW_INSET = 8;
@@ -222,12 +224,14 @@ export class StageSelectScene extends Phaser.Scene {
         ),
       );
       const textX = ROW_INSET + list.thumbWidth + 16;
+      // Compact rows (many stages) show only the name; the place is still under the preview.
+      const twoLines = stage.location !== undefined && list.rowHeight >= TWO_LINE_ROW_HEIGHT;
       container.add(
         this.add
-          .text(textX, list.rowHeight / 2 - 9, stage.displayName, arcadeText(14))
+          .text(textX, list.rowHeight / 2 + (twoLines ? -9 : 0), stage.displayName, arcadeText(14))
           .setOrigin(0, 0.5),
       );
-      if (stage.location) {
+      if (stage.location && twoLines) {
         container.add(
           this.add
             .text(textX, list.rowHeight / 2 + 9, stage.location, bodyText(10, COLORS.neon))

@@ -33,6 +33,20 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     longitude: -46.63,
   },
   {
+    // Gabriele's city (Inovar Consulting). Fights here happen on Copacabana's promenade.
+    id: 'rio-de-janeiro',
+    kind: 'city',
+    name: 'Rio de Janeiro',
+    country: HOME_COUNTRY,
+    region: 'Rio de Janeiro',
+    regionCode: 'RJ',
+    latitude: -22.91,
+    longitude: -43.17,
+    // Label over the sea: inland it would cover São Paulo's.
+    mapLabel: { side: 'right', dy: 0 },
+    stageId: 'rio-de-janeiro',
+  },
+  {
     id: 'joinville',
     kind: 'city',
     name: 'Joinville',

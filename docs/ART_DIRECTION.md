@@ -479,6 +479,15 @@ preparo e animação do Recife: o avião roxo com a faixa "GMC" voa alto, menor,
 das cúpulas da estufa; a torcida pula em três faixas (os postes ficam parados). `top` −40 põe os
 pés no calçamento em mosaico.
 
+## Cenário: RIO DE JANEIRO (Gabriele)
+
+Arte oficial fornecida pelo dono do projeto: o calçadão de Copacabana com o padrão de ondas, a Baía
+de Guanabara, o Pão de Açúcar com o bondinho, o Cristo Redentor, bandeiras do Brasil e a torcida
+atrás das grades da Inovar Consulting
+([scripts/stage-art/rio-de-janeiro/README.md](../scripts/stage-art/rio-de-janeiro/README.md)).
+Cena parada (sem avião), como o BITRIX24 MOSCOU; a torcida pula em três faixas (laterais e a do
+fundo, menor) e os celulares piscam. `top` −50 põe os pés no calçadão.
+
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
 Arte oficial fornecida pelo dono do projeto: o salão da sede da Bitrix24 em Moscou, com o
@@ -648,6 +657,7 @@ registrada aqui:
 | `scripts/stage-art/castelo-branco/source.webp` e `public/stages/castelo-branco/*`                   | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_castelo_branco.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/portugal/source.webp` e `public/stages/portugal/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_portugal.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/spain/source.webp` e `public/stages/spain/*`                                     | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_spain.py`                   | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/rio-de-janeiro/source.webp` e `public/stages/rio-de-janeiro/*`                   | Arte oficial fornecida pelo usuário; escala por `prepare_rio_de_janeiro.py`                     | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`               | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`              | Arte do projeto, aprovada pelo usuário                            |

@@ -10,6 +10,7 @@ import { portugal } from './portugal';
 import { recife } from './recife';
 import { russia } from './russia';
 import { spain } from './spain';
+import { rioDeJaneiro } from './rioDeJaneiro';
 
 export const STAGES: readonly StageConfig[] = [
   partnerSummit,
@@ -21,6 +22,7 @@ export const STAGES: readonly StageConfig[] = [
   spain,
   casteloBranco,
   curitiba,
+  rioDeJaneiro,
   bitrix24Moscow,
   partnerArena,
 ];

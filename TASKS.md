@@ -681,6 +681,12 @@ sem pedido explícito.**
 - [x] Personagem novo pode entrar sem final ilustrado (teste e legenda da galeria aceitam)
 - [x] Ensaio com um 9º personagem temporário: seleção 5×2, campanha própria, galeria 3/9
 
+## DONE (cenário RIO DE JANEIRO, branch `feature/rio-stage`)
+
+- [x] Cenário RIO DE JANEIRO (Copacabana, arte oficial; torcida animada) e lugar
+      `rio-de-janeiro` (RJ, rótulo à direita no mapa) para a Gabriele, da Inovar Consulting
+- [x] Escolha de fase com 11 cenários sem rolar: linhas compactas mostram só o nome
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

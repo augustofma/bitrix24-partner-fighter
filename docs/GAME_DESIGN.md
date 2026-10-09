@@ -724,7 +724,8 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   três da Península Ibérica não se sobreporem. Cada viagem parte de onde a
   campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário
   RECIFE); em Portugal, contra o Filipe, no calçadão à beira-mar (cenário PORTUGAL); na Espanha, contra o
-  Isaque, na Puerta de Alcalá (cenário MADRI); os outros
+  Isaque, na Puerta de Alcalá (cenário MADRI); no **Rio de Janeiro** (cidade da Gabriele, Inovar
+  Consulting), no calçadão de Copacabana (cenário RIO DE JANEIRO); os outros
   lugares usam o Partner Summit até terem cenário próprio.
 - **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
   (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.

@@ -5,6 +5,10 @@ o mesmo nível dos outros: luta rápida, Modo História, galeria. Quase tudo é 
 configuração; as telas se ajustam sozinhas. Comece de uma branch nova a partir da `main`
 atualizada e siga as regras do [AGENTS.md](../AGENTS.md).
 
+> **Gabriele (Inovar Consulting):** a cidade dela já está pronta. O lugar `rio-de-janeiro`
+> (Rio de Janeiro - RJ) e o cenário RIO DE JANEIRO (calçadão de Copacabana) existem; no Modo
+> História basta `{ fighterId: '<id dela>', home: 'rio-de-janeiro' }` em `STORY_PROFILES`.
+
 ## 1. Lutador (obrigatório)
 
 - `src/fighters/<camelCase>.ts` exportando um `FighterConfig` (modelo:
