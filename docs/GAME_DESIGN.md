@@ -222,7 +222,7 @@ Normais ligeiramente mais fortes, com startup e recovery maiores. Frame data a 6
 | airPunch    |    8 |       6 |      6 |       12 |
 | airKick     |   11 |       9 |      8 |       16 |
 
-É a sexta e última luta das seis campanhas atuais. Derrota mantém etapa, rival, dificuldade e
+É a última luta de toda campanha (a quinta, depois dos 4 rivais sorteados). Derrota mantém etapa, rival, dificuldade e
 escritório; vitória encerra a campanha pelo fluxo existente. Não há desbloqueio nesta versão.
 
 ### AISLAN — ZOPU
@@ -695,15 +695,12 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   Augusto em **Recife**, **Filipe em Portugal**, **João Guiotti na Rússia**, **Isaque
   Ferreira na Espanha** (ainda sem origem oficial) e Romualdo em **Joinville**. A campanha do escolhido **começa no lugar dele**, e os outros são enfrentados
   nos lugares deles, um por um (nunca ele mesmo).
-- **Rotas (geradas):** Augusto: Recife → Portugal (Filipe) → Rússia (João) → Espanha (Isaque)
-  → Joinville (Romualdo). Filipe: Portugal → Recife (Augusto) → Rússia (João) → Espanha
-  (Isaque) → Joinville (Romualdo). João: Rússia → Recife (Augusto) → Portugal (Filipe) →
-  Espanha (Isaque) → Joinville (Romualdo). Romualdo: Joinville → Recife (Augusto) → Portugal
-  (Filipe) → Rússia (João) → Espanha (Isaque). Isaque: Espanha → Recife → Portugal → Rússia →
-  Joinville. Com o Rômulo, toda campanha passa ainda por **Castelo Branco** (Portugal, onde ele
-  mora), no cenário CASTELO BRANCO, logo antes do chefe final; a dele começa lá. O Gabriel Mattozo é de
-  **Curitiba** (cenário CURITIBA, no Jardim Botânico): as campanhas passam por lá depois da
-  Espanha e antes de Joinville; a dele começa lá. No mapa-múndi o
+- **Rotas (sorteadas):** cada campanha tem **5 lutas: 4 rivais sorteados** entre os outros
+  personagens da história (sem repetir, nunca o próprio) **e o chefe final** (Dmitry, em Moscou).
+  O sorteio acontece ao começar a campanha (inclusive em JOGAR NOVAMENTE) e vale até o fim dela:
+  perder e tentar de novo repete o mesmo rival, e o mapa mostra sempre a mesma rota. Cada rival é
+  enfrentado no lugar e no cenário dele (Rômulo em **Castelo Branco**, Gabriel Mattozo em
+  **Curitiba**, Aislan no portal ZOPU de Joinville...). No mapa-múndi o
   marcador de Portugal (Filipe) fica em Lisboa e o de Castelo Branco um pouco ao norte, para os
   três da Península Ibérica não se sobreporem. Cada viagem parte de onde a
   campanha está (o lugar da luta anterior). Lutas em Recife são no **Marco Zero** (cenário

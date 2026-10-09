@@ -10,13 +10,13 @@ import {
   arriveForFight,
   legStageId,
   recordStoryMatch,
-  startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import { STORY_MAP_LAYOUT } from '../src/ui/story/storyMapLayout';
 
 function reachAislan(player = 'augusto') {
-  let progress = startStory(player);
+  let progress = startStoryOn(player, storyRouteFor(player)!);
   while (progress.opponent !== 'aislan' && progress.phase !== 'complete') {
     progress = recordStoryMatch(arriveForFight(progress), true);
   }

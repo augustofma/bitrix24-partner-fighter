@@ -36,9 +36,13 @@ import {
   recordStoryMatch,
   routeCities,
   startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import { getStageConfig } from '../src/stages/stageRegistry';
+
+/** The full campaign (every rival, default order, then the boss): a fixed route to test with. */
+const fixedStory = (fighterId: string) => startStoryOn(fighterId, storyRouteFor(fighterId)!);
 
 describe('origins (all from configuration)', () => {
   it.each([
@@ -103,7 +107,7 @@ describe('campaigns', () => {
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
-    expect(routeCities('augusto')).toEqual([
+    expect(routeCities(fixedStory('augusto'))).toEqual([
       'recife',
       'portugal',
       'russia',
@@ -127,7 +131,7 @@ describe('campaigns', () => {
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
-    expect(routeCities('filipe')).toEqual([
+    expect(routeCities(fixedStory('filipe'))).toEqual([
       'portugal',
       'recife',
       'russia',
@@ -158,8 +162,9 @@ describe('campaigns', () => {
 
 describe('story progress', () => {
   it("starts with the selected fighter, flying from home to the first rival's place", () => {
-    expect(startStory('augusto')).toEqual({
+    expect(fixedStory('augusto')).toEqual({
       selectedFighter: 'augusto',
+      route: storyRouteFor('augusto'),
       currentStage: 0,
       currentLocation: 'recife',
       nextLocation: 'portugal',
@@ -170,7 +175,7 @@ describe('story progress', () => {
   });
 
   it('landing makes the destination the current location, and the fight is a regular match', () => {
-    const fight = arriveForFight(startStory('augusto'));
+    const fight = arriveForFight(fixedStory('augusto'));
     expect(fight).toMatchObject({
       phase: 'fight',
       currentLocation: 'portugal',
@@ -187,7 +192,7 @@ describe('story progress', () => {
   });
 
   it('a loss does not advance; retrying keeps the same leg, rival and place', () => {
-    const fight = arriveForFight(startStory('augusto'));
+    const fight = arriveForFight(fixedStory('augusto'));
     const lost = recordStoryMatch(fight, false);
     expect(lost).toEqual(fight);
     expect(storyMatchSetup(lost, 'normal').cpuFighterId).toBe('filipe');
@@ -195,7 +200,7 @@ describe('story progress', () => {
   });
 
   it('the next trip leaves from where the last fight was: Portugal -> Russia', () => {
-    const second = recordStoryMatch(arriveForFight(startStory('augusto')), true);
+    const second = recordStoryMatch(arriveForFight(fixedStory('augusto')), true);
     expect(second).toMatchObject({
       currentStage: 1,
       currentLocation: 'portugal',
@@ -219,7 +224,7 @@ describe('story progress', () => {
   });
 
   it('winning the last fight completes the campaign (and nothing advances after it)', () => {
-    let progress = startStory('filipe');
+    let progress = fixedStory('filipe');
     for (let leg = 0; leg < 8; leg++) progress = recordStoryMatch(arriveForFight(progress), true);
     expect(progress).toMatchObject({
       phase: 'complete',
@@ -234,14 +239,14 @@ describe('story progress', () => {
   });
 
   it('results outside a fight (e.g. a quick fight) never touch the campaign', () => {
-    const traveling = startStory('augusto');
+    const traveling = fixedStory('augusto');
     expect(recordStoryMatch(traveling, true)).toBe(traveling);
   });
 
   it('is deterministic: the same results always give the same progress', () => {
     const play = () => {
       const steps = [];
-      let progress = startStory('augusto');
+      let progress = fixedStory('augusto');
       for (const won of [false, true, true, false, false, true, true]) {
         progress = progress.phase === 'travel' ? arriveForFight(progress) : progress;
         progress = recordStoryMatch(progress, won);
@@ -348,7 +353,7 @@ describe('international travel map', () => {
   });
 
   it('Recife -> Portugal: the plane leaves from the current location and crosses the Atlantic', () => {
-    const trip = tripForProgress(startStory('augusto'), rects)!;
+    const trip = tripForProgress(fixedStory('augusto'), rects)!;
     expect(trip.from.id).toBe('recife');
     expect(trip.to.id).toBe('portugal');
     expect(trip.international).toBe(true);
@@ -368,7 +373,7 @@ describe('international travel map', () => {
   });
 
   it('Portugal -> Russia: the second trip departs from Portugal', () => {
-    const second = recordStoryMatch(arriveForFight(startStory('augusto')), true);
+    const second = recordStoryMatch(arriveForFight(fixedStory('augusto')), true);
     const trip = tripForProgress(second, rects)!;
     expect([trip.from.id, trip.to.id]).toEqual(['portugal', 'russia']);
     expect(trip.path.pointAt(0)).toEqual(locationToMap(at('portugal'), rects.world, WORLD_BOUNDS));
@@ -378,6 +383,7 @@ describe('international travel map', () => {
   it('a domestic trip still uses the Brazil map and its rectangle', () => {
     const domestic = {
       selectedFighter: 'augusto',
+      route: [{ opponent: 'joao-guiotti', destination: 'sao-paulo' }],
       currentStage: 0,
       currentLocation: 'recife',
       nextLocation: 'sao-paulo',

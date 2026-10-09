@@ -22,7 +22,7 @@ import {
   arriveForFight,
   currentLeg,
   recordStoryMatch,
-  startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import { DEFAULT_STAGE_ID } from '../src/stages/stageRegistry';
@@ -33,7 +33,7 @@ const ISAQUE = 'isaque-ferreira';
 
 /** Plays a campaign (winning) until the trip to Isaque; returns that travel step. */
 function untilIsaque(fighterId: string): StoryProgress {
-  let progress = startStory(fighterId);
+  let progress = startStoryOn(fighterId, storyRouteFor(fighterId)!);
   while (progress.opponent !== ISAQUE) {
     progress = recordStoryMatch(arriveForFight(progress), true);
   }

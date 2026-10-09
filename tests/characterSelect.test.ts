@@ -364,7 +364,9 @@ describe('CharacterSelectScene story mode', () => {
       const progress = ui.registry.get(RegistryKeys.storyProgress) as StoryProgress;
       expect(progress.selectedFighter).toBe(fighter.id);
       expect(progress.currentLocation).toBe(campaignStartLocation(fighter.id));
-      expect(progress.opponent).toBe(campaignOpponents(fighter.id)[0]);
+      // Rivals are drawn at random among the others; the first trip goes to the first of them.
+      expect(progress.opponent).toBe(progress.route[0]!.opponent);
+      expect(campaignOpponents(fighter.id)).toContain(progress.opponent);
       expect(campaignOpponents(fighter.id)).not.toContain(fighter.id);
     },
   );

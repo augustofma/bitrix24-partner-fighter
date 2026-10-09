@@ -656,6 +656,11 @@ sem pedido explícito.**
 - [x] Pausa na luta (`PauseScene`): ESC/P, botão II no toque e pausa automática ao sair da
       página; CONTINUAR, REINICIAR LUTA, SAIR PARA O MENU
 
+## DONE (Modo História com rivais sorteados, branch `feature/story-random-rivals`)
+
+- [x] Cada campanha: 4 rivais sorteados (sem repetir, nunca o próprio) e o chefe final;
+      sorteio ao começar, guardado em `StoryProgress.route` (retry e mapa usam a mesma rota)
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

@@ -17,7 +17,7 @@ import {
   arriveForFight,
   legStageId,
   recordStoryMatch,
-  startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import type { StoryProgress } from '../src/types/story';
@@ -26,7 +26,7 @@ import { FAST_TIMING, stepFrames } from './helpers';
 const JOAO = 'joao-guiotti';
 
 function untilJoao(fighterId: string): StoryProgress {
-  let progress = startStory(fighterId);
+  let progress = startStoryOn(fighterId, storyRouteFor(fighterId)!);
   while (progress.opponent !== JOAO) progress = recordStoryMatch(arriveForFight(progress), true);
   return progress;
 }

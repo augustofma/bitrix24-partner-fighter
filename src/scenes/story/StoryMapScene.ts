@@ -19,8 +19,8 @@ import {
   locationWithCountry,
 } from '../../story/locations';
 import { viewShows } from '../../story/mapViews';
-import { currentLeg } from '../../story/storyProgress';
-import { isFinalBossEncounter, legDeparture, storyRouteFor } from '../../story/storyProfiles';
+import { currentLeg, legDeparture } from '../../story/storyProgress';
+import { isFinalBossEncounter } from '../../story/storyProfiles';
 import type { StoryProgress } from '../../types/story';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
@@ -158,7 +158,7 @@ export class StoryMapScene extends Phaser.Scene {
       from === to ? to : STRINGS.storyTrip(from, to),
     );
     title.setScale(title.scaleX * fitTitleScale(title.displayWidth, routeTitle.maxWidth));
-    const route = storyRouteFor(this.progress.selectedFighter) ?? [];
+    const { route } = this.progress;
     this.add
       .text(
         panel.x,
@@ -178,8 +178,8 @@ export class StoryMapScene extends Phaser.Scene {
     const { view, rect } = this.trip;
     const visited = new Set(
       this.progress.completedStages.flatMap((stage) => {
-        const leg = storyRouteFor(this.progress.selectedFighter)?.[stage];
-        return leg ? [legDeparture(this.progress.selectedFighter, stage), leg.destination] : [];
+        const leg = this.progress.route[stage];
+        return leg ? [legDeparture(this.progress, stage), leg.destination] : [];
       }),
     );
     const world = view.id === 'world';
@@ -228,14 +228,14 @@ export class StoryMapScene extends Phaser.Scene {
 
   /** Legs already won, as dotted gold routes. */
   private drawFlownLegs(): void {
-    const route = storyRouteFor(this.progress.selectedFighter) ?? [];
+    const { route } = this.progress;
     const { view, rect } = this.trip;
     const g = this.add.graphics();
     g.fillStyle(COLORS.gold, 0.75);
     for (const stage of this.progress.completedStages) {
       const leg = route[stage];
       if (!leg) continue;
-      const from = getStoryLocation(legDeparture(this.progress.selectedFighter, stage));
+      const from = getStoryLocation(legDeparture(this.progress, stage));
       const to = getStoryLocation(leg.destination);
       // A leg that left this map's frame (e.g. abroad, on the Brazil map) is not drawn.
       if (!viewShows(view, from) || !viewShows(view, to)) continue;

@@ -6,7 +6,12 @@ import { STORY_LOCATIONS, getStoryLocation, stageIdForLocation } from '../src/st
 import {
   STORY_PROFILES,
   campaignOpponents,
+  STORY_FINAL_BOSS,
+  STORY_RIVALS_PER_CAMPAIGN,
   campaignStartLocation,
+  drawStoryRoute,
+  finalBossLeg,
+  rivalLeg,
   storyLocationId,
   storyRouteFor,
 } from '../src/story/storyProfiles';
@@ -16,17 +21,21 @@ import {
   recordStoryMatch,
   routeCities,
   startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import { DEFAULT_STAGE_ID, getStageConfig } from '../src/stages/stageRegistry';
 import { STORY_MAP_LAYOUT } from '../src/ui/story/storyMapLayout';
 import type { StoryProgress } from '../src/types/story';
 
+/** The full campaign (every rival, default order, then the boss): a fixed route to test with. */
+const fixedStory = (fighterId: string) => startStoryOn(fighterId, storyRouteFor(fighterId)!);
+
 const PLAYABLE = STORY_PROFILES.map((profile) => profile.fighterId);
 
 /** Plays a whole campaign, winning every fight; returns every progress step. */
 function playThrough(fighterId: string): StoryProgress[] {
-  const steps = [startStory(fighterId)];
+  const steps = [fixedStory(fighterId)];
   let progress = steps[0]!;
   while (progress.phase !== 'complete') {
     progress = arriveForFight(progress);
@@ -47,7 +56,7 @@ describe('the campaign starts where the chosen fighter is', () => {
   ])('%s starts in %s (its configured story place)', (fighterId, place) => {
     expect(campaignStartLocation(fighterId)).toBe(place);
     expect(campaignStartLocation(fighterId)).toBe(storyLocationId(fighterId));
-    expect(startStory(fighterId)).toMatchObject({
+    expect(fixedStory(fighterId)).toMatchObject({
       selectedFighter: fighterId,
       currentStage: 0,
       currentLocation: place,
@@ -57,7 +66,7 @@ describe('the campaign starts where the chosen fighter is', () => {
 
   it('the first flight on the map leaves from the chosen fighter’s place', () => {
     for (const fighterId of PLAYABLE) {
-      const trip = tripForProgress(startStory(fighterId), STORY_MAP_LAYOUT.maps)!;
+      const trip = tripForProgress(fixedStory(fighterId), STORY_MAP_LAYOUT.maps)!;
       expect(trip.from.id).toBe(campaignStartLocation(fighterId));
       expect(trip.to.id).toBe(storyRouteFor(fighterId)![0]!.destination);
     }
@@ -87,7 +96,7 @@ describe('rivals are generated, never written per campaign', () => {
   });
 
   it('Augusto: Recife -> Portugal (Filipe) -> Russia (João) -> Spain (Isaque) -> Joinville', () => {
-    expect(routeCities('augusto')).toEqual([
+    expect(routeCities(fixedStory('augusto'))).toEqual([
       'recife',
       'portugal',
       'russia',
@@ -110,7 +119,7 @@ describe('rivals are generated, never written per campaign', () => {
   });
 
   it('João: Russia -> Recife -> Portugal -> Spain (Isaque) -> Joinville', () => {
-    expect(routeCities('joao-guiotti')).toEqual([
+    expect(routeCities(fixedStory('joao-guiotti'))).toEqual([
       'russia',
       'recife',
       'portugal',
@@ -133,7 +142,7 @@ describe('rivals are generated, never written per campaign', () => {
   });
 
   it('Romualdo: Joinville -> Recife -> Portugal -> Russia -> Spain (Isaque)', () => {
-    expect(routeCities('romualdo')).toEqual([
+    expect(routeCities(fixedStory('romualdo'))).toEqual([
       'joinville',
       'recife',
       'portugal',
@@ -157,7 +166,7 @@ describe('rivals are generated, never written per campaign', () => {
 
   it('Isaque: starts in Spain, never fights himself', () => {
     expect(campaignStartLocation('isaque-ferreira')).toBe('spain');
-    expect(routeCities('isaque-ferreira')).toEqual([
+    expect(routeCities(fixedStory('isaque-ferreira'))).toEqual([
       'spain',
       'recife',
       'portugal',
@@ -210,7 +219,7 @@ describe('Recife in the campaigns', () => {
 
   it('a fight in Recife uses the RECIFE (Marco Zero) stage', () => {
     // João: Russia -> Recife, against Augusto, at the Marco Zero.
-    const fight = arriveForFight(startStory('joao-guiotti'));
+    const fight = arriveForFight(fixedStory('joao-guiotti'));
     expect(fight).toMatchObject({ currentLocation: 'recife', opponent: 'augusto' });
     const setup = storyMatchSetup(fight, 'normal');
     expect(setup.stageId).toBe('recife');
@@ -223,7 +232,7 @@ describe('Recife in the campaigns', () => {
       expect(stageId).toBe(location.stageId ?? DEFAULT_STAGE_ID);
       expect(() => getStageConfig(stageId)).not.toThrow();
     }
-    const augustoFirst = storyMatchSetup(arriveForFight(startStory('augusto')), 'normal');
+    const augustoFirst = storyMatchSetup(arriveForFight(fixedStory('augusto')), 'normal');
     expect(augustoFirst.stageId).toBe('portugal'); // Filipe, on the seaside promenade
     expect(legStageId({ opponent: 'joao-guiotti', destination: 'russia' })).toBe(DEFAULT_STAGE_ID);
     expect(legStageId({ opponent: 'romualdo', destination: 'joinville' })).toBe('joinville');
@@ -251,5 +260,84 @@ describe('no rule depends on a specific fighter', () => {
         expect(source, file).not.toMatch(new RegExp(`case '${id}'`));
       }
     }
+  });
+});
+
+/** Small seeded generator (mulberry32), so random draws are reproducible in tests. */
+function seeded(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+describe('each campaign: 4 random rivals, then the final boss', () => {
+  it('4 fights before the boss', () => {
+    expect(STORY_RIVALS_PER_CAMPAIGN).toBe(4);
+  });
+
+  it.each(PLAYABLE)(
+    '%s: 4 different rivals (never himself, never the boss), then the boss',
+    (id) => {
+      for (let seed = 1; seed <= 50; seed++) {
+        const route = drawStoryRoute(id, seeded(seed))!;
+        expect(route).toHaveLength(STORY_RIVALS_PER_CAMPAIGN + 1);
+        expect(route.at(-1)).toEqual(finalBossLeg(id));
+        const rivals = route.slice(0, -1).map((leg) => leg.opponent);
+        expect(new Set(rivals).size).toBe(rivals.length);
+        expect(rivals).not.toContain(id);
+        expect(rivals).not.toContain(STORY_FINAL_BOSS.fighterId);
+        for (const rival of rivals) expect(campaignOpponents(id)).toContain(rival);
+        // Each rival is still met at its own place and arena.
+        for (const leg of route.slice(0, -1)) expect(leg).toEqual(rivalLeg(leg.opponent));
+      }
+    },
+  );
+
+  it('the rivals vary between campaigns: every rival shows up, in many line-ups', () => {
+    const seen = new Set<string>();
+    const lineUps = new Set<string>();
+    for (let seed = 1; seed <= 300; seed++) {
+      const rivals = drawStoryRoute('augusto', seeded(seed))!
+        .slice(0, -1)
+        .map((leg) => leg.opponent);
+      rivals.forEach((rival) => seen.add(rival));
+      lineUps.add(rivals.join());
+    }
+    expect([...seen].sort()).toEqual([...campaignOpponents('augusto')].sort());
+    expect(lineUps.size).toBeGreaterThan(50);
+  });
+
+  it('a new campaign draws its route once and keeps it to the end', () => {
+    const progress = startStory('romulo', seeded(7));
+    expect(progress.route).toEqual(drawStoryRoute('romulo', seeded(7)));
+    expect(progress.opponent).toBe(progress.route[0]!.opponent);
+    // Losing keeps the same rival; winning goes on along the same route.
+    const fight = arriveForFight(progress);
+    expect(recordStoryMatch(fight, false).route).toBe(progress.route);
+    let step = progress;
+    const met: string[] = [];
+    while (step.phase !== 'complete') {
+      met.push(step.opponent!);
+      step = recordStoryMatch(arriveForFight(step), true);
+      expect(step.route).toBe(progress.route);
+    }
+    expect(met).toEqual(progress.route.map((leg) => leg.opponent));
+    expect(met).toHaveLength(STORY_RIVALS_PER_CAMPAIGN + 1);
+  });
+
+  it('starting again draws again (with Math.random by default)', () => {
+    const routes = new Set(
+      Array.from({ length: 20 }, () =>
+        startStory('augusto')
+          .route.map((leg) => leg.opponent)
+          .join(),
+      ),
+    );
+    expect(routes.size).toBeGreaterThan(1);
   });
 });

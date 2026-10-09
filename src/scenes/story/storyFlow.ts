@@ -130,6 +130,7 @@ function isStoryProgress(value: unknown): value is StoryProgress {
   return (
     typeof candidate.selectedFighter === 'string' &&
     typeof candidate.currentStage === 'number' &&
+    Array.isArray(candidate.route) &&
     Array.isArray(candidate.completedStages) &&
     (candidate.phase === 'travel' || candidate.phase === 'fight' || candidate.phase === 'complete')
   );

@@ -1,27 +1,33 @@
 import type { AIDifficulty, MatchSetup } from '../types/match';
-import type { StoryLeg, StoryProgress } from '../types/story';
+import type { StoryLeg, StoryProgress, StoryRoute } from '../types/story';
 import { stageIdForLocation } from './locations';
-import { legDeparture, storyRouteFor } from './storyProfiles';
+import { campaignStartLocation, drawStoryRoute } from './storyProfiles';
 
 /*
  * Campaign progression as pure functions over an immutable StoryProgress. The scenes only
- * store the value and call these; the fight itself is the regular best-of-three match.
+ * store the value and call these; the fight itself is the regular best-of-three match. The
+ * route is drawn once, when the campaign starts, and travels inside the progress.
  */
 
-function routeOf(fighterId: string) {
-  const route = storyRouteFor(fighterId);
-  if (!route) throw new Error(`"${fighterId}" has no story campaign.`);
-  return route;
+/** Where leg `stage` departs from: the previous leg's place, or the campaign's start. */
+function departure(fighterId: string, route: StoryRoute, stage: number): string {
+  const previous = stage > 0 ? route[stage - 1] : undefined;
+  return previous ? previous.destination : campaignStartLocation(fighterId);
 }
 
 /** About to travel along leg `stage` (or complete when past the last leg). */
-function atLeg(fighterId: string, stage: number, completed: readonly number[]): StoryProgress {
-  const route = routeOf(fighterId);
+function atLeg(
+  fighterId: string,
+  route: StoryRoute,
+  stage: number,
+  completed: readonly number[],
+): StoryProgress {
   const leg = route[stage];
   if (!leg) {
     const last = route[route.length - 1] as StoryLeg;
     return {
       selectedFighter: fighterId,
+      route,
       currentStage: route.length,
       currentLocation: last.destination,
       nextLocation: null,
@@ -32,9 +38,10 @@ function atLeg(fighterId: string, stage: number, completed: readonly number[]): 
   }
   return {
     selectedFighter: fighterId,
+    route,
     currentStage: stage,
     // Always from where the campaign is: home, or the previous fight's place.
-    currentLocation: legDeparture(fighterId, stage),
+    currentLocation: departure(fighterId, route, stage),
     nextLocation: leg.destination,
     opponent: leg.opponent,
     completedStages: completed,
@@ -42,14 +49,30 @@ function atLeg(fighterId: string, stage: number, completed: readonly number[]): 
   };
 }
 
-/** A new campaign for the chosen fighter: the first trip leaves from its home. */
-export function startStory(fighterId: string): StoryProgress {
-  return atLeg(fighterId, 0, []);
+/**
+ * A new campaign for the chosen fighter: random rivals, then the final boss (drawStoryRoute);
+ * the first trip leaves from its home. `random` is injectable for tests.
+ */
+export function startStory(fighterId: string, random: () => number = Math.random): StoryProgress {
+  const route = drawStoryRoute(fighterId, random);
+  if (!route) throw new Error(`"${fighterId}" has no story campaign.`);
+  return startStoryOn(fighterId, route);
+}
+
+/** A new campaign over a given route (e.g. a fixed one in tests). */
+export function startStoryOn(fighterId: string, route: StoryRoute): StoryProgress {
+  if (route.length === 0) throw new Error(`"${fighterId}" has no story campaign.`);
+  return atLeg(fighterId, route, 0, []);
 }
 
 /** The current leg's definition (undefined once the campaign is complete). */
 export function currentLeg(progress: StoryProgress): StoryLeg | undefined {
-  return routeOf(progress.selectedFighter)[progress.currentStage];
+  return progress.route[progress.currentStage];
+}
+
+/** Where leg `stage` of this campaign departs from (home for the first one). */
+export function legDeparture(progress: StoryProgress, stage: number): string {
+  return departure(progress.selectedFighter, progress.route, stage);
 }
 
 /** The plane landed: the fight of the current leg is on. */
@@ -70,7 +93,7 @@ export function arriveForFight(progress: StoryProgress): StoryProgress {
 export function recordStoryMatch(progress: StoryProgress, playerWon: boolean): StoryProgress {
   if (progress.phase !== 'fight' || !playerWon) return progress;
   const completed = [...progress.completedStages, progress.currentStage];
-  return atLeg(progress.selectedFighter, progress.currentStage + 1, completed);
+  return atLeg(progress.selectedFighter, progress.route, progress.currentStage + 1, completed);
 }
 
 /** Arena of a leg: the one it names, or the stage of the place where the fight happens. */
@@ -92,7 +115,6 @@ export function storyMatchSetup(progress: StoryProgress, difficulty: AIDifficult
 }
 
 /** Every place of the campaign in order (home first), e.g. for the completion screen. */
-export function routeCities(fighterId: string): string[] {
-  const route = routeOf(fighterId);
-  return [legDeparture(fighterId, 0), ...route.map((leg) => leg.destination)];
+export function routeCities(progress: StoryProgress): string[] {
+  return [legDeparture(progress, 0), ...progress.route.map((leg) => leg.destination)];
 }

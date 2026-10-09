@@ -20,7 +20,7 @@ import {
 import {
   arriveForFight,
   recordStoryMatch,
-  startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import type { FighterConfig } from '../src/types/fighter';
@@ -121,7 +121,7 @@ describe('Dmitry, the story’s final boss', () => {
 
   it('the last fight of a real campaign is set up on this stage', () => {
     withDmitry(false, () => {
-      let progress = startStory('augusto');
+      let progress = startStoryOn('augusto', storyRouteFor('augusto')!);
       while (progress.opponent !== STORY_FINAL_BOSS.fighterId) {
         progress = recordStoryMatch(arriveForFight(progress), true);
         expect(progress.phase).not.toBe('complete');

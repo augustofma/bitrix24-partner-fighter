@@ -119,13 +119,42 @@ export function rivalLeg(opponent: string): StoryLeg {
   return { opponent, destination: storyLocationId(opponent), ...(stageId ? { stageId } : {}) };
 }
 
-/** The campaign of a fighter (generated), or undefined when it has none. */
+/** Rivals fought before the final boss in each campaign, drawn at random from the others. */
+export const STORY_RIVALS_PER_CAMPAIGN = 4;
+
+/**
+ * Every leg a fighter's campaign can have: all its possible rivals (default order) and the
+ * final boss. A campaign plays a random draw of them (drawStoryRoute); this full set answers
+ * "does this fighter have a campaign" and "is this fighter met as a rival".
+ */
 export function storyRouteFor(fighterId: string): StoryRoute | undefined {
   if (!isStoryEligible(fighterId)) return undefined;
   const route = campaignOpponents(fighterId).map(rivalLeg);
   if (route.length === 0) return undefined;
   const boss = finalBossLeg(fighterId);
   return boss ? [...route, boss] : route;
+}
+
+/**
+ * A new campaign's route: STORY_RIVALS_PER_CAMPAIGN rivals drawn at random (no repeats; all of
+ * them when there are fewer), then the final boss. `random` returns [0, 1) like Math.random
+ * (injectable for tests).
+ */
+export function drawStoryRoute(
+  fighterId: string,
+  random: () => number = Math.random,
+): StoryRoute | undefined {
+  if (!isStoryEligible(fighterId)) return undefined;
+  const pool = campaignOpponents(fighterId);
+  // Fisher-Yates shuffle, then the first ones.
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j] as string, pool[i] as string];
+  }
+  const legs = pool.slice(0, STORY_RIVALS_PER_CAMPAIGN).map(rivalLeg);
+  if (legs.length === 0) return undefined;
+  const boss = finalBossLeg(fighterId);
+  return boss ? [...legs, boss] : legs;
 }
 
 export function hasStoryCampaign(fighterId: string): boolean {
@@ -143,17 +172,6 @@ export function isStoryRival(fighterId: string): boolean {
 export function fighterOrigin(fighterId: string): StoryLocation | undefined {
   const profile = getStoryProfile(fighterId);
   return profile?.home ? getStoryLocation(profile.home) : undefined;
-}
-
-/**
- * Where leg `stage` departs from: the previous leg's destination, or (first leg) the place
- * where the chosen fighter's campaign starts.
- */
-export function legDeparture(fighterId: string, stage: number): string {
-  const route = storyRouteFor(fighterId) ?? [];
-  const previous = route[stage - 1];
-  if (stage > 0 && previous) return previous.destination;
-  return campaignStartLocation(fighterId);
 }
 
 /**

@@ -19,7 +19,7 @@ import {
   quitStory,
   retryStoryFight,
 } from '../src/scenes/story/storyFlow';
-import { storyRouteFor } from '../src/story/storyProfiles';
+import { legStageId } from '../src/story/storyProgress';
 import type { MatchResult, MatchSetup } from '../src/types/match';
 
 /** A stand-in scene: only the game registry matters to the story glue. */
@@ -56,14 +56,15 @@ describe('story flow between the existing scenes', () => {
     const scene = fakeScene();
     scene.registry.set(RegistryKeys.aiDifficulty, 'hard');
     beginStory(scene, 'filipe');
+    // The rivals are drawn at random: the fight is the first leg of the drawn route.
+    const first = getStoryProgress(scene)!.route[0]!;
     arriveAndFight(scene);
     expect(lastNavigation()).toEqual([
       SceneKeys.Versus,
       expect.objectContaining({
         playerFighterId: 'filipe',
-        // Filipe starts in Portugal; his first rival is Augusto, met in Recife (Marco Zero).
-        cpuFighterId: 'augusto',
-        stageId: 'recife',
+        cpuFighterId: first.opponent,
+        stageId: legStageId(first),
         difficulty: 'hard',
         mode: 'story',
       }),
@@ -82,7 +83,8 @@ describe('story flow between the existing scenes', () => {
     retryStoryFight(scene);
     expect(lastNavigation()).toEqual([SceneKeys.Versus, setup]);
     const won = finishStoryMatch(scene, result(setup, 0));
-    expect(won).toMatchObject({ phase: 'travel', currentStage: 1, opponent: 'joao-guiotti' });
+    const second = getStoryProgress(scene)!.route[1]!.opponent;
+    expect(won).toMatchObject({ phase: 'travel', currentStage: 1, opponent: second });
     // The same result reported twice never advances twice.
     expect(finishStoryMatch(scene, result(setup, 0))).toEqual(won);
     continueStory(scene);
@@ -92,7 +94,7 @@ describe('story flow between the existing scenes', () => {
   it('the last win leads to the campaign ending; quitting clears the campaign', () => {
     const scene = fakeScene();
     beginStory(scene, 'augusto');
-    for (let leg = 0; leg < (storyRouteFor('augusto')?.length ?? 0); leg++) {
+    for (let leg = 0; leg < getStoryProgress(scene)!.route.length; leg++) {
       arriveAndFight(scene);
       finishStoryMatch(scene, result(lastNavigation()?.[1] as MatchSetup, 0));
     }
@@ -106,7 +108,7 @@ describe('story flow between the existing scenes', () => {
   it('end of a match: the victory screen, except after the win that completes the campaign', () => {
     const scene = fakeScene();
     beginStory(scene, 'augusto');
-    const legs = storyRouteFor('augusto')?.length ?? 0;
+    const legs = getStoryProgress(scene)!.route.length;
     for (let leg = 0; leg < legs; leg++) {
       arriveAndFight(scene);
       const setup = lastNavigation()?.[1] as MatchSetup;

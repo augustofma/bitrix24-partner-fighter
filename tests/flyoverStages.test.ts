@@ -17,11 +17,11 @@ import { recife } from '../src/stages/recife';
 import { russia } from '../src/stages/russia';
 import { STAGES, getStageConfig } from '../src/stages/stageRegistry';
 import { stageIdForLocation } from '../src/story/locations';
-import { quickFightStageId } from '../src/story/storyProfiles';
+import { quickFightStageId, storyRouteFor } from '../src/story/storyProfiles';
 import {
   arriveForFight,
   recordStoryMatch,
-  startStory,
+  startStoryOn,
   storyMatchSetup,
 } from '../src/story/storyProgress';
 import type { StageConfig } from '../src/types/stage';
@@ -198,7 +198,7 @@ describe('JOINVILLE is picked by place', () => {
   it('Joinville fights use it: Augusto meets Romualdo there, at the gate', () => {
     expect(stageIdForLocation('joinville')).toBe('joinville');
     // Augusto: Recife -> Portugal -> Russia -> Joinville (Romualdo).
-    let progress = startStory('augusto');
+    let progress = startStoryOn('augusto', storyRouteFor('augusto')!);
     while (progress.opponent !== 'romualdo') {
       progress = recordStoryMatch(arriveForFight(progress), true);
     }

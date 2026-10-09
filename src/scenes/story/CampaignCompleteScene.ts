@@ -101,7 +101,7 @@ export class CampaignCompleteScene extends Phaser.Scene {
       ending ? ENDING_TITLE : undefined,
     );
     // Two fights in a row at the same place (e.g. Joinville) show it once in the route.
-    const places = routeCities(champion.id).filter((id, i, all) => id !== all[i - 1]);
+    const places = routeCities(progress).filter((id, i, all) => id !== all[i - 1]);
     const placesAbroad = places.some((id) => !isHomeCountry(getStoryLocation(id)));
     const cities = places.map((id) => locationName(getStoryLocation(id)));
     const cheer = createResultLine(this, hasArt ? VICTORY_ART.resultPanel.key : null, [

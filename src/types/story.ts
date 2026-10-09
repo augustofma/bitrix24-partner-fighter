@@ -98,6 +98,11 @@ export type StoryPhase = 'travel' | 'fight' | 'complete';
  */
 export interface StoryProgress {
   selectedFighter: string;
+  /**
+   * This campaign's legs, drawn when it starts (random rivals, then the final boss) and kept
+   * until it ends, so a retry or the map always shows the same campaign.
+   */
+  route: StoryRoute;
   /** Index of the leg being played (equals the route length once complete). */
   currentStage: number;
   currentLocation: string;

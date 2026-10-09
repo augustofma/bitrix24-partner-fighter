@@ -11,7 +11,7 @@ import { matchAssets } from '../render/assets/sceneAssets';
 import { getStageConfig } from '../stages/stageRegistry';
 import { getStoryLocation, locationLabel, locationName } from '../story/locations';
 import { currentLeg } from '../story/storyProgress';
-import { fighterOrigin, isFinalBossEncounter, storyRouteFor } from '../story/storyProfiles';
+import { fighterOrigin, isFinalBossEncounter } from '../story/storyProfiles';
 import type { MatchSetup } from '../types/match';
 import { getStoryProgress } from './story/storyFlow';
 import { COLORS, arcadeText, bodyText, pixelText } from '../ui/theme';
@@ -165,7 +165,6 @@ export class VersusScene extends Phaser.Scene {
       this.tweens.add({ targets: label, alpha: 1, delay: SLIDE_MS, duration: 250 });
     }
     const progress = getStoryProgress(this);
-    const route = storyRouteFor(setup.playerFighterId);
     const leg = progress ? currentLeg(progress) : undefined;
     if (leg) {
       if (isFinalBossEncounter(leg)) {
@@ -189,12 +188,12 @@ export class VersusScene extends Phaser.Scene {
         .setAlpha(0);
       this.tweens.add({ targets: place, alpha: 1, delay: SLIDE_MS + 100, duration: 300 });
     }
-    if (progress && route) {
+    if (progress) {
       this.add
         .text(
           GAME_WIDTH / 2,
           STAGE_LABEL_Y,
-          STRINGS.storyLeg(progress.currentStage + 1, route.length),
+          STRINGS.storyLeg(progress.currentStage + 1, progress.route.length),
           pixelText(20, COLORS.gold),
         )
         .setOrigin(0.5);

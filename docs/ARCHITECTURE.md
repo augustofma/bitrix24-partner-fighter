@@ -383,17 +383,17 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   (sem origem oficial cadastrada), Romualdo em Joinville, Gabriel Mattozo em Curitiba (PR), Rômulo em Castelo Branco (Portugal,
   onde mora; é da Arrecife Digital). `mapNudge` desloca um marcador alguns px no mapa-múndi só
   para legibilidade (Castelo Branco, a poucos px de Lisboa e Madri); voos saem e chegam nele.
-- **Campanhas geradas (nada escrito por personagem):** `storyRouteFor(id)` =
-  `campaignOpponents(id)` (todos os outros personagens da história, na ordem de
-  `STORY_PROFILES`, ou na `opponentOrder` opcional do perfil; nunca o próprio) mapeados por
-  `rivalLeg(rival)` = `{ opponent, destination: storyLocationId(rival) }`. O início é
-  `campaignStartLocation(id)` = `storyLocationId(id)`, que vira o `currentLocation` inicial. A
-  etapa não guarda a partida: é o destino da etapa anterior (ou o início, na primeira), então o
-  avião sai sempre de onde a campanha está. Exemplos: Augusto Recife → Portugal (Filipe) →
-  Rússia (João) → Espanha (Isaque) → Joinville (Romualdo); João Rússia → Recife (Augusto) →
-  Portugal (Filipe) → Espanha (Isaque) → Joinville (Romualdo); Romualdo Joinville → Recife →
-  Portugal → Rússia → Espanha; Isaque Espanha → Recife → Portugal → Rússia → Joinville.
-  Recife vira destino para todos que não começam lá.
+- **Campanhas sorteadas (nada escrito por personagem):** `storyRouteFor(id)` é o conjunto
+  completo de etapas possíveis: `campaignOpponents(id)` (todos os outros personagens da história,
+  na ordem de `STORY_PROFILES` ou na `opponentOrder` opcional do perfil; nunca o próprio)
+  mapeados por `rivalLeg(rival)` = `{ opponent, destination: storyLocationId(rival) }`, mais o
+  chefe. Serve para "tem campanha" e "é rival". A campanha jogada é `drawStoryRoute(id, random)`:
+  `STORY_RIVALS_PER_CAMPAIGN` (4) rivais embaralhados (Fisher-Yates, `random` injetável nos
+  testes) e o chefe no fim. `startStory` sorteia uma vez e guarda a rota em
+  `StoryProgress.route`; mapa, VS, etapa "n/t" e o final leem dela. O início é
+  `campaignStartLocation(id)` = `storyLocationId(id)`. A etapa não guarda a partida: é o destino
+  da etapa anterior (ou o início, na primeira; `legDeparture(progress, etapa)`), então o avião
+  sai sempre de onde a campanha está. `startStoryOn(id, rota)` começa numa rota dada (testes).
 - **Fim da partida:** a `FightScene` entrega o resultado a `endMatch` (`storyFlow.ts`): a vitória
   que conclui a campanha é registrada ali e vai direto à `CampaignCompleteScene`; o resto vai à
   `VictoryScene` (que registra o resultado; registrar de novo não avança duas vezes).
@@ -408,11 +408,11 @@ regionCode?, latitude, longitude, mapLabel?, stageId? }`. Cidades brasileiras (R
   o selo FINAL BOSS, sem IDs de personagens nas cenas ou no motor.
   `STORY_FINAL_BOSS` (`{ fighterId: 'dmitry', destination: 'russia', stageId:
 'bitrix24-moscow' }`) é dado, não lógica por personagem. `finalBossLeg(id)` devolve essa etapa
-  quando o chefe está no `ROSTER` e não é o próprio jogador; `storyRouteFor` a põe no fim de toda
+  quando o chefe está no `ROSTER` e não é o próprio jogador; `drawStoryRoute` a põe no fim de toda
   campanha e `campaignOpponents` nunca o inclui no meio. O chefe não tem perfil em
   `STORY_PROFILES` (não tem campanha), mas `isStoryRival` o reconhece. O stage dele não é
   `stageId` de nenhum lugar, então só aparece na história por essa etapa.
-- `StoryProgress`: `selectedFighter`, `currentStage`, `currentLocation`, `nextLocation`,
+- `StoryProgress`: `selectedFighter`, `route` (a rota sorteada), `currentStage`, `currentLocation`, `nextLocation`,
   `opponent`, `completedStages` e `phase` (`travel` | `fight` | `complete`). As funções
   (`startStory`, `arriveForFight`, `recordStoryMatch`, `storyMatchSetup`) devolvem um novo
   objeto; derrota não avança (o retry repete a mesma etapa); vitória vai para a próxima viagem
@@ -443,9 +443,8 @@ países). Ele aparece na vista que o enquadra; cidades do Brasil ficam nas duas.
 **Como adicionar um personagem à história:** crie o lutador como qualquer outro
 (`src/fighters/<id>.ts` + `ROSTER`) e adicione `{ fighterId, home: '<origem>', encounter?:
 '<lugar na história>' }` em `STORY_PROFILES`. Ele passa a ser jogável na história (começando no
-seu lugar) e rival nas outras campanhas, sem nenhuma mudança nas cenas. A posição no array é a
-ordem padrão em que as campanhas enfrentam os rivais; `opponentOrder` muda a ordem de uma
-campanha específica.
+seu lugar) e rival nas outras campanhas, sem nenhuma mudança nas cenas. Os rivais de cada campanha
+são sorteados entre todos eles (`drawStoryRoute`).
 
 **Cenários por lugar hoje:** Recife → `recife`, Joinville → `joinville`; os outros lugares
 usam o Partner Summit. **Cenário por encontro:** `StoryCharacterProfile.encounterStageId`
