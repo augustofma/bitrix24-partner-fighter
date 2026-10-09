@@ -190,6 +190,22 @@ muda colisões. Os normais têm dano moderadamente maior e recuperação mais lo
 
 Tempos em frames a 60 Hz. A IA e a seleção usam o config genérico do roster.
 
+### GABRIELE — INOVAR CONSULTING
+
+Jogável e rival CPU na luta rápida, sem campanha ou especial exclusivo. Vida 100,
+avanço/recuo 3,25/2,55 px/frame, salto 16,5 e velocidade aérea 3,9. Caixas padrão.
+Mobilidade próxima à do Filipe, menos rápida que Augusto/Gabriel; normais de dano médio,
+com socos de startup curto e recuperação que permite punição. Tempos a 60 Hz:
+
+| Golpe       | Dano | Startup | Active | Recovery |
+| ----------- | ---: | ------: | -----: | -------: |
+| punch       |    7 |       4 |      3 |       11 |
+| kick        |   10 |       9 |      4 |       17 |
+| crouchPunch |    5 |       4 |      3 |        9 |
+| crouchKick  |    9 |       9 |      4 |       18 |
+| airPunch    |    6 |       5 |      6 |       10 |
+| airKick     |   10 |       8 |      8 |       14 |
+
 ### GABRIEL MATTOZO — GMC
 
 Selecionável na luta rápida, como jogador ou CPU. Sem perfil de história e sem especial

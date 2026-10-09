@@ -316,6 +316,13 @@ describe('CharacterSelectScene roster integration', () => {
       const roster = ROSTER as FighterConfig[];
       const original = [...roster];
       try {
+        // Keep this fixture's requested size even as the production roster grows.
+        let playableCount = 0;
+        roster.splice(
+          0,
+          roster.length,
+          ...original.filter((fighter) => !fighter.playable || playableCount++ < count),
+        );
         for (let index = 0; getPlayableFighters().length < count; index++) {
           roster.push({ ...augusto, id: `test-${index}`, displayName: `TEST_${index}` });
         }

@@ -249,6 +249,18 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/gabriele/portrait.png'),
+        path: 'fighters/gabriele/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'gabriele-sheet',
+        path: 'fighters/gabriele/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/dmitry/portrait.png'),
         path: 'fighters/dmitry/portrait.png',
       },
@@ -295,6 +307,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'dmitry-sheet',
         'romulo-sheet',
         'gabriel-mattozo-sheet',
+        'gabriele-sheet',
+        portraitTextureKey('fighters/gabriele/portrait.png'),
         portraitTextureKey('fighters/gabriel-mattozo/portrait.png'),
         portraitTextureKey('fighters/romulo/portrait.png'),
         portraitTextureKey('fighters/dmitry/portrait.png'),
