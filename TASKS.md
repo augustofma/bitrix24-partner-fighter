@@ -668,6 +668,17 @@ sem pedido explícito.**
 - [x] Final liberado ao zerar a campanha, salvo em `localStorage` (`endingGallery.ts`);
       "NOVO FINAL NA GALERIA x/8" na tela de campanha concluída
 
+## DONE (Gabriele — Inovar Consulting, branch `feature/gabriele-inovar-fighter`)
+
+- [x] Nova fighter por configuração, nona selecionável na luta rápida como P1 e CPU
+- [x] Vida 100, perfil equilibrado/ágil e seis normais; sem especial exclusivo ou campanha
+- [x] Arte original com cabelo vermelho, óculos e proporções naturais; atlas e portrait RGBA
+- [x] 40 células 192×224 isoladas em 1536×1120; retrato 240×300; pipeline com fontes e prompts
+- [x] Testes de assets, animações, seleção, simulação, CPU e determinismo
+- [x] Fixture da seleção mantém o tamanho solicitado mesmo quando o roster real cresce
+- [x] Playtest visual com F2, comparação com os nove fighters e oito confrontos solicitados
+- [x] Seleção até luta, cross-up/flipX e multitouch no mobile landscape emulado
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

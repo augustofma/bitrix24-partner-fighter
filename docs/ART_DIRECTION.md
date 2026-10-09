@@ -780,6 +780,21 @@ proporcional por pose em Pillow/NumPy offline, sem dependência nova no jogo. A 
 pose recolhida de recuperação também no startup; o chute aéreo foi elevado para acompanhar
 melhor a hitbox existente. Arte não muda timing nem colisões.
 
+## Gabriele — Inovar Consulting
+
+Arte original criada com ImageGen integrado, com a foto real e o pôster aprovado fornecidos
+pelo usuário. Identidade: cabelo vermelho intenso, longo e ondulado, óculos grandes, rosto
+arredondado, proporções naturais, camisa creme, calça escura, tênis branco e crachá.
+Sem sprites de franquias ou logos copiados. Proveniência e prompts completos em
+[scripts/gabriele-art](../scripts/gabriele-art/README.md).
+
+Atlas RGBA 1536×1120, 40 células 192×224 (8×5); retrato RGBA 240×300. Preparo offline
+reproduzível com Pillow/NumPy e utilitários existentes: recortes e raízes revisados, alpha
+limpo e escala proporcional, sem afinar o corpo. Altura base 172 px, baseline 216, margem
+mínima 4 px, scale 1 e offsets 0/8. Poses para a direita; flipX genérico. Startup do soco
+aéreo reutiliza a recuperação recolhida, pois a fonte o trazia estendido. Cabelo preservado
+dentro das células. Arte não define colisões nem timing; sem especial ou Story Route.
+
 ## Gabriel Mattozo — GMC
 
 Arte original gerada com ImageGen integrado, usando as duas fotos e o pôster oficial
