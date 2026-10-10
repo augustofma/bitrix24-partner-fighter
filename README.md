@@ -8,8 +8,10 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
-JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD e DOUGLAS.
-Todos os onze estão disponíveis na luta rápida. Douglas (Dohko Technology) tem 100 de vida,
+JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD, DOUGLAS e RODOLFO.
+Todos os doze estão disponíveis na luta rápida. Rodolfo (Brasil Leads) tem 100 de vida,
+caminhada 3,3 e socos de startup curto, compensados por recovery; sem especial ou campanha.
+Douglas (Dohko Technology) tem 100 de vida,
 seis normais, sem especial exclusivo ou campanha. Amanda (BR24) tem 100 de vida, seis normais,
 mobilidade média, arte própria e o especial POWER COMBO (POWERZAP + POWERBOT).
 Os dez anteriores têm campanha no Modo História (a Gabriele começa no Rio de Janeiro e a Amanda em

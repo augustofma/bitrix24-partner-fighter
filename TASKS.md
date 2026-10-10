@@ -762,6 +762,7 @@ sem pedido explícito.**
 - [x] Balões da tela VS acima dos cards (não cobrem mais o rosto de quem tem a cabeça alta)
 - [x] Especiais sem som de passarinho: a comemoração da torcida perdeu os assobios; todo especial
       que conecta toca `special-hit` (golpe especial pesado); POWER COMBO sem bolhas/chirps
+
 ## DONE (Douglas — Dohko Technology, branch `feature/douglas-dohko-fighter`)
 
 - [x] Fighter novo por configuração, décimo primeiro na luta rápida como P1/CPU; vida 100,
@@ -770,6 +771,15 @@ sem pedido explícito.**
 - [x] Idle com guarda discreta, normalização reproduzível de escala/âncoras, alpha e margens validados
 - [x] Testes de assets, animações, roster, estados, CPU e determinismo; playtest com F2 contra o elenco
 - [x] Branch baseada na feature da Amanda para permitir o confronto solicitado, sem merge na main
+
+## DONE (Rodolfo — Brasil Leads, branch `feature/rodolfo-brasil-leads-fighter`)
+
+- [x] Novo fighter por configuração, doze parceiros na luta rápida; vida 100, mobilidade média,
+      socos rápidos com recovery compensatório; sem especial exclusivo ou Story Route
+- [x] Sheet 1536×1120 com 40 células e portrait 240×300 RGBA, fontes e prompts versionados
+- [x] Poses aéreas suplementares, normalização reproduzível, margens e alpha validados
+- [x] Testes de roster, config, assets, animações, simulação, CPU e determinismo
+- [x] Treze partidas completas, poses com F2, teclado, cross-up e multitouch no mobile emulado
 
 ## NEXT (próximas tarefas recomendadas)
 

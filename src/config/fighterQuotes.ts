@@ -68,6 +68,10 @@ export const FIGHTER_QUOTES: Readonly<Record<string, FighterQuotes>> = {
     ],
     victory: ['Precisão do início ao fim.', 'O resultado começa no planejamento.'],
   },
+  rodolfo: {
+    versus: ['Vamos transformar energia em resultado!', 'Toda oportunidade merece atitude!'],
+    victory: ['Esse resultado é de todos nós!', 'Mais energia para a próxima conquista!'],
+  },
   dmitry: {
     versus: ['Bem-vindo à sede da Bitrix24.', 'Vamos ver se você é parceiro gold.'],
     victory: ['Seu plano foi rebaixado para o gratuito.', 'Volte quando tiver mais licenças.'],
