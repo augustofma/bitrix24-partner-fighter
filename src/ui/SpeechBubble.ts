@@ -10,8 +10,8 @@ const POP_MS = 220;
 export interface SpeechBubbleOptions {
   /** Text wraps at this width. */
   maxWidth: number;
-  /** Where the tail points: towards the speaker, below-left or below-right of the bubble. */
-  tail: 'left' | 'right';
+  /** Where the tail points: towards the speaker, below-left, below-right or straight down. */
+  tail: 'left' | 'right' | 'center';
   fontSize?: number;
   /**
    * What x, y is: the bubble's centre (default) or the tip of its tail, so a bubble of any
@@ -48,8 +48,9 @@ export class SpeechBubble {
     const left = -width / 2;
     const top = -height / 2;
     // Tail first (under the body), then the bordered body.
-    const baseX = tail === 'left' ? left + width * 0.22 : left + width * 0.78;
-    const tipX = baseX + (tail === 'left' ? -TAIL : TAIL);
+    const lean = tail === 'left' ? -1 : tail === 'right' ? 1 : 0;
+    const baseX = lean === 0 ? 0 : lean < 0 ? left + width * 0.22 : left + width * 0.78;
+    const tipX = baseX + lean * TAIL;
     const bottom = top + height;
     g.fillStyle(COLORS.ink, 1).fillTriangle(
       baseX - 10,
@@ -72,7 +73,7 @@ export class SpeechBubble {
       bottom - 3,
       baseX + 7,
       bottom - 3,
-      tipX + (tail === 'left' ? 2 : -2),
+      tipX - lean * 2,
       bottom + TAIL - 1,
     );
     const offset = anchor === 'tail' ? { x: tipX, y: bottom + TAIL + BORDER } : { x: 0, y: 0 };

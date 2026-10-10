@@ -35,10 +35,10 @@ const PLACE_Y = 352;
 const BOSS_LABEL_Y = 310;
 /**
  * The fighters' lines, one after the other: above each portrait (in the free band over the
- * cards), toward the inner side, the tail pointing down at it. Never over a face: the portraits'
- * heads sit near the top of the card, at different heights.
+ * cards), centered on it with the tail straight down at the head. Never over a face: the
+ * portraits' heads sit near the top of the card, at different heights.
  */
-const QUOTE = { x: 300, y: 34, maxWidth: 230, delayMs: 100, gapMs: 750 } as const;
+const QUOTE = { y: 34, maxWidth: 230, delayMs: 100, gapMs: 750 } as const;
 
 /**
  * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where
@@ -92,15 +92,14 @@ export class VersusScene extends Phaser.Scene {
       ease: 'Cubic.easeOut',
     });
 
-    // Each fighter's line, from the inner corner of its portrait: the player first, then the rival.
+    // Each fighter's line, over its portrait: the player first, then the rival.
     [player, cpu].forEach((config, side) => {
       const line = pickQuote(config.id, 'versus');
       if (!line) return;
-      const x = side === 0 ? QUOTE.x : GAME_WIDTH - QUOTE.x;
-      new SpeechBubble(this, x, QUOTE.y, line, {
-        maxWidth: QUOTE.maxWidth,
-        tail: side === 0 ? 'left' : 'right',
-      }).show(SLIDE_MS + QUOTE.delayMs + side * QUOTE.gapMs);
+      const x = side === 0 ? PORTRAIT_SIDE_X : GAME_WIDTH - PORTRAIT_SIDE_X;
+      new SpeechBubble(this, x, QUOTE.y, line, { maxWidth: QUOTE.maxWidth, tail: 'center' }).show(
+        SLIDE_MS + QUOTE.delayMs + side * QUOTE.gapMs,
+      );
     });
 
     const vs = this.add
