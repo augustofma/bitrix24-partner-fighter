@@ -2,7 +2,8 @@ import { selectSpriteAssets, validateSpriteAssets } from '../src/render/sprite/s
 import { describe, expect, it } from 'vitest';
 import { gabriele } from '../src/fighters/gabriele';
 import { ROSTER } from '../src/fighters/roster';
-import { hasStoryCampaign } from '../src/story/storyProfiles';
+import { campaignStartLocation, hasStoryCampaign, rivalLeg } from '../src/story/storyProfiles';
+import { legStageId } from '../src/story/storyProgress';
 import {
   attackFrameIndex,
   jumpFrameIndex,
@@ -12,12 +13,14 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Gabriele PNG assets', () => {
-  it('keeps one roster entry, her own portrait, without inventing a story campaign', () => {
+  it('keeps one roster entry, her own portrait, and a story campaign from Rio de Janeiro', () => {
     expect(ROSTER.filter((f) => f.id === 'gabriele')).toEqual([gabriele]);
     expect(gabriele.assets.portrait).toBe('fighters/gabriele/portrait.png');
     expect(gabriele.playable).toBe(true);
-    // No story profile is invented for the new fighter.
-    expect(hasStoryCampaign(gabriele.id)).toBe(false);
+    // Her story profile: from Rio de Janeiro, met on Copacabana's promenade.
+    expect(hasStoryCampaign(gabriele.id)).toBe(true);
+    expect(campaignStartLocation(gabriele.id)).toBe('rio-de-janeiro');
+    expect(legStageId(rivalLeg(gabriele.id))).toBe('rio-de-janeiro');
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(gabriele, 40)).toEqual([]);

@@ -26,6 +26,7 @@ describe('story endings', () => {
     'joao-guiotti',
     'isaque-ferreira',
     'gabriel-mattozo',
+    'gabriele',
     'romualdo',
     'aislan',
     'romulo',

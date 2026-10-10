@@ -192,7 +192,9 @@ Tempos em frames a 60 Hz. A IA e a seleção usam o config genérico do roster.
 
 ### GABRIELE — INOVAR CONSULTING
 
-Jogável e rival CPU na luta rápida, sem campanha ou especial exclusivo. Vida 100,
+Jogável e rival CPU na luta rápida; no Modo História mora no **Rio de Janeiro** (calçadão de
+Copacabana, cenário RIO DE JANEIRO), onde começa a campanha dela e onde as outras a enfrentam.
+Final ilustrado num mirante do Rio ao pôr do sol. Ainda sem especial exclusivo. Vida 100,
 avanço/recuo 3,25/2,55 px/frame, salto 16,5 e velocidade aérea 3,9. Caixas padrão.
 Mobilidade próxima à do Filipe, menos rápida que Augusto/Gabriel; normais de dano médio,
 com socos de startup curto e recuperação que permite punição. Tempos a 60 Hz:
@@ -702,19 +704,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/8 LIBERADOS" no topo:
+do Modo História, com o contador "x/9 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com os 8 finais liberados, o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com os 9 finais liberados, o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/8" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/9" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -764,7 +766,7 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   concluída, sem a tela "<NOME> VENCEU!". As outras vitórias e todas as derrotas passam pela
   tela de vitória como antes.
 - **Final ilustrado:** um personagem pode ter a própria ilustração de final (hoje o Augusto,
-  olhando o pôr do sol no Marco Zero; o Filipe, num miradouro de Lisboa sobre o Tejo; o João Guiotti, numa sacada sobre uma cidade à beira do rio; o Isaque, numa sacada de Madri; o Gabriel Mattozo, num mirante de Curitiba ao lado do Jardim Botânico; o Romualdo, num mirante sobre Joinville ao lado do pórtico;
+  olhando o pôr do sol no Marco Zero; o Filipe, num miradouro de Lisboa sobre o Tejo; o João Guiotti, numa sacada sobre uma cidade à beira do rio; o Isaque, numa sacada de Madri; o Gabriel Mattozo, num mirante de Curitiba ao lado do Jardim Botânico; a Gabriele, num mirante do Rio com o Pão de Açúcar e o Cristo; o Romualdo, num mirante sobre Joinville ao lado do pórtico;
   e o Aislan, no Mirante de Joinville olhando a cidade). Ela ocupa a tela toda com um zoom lento e
   aparece sozinha
   por um instante; depois entram o título (menor, à direita, sem cobrir o personagem), a rota e

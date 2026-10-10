@@ -43,6 +43,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Rômulo is from Arrecife Digital (Recife) but lives in Castelo Branco, Portugal: that is his
   // origin and where he is met, on the castle terrace (the place's stage).
   { fighterId: 'romulo', home: 'castelo-branco' },
+  // Gabriele (Inovar Consulting) is from Rio de Janeiro: met on Copacabana's promenade.
+  { fighterId: 'gabriele', home: 'rio-de-janeiro' },
 ];
 
 /**

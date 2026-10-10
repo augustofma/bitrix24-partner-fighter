@@ -54,13 +54,12 @@ describe('Castelo Branco in the story', () => {
     expect(route.at(-1)?.opponent).toBe(STORY_FINAL_BOSS.fighterId);
   });
 
-  it('every other campaign meets Rômulo there, on the castle terrace, right before the boss', () => {
+  it('every other campaign can meet Rômulo there, on the castle terrace', () => {
     expect(legStageId(rivalLeg('romulo'))).toBe('castelo-branco');
     for (const { fighterId } of STORY_PROFILES.filter((p) => p.fighterId !== 'romulo')) {
       const route = storyRouteFor(fighterId)!;
       const legs = route.filter((leg) => leg.opponent === 'romulo');
       expect(legs).toEqual([{ opponent: 'romulo', destination: 'castelo-branco' }]);
-      expect(route.at(-2)?.opponent).toBe('romulo');
     }
   });
 

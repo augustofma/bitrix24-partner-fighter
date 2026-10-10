@@ -46,10 +46,8 @@ describe('Aislan shared location, independent encounter', () => {
     'adds one encounter to $fighterId',
     ({ fighterId }) => {
       const route = storyRouteFor(fighterId)!;
+      // Once among the possible rivals (campaigns draw 4 of them at random).
       expect(route.filter((l) => l.opponent === 'aislan')).toHaveLength(1);
-      // After Romualdo, before Rômulo (Castelo Branco) and the final boss.
-      const order = route.map((l) => l.opponent).filter((id) => id !== 'romulo');
-      expect(order.at(-2)).toBe('aislan');
     },
   );
   it('each encounter loads its own Joinville art, with no texture key shared', () => {

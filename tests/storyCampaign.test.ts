@@ -105,6 +105,7 @@ describe('rivals are generated, never written per campaign', () => {
       'joinville',
       'joinville',
       'castelo-branco',
+      'rio-de-janeiro',
       'russia',
     ]);
     expect(campaignOpponents('augusto')).toEqual([
@@ -115,6 +116,7 @@ describe('rivals are generated, never written per campaign', () => {
       'romualdo',
       'aislan',
       'romulo',
+      'gabriele',
     ]);
   });
 
@@ -128,6 +130,7 @@ describe('rivals are generated, never written per campaign', () => {
       'joinville',
       'joinville',
       'castelo-branco',
+      'rio-de-janeiro',
       'russia',
     ]);
     expect(campaignOpponents('joao-guiotti')).toEqual([
@@ -138,6 +141,7 @@ describe('rivals are generated, never written per campaign', () => {
       'romualdo',
       'aislan',
       'romulo',
+      'gabriele',
     ]);
   });
 
@@ -151,6 +155,7 @@ describe('rivals are generated, never written per campaign', () => {
       'curitiba',
       'joinville',
       'castelo-branco',
+      'rio-de-janeiro',
       'russia',
     ]);
     expect(campaignOpponents('romualdo')).toEqual([
@@ -161,6 +166,7 @@ describe('rivals are generated, never written per campaign', () => {
       'gabriel-mattozo',
       'aislan',
       'romulo',
+      'gabriele',
     ]);
   });
 
@@ -175,6 +181,7 @@ describe('rivals are generated, never written per campaign', () => {
       'joinville',
       'joinville',
       'castelo-branco',
+      'rio-de-janeiro',
       'russia',
     ]);
   });
