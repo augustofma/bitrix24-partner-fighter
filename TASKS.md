@@ -813,9 +813,11 @@ sem pedido explícito.**
       removidos o tema `dimensionRift`, os sons `special-dimension*`, o texto e os testes antigos
 - [x] Cinco contatos (3 + 3 + 3 + 3 + 10 = 22), chip 4, startup 16 / ativo 22 / recovery 28,
       hitstop final 14; ondas que alcançam cada vez mais longe (190 → 280 px), sem tracking
-- [x] Tema `hundredDragons` procedural (dragões de pixel art em camadas de profundidade, líder,
-      ondas, silhuetas, dragão final, clarão e explosão maior no K.O.); rótulo dourado
-      (`labelColor`); sons `special-dragons`, `special-dragon-bite` e `special-dragon-impact`
+- [x] Tema `hundredDragons` com a arte de dragões do usuário (`public/vfx/dragon-flood.png` e
+      `dragon-hero.png`, preparadas em `scripts/vfx-art/hundred-dragons`): dragão líder, cópias
+      da faixa de dragões em profundidade, dragão final grande, clarão e explosão maior no K.O.;
+      rótulo dourado (`labelColor`); sons `special-dragons`, `special-dragon-bite` e
+      `special-dragon-impact`
 - [x] Testes (nome, meter, 5 contatos, dano, defesa/chip, parcial, erro, pulo, cross-up, K.O.,
       sons, primeiro uso, determinismo, custo de desenho do VFX, CPU nos três níveis); playtest
 

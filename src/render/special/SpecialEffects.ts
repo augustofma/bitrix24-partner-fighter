@@ -34,8 +34,11 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
 const LABEL_OFFSET_Y = -194;
 /** The step tag of a multi-hit move (hitLabels), just under the label. */
 const HIT_LABEL_OFFSET_Y = -172;
-/** Images one slot can show in a frame (e.g. a glow copy and the crisp image). */
-const IMAGES_PER_SLOT = 2;
+/**
+ * Images one slot can show in a frame (e.g. a glow copy and the crisp image, or several copies
+ * of a flood of dragons).
+ */
+const IMAGES_PER_SLOT = 6;
 /** Impacts on screen at once (a new one recycles the oldest). */
 const IMPACT_SLOTS = 2;
 

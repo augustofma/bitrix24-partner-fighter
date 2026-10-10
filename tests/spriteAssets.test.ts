@@ -277,6 +277,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         key: portraitTextureKey('fighters/douglas/portrait.png'),
         path: 'fighters/douglas/portrait.png',
       },
+      { type: 'image', key: vfxTextureKey('vfx/dragon-flood.png'), path: 'vfx/dragon-flood.png' },
+      { type: 'image', key: vfxTextureKey('vfx/dragon-hero.png'), path: 'vfx/dragon-hero.png' },
       {
         type: 'spritesheet',
         key: 'douglas-sheet',
@@ -371,6 +373,8 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         vfxTextureKey('vfx/vibecode-emblem.png'),
         vfxTextureKey('vfx/gptmaker-emblem.png'),
         vfxTextureKey('vfx/fluidz-emblem.png'),
+        vfxTextureKey('vfx/dragon-flood.png'),
+        vfxTextureKey('vfx/dragon-hero.png'),
       ].sort(),
     );
   });

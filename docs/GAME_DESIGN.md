@@ -600,21 +600,21 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   o bot piscando por cima (câmera treme um pouco mais que num golpe comum). Rótulo POWER COMBO
   com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: carga de energia com um baque no disparo, o
   golpe especial em cada mensagem e, no final, um estrondo digital.
-- **CÓLERA DOS 100 DRAGÕES (Douglas), avalanche de dragões:** na concentração (pose de base
-  aberta com o punho recolhido), a tela escurece um pouco em azul-profundo com vinheta nas
-  laterais, energia dourada e verde-esmeralda gira em volta dele com três dragõezinhos nadando no
-  fluxo, um anel de luz e faíscas piscam no chão e o punho carrega. Na liberação, um dragão líder
-  grande sai do punho e abre caminho (primeiro contato); atrás dele vêm ondas de dragões em
-  várias profundidades (perto: grandes e dourados; no meio: verdes; longe: pequenos, ciano e
-  translúcidos), com rastros, afterimages e um enxame de silhuetas distantes; por fim, um dragão
-  bem maior, dourado com olhos e boca brancos, atravessa o rival (clarão dourado na tela). O
-  dragão é pixel art de retângulos: cabeça alongada com contorno escuro, olho brilhante, chifres
-  e crina para trás, mandíbula aberta de energia com presas, e corpo serpentino que ondula. Nas
-  mordidas, mandíbulas de luz se fecham com anel verde e faíscas; no dragão final, anéis
-  brancos/dourados, raios de luz, ondas verde e dourada e uma explosão de partículas (maior no
-  K.O.; câmera treme mais no último contato). Na defesa tudo fica menor. Rótulo CÓLERA DOS 100
-  DRAGÕES em dourado. Som: energia crescendo com rosnado, rugido e uma série de whooshes (as
-  ondas), uma mordida curta em cada onda e um estrondo com explosão de energia no final.
+- **CÓLERA DOS 100 DRAGÕES (Douglas), avalanche de dragões:** usa a arte de dragões fornecida
+  pelo dono do projeto (dragões dourados com rastros verde-azulados em pixel art). Na
+  concentração (base aberta, punho recolhido), a tela escurece um pouco em azul-profundo com
+  vinheta nas laterais, energia dourada e verde-esmeralda gira em volta dele com três
+  dragõezinhos nadando no fluxo, um anel de luz e faíscas piscam no chão e o punho carrega. Na
+  liberação, o dragão líder sai do punho e abre caminho (primeiro contato); atrás dele, cinco
+  cópias da faixa de dragões avançam em profundidades diferentes (as de trás menores, mais
+  transparentes e azuladas; as da frente maiores e opacas), com partículas por baixo: dezenas de
+  cabeças na tela. As ondas somem logo antes do final e o dragão maior, em escala grande,
+  atravessa o rival sozinho (clarão dourado na tela). Nas mordidas, mandíbulas de luz se fecham
+  com anel verde e faíscas; no dragão final, anéis brancos/dourados, raios de luz, ondas verde e
+  dourada e uma explosão de partículas (maior no K.O.; câmera treme mais no último contato). Na
+  defesa o impacto fica menor. Rótulo CÓLERA DOS 100 DRAGÕES em dourado. Som: energia crescendo
+  com rosnado, rugido e uma série de whooshes (as ondas), uma mordida curta em cada onda e um
+  estrondo com explosão de energia no final.
 - **FOORCE ZAP (Rodolfo), soco carregado de mensagens:** na carga, o punho erguido se enche de
   energia verde e dourada, raiozinhos estalam em volta e um anel dourado se fecha nele; no
   avanço, linhas de velocidade atrás dele e, à frente do punho, um cone de ondas de "enviar",

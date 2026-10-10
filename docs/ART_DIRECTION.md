@@ -786,6 +786,7 @@ registrada aqui:
 | `public/vfx/24zap-*`, `mindhub-*`, `fluidz-*`                                                       | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                             | Uso autorizado pelo dono do projeto                               |
 | `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`                                             | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros)    | Original do projeto                                               |
 | `scripts/vfx-art/police-car/source.png` e `public/vfx/police-car.png`                               | ImageGen a partir da referência de viatura fornecida pelo usuário; meia resolução por `prepare.py` | Arte original gerada para o projeto; sem marcas reais             |
+| `scripts/vfx-art/hundred-dragons/source.jpg` e `public/vfx/dragon-*.png`                            | Arte fornecida pelo usuário; recortes e transparência por `prepare.py`                             | Arte do projeto, aprovada pelo usuário                            |
 | `public/audio/sfx/*` (efeitos, menos `voice-*`)                                                     | Sintetizados por `scripts/sfx/generate_sfx.py`                                                     | Original do projeto                                               |
 | `public/audio/sfx/voice-*` (narrador)                                                               | Kokoro-82M (hexgrad) gerando offline por `scripts/voice/generate_announcer.py`                     | Modelo Apache-2.0; áudio gerado para o projeto                    |
 | `public/audio/ambience/*` (10 loops)                                                                | Sintetizados por `scripts/ambience/generate_ambience.py`                                           | Original do projeto                                               |
@@ -839,14 +840,14 @@ como imagem lisa.
   branco (retícula, rede de nós, bot holográfico genérico, glitch e estilhaços). Sem logo dos
   apps: só balões, nós e um rosto de bot genérico; nenhuma imagem (nada a carregar no primeiro
   uso).
-- **CÓLERA DOS 100 DRAGÕES:** dourado (#FFC83A), amarelo intenso (#FFF05A), verde-esmeralda
-  (#1FD68A), ciano (#3FF0FF) e branco; azul-profundo (#0B1640) no escurecimento e contorno quase
-  preto (#061026) nos dragões. Dragões originais em pixel art de retângulos (sem triangulação):
-  cabeça alongada, olho brilhante, chifres discretos, mandíbula de energia e corpo serpentino.
-  Inspiração só na ideia de muitos dragões de energia: nenhuma pose, quadro ou efeito de outra
-  obra. A quantidade vem de camadas (cerca de 20 dragões em ondas, 22 silhuetas, rastros e
-  afterimages) redesenhadas nos dois Graphics do pool a cada quadro; dragões pequenos dispensam
-  os detalhes finos. Tudo procedural: nada para carregar.
+- **CÓLERA DOS 100 DRAGÕES:** arte de dragões fornecida pelo dono do projeto
+  (`public/vfx/dragon-flood.png` e `dragon-hero.png`, preparadas por
+  [scripts/vfx-art/hundred-dragons](../scripts/vfx-art/hundred-dragons/README.md)): dourado,
+  amarelo intenso e verde-azulado em pixel art, com o preto convertido em transparência. Os
+  efeitos desenhados em código seguem a mesma paleta: dourado (#FFC83A), amarelo (#FFF05A),
+  verde-esmeralda (#1FD68A), ciano (#3FF0FF) e branco, com azul-profundo (#0B1640) no
+  escurecimento. A quantidade vem de cópias da faixa de dragões em escalas, alturas e
+  transparências diferentes (até seis imagens do pool por quadro), não de cem objetos.
 - **FOORCE ZAP:** verde de mensagem (#25D366) e verde-limão (#8DFF6A) com o dourado (#E0B03A,
   #FFE08A) e o azul-marinho (#1B1F4A) da Brasil Leads, mais branco. Desenho original de balões,
   raios em zigue-zague, ondas e anéis, sem logo de app. Tudo procedural: nada para carregar.

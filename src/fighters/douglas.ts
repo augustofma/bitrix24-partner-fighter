@@ -180,6 +180,10 @@ export const douglas: FighterConfig = {
         label: STRINGS.specialHundredDragons,
         // Gold lettering, like the dragons.
         labelColor: 0xffc83a,
+        // The user's dragon art: the band of dragons (the flood) and the largest dragon (the
+        // lead and the final dragon). See scripts/vfx-art/hundred-dragons.
+        emblem: 'vfx/dragon-flood.png',
+        glyph: 'vfx/dragon-hero.png',
         sound: 'special-dragons',
         hitSounds: [
           'special-hit',

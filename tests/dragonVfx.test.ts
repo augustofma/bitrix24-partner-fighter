@@ -30,9 +30,30 @@ function recorder(worldView?: { x: number; y: number; width: number; height: num
 
 const move = douglas.specials[0]!;
 const noImage = { available: false, show: () => {} };
+
+/** An image slot stand-in that records what the theme places each frame. */
+function images() {
+  const shown: { scale: number; alpha: number; flipX?: boolean }[] = [];
+  return {
+    shown,
+    slot: {
+      available: true,
+      show: (o: { scale: number; alpha: number; flipX?: boolean; x: number; y: number }) => {
+        expect(Number.isFinite(o.x) && Number.isFinite(o.y) && o.scale > 0).toBe(true);
+        shown.push(o);
+      },
+    },
+  };
+}
 const total = move.startupFrames + move.activeFrames + move.recoveryFrames;
 
-function frameAt(frame: number, g: unknown, glow: unknown, direction: 1 | -1 = 1): MoveFrame {
+function frameAt(
+  frame: number,
+  g: unknown,
+  glow: unknown,
+  direction: 1 | -1 = 1,
+  art: { emblem?: MoveFrame['emblem']; glyph?: MoveFrame['glyph'] } = {},
+): MoveFrame {
   const phase =
     frame < move.startupFrames
       ? 'startup'
@@ -64,8 +85,8 @@ function frameAt(frame: number, g: unknown, glow: unknown, direction: 1 | -1 = 1
     hand: { x: 400 + direction * 30, y: 370 },
     front: { x: 400 + direction * 190, y: 370 },
     box: { left: 430, right: 590, top: 320, bottom: 420 },
-    emblem: noImage,
-    glyph: noImage,
+    emblem: art.emblem ?? noImage,
+    glyph: art.glyph ?? noImage,
     impacting: false,
   };
 }
@@ -81,27 +102,43 @@ describe('CÓLERA DOS 100 DRAGÕES VFX', () => {
     }
   });
 
-  it('stays cheap: a bounded number of draw calls per frame (pooled Graphics, no objects)', () => {
-    let worst = 0;
+  it('stays cheap: a few pooled images and a bounded number of draw calls per frame', () => {
+    let worstCalls = 0;
+    let worstImages = 0;
     for (let f = 0; f < total; f++) {
       const g = recorder();
       const glow = recorder();
-      DRAGON_THEME.drawMove(frameAt(f, g.g, glow.g));
-      worst = Math.max(worst, g.count() + glow.count());
+      const flood = images();
+      const hero = images();
+      DRAGON_THEME.drawMove(frameAt(f, g.g, glow.g, 1, { emblem: flood.slot, glyph: hero.slot }));
+      worstCalls = Math.max(worstCalls, g.count() + glow.count());
+      worstImages = Math.max(worstImages, flood.shown.length + hero.shown.length);
     }
-    expect(worst).toBeGreaterThan(200); // many dragons on screen at the peak
-    expect(worst).toBeLessThan(2500);
+    expect(worstCalls).toBeLessThan(400);
+    // Never more than the pool holds (6 per slot).
+    expect(worstImages).toBeLessThanOrEqual(12);
   });
 
-  it('the flood is on screen during the active window and gone by the end of recovery', () => {
+  it('the flood pours several copies of the band, then the final dragon crosses alone', () => {
     const at = (f: number) => {
-      const g = recorder();
-      const glow = recorder();
-      DRAGON_THEME.drawMove(frameAt(f, g.g, glow.g));
-      return g.count() + glow.count();
+      const flood = images();
+      const hero = images();
+      DRAGON_THEME.drawMove(
+        frameAt(f, recorder().g, recorder().g, -1, { emblem: flood.slot, glyph: hero.slot }),
+      );
+      return { flood: flood.shown, hero: hero.shown };
     };
-    expect(at(move.startupFrames + 8)).toBeGreaterThan(at(1) * 2);
-    expect(at(total - 1)).toBeLessThan(at(move.startupFrames + 8) / 4);
+    expect(at(move.startupFrames - 2).hero).toHaveLength(3); // small dragons swimming around him
+    const flood = at(move.startupFrames + 8);
+    expect(flood.flood.length).toBeGreaterThanOrEqual(4);
+    expect(flood.flood.every((image) => image.flipX)).toBe(true); // facing left
+    const scales = flood.flood.map((image) => image.scale);
+    expect(Math.max(...scales)).toBeGreaterThan(Math.min(...scales) * 1.5); // depth
+    const final = at(move.startupFrames + 16);
+    expect(final.flood).toHaveLength(0);
+    expect(Math.max(...final.hero.map((image) => image.scale))).toBeGreaterThan(1.4);
+    const end = at(total - 1);
+    expect(end.flood.length + end.hero.length).toBe(0);
   });
 
   it('impacts: bites, the final dragon (bigger on a KO), hit or blocked', () => {

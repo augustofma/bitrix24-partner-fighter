@@ -177,7 +177,7 @@ describe('Douglas: CÓLERA DOS 100 DRAGÕES', () => {
     ]);
   });
 
-  it('first use loads nothing: boot SFX and a fully procedural VFX', () => {
+  it('first use loads nothing: boot SFX, and the dragon art loads at boot with the emblems', () => {
     const bootKeys = SFX_ASSETS.map((a) => a.key);
     const ids = ['special-dragons', 'special-dragon-bite', 'special-dragon-impact', 'special-hit'];
     for (const id of ids as (keyof typeof SFX)[]) {
@@ -188,9 +188,17 @@ describe('Douglas: CÓLERA DOS 100 DRAGÕES', () => {
       ).not.toThrow();
     }
     const effect = douglas.assets.specialEffects?.[move.id];
-    expect(effect?.emblem).toBeUndefined();
-    expect(effect?.glyph).toBeUndefined();
-    expect(collectFighterAssets([douglas]).some((a) => a.path.startsWith('vfx/'))).toBe(false);
+    expect(effect?.emblem).toBe('vfx/dragon-flood.png');
+    expect(effect?.glyph).toBe('vfx/dragon-hero.png');
+    // The light, boot-time set (no sprite sheets) already carries both images.
+    const boot = collectFighterAssets([douglas], { sheets: false }).map((a) => a.path);
+    expect(boot).toEqual(expect.arrayContaining(['vfx/dragon-flood.png', 'vfx/dragon-hero.png']));
+    for (const path of ['vfx/dragon-flood.png', 'vfx/dragon-hero.png']) {
+      const png = readFileSync(join(__dirname, '..', 'public', path));
+      // RGBA PNG (color type 6), small enough for the boot download.
+      expect(png.readUInt8(25)).toBe(6);
+      expect(png.length).toBeLessThan(260 * 1024);
+    }
   });
 
   it('deterministic: the same inputs give the same fight', () => {

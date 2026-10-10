@@ -196,9 +196,9 @@ export interface FighterAssetManifest {
  *   the rival on each messaging hit, then an AI scan (reticle, node network, bot hologram) and
  *   a digital explosion on the finisher. Made for a multi-hit `hits` timeline.
  * - `hundredDragons`: an avalanche of energy dragons (CÓLERA DOS 100 DRAGÕES): energy spirals
- *   around the fighter, a lead dragon bursts out (first hit), waves of dragons at several
- *   depths pour forward (small hits) and a larger white-gold dragon crosses the rival (last
- *   hit). Original pixel dragons, made for a multi-hit `hits` timeline.
+ *   around the fighter, a lead dragon bursts out (first hit), copies of a band of dragons pour
+ *   forward at several depths (small hits) and a much larger dragon crosses the rival (last
+ *   hit). Uses `emblem` (the band) and `glyph` (the largest dragon); made for `hits`.
  * - `forceZap`: a charged dash punch (FOORCE ZAP): the raised fist fills with green and gold
  *   energy, then a cone of send waves, bolts and chat bubbles blasts forward from it.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
@@ -222,9 +222,9 @@ export interface SpecialEffectConfig {
   label: string;
   /** Color of that text (default: the cyan of every special). */
   labelColor?: number;
-  /** Pixel-art app emblem (path in /public) shown on the move and on the impact. */
+  /** Pixel-art image (path in /public): an app emblem, or the move's own artwork. */
   emblem?: string;
-  /** Symbol-only image (white, path in /public), tinted and glowed by the style. */
+  /** A second image (path in /public): a symbol the style tints, or more of the artwork. */
   glyph?: string;
   /** Sound when the special starts (default: the generic special sound). */
   sound?: SfxId;
