@@ -83,6 +83,7 @@ class ImageSlot implements EffectImage {
       .setScale(options.scale)
       .setAlpha(Math.min(1, options.alpha))
       .setRotation(options.rotation ?? 0)
+      .setFlipX(options.flipX ?? false)
       .setBlendMode(options.glow ? Phaser.BlendModes.ADD : Phaser.BlendModes.NORMAL)
       .setVisible(true);
     if (options.tint === undefined) image.clearTint();

@@ -33,6 +33,7 @@ function fakeScene() {
           if (key === 'setVisible') target.visible = args[0];
           if (key === 'setTexture') target.texture = { key: args[0] };
           if (key === 'setScale') target.scale = args[0];
+          if (key === 'setFlipX') target.flipX = args[0];
           return proxy;
         };
       },
@@ -236,6 +237,24 @@ describe('app-themed special VFX: timing and cleanup', () => {
     expect(sawImpact).toBe(true);
     expect(sim.fighters[0].state).not.toBe('special');
     expect({ ...created, images: created.images.length }).toEqual(objectsAfterSetup);
+  });
+
+  it.each([1, -1] as const)('police artwork faces %i and disappears on reset', (direction) => {
+    const { scene, created } = fakeScene();
+    const effects = new SpecialEffects(scene);
+    const sim = specialFight(gabriele, 200);
+    stepFrames(sim, 1, press({ special: true }));
+    sim.fighters[0].direction = direction;
+    effects.sync(sim.fighters);
+    const car = created.images.find((image) => image.visible);
+    expect(car).toMatchObject({
+      texture: { key: vfxTextureKey('vfx/police-car.png') },
+      flipX: direction < 0,
+      scale: 0.28,
+    });
+    sim.fighters[0].resetForRound({ x: 300, y: partnerArena.groundY }, 1);
+    effects.sync(sim.fighters);
+    expect(visibleEmblems(created.images)).toEqual([]);
   });
 
   it('an interrupted special leaves nothing on screen (e.g. the round resets)', () => {

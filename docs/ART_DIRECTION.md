@@ -1,5 +1,13 @@
 # Direção de Arte
 
+## Viatura do especial de Gabriele
+
+`public/vfx/police-car.png`: pixel art criada com ImageGen a partir da referência fornecida
+pelo usuário, com dois policiais nas janelas, sem marcas ou insígnias reais. Substitui o
+desenho geométrico do especial; preserva efeitos animados e gameplay. PNG RGBA 1448 × 1086,
+escala 0,2, espelhamento por direção. Proveniência e método em
+[scripts/vfx-art/police-car](../scripts/vfx-art/police-car/README.md).
+
 > Estado atual (v0.2): o **pipeline de sprites está pronto**. O FIGHTER_A usa uma spritesheet
 > **de demonstração** (gerada por script, não é arte final); o FIGHTER_B e o cenário ainda são
 > desenhados em código. Este documento define a direção artística e o formato dos assets.

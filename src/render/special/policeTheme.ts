@@ -1,4 +1,4 @@
-import type { ImpactFrame, MoveFrame, SpecialTheme } from './specialTheme';
+import type { EffectImage, ImpactFrame, MoveFrame, SpecialTheme } from './specialTheme';
 import { clamp01, disc, easeOutCubic, hash01, lerp, pixelBox, type Graphics } from './vfxShapes';
 
 /*
@@ -9,7 +9,7 @@ import { clamp01, disc, easeOutCubic, hash01, lerp, pixelBox, type Graphics } fr
  * sparks, the siren's red/blue wash); a block: sparks ricocheting off the guard. Recovery: the
  * car reverses away, lights fading.
  *
- * Cartoon pixel shapes only (no blood, no real insignia): a generic white-and-blue patrol car.
+ * Configured pixel artwork with a procedural fallback; no blood or real insignia.
  */
 
 const WHITE = 0xf4f6fa;
@@ -36,11 +36,17 @@ const SMOKE = 0xc9ccd6;
 const S = 1.65;
 /** Patrol car size (world px, at 1x) and where it parks: behind Gabriele, facing the rival. */
 const CAR = { length: 132, bodyHeight: 22, cabinWidth: 72, cabinHeight: 22, wheel: 11 } as const;
-const PARK_BEHIND = 150;
+/** Behind Gabriele, with the front bumper just behind her (the illustrated car is longer). */
+const PARK_BEHIND = 208;
 /** Where it comes from (and leaves to): well off-screen behind her. */
 const ENTRY_DISTANCE = 520;
 const TRACERS = 6;
 const IMPACT_BURSTS = 7;
+/**
+ * Artwork is 1448x1086; wheels touch y=829, with its center at (724,543). Drawn at the size of
+ * a real car next to Gabriele: the roof (with the light bar) close to her head height.
+ */
+const CAR_ART = { scale: 0.28, groundOffset: 286, roofX: -72, roofY: -524 } as const;
 
 type Point = { x: number; y: number };
 
@@ -56,8 +62,29 @@ function patrolCar(
   dir: 1 | -1,
   frame: number,
   alpha: number,
+  image: EffectImage,
 ): void {
   if (alpha <= 0) return;
+  if (image.available) {
+    image.show({
+      x: cx,
+      y: ground - CAR_ART.groundOffset * CAR_ART.scale,
+      scale: CAR_ART.scale,
+      alpha,
+      flipX: dir < 0,
+    });
+    const red = redLit(frame);
+    const lightX = cx + dir * (CAR_ART.roofX + (red ? -70 : 70)) * CAR_ART.scale;
+    disc(
+      glow,
+      lightX,
+      ground + CAR_ART.roofY * CAR_ART.scale,
+      65 * CAR_ART.scale,
+      red ? RED : SIREN_BLUE,
+      0.35 * alpha,
+    );
+    return;
+  }
   const half = (CAR.length * S) / 2;
   const wheel = CAR.wheel * S;
   const bodyHeight = CAR.bodyHeight * S;
@@ -102,7 +129,12 @@ function patrolCar(
 }
 
 /** Where the two officers' guns are when they lean out (front and back windows). */
-function muzzles(cx: number, ground: number, dir: 1 | -1): Point[] {
+function muzzles(cx: number, ground: number, dir: 1 | -1, illustrated: boolean): Point[] {
+  if (illustrated)
+    return [
+      { x: cx + dir * 330 * CAR_ART.scale, y: ground - 407 * CAR_ART.scale },
+      { x: cx - dir * 65 * CAR_ART.scale, y: ground - 396 * CAR_ART.scale },
+    ];
   const windowY = ground - (CAR.wheel + CAR.bodyHeight + 8) * S;
   return [
     { x: cx + dir * 60 * S, y: windowY },
@@ -172,7 +204,7 @@ function drawMove(f: MoveFrame): void {
     // Screeching in from behind, braking hard at the end.
     const arrive = easeOutCubic(clamp01(t * 1.15));
     const cx = lerp(parked - dir * ENTRY_DISTANCE, parked, arrive);
-    patrolCar(g, glow, cx, ground, dir, frame, 1);
+    patrolCar(g, glow, cx, ground, dir, frame, 1, f.emblem);
     if (arrive > 0.55) {
       for (let i = 0; i < 4; i++) {
         const puff = clamp01(t * 2 - 1 + i * 0.1);
@@ -190,10 +222,10 @@ function drawMove(f: MoveFrame): void {
   }
 
   if (phase === 'active') {
-    patrolCar(g, glow, parked, ground, dir, frame, 1);
+    patrolCar(g, glow, parked, ground, dir, frame, 1, f.emblem);
     const target = { x: front.x, y: hand.y };
-    muzzles(parked, ground, dir).forEach((muzzle, gun) => {
-      officer(g, muzzle, dir, 1);
+    muzzles(parked, ground, dir, f.emblem.available).forEach((muzzle, gun) => {
+      if (!f.emblem.available) officer(g, muzzle, dir, 1);
       if ((frame + gun) % 3 === 0) muzzleFlash(g, glow, muzzle, dir, 9);
       // A burst of tracers along the whole reach, each aimed a little differently.
       for (let i = 0; i < TRACERS / 2; i++) {
@@ -224,6 +256,7 @@ function drawMove(f: MoveFrame): void {
     dir,
     frame,
     1 - leave * 0.6,
+    f.emblem,
   );
 }
 

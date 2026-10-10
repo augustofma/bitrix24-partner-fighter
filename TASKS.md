@@ -5,6 +5,9 @@ sem pedido explícito.**
 
 ## DONE (v0.1: vertical slice)
 
+- [x] Viatura do especial de Gabriele substituída por pixel art detalhada baseada na referência
+      fornecida, com dois policiais, espelhamento e efeitos de disparo preservados.
+
 - [x] Projeto Vite + TypeScript (strict) + Phaser 3.90; ESLint, Prettier, Vitest
 - [x] Documentação: README, AGENTS, ARCHITECTURE, GAME_DESIGN, ART_DIRECTION, TASKS
 - [x] Simulação pura e determinística em passo fixo de 60 Hz (`FightSimulation`)
