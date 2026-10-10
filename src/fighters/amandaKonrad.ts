@@ -1,7 +1,8 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** Balanced normals with moderate mobility and punishable kicks. */
+/** Balanced normals with moderate mobility and punishable kicks; POWER COMBO special. */
 export const amandaKonrad: FighterConfig = {
   id: 'amanda-konrad',
   name: 'amanda-konrad',
@@ -120,9 +121,64 @@ export const amandaKonrad: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // POWER COMBO: her two apps in sequence. POWERZAP fires two quick messages (light hits
+      // that keep the rival in hitstun), then POWERBOT locks on and lands the main blow.
+      id: 'amanda-konrad.powerCombo',
+      displayName: STRINGS.specialPowerCombo,
+      state: 'special',
+      level: 'mid',
+      meterCost: 40,
+      groundOnly: true,
+      // She stands her ground: the messages and the bot travel, she does not.
+      advanceSpeed: 0,
+      startupFrames: 14,
+      // Three steps (see hits): messages at 0 and 6, the bot at 14.
+      activeFrames: 18,
+      // Punishable when blocked (26 recovery against the bot's 14 blockstun).
+      recoveryFrames: 26,
+      // The defaults are the POWERZAP messages; the steps below add reach and the finisher.
+      damage: 4,
+      chipDamage: 1,
+      // Waist-to-chest high: a well-timed jump clears it (and the bot's scan below).
+      hitbox: { x: 30, y: -120, width: 150, height: 50 },
+      // Longer than the gap to the next step: the hits combo, the rival cannot act in between.
+      hitstunFrames: 14,
+      blockstunFrames: 10,
+      knockback: 2.5,
+      blockPushback: 2,
+      hitstopFrames: 4,
+      hits: [
+        { activeFrame: 0 },
+        // The second message flies farther (the first one pushed the rival back a little).
+        { activeFrame: 6, hitbox: { x: 40, y: -120, width: 190, height: 50 } },
+        // POWERBOT: the main hit, up to 260 px (CHAMA O 190!: 280), a taller box (the scan).
+        {
+          activeFrame: 14,
+          damage: 12,
+          chipDamage: 1,
+          hitbox: { x: 50, y: -130, width: 210, height: 80 },
+          hitstunFrames: 22,
+          blockstunFrames: 14,
+          knockback: 8,
+          blockPushback: 6,
+          hitstopFrames: 12,
+        },
+      ],
+    },
+  ],
   palette: { body: 0xf5e8d2, accent: 0xb84c24, skin: 0xf0bfa6, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'amanda-konrad.powerCombo': {
+        style: 'powerCombo',
+        label: STRINGS.specialPowerCombo,
+        sound: 'special-powerzap',
+        hitLabels: [STRINGS.specialPowerZap, STRINGS.specialPowerZap, STRINGS.specialPowerBot],
+        hitSounds: ['powerzap-hit', 'powerzap-hit', 'special-powerbot'],
+      },
+    },
     portrait: 'fighters/amanda-konrad/portrait.png',
     pixelArt: true,
     sprite: {
@@ -149,6 +205,8 @@ export const amandaKonrad: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
+        // POWER COMBO: arm raised (sending), then the pointing punch pose while it fires.
+        special: { frames: [39, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },
     },

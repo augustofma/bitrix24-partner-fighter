@@ -742,6 +742,18 @@ sem pedido explícito.**
       atualizadas para respeitar paginação ao crescer o elenco
 - [x] Playtest com F2 e onze confrontos completos; seleção, teclado, cross-up e multitouch no mobile emulado
 
+## DONE (POWER COMBO da Amanda, branch `feature/amanda-power-combo`)
+
+- [x] Auditoria da Amanda do Codex: id único, sheet 1536×1120 / 40 células, portrait 240×300,
+      frame map, seleção, luta rápida, CPU, VS e vitória sem fallback; nada a corrigir
+- [x] Multi-hit genérico por dados (`AttackConfig.hits`, `attackHits`, `hitStepAt`, `hitIndex`
+      no evento); IA mede alcance sobre todas as etapas
+- [x] POWER COMBO: custo 40, POWERZAP 4 + 4 e POWERBOT 12 (20), chip 1 + 1 + 1, startup 14 /
+      ativo 18 / recovery 26, alcance 260, pulável; tema `powerCombo`, rótulos por etapa, sons
+      `special-powerzap` / `powerzap-hit` / `special-powerbot`, câmera mais forte no final
+- [x] Testes (dados, meter, ordem, dano, defesa, alcance, pulo, IA, K.O. no meio, primeiro uso,
+      determinismo); playtest desktop, CPU nos três níveis e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

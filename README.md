@@ -10,7 +10,7 @@ selecionável, com sprite e retrato pixel-art originais gerados a partir das ref
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
 JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE e AMANDA KONRAD.
 Todos os dez estão disponíveis na luta rápida. Amanda (BR24) tem 100 de vida, seis normais,
-mobilidade média e arte própria; ainda sem especial exclusivo ou campanha.
+mobilidade média, arte própria e o especial POWER COMBO (POWERZAP + POWERBOT); ainda sem campanha.
 Os nove anteriores têm campanha no Modo História (a Gabriele começa no Rio de Janeiro). Na **LUTA RÁPIDA** são três
 passos: **seu lutador**, **o rival** (qualquer jogável, inclusive o mesmo; começa sugerindo o
 próximo do roster) e **a fase** (todos os cenários ilustrados, com prévia; começa no cenário da

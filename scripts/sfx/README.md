@@ -42,6 +42,9 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-alaio-strike` | ALAIO STRIKE! começa (Dmitry)           | Tempestade se formando, chiado elétrico, trovão e estrondo longo | 0,9    |
 | `special-n8n`          | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
 | `special-190`          | CHAMA O 190! começa (Gabriele)          | Sirene de dois tons, pneu cantando, rajada de tiros e impacto    | 0,85   |
+| `special-powerzap`     | POWER COMBO começa (Amanda Konrad)      | Envio subindo, três bolhas e um chirp digital                    | 0,80   |
+| `powerzap-hit`         | Cada mensagem do POWERZAP que conecta   | Pop digital curto com baque leve                                 | 0,62   |
+| `special-powerbot`     | O POWERBOT conecta                      | Trava de mira (dois blips) e estrondo digital com zap descendo   | 0,90   |
 | `victory`              | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
 | `crowd-ooh`            | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |
 | `crowd-cheer`          | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido, palmas e assobios                       | 0,50   |

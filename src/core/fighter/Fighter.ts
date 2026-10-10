@@ -12,7 +12,13 @@ import type { Direction, Rect, Vec2 } from '../../types/geometry';
 import type { InputFrame, InputState } from '../../types/input';
 import { toWorldRect } from '../geometry';
 import { horizontalAxis } from '../input';
-import { attackPhaseAt, totalAttackFrames, type AttackPhase } from './attackFrames';
+import {
+  attackHits,
+  attackPhaseAt,
+  hitStepAt,
+  totalAttackFrames,
+  type AttackPhase,
+} from './attackFrames';
 import { specialForPress } from './specialMoves';
 
 /**
@@ -53,7 +59,8 @@ export class Fighter implements ReadonlyFighter {
   private currentState: FighterStateId = 'idle';
   private framesInState = 0;
   private attack: AttackConfig | null = null;
-  private attackConnected = false;
+  /** Last step of the current attack that connected (-1: none yet; see AttackConfig.hits). */
+  private connectedStep = -1;
   /** Remaining hitstun (state 'hurt') or blockstun (block states). */
   private stunFrames = 0;
   private readonly inputBuffer = new AttackInputBuffer();
@@ -104,6 +111,21 @@ export class Fighter implements ReadonlyFighter {
 
   get attackPhase(): AttackPhase | null {
     return this.attack ? attackPhaseAt(this.attack, this.framesInState) : null;
+  }
+
+  /** Step of the current attack open right now (-1: none; single-hit attacks have step 0). */
+  get attackStep(): number {
+    return this.attack ? hitStepAt(this.attack, this.framesInState) : -1;
+  }
+
+  /**
+   * The contact the attack can make right now (its open step resolved to a full config), or
+   * null when nothing can connect: outside the active window or that step already connected.
+   */
+  get activeHit(): AttackConfig | null {
+    const step = this.attackStep;
+    if (!this.attack || step < 0 || step <= this.connectedStep) return null;
+    return attackHits(this.attack)[step] ?? null;
   }
 
   get maxHealth(): number {
@@ -167,10 +189,10 @@ export class Fighter implements ReadonlyFighter {
     return toWorldRect(box, this.position, this.direction);
   }
 
-  /** Damage area in world space while an attack is active and has not connected yet. */
+  /** Damage area in world space while an attack step is open and has not connected yet. */
   getHitbox(): Rect | null {
-    if (!this.attack || this.attackConnected || this.attackPhase !== 'active') return null;
-    return toWorldRect(this.attack.hitbox, this.position, this.direction);
+    const hit = this.activeHit;
+    return hit ? toWorldRect(hit.hitbox, this.position, this.direction) : null;
   }
 
   /** Body used to keep fighters apart (see pushboxFor for the cross-up rule). */
@@ -180,9 +202,9 @@ export class Fighter implements ReadonlyFighter {
     return toWorldRect(box, this.position, this.direction);
   }
 
-  /** Each attack can hit only once. */
+  /** Each step of an attack can hit only once (single-hit attacks: once in all). */
   markAttackConnected(): void {
-    this.attackConnected = true;
+    this.connectedStep = Math.max(this.connectedStep, this.attackStep);
   }
 
   applyHit(attack: AttackConfig, pushDirection: Direction): void {
@@ -236,7 +258,7 @@ export class Fighter implements ReadonlyFighter {
     this.lastX = spawn.x;
     this.setState('idle', true);
     this.attack = null;
-    this.attackConnected = false;
+    this.connectedStep = -1;
     this.stunFrames = 0;
     this.inputBuffer.clear();
     this.airAttackUsed = false;
@@ -363,7 +385,7 @@ export class Fighter implements ReadonlyFighter {
   private startAttack(attack: AttackConfig): void {
     this.setState(attack.state, true);
     this.attack = attack;
-    this.attackConnected = false;
+    this.connectedStep = -1;
   }
 
   private tryBufferedSpecial(): boolean {

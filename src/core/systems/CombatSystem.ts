@@ -2,6 +2,7 @@ import type { AttackConfig } from '../../types/fighter';
 import { SPECIAL_METER } from '../../config/special';
 import type { Direction, Vec2 } from '../../types/geometry';
 import type { Fighter } from '../fighter/Fighter';
+import { attackHits } from '../fighter/attackFrames';
 import { GUARD_COVERAGE, guardPostureOf } from '../fighter/fighterStates';
 import { intersectionCenter, rectsOverlap } from '../geometry';
 
@@ -11,7 +12,11 @@ export interface CombatEvent {
   type: 'hit' | 'block' | 'koHit';
   attackerIndex: FighterIndex;
   defenderIndex: FighterIndex;
+  /** The contact that landed: the attack, or its step resolved to a full config. */
   attack: AttackConfig;
+  /** Which step of a multi-hit attack (0 for single-hit ones) and how many it has. */
+  hitIndex: number;
+  hitCount: number;
   /** World position of the contact, for effects. */
   point: Vec2;
 }
@@ -19,12 +24,15 @@ export interface CombatEvent {
 interface Contact {
   attackerIndex: FighterIndex;
   attack: AttackConfig;
+  hitIndex: number;
+  hitCount: number;
   point: Vec2;
 }
 
 /**
  * Resolves hitbox-vs-hurtbox contacts between the two fighters.
- * Fighter-agnostic: damage, stun and push all come from the AttackConfig.
+ * Fighter-agnostic: damage, stun and push all come from the AttackConfig (per step for a
+ * multi-hit attack, each step connecting at most once).
  * Contacts are gathered first and applied afterwards, so simultaneous hits trade.
  */
 export class CombatSystem {
@@ -35,11 +43,14 @@ export class CombatSystem {
       const defender = fighters[otherIndex(attackerIndex)];
       const hitbox = attacker.getHitbox();
       const hurtbox = defender.getHurtbox();
-      if (!hitbox || !hurtbox || !attacker.activeAttack) continue;
+      const attack = attacker.activeHit;
+      if (!hitbox || !hurtbox || !attack || !attacker.activeAttack) continue;
       if (!rectsOverlap(hitbox, hurtbox)) continue;
       contacts.push({
         attackerIndex,
-        attack: attacker.activeAttack,
+        attack,
+        hitIndex: attacker.attackStep,
+        hitCount: attackHits(attacker.activeAttack).length,
         point: intersectionCenter(hitbox, hurtbox),
       });
     }
@@ -48,7 +59,7 @@ export class CombatSystem {
   }
 
   private applyContact(fighters: readonly [Fighter, Fighter], contact: Contact): CombatEvent {
-    const { attackerIndex, attack, point } = contact;
+    const { attackerIndex, attack, hitIndex, hitCount, point } = contact;
     const defenderIndex = otherIndex(attackerIndex);
     const attacker = fighters[attackerIndex];
     const defender = fighters[defenderIndex];
@@ -68,7 +79,7 @@ export class CombatSystem {
       if (attack.damage > 0) defender.changeSpecialMeter(SPECIAL_METER.received);
       type = defender.isKnockedOut ? 'koHit' : 'hit';
     }
-    return { type, attackerIndex, defenderIndex, attack, point };
+    return { type, attackerIndex, defenderIndex, attack, hitIndex, hitCount, point };
   }
 }
 

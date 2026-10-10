@@ -738,13 +738,24 @@ ataque vem do contato coletado, preservando a classificação mesmo em trades qu
 atacante. Um especial nunca gera meter para quem o executa; receber dano (de golpe normal ou
 especial) sempre rende +5 ao defensor.
 
-Nesta versão cada execução tem um contato, inclusive o especial. Um futuro multi-hit deve
-estender a linha do tempo de AttackConfig e o controle de contatos por índice/janela em
-Fighter/CombatSystem; não simular hits via timers do renderer ou condicionais por personagem.
+**Multi-hit (`AttackConfig.hits`):** opcional e genérico (hoje só o POWER COMBO usa). A janela
+ativa é dividida em etapas (`activeFrame` relativo ao início do ativo); cada etapa fica aberta
+até a próxima abrir e pode trocar dano, chip, hitbox, stun, knockback, pushback e hitstop (o que
+não trocar vem do golpe). `attackHits(attack)` devolve cada etapa como um `AttackConfig` completo
+(cache por golpe, nada alocado por frame) e `hitStepAt` diz qual está aberta. O `Fighter` guarda
+a última etapa que conectou (`connectedStep`): `activeHit`/`getHitbox` só existem enquanto a
+etapa aberta ainda não acertou, então cada etapa conecta no máximo uma vez e pode errar sozinha.
+O `CombatSystem` resolve o contato com a etapa (`activeHit`) e o evento traz `hitIndex` /
+`hitCount` (golpe de um contato: 0 de 1). Hitstop, chip, meter (+5 ao defensor por contato) e
+guarda seguem as regras de sempre, por contato. A IA mede alcance e acerto sobre todas as etapas
+(`specialReach`, `specialWouldConnect`). Na apresentação, o impacto recebe `hit`/`hits`, o
+`SpecialEffectConfig` pode ter `hitLabels` (texto curto por etapa sob o rótulo) e `hitSounds`
+(impacto por etapa), e a `FightScene` treme a câmera um pouco mais no último contato de um golpe
+multi-hit. Nada disso conhece personagem.
 
 SpecialMeterBar desenha as barras do HUD e prontidão pelo custo configurado. Os VFX dos
 especiais ficam em `src/render/special/`: `assets.specialEffects[activeAttack.id]` diz o tema
-(`zapMessages` ou `mindNetwork`), o rótulo, o emblema / símbolo (imagens pixel-art em
+(`zapMessages`, `mindNetwork`, ... `powerCombo`), o rótulo, o emblema / símbolo (imagens pixel-art em
 `public/vfx/`, carregadas pelo mesmo `collectFighterAssets` dos sprites) e o som do início. O
 golpe é desenhado só a partir de `stateFrame` e da fase (`startup` / `active` / `recovery`),
 então congela no hitstop e some no instante em que o golpe acaba ou é interrompido; o impacto

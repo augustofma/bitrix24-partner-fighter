@@ -44,6 +44,9 @@ export type SfxId =
   | 'special-alaio-strike'
   | 'special-n8n'
   | 'special-190'
+  | 'special-powerzap'
+  | 'powerzap-hit'
+  | 'special-powerbot'
   // Crowd reactions (stages with a crowd only).
   | 'crowd-cheer'
   | 'crowd-ooh'

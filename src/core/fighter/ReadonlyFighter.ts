@@ -20,6 +20,8 @@ export interface ReadonlyFighter {
   readonly stateFrame: number;
   readonly activeAttack: AttackConfig | null;
   readonly attackPhase: AttackPhase | null;
+  /** Step of a multi-hit attack open right now (-1: none; single-hit attacks: 0). */
+  readonly attackStep: number;
   readonly isAirborne: boolean;
   readonly isBlocking: boolean;
   readonly isKnockedOut: boolean;

@@ -4,19 +4,6 @@
 > **de demonstração** (gerada por script, não é arte final); o FIGHTER_B e o cenário ainda são
 > desenhados em código. Este documento define a direção artística e o formato dos assets.
 
-## Amanda Konrad — BR24
-
-Arte original criada com ImageGen integrado usando as duas fotos reais e o pôster aprovado
-fornecidos pelo usuário. Cabelo acobreado preso com ondas, blusa off-white com babados,
-jeans, crachá e tênis claros. Sem assets de franquias ou logos copiados.
-Fontes e prompts em [scripts/amanda-konrad-art](../scripts/amanda-konrad-art/README.md).
-Uso autorizado para esta implementação; arte gerada para o projeto.
-
-`public/fighters/amanda-konrad/sprite.png`: RGBA 1536×1120, grade 8×5 de células 192×224.
-`portrait.png`: RGBA 240×300. Normalização reproduzível com Pillow/NumPy já usados pelo projeto,
-baseline 216, margens ≥4, escala 1 e offsets 0/8. Frames voltados à direita, espelhamento genérico;
-fases dos seis golpes sincronizadas pelo config. Retrato entra no boot e sheet na tela VS.
-
 ## Direção
 
 - **Gênero e época:** fighting game arcade dos anos 90 (energia, cores saturadas, leitura
@@ -780,6 +767,11 @@ como imagem lisa.
   cápsulas animados no código, sem sangue. Sem a imagem, o código desenha uma viatura genérica
   branca (#F4F6FA) com faixa azul (#1F4FBF) e policiais de farda azul-clara (#6F9BEA).
   Proveniência e método em [scripts/vfx-art/police-car](../scripts/vfx-art/police-car/README.md).
+- **POWER COMBO:** POWERZAP em verde de mensagem (#2FE08A) e ciano (#2FE0FF) com branco
+  (balões de chat, rastros e pacotes); POWERBOT em azul-elétrico (#2F6BFF), roxo (#9B5CFF), ciano e
+  branco (retícula, rede de nós, bot holográfico genérico, glitch e estilhaços). Sem logo dos
+  apps: só balões, nós e um rosto de bot genérico; nenhuma imagem (nada a carregar no primeiro
+  uso).
 - **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
   borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
   fluxo (nós, conexões e pacotes), sem logo de produto.
@@ -863,3 +855,18 @@ reproduzível com Pillow/NumPy e utilitários já existentes: isolamento do alph
 pose, escala proporcional e ancoragem. Baseline 216, margem ≥4; scale 1 e offsets 0/8.
 Base para a direita; flipX genérico. Golpes sincronizados por fases do config; seis normais,
 sem arte de especial. KO deitado reduzido proporcionalmente para caber, sem cortar membros.
+
+## Amanda Konrad — BR24
+
+Arte original criada com ImageGen integrado usando as duas fotos reais e o pôster aprovado
+fornecidos pelo usuário. Cabelo acobreado preso com ondas, blusa off-white com babados,
+jeans, crachá e tênis claros. Sem assets de franquias ou logos copiados.
+Fontes e prompts em [scripts/amanda-konrad-art](../scripts/amanda-konrad-art/README.md).
+Uso autorizado para esta implementação; arte gerada para o projeto.
+
+`public/fighters/amanda-konrad/sprite.png`: RGBA 1536×1120, grade 8×5 de células 192×224.
+`portrait.png`: RGBA 240×300. Normalização reproduzível com Pillow/NumPy já usados pelo projeto,
+baseline 216, margens ≥4, escala 1 e offsets 0/8. Frames voltados à direita, espelhamento genérico;
+fases dos seis golpes sincronizadas pelo config. Retrato entra no boot e sheet na tela VS.
+O especial POWER COMBO reaproveita frames existentes (39, 15, 16: braço erguido e o soco
+apontando); os efeitos são desenhados em código (veja VFX dos especiais).

@@ -276,7 +276,10 @@ export class FightScene extends Phaser.Scene {
         );
         this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'hit');
-        this.fightCamera.shake(80, 0.004);
+        // The finisher of a multi-hit move lands harder than its first hits.
+        if (event.hitCount > 1 && event.hitIndex === event.hitCount - 1) {
+          this.fightCamera.shake(160, 0.007);
+        } else this.fightCamera.shake(80, 0.004);
         return;
       case 'block':
         this.combos.blocked(event.attackerIndex);

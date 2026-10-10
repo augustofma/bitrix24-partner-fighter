@@ -31,9 +31,16 @@ export function combatSfx(
 ): SfxId[] {
   switch (event.type) {
     case 'hit':
-    case 'koHit':
-      // The blow lands (impact) and the defender reacts (hurt). KO itself sounds on 'ko'.
-      return [impactSfx(event.attack.state), 'hurt'];
+    case 'koHit': {
+      // The blow lands (impact) and the defender reacts (hurt). KO itself sounds on 'ko'. A
+      // multi-hit special may give each of its steps its own impact (hitSounds).
+      const attacker = fighters?.[event.attackerIndex];
+      const themed =
+        event.attack.state === 'special'
+          ? attacker?.config.assets.specialEffects?.[event.attack.id]?.hitSounds?.[event.hitIndex]
+          : undefined;
+      return [themed ?? impactSfx(event.attack.state), 'hurt'];
+    }
     case 'block':
       return ['block'];
     case 'jump':

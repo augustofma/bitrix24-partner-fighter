@@ -9,6 +9,7 @@ import { FLUID_THEME } from './fluidTheme';
 import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
 import { POLICE_THEME } from './policeTheme';
+import { POWER_THEME } from './powerTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
 import { WORKFLOW_THEME } from './workflowTheme';
@@ -23,9 +24,12 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   skyLightning: LIGHTNING_THEME,
   workflowNodes: WORKFLOW_THEME,
   policeRaid: POLICE_THEME,
+  powerCombo: POWER_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;
+/** The step tag of a multi-hit move (hitLabels), just under the label. */
+const HIT_LABEL_OFFSET_Y = -172;
 /** Images one slot can show in a frame (e.g. a glow copy and the crisp image). */
 const IMAGES_PER_SLOT = 2;
 /** Impacts on screen at once (a new one recycles the oldest). */
@@ -39,6 +43,8 @@ interface Impact {
   y: number;
   direction: 1 | -1;
   blocked: boolean;
+  hit: number;
+  hits: number;
   startedAt: number;
 }
 
@@ -102,6 +108,7 @@ export class SpecialEffects {
   private readonly glow: Phaser.GameObjects.Graphics;
   private readonly graphics: Phaser.GameObjects.Graphics;
   private readonly labels: readonly Phaser.GameObjects.Text[];
+  private readonly hitLabels: readonly Phaser.GameObjects.Text[];
   private readonly moveSlots: readonly { emblem: ImageSlot; glyph: ImageSlot }[];
   private readonly impactSlots: readonly ImageSlot[];
   private readonly impacts: (Impact | null)[] = Array.from({ length: IMPACT_SLOTS }, () => null);
@@ -112,6 +119,13 @@ export class SpecialEffects {
     this.labels = [0, 1].map(() =>
       scene.add
         .text(0, 0, '', arcadeText(18, COLORS.cyan))
+        .setOrigin(0.5)
+        .setDepth(DEPTH.effects + 3)
+        .setVisible(false),
+    );
+    this.hitLabels = [0, 1].map(() =>
+      scene.add
+        .text(0, 0, '', arcadeText(13, COLORS.white))
         .setOrigin(0.5)
         .setDepth(DEPTH.effects + 3)
         .setVisible(false),
@@ -140,6 +154,8 @@ export class SpecialEffects {
       y: event.point.y,
       direction: attacker.direction,
       blocked: event.type === 'block',
+      hit: event.hitIndex,
+      hits: event.hitCount,
       startedAt: this.scene.time.now,
     };
   }
@@ -154,8 +170,10 @@ export class SpecialEffects {
 
   private drawMove(fighter: ReadonlyFighter, index: number): void {
     const label = this.labels[index];
+    const hitLabel = this.hitLabels[index];
     const slots = this.moveSlots[index];
     label?.setVisible(false);
+    hitLabel?.setVisible(false);
     const attack = fighter.activeAttack;
     const phase = fighter.attackPhase;
     const effect =
@@ -172,6 +190,17 @@ export class SpecialEffects {
       .setPosition(fighter.position.x, fighter.position.y + LABEL_OFFSET_Y)
       .setAlpha(alpha)
       .setVisible(true);
+    // Multi-hit: which part of the move is on (the first before it opens, the last after).
+    const steps = effect.hitLabels;
+    if (steps && steps.length > 0) {
+      const step = fighter.attackStep;
+      const current = phase === 'startup' ? 0 : phase === 'recovery' ? steps.length - 1 : step;
+      hitLabel
+        ?.setText(steps[Math.min(steps.length - 1, Math.max(0, current))] ?? '')
+        .setPosition(fighter.position.x, fighter.position.y + HIT_LABEL_OFFSET_Y)
+        .setAlpha(alpha)
+        .setVisible(true);
+    }
 
     const direction = fighter.direction;
     const { hitbox } = attack;
@@ -224,6 +253,8 @@ export class SpecialEffects {
         direction: impact.direction,
         t,
         blocked: impact.blocked,
+        hit: impact.hit,
+        hits: impact.hits,
         emblem: slot,
       });
     });

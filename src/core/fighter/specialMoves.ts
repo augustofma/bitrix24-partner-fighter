@@ -1,5 +1,6 @@
 import type { FighterConfig, SpecialMoveConfig } from '../../types/fighter';
 import type { Direction, Rect, Vec2 } from '../../types/geometry';
+import { attackHits } from './attackFrames';
 import { attackWouldConnect } from './attackGeometry';
 
 /*
@@ -44,7 +45,8 @@ export function specialForPress(
 }
 
 /**
- * Would `move`, started now, touch `target`'s current hurtbox when it becomes active? Takes
+ * Would `move` (any of its hits), started now, touch `target`'s current hurtbox when it becomes
+ * active? Takes
  * the forward travel during startup (advanceSpeed) into account. Pure geometry: reach and height.
  */
 export function specialWouldConnect(
@@ -54,10 +56,12 @@ export function specialWouldConnect(
   target: Rect | null,
 ): boolean {
   const travel = move.advanceSpeed * move.startupFrames * direction;
-  return attackWouldConnect(move, { x: origin.x + travel, y: origin.y }, direction, target);
+  const from = { x: origin.x + travel, y: origin.y };
+  return attackHits(move).some((hit) => attackWouldConnect(hit, from, direction, target));
 }
 
 /** Farthest center distance (px) the move reaches forward, startup travel included. */
 export function specialReach(move: SpecialMoveConfig): number {
-  return move.hitbox.x + move.hitbox.width + move.advanceSpeed * move.startupFrames;
+  const reach = Math.max(...attackHits(move).map(({ hitbox }) => hitbox.x + hitbox.width));
+  return reach + move.advanceSpeed * move.startupFrames;
 }

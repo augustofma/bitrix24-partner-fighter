@@ -507,6 +507,18 @@ rival. Custo 40, somente no chão, nível `mid`, dano 18, chip 3, startup 18 / a
 alcance de 280 px, o maior do elenco, pago com a saída mais lenta (a viatura precisa chegar) e o
 maior castigo na defesa (26 de recovery contra 14 de blockstun).
 
+**POWER COMBO (Amanda Konrad):** os dois apps dela em sequência, num único especial com três
+contatos (`hits`). Custo 40, somente no chão, nível `mid`, startup 14 / ativo 18 / recovery 26,
+ela não avança. **POWERZAP** (frames 0 e 6 do ativo): duas mensagens de 4 de dano (chip 1,
+hitstun 14, blockstun 10, knockback 2,5, hitstop 4), a segunda com mais alcance (230 px contra
+180). **POWERBOT** (frame 14): o golpe principal, 12 de dano (chip 1, hitstun 22, blockstun 14,
+knockback 8, hitstop 12), alcance de 260 px. Total 20 no acerto e 3 de chip na defesa. O hitstun
+de cada mensagem dura mais que o intervalo até o próximo contato, então os três formam um combo
+(o contador mostra "3 HITS!"); cada contato acerta uma vez só e pode errar sozinho: de longe só o
+POWERBOT alcança, e as caixas ficam na altura da cintura/peito, então um pulo lido na saída passa
+por cima de tudo (pular cedo demais cai no POWERBOT). Na defesa fica -15 depois do último
+contato: punível. Um K.O. no meio encerra o combo ali.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -558,6 +570,15 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   acerto, os tiros chegam um atrás do outro no rival (clarões, faíscas e o vermelho/azul da
   sirene; na defesa: faíscas ricocheteando na guarda); depois a viatura sai de ré. Tudo em
   desenho de pixel, sem sangue. Som: sirene de dois tons, pneu cantando, rajada e impacto.
+- **POWER COMBO (Amanda Konrad), POWERZAP → POWERBOT:** na carga, um balão de chat verde com
+  "digitando..." se forma na mão dela e ondas de envio pulsam; em cada mensagem, um balão voa até
+  o alcance com rastro ciano e pacotes digitais, e o acerto é um "enviado" pequeno (anel verde,
+  pedaços de balão). Logo antes do golpe final, a análise trava no alvo: retícula girando, rede de
+  nós se ligando, um pequeno bot holográfico escaneando e um feixe da mão até o alvo; no acerto,
+  explosão digital azul-elétrico e roxa com clarão branco, barras de glitch, estilhaços de pixel e
+  o bot piscando por cima (câmera treme um pouco mais que num golpe comum). Rótulo POWER COMBO
+  com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: envio com bolhas, um "pop" digital por
+  mensagem e, no final, trava de mira e estrondo digital.
 - **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
   frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
   disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por
@@ -829,7 +850,7 @@ acima da música; **M** silencia tudo. Lista e níveis em
 ## Amanda Konrad — BR24
 
 Jogável na luta rápida como P1 ou CPU. Vida 100; avanço 3,2, recuo 2,6 e velocidade horizontal
-do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão, sem especial exclusivo e sem campanha.
+do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão e especial POWER COMBO; sem campanha.
 Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 
 | Golpe         | Dano | Startup / ativo / recovery |

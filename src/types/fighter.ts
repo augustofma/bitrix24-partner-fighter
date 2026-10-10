@@ -87,6 +87,31 @@ export interface AttackConfig {
   blockPushback: number;
   /** Freeze frames on contact, for impact feel. */
   hitstopFrames: number;
+  /**
+   * Multi-hit timeline (optional): the active window is split into steps that can each connect
+   * once, in order. A step opens `activeFrame` frames into the active window and stays open
+   * until the next one opens; what it leaves out comes from the attack above. Without it the
+   * whole active window is one contact.
+   */
+  hits?: readonly AttackHitStep[];
+}
+
+/** One contact of a multi-hit attack (see AttackConfig.hits). */
+export interface AttackHitStep extends Partial<
+  Pick<
+    AttackConfig,
+    | 'damage'
+    | 'chipDamage'
+    | 'hitbox'
+    | 'hitstunFrames'
+    | 'blockstunFrames'
+    | 'knockback'
+    | 'blockPushback'
+    | 'hitstopFrames'
+  >
+> {
+  /** Frames after the active window starts (the first step is 0). */
+  activeFrame: number;
 }
 
 export interface FighterStats {
@@ -117,7 +142,7 @@ export interface FighterBoxes {
   pushHeight: number;
 }
 
-/** One strong contact today; future hit timelines extend the shared attack resolver. */
+/** A special: an attack paid with meter (one contact, or a multi-hit `hits` timeline). */
 export interface SpecialMoveConfig extends AttackConfig {
   state: 'special';
   meterCost: number;
@@ -167,6 +192,9 @@ export interface FighterAssetManifest {
  *   screen and lightning bolts from it to the floor across the stage, a bolt onto the victim.
  * - `policeRaid`: a cartoon police call (CHAMA O 190!): a patrol car screeching in with flashing
  *   lights, officers firing tracers along the reach, a volley landing on the rival.
+ * - `powerCombo`: two apps in sequence (POWER COMBO): chat bubbles and digital bursts racing to
+ *   the rival on each messaging hit, then an AI scan (reticle, node network, bot hologram) and
+ *   a digital explosion on the finisher. Made for a multi-hit `hits` timeline.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
 export type SpecialEffectStyle =
@@ -177,7 +205,8 @@ export type SpecialEffectStyle =
   | 'liquidFlow'
   | 'skyLightning'
   | 'workflowNodes'
-  | 'policeRaid';
+  | 'policeRaid'
+  | 'powerCombo';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;
@@ -189,6 +218,10 @@ export interface SpecialEffectConfig {
   glyph?: string;
   /** Sound when the special starts (default: the generic special sound). */
   sound?: SfxId;
+  /** Multi-hit moves: a short tag under the label for each step of `hits` (e.g. its app). */
+  hitLabels?: readonly string[];
+  /** Multi-hit moves: the impact sound of each step that connects (default: the heavy hit). */
+  hitSounds?: readonly SfxId[];
 }
 
 export interface FighterSpriteAssets {

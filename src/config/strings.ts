@@ -124,6 +124,9 @@ export const STRINGS = {
   specialAlaioStrike: 'ALAIO STRIKE!',
   specialN8n: 'N8N!',
   specialPolice: 'CHAMA O 190!',
+  specialPowerCombo: 'POWER COMBO',
+  specialPowerZap: 'POWERZAP',
+  specialPowerBot: 'POWERBOT',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:

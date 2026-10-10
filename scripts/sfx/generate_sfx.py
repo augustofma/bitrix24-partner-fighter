@@ -390,6 +390,40 @@ def sfx_special_190(rng):
     return mix(siren, at(screech, 0.16), *shots, at(hit, 0.32))
 
 
+def sfx_special_powerzap(rng):
+    """POWER COMBO starts (POWERZAP): a quick "message sent" whoosh rising, three bubble pops
+    climbing in pitch and a short digital chirp: messages flying out."""
+    whoosh_len = 0.22
+    whoosh = bandpass(rng.uniform(-1, 1, int(whoosh_len * SR)), 900, 4200) * np.sin(np.linspace(0, np.pi, int(whoosh_len * SR))) * 0.45
+    pops = [
+        at(np.sin(sweep(hz, hz * 1.9, 0.05)) * decay(0.05, 45) * 0.55, 0.05 + i * 0.06)
+        for i, hz in enumerate([620, 840, 1120])
+    ]
+    chirp = at(square(sweep(1400, 2600, 0.08), 6) * decay(0.08, 25) * 0.18, 0.24)
+    return mix(whoosh, *pops, chirp)
+
+
+def sfx_powerzap_hit(rng):
+    """A POWERZAP message lands: a light, bright digital pop with a tiny thump (a small hit)."""
+    pop = np.sin(sweep(1300, 520, 0.07)) * decay(0.07, 40) * 0.6
+    thump = np.sin(sweep(190, 90, 0.08)) * decay(0.08, 35) * 0.55
+    fizz = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 3000) * decay(0.05, 60) * 0.25
+    return mix(thump, pop, fizz)
+
+
+def sfx_special_powerbot(rng):
+    """POWERBOT finisher lands: a scan "lock" double blip, then a heavy digital boom with a
+    bit-crushed tail and a falling synth zap."""
+    lock = mix(at(square(sweep(1800, 1800, 0.04), 4) * decay(0.04, 30) * 0.2, 0),
+               at(square(sweep(2400, 2400, 0.04), 4) * decay(0.04, 30) * 0.2, 0.05))
+    boom_len = 0.5
+    boom = np.sin(sweep(150, 38, boom_len, 1.6)) * decay(boom_len, 7) * 0.9
+    noise = lowpass(rng.uniform(-1, 1, int(boom_len * SR)), 2600) * decay(boom_len, 9) * 0.5
+    crushed = np.round(noise * 6) / 6
+    zap = saw(sweep(2200, 180, 0.35, 1.4), 10) * decay(0.35, 8) * 0.22
+    return mix(lock, at(mix(boom, crushed, zap), 0.1))
+
+
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
     """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
     and a slightly different onset, summed into one crowd roar."""
@@ -462,6 +496,9 @@ EFFECTS = {
     "special-alaio-strike": sfx_special_alaio_strike,
     "special-n8n": sfx_special_n8n,
     "special-190": sfx_special_190,
+    "special-powerzap": sfx_special_powerzap,
+    "powerzap-hit": sfx_powerzap_hit,
+    "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,
 }
