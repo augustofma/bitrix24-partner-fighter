@@ -274,6 +274,31 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
       },
       {
         type: 'image',
+        key: portraitTextureKey('fighters/douglas/portrait.png'),
+        path: 'fighters/douglas/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'douglas-sheet',
+        path: 'fighters/douglas/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+
+      {
+        type: 'image',
+        key: portraitTextureKey('fighters/rodolfo/portrait.png'),
+        path: 'fighters/rodolfo/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'rodolfo-sheet',
+        path: 'fighters/rodolfo/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
+      {
+        type: 'image',
         key: portraitTextureKey('fighters/dmitry/portrait.png'),
         path: 'fighters/dmitry/portrait.png',
       },
@@ -321,6 +346,10 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'romulo-sheet',
         'gabriel-mattozo-sheet',
         'gabriele-sheet',
+        'douglas-sheet',
+        'rodolfo-sheet',
+        portraitTextureKey('fighters/douglas/portrait.png'),
+        portraitTextureKey('fighters/rodolfo/portrait.png'),
         'amanda-konrad-sheet',
         portraitTextureKey('fighters/amanda-konrad/portrait.png'),
         vfxTextureKey('vfx/police-car.png'),
