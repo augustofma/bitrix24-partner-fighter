@@ -763,6 +763,15 @@ sem pedido explícito.**
 - [x] Especiais sem som de passarinho: a comemoração da torcida perdeu os assobios; todo especial
       que conecta toca `special-hit` (golpe especial pesado); POWER COMBO sem bolhas/chirps
 
+## DONE (Douglas — Dohko Technology, branch `feature/douglas-dohko-fighter`)
+
+- [x] Fighter novo por configuração, décimo primeiro na luta rápida como P1/CPU; vida 100,
+      mobilidade média, seis normais, sem especial exclusivo ou campanha
+- [x] Sprite RGBA 1536×1120 em 40 células 192×224 e portrait RGBA 240×300; fontes e prompts versionados
+- [x] Idle com guarda discreta, normalização reproduzível de escala/âncoras, alpha e margens validados
+- [x] Testes de assets, animações, roster, estados, CPU e determinismo; playtest com F2 contra o elenco
+- [x] Integrado sobre a main atual na branch `feature/douglas-story` (Amanda com POWER COMBO)
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

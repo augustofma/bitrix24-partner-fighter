@@ -866,6 +866,22 @@ Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 | Soco aéreo    | 6    | 5 / 6 / 10                 |
 | Chute aéreo   | 10   | 8 / 8 / 14                 |
 
+## Douglas — Dohko Technology
+
+Disponível na luta rápida como P1 e CPU, sem especial exclusivo ou campanha. Vida 100,
+avanço 3,1, recuo 2,6, impulso do pulo 16,5 e deslocamento aéreo 3,9 px/frame. Corpo padrão.
+Soco e chute em pé têm 4 px de alcance adicional frente ao perfil da Amanda, compensados
+por startup mais longo. Frame data em startup / ativo / recovery:
+
+| Golpe         | Dano | Frames      |
+| ------------- | ---- | ----------- |
+| Soco          | 7    | 5 / 3 / 11  |
+| Chute         | 10   | 10 / 4 / 17 |
+| Soco agachado | 5    | 5 / 3 / 9   |
+| Rasteira      | 9    | 10 / 4 / 18 |
+| Soco aéreo    | 6    | 5 / 6 / 10  |
+| Chute aéreo   | 10   | 8 / 8 / 14  |
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |
