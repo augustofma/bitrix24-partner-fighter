@@ -36,13 +36,17 @@ const SMOKE = 0xc9ccd6;
 const S = 1.65;
 /** Patrol car size (world px, at 1x) and where it parks: behind Gabriele, facing the rival. */
 const CAR = { length: 132, bodyHeight: 22, cabinWidth: 72, cabinHeight: 22, wheel: 11 } as const;
-const PARK_BEHIND = 150;
+/** Behind Gabriele, with the front bumper just behind her (the illustrated car is longer). */
+const PARK_BEHIND = 208;
 /** Where it comes from (and leaves to): well off-screen behind her. */
 const ENTRY_DISTANCE = 520;
 const TRACERS = 6;
 const IMPACT_BURSTS = 7;
-/** Artwork is 1448x1086; wheels touch y=829, with its center at (724,543). */
-const CAR_ART = { scale: 0.2, groundOffset: 286, roofX: -72, roofY: -524 } as const;
+/**
+ * Artwork is 1448x1086; wheels touch y=829, with its center at (724,543). Drawn at the size of
+ * a real car next to Gabriele: the roof (with the light bar) close to her head height.
+ */
+const CAR_ART = { scale: 0.28, groundOffset: 286, roofX: -72, roofY: -524 } as const;
 
 type Point = { x: number; y: number };
 
@@ -75,7 +79,7 @@ function patrolCar(
       glow,
       lightX,
       ground + CAR_ART.roofY * CAR_ART.scale,
-      13,
+      65 * CAR_ART.scale,
       red ? RED : SIREN_BLUE,
       0.35 * alpha,
     );
