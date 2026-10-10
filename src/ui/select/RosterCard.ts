@@ -159,6 +159,7 @@ export class RosterCard {
       height: artHeight,
       showName: false,
       framed: false,
+      fit: 'cover',
     });
     const plateY = this.height / 2 - ART_INSET - NAME_PLATE_HEIGHT / 2;
     const plate = scene.add.rectangle(

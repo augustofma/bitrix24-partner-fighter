@@ -15,6 +15,12 @@ export interface PortraitOptions {
   showName?: boolean;
   /** Draw the card background and glow (false when the caller provides its own frame). */
   framed?: boolean;
+  /**
+   * How a portrait image fits the art area: 'contain' (default) shows it whole; 'cover' fills
+   * the area, trimming the sides (or the top) that stick out. Roster cards use 'cover' so a
+   * tall card never shows an empty band above the portrait.
+   */
+  fit?: 'contain' | 'cover';
 }
 
 /** Height of the placeholder figure (feet to top of head) used to fit it in the card. */
@@ -67,7 +73,7 @@ export function createPortrait(
   };
   const portraitKey = config.assets.portrait ? portraitTextureKey(config.assets.portrait) : null;
   if (portraitKey && scene.textures.exists(portraitKey)) {
-    container.add(createPortraitImage(scene, portraitKey, area, mirrored));
+    container.add(createPortraitImage(scene, portraitKey, area, mirrored, options.fit));
   } else {
     container.add(createPortraitFigure(scene, config, area, options.pose ?? POSES.idle, mirrored));
   }
@@ -83,16 +89,25 @@ export function createPortrait(
   return container;
 }
 
-/** Real portrait: scaled to fit ("contain") and standing on the bottom of the art area. */
+/** Real portrait: scaled to fit (contain or cover) and standing on the bottom of the art area. */
 function createPortraitImage(
   scene: Phaser.Scene,
   key: string,
   area: ArtArea,
   mirrored: boolean,
+  fit: 'contain' | 'cover' = 'contain',
 ): Phaser.GameObjects.Image {
   const image = scene.add.image(0, area.bottom, key).setOrigin(0.5, 1).setFlipX(mirrored);
-  const scale = Math.min(area.width / image.width, area.height / image.height);
-  return image.setScale(scale);
+  const scaleX = area.width / image.width;
+  const scaleY = area.height / image.height;
+  if (fit === 'contain') return image.setScale(Math.min(scaleX, scaleY));
+  const scale = Math.max(scaleX, scaleY);
+  // Texture crop (no mask): the middle of the width and the bottom of the height that fit.
+  const cropWidth = Math.min(image.width, area.width / scale);
+  const cropHeight = Math.min(image.height, area.height / scale);
+  return image
+    .setScale(scale)
+    .setCrop((image.width - cropWidth) / 2, image.height - cropHeight, cropWidth, cropHeight);
 }
 
 function createPortraitFigure(
