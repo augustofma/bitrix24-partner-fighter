@@ -45,6 +45,8 @@ export type SfxId =
   | 'special-n8n'
   | 'special-190'
   | 'special-hit'
+  | 'special-dimension'
+  | 'special-dimension-impact'
   | 'special-powerzap'
   | 'special-powerbot'
   // Crowd reactions (stages with a crowd only).

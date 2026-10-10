@@ -127,6 +127,7 @@ export const STRINGS = {
   specialPowerCombo: 'POWER COMBO',
   specialPowerZap: 'POWERZAP',
   specialPowerBot: 'POWERBOT',
+  specialOutraDimensao: 'OUTRA DIMENSÃO',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:

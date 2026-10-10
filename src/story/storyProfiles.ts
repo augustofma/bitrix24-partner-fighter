@@ -47,6 +47,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   { fighterId: 'gabriele', home: 'rio-de-janeiro' },
   // Amanda Konrad (BR24) is from Florianópolis: met by the Hercílio Luz bridge.
   { fighterId: 'amanda-konrad', home: 'florianopolis' },
+  // Douglas (Dohko Technology) is from São Paulo: no stage of its own, met at the Partner Summit.
+  { fighterId: 'douglas', home: 'sao-paulo' },
 ];
 
 /**

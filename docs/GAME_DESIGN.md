@@ -519,6 +519,15 @@ POWERBOT alcança, e as caixas ficam na altura da cintura/peito, então um pulo 
 por cima de tudo (pular cedo demais cai no POWERBOT). Na defesa fica -15 depois do último
 contato: punível. Um K.O. no meio encerra o combo ali.
 
+**OUTRA DIMENSÃO (Douglas):** uma fenda dimensional abre à frente dele (o nome da Dohko
+Technology vem de um personagem de anime; o golpe é original, sem símbolos nem efeitos da
+obra). Custo 40, somente no chão, nível `mid`, startup 16 / ativo 8 / recovery 28, ele não
+avança. Dois contatos (`hits`): a **sucção** no frame 0 do ativo (6 de dano, chip 1, hitstun 20,
+blockstun 12, knockback 1, hitstop 6) e o **colapso** no frame 6 (16 de dano, chip 2, hitstun 26,
+blockstun 16, knockback 9, pushback 6, hitstop 13). Total 22 no acerto e 3 de chip na defesa.
+Alcance médio (210 px) na altura do corpo: de longe erra e um pulo lido na saída passa por cima.
+Na defesa fica -13 depois do colapso: punível.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -579,6 +588,14 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   o bot piscando por cima (câmera treme um pouco mais que num golpe comum). Rótulo POWER COMBO
   com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: carga de energia com um baque no disparo, o
   golpe especial em cada mensagem e, no final, um estrondo digital.
+- **OUTRA DIMENSÃO (Douglas), fenda dimensional:** na carga, ele estende a mão e partículas
+  cósmicas giram até ela, a tela escurece um pouco e o espaço racha na vertical à frente dele; no
+  ativo, a rachadura vira um portal oval com borda azul-elétrico/roxo/ciano, estrelas pixeladas
+  dentro, linhas de órbita e partículas girando, um feixe da mão até ele e riscos de sucção; no
+  primeiro contato o rival é "puxado" (riscos de velocidade, névoa roxa e estrelas da outra
+  dimensão); no segundo, a fenda colapsa: clarão branco/ciano redondo, onda roxa, anéis e
+  estilhaços com brilhos dourados (câmera treme mais). Na defesa tudo fica menor. Depois a fenda
+  fecha e a tela volta ao normal. Som: energia espacial, warp, grave crescente e explosão cósmica.
 - **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
   frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
   disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por
@@ -738,19 +755,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/10 LIBERADOS" no topo:
+do Modo História, com o contador "x/11 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com todos os finais liberados (hoje 10), o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com todos os finais liberados (hoje 11), o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/10" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/11" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -868,7 +885,9 @@ Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 
 ## Douglas — Dohko Technology
 
-Disponível na luta rápida como P1 e CPU, sem especial exclusivo ou campanha. Vida 100,
+Disponível na luta rápida como P1 e CPU, com o especial OUTRA DIMENSÃO. No Modo História ele é de
+**São Paulo**: campanha própria e rival das outras na cidade dele (sem cenário próprio: Partner
+Summit); final num mirante com a ponte estaiada ao pôr do sol. Vida 100,
 avanço 3,1, recuo 2,6, impulso do pulo 16,5 e deslocamento aéreo 3,9 px/frame. Corpo padrão.
 Soco e chute em pé têm 4 px de alcance adicional frente ao perfil da Amanda, compensados
 por startup mais longo. Frame data em startup / ativo / recovery:

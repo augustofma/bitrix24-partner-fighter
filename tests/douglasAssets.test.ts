@@ -12,11 +12,11 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Douglas PNG assets', () => {
-  it('keeps one roster entry, her own portrait, and remains quick-fight only', () => {
+  it('keeps one roster entry, his own portrait, and has a story campaign (São Paulo)', () => {
     expect(ROSTER.filter((f) => f.id === 'douglas')).toEqual([douglas]);
     expect(douglas.assets.portrait).toBe('fighters/douglas/portrait.png');
     expect(douglas.playable).toBe(true);
-    expect(hasStoryCampaign(douglas.id)).toBe(false);
+    expect(hasStoryCampaign(douglas.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(douglas, 40)).toEqual([]);

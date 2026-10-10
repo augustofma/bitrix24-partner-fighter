@@ -449,6 +449,13 @@ sobre a baía e a Ponte Hercílio Luz
 ([scripts/story-ending-art/amanda-konrad/README.md](../scripts/story-ending-art/amanda-konrad/README.md)).
 Ela está à esquerda e o título, à direita, não a cobre.
 
+## Final do Modo História: DOUGLAS
+
+Arte oficial fornecida pelo dono do projeto: o Douglas, de costas, de terno escuro e mãos nos
+bolsos, num mirante de São Paulo olhando o pôr do sol sobre os prédios, o rio e a ponte estaiada
+([scripts/story-ending-art/douglas/README.md](../scripts/story-ending-art/douglas/README.md)).
+Ele está à esquerda e o título, à direita, não o cobre.
+
 ## Final do Modo História: GABRIEL MATTOZO
 
 Arte oficial fornecida pelo dono do projeto: o Gabriel Mattozo, de costas, de moletom claro, num
@@ -749,6 +756,7 @@ registrada aqui:
 | `scripts/story-ending-art/joao-guiotti/source.webp` e `public/story/endings/joao-guiotti.jpg`       | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_joao_guiotti_ending.py`             | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/gabriele/source.webp` e `public/story/endings/gabriele.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_gabriele_ending.py`                 | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/amanda-konrad/source.webp` e `public/story/endings/amanda-konrad.jpg`     | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_amanda_konrad_ending.py`            | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/story-ending-art/douglas/source.webp` e `public/story/endings/douglas.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_douglas_ending.py`                  | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/gabriel-mattozo/source.webp` e `public/story/endings/gabriel-mattozo.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_gabriel_mattozo_ending.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/isaque-ferreira/source.webp` e `public/story/endings/isaque-ferreira.jpg` | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_isaque_ferreira_ending.py`          | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romulo/source.webp` e `public/story/endings/romulo.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romulo_ending.py`                   | Arte do projeto, aprovada pelo usuário                            |
@@ -816,6 +824,11 @@ como imagem lisa.
   branco (retícula, rede de nós, bot holográfico genérico, glitch e estilhaços). Sem logo dos
   apps: só balões, nós e um rosto de bot genérico; nenhuma imagem (nada a carregar no primeiro
   uso).
+- **OUTRA DIMENSÃO:** azul-elétrico (#2F6BFF), roxo (#8A3CFF), ciano (#34E8FF), branco e o fundo
+  da fenda quase preto (#05020F) com névoa roxa (#14062E); brilhos dourados (#FFD75A) pontuais. A
+  fenda é um oval de linhas de pixel (sem triangulação), com estrelas que derivam para o centro
+  (profundidade). Inspiração só no conceito de ataque dimensional: nenhum símbolo, armadura ou
+  efeito de franquia. Tudo procedural: nada para carregar.
 - **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
   borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
   fluxo (nós, conexões e pacotes), sem logo de produto.
@@ -914,3 +927,12 @@ baseline 216, margens ≥4, escala 1 e offsets 0/8. Frames voltados à direita, 
 fases dos seis golpes sincronizadas pelo config. Retrato entra no boot e sheet na tela VS.
 O especial POWER COMBO reaproveita frames existentes (39, 15, 16: braço erguido e o soco
 apontando); os efeitos são desenhados em código (veja VFX dos especiais).
+
+## Douglas — Dohko Technology
+
+Arte original gerada com ImageGen integrado a partir da foto real e do pôster aprovado
+fornecidos pelo usuário: cabelo preto penteado, cavanhaque, terno escuro, camisa branca,
+gravata cinza e sapatos sociais. Sem logos ou sprites de terceiros. Uso autorizado pelo usuário.
+Fontes, prompts e normalização em [scripts/douglas-art](../scripts/douglas-art/README.md).
+Sheet RGBA 1536×1120, 40 células 192×224, retrato RGBA 240×300. Baseline 216, margem ≥4,
+escala 1 e offsets 0/8. Idle refeito como guarda discreta; seis golpes sincronizados por fases.
