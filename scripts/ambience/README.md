@@ -19,7 +19,7 @@ toca a 0,3 (`AMBIENCE_VOLUME`) com ganho fino por loop em `AMBIENCES` (`src/conf
 | `rio`            | Rio de Janeiro            | Torcida, batucada (surdo, tamborim, ganzá), mar             |
 | `recife`         | Recife                    | Torcida, alfaias de maracatu e agogô                        |
 | `spain`          | Madri                     | Torcida e palmas de flamenco                                |
-| `portugal`       | Portugal                  | Torcida, gaivotas e ondas                                   |
+| `portugal`       | Portugal, Florianópolis   | Torcida, gaivotas e ondas                                   |
 | `castelo-branco` | Castelo Branco            | Torcida, vento e passarinhos                                |
 | `joinville`      | Joinville, Joinville Zopu | Torcida e passarinhos                                       |
 | `curitiba`       | Curitiba                  | Torcida, chafariz e passarinhos                             |

@@ -778,8 +778,8 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   RECIFE); em Portugal, contra o Filipe, no calçadão à beira-mar (cenário PORTUGAL); na Espanha, contra o
   Isaque, na Puerta de Alcalá (cenário MADRI); no **Rio de Janeiro** (cidade da Gabriele, Inovar
   Consulting), no calçadão de Copacabana (cenário RIO DE JANEIRO); os outros
-  lugares (como **Florianópolis**, cidade da Amanda Konrad, BR24) usam o Partner Summit até
-  terem cenário próprio.
+  lugares usam o Partner Summit até terem cenário próprio. Em **Florianópolis** (cidade da
+  Amanda Konrad, BR24) a luta é no calçadão diante da Ponte Hercílio Luz (cenário FLORIANÓPOLIS).
 - **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
   (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.
 - **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
@@ -852,7 +852,8 @@ acima da música; **M** silencia tudo. Lista e níveis em
 
 Jogável na luta rápida como P1 ou CPU. Vida 100; avanço 3,2, recuo 2,6 e velocidade horizontal
 do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão e especial POWER COMBO. No Modo História ela é de **Florianópolis (SC)**:
-campanha própria e rival das outras na cidade dela (sem cenário próprio: Partner Summit); final
+campanha própria e rival das outras na cidade dela (cenário FLORIANÓPOLIS, diante da Ponte
+Hercílio Luz); final
 com a Ponte Hercílio Luz ao pôr do sol.
 Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 

@@ -504,6 +504,17 @@ atrás das grades da Inovar Consulting
 Cena parada (sem avião), como o BITRIX24 MOSCOU; a torcida pula em três faixas (laterais e a do
 fundo, menor) e os celulares piscam. `top` −50 põe os pés no calçadão.
 
+## Cenário: FLORIANÓPOLIS (Amanda Konrad)
+
+Arte oficial fornecida pelo dono do projeto: um calçadão de pedras com padrão de ondas à beira da
+baía, a Ponte Hercílio Luz, veleiros, a cidade e os morros, coqueiros, bandeiras do Brasil e a
+torcida atrás das grades da BR24
+([scripts/stage-art/florianopolis/README.md](../scripts/stage-art/florianopolis/README.md)).
+Cena parada, como o RIO DE JANEIRO; a torcida pula em três faixas (as arquibancadas dos lados e os
+fãs do meio) e os celulares piscam. As grades terminam mais alto que no Rio: `top` 0 deixa os
+lutadores no calçadão aberto, à frente delas. Som ambiente: o mesmo do PORTUGAL (mar, gaivotas e
+torcida).
+
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
 Arte oficial fornecida pelo dono do projeto: o salão da sede da Bitrix24 em Moscou, com o
@@ -681,6 +692,7 @@ Cada cenário tem um loop de 12 s (sem emenda audível) **sintetizado** por
 | JOINVILLE (os dois)    | `joinville`      | Torcida e passarinhos                         |
 | CURITIBA               | `curitiba`       | Torcida, chafariz e passarinhos               |
 | RÚSSIA                 | `russia`         | Torcida e rajadas de vento                    |
+| FLORIANÓPOLIS          | `portugal`       | Torcida, gaivotas e ondas (o mesmo loop)      |
 | BITRIX24 MOSCOU        | `office`         | Ar-condicionado, conversa, teclados, telefone |
 
 Nas reações da plateia a torcida grita por cima: "ooh!" (`crowd-ooh`) no golpe forte e
@@ -706,6 +718,7 @@ registrada aqui:
 | `scripts/stage-art/portugal/source.webp` e `public/stages/portugal/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_portugal.py`                   | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/spain/source.webp` e `public/stages/spain/*`                                     | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_spain.py`                      | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/rio-de-janeiro/source.webp` e `public/stages/rio-de-janeiro/*`                   | Arte oficial fornecida pelo usuário; escala por `prepare_rio_de_janeiro.py`                        | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/florianopolis/source.webp` e `public/stages/florianopolis/*`                     | Arte oficial fornecida pelo usuário; escala por `prepare_florianopolis.py`                         | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                   | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`                  | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`                 | Arte do projeto, aprovada pelo usuário                            |

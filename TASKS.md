@@ -756,6 +756,8 @@ sem pedido explícito.**
 - [x] Modo História da Amanda: Florianópolis (SC) no mapa (marcador ao sul de Joinville), perfil
       `home: 'florianopolis'` (campanha própria, rival das outras; Partner Summit) e final com a
       Ponte Hercílio Luz (`prepare_amanda_konrad_ending.py`, 1440×810); galeria com 10 finais
+- [x] Cenário FLORIANÓPOLIS (calçadão e Ponte Hercílio Luz, torcida atrás das grades da BR24),
+      arena igual às outras, ambiente do mar; seleção de fases cabe 12 cenários sem rolar
 
 ## NEXT (próximas tarefas recomendadas)
 

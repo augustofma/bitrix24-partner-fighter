@@ -76,7 +76,7 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
   },
   {
     // Amanda Konrad's city (BR24). South of Joinville on both maps: drawn a little south-east,
-    // label to the right. No stage of its own yet: fights here use the default stage.
+    // label to the right.
     id: 'florianopolis',
     kind: 'city',
     name: 'Florianópolis',
@@ -87,6 +87,8 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     longitude: -48.55,
     mapNudge: { dx: 4, dy: 7 },
     mapLabel: { side: 'right', dy: 8 },
+    // Fights here happen on the promenade by the Hercílio Luz bridge.
+    stageId: 'florianopolis',
   },
   // Countries are marked at a central, recognizable point (Russia: around Moscow, where the
   // European side meets the map's frame).

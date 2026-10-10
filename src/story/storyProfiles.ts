@@ -45,7 +45,7 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   { fighterId: 'romulo', home: 'castelo-branco' },
   // Gabriele (Inovar Consulting) is from Rio de Janeiro: met on Copacabana's promenade.
   { fighterId: 'gabriele', home: 'rio-de-janeiro' },
-  // Amanda Konrad (BR24) is from Florianópolis (her ending: the Hercílio Luz bridge).
+  // Amanda Konrad (BR24) is from Florianópolis: met by the Hercílio Luz bridge.
   { fighterId: 'amanda-konrad', home: 'florianopolis' },
 ];
 
