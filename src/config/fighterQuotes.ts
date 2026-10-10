@@ -61,6 +61,13 @@ export const FIGHTER_QUOTES: Readonly<Record<string, FighterQuotes>> = {
     versus: ['Ideias grandes, atitude maior ainda!', 'Vamos fazer acontecer!'],
     victory: ['Conexões que fazem a diferença.', 'O próximo passo é sempre em frente!'],
   },
+  douglas: {
+    versus: [
+      'Estratégia antes de cada movimento.',
+      'Disciplina transforma potencial em resultado.',
+    ],
+    victory: ['Precisão do início ao fim.', 'O resultado começa no planejamento.'],
+  },
   dmitry: {
     versus: ['Bem-vindo à sede da Bitrix24.', 'Vamos ver se você é parceiro gold.'],
     victory: ['Seu plano foi rebaixado para o gratuito.', 'Volte quando tiver mais licenças.'],

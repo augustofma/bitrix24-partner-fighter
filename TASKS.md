@@ -762,6 +762,14 @@ sem pedido explícito.**
 - [x] Balões da tela VS acima dos cards (não cobrem mais o rosto de quem tem a cabeça alta)
 - [x] Especiais sem som de passarinho: a comemoração da torcida perdeu os assobios; todo especial
       que conecta toca `special-hit` (golpe especial pesado); POWER COMBO sem bolhas/chirps
+## DONE (Douglas — Dohko Technology, branch `feature/douglas-dohko-fighter`)
+
+- [x] Fighter novo por configuração, décimo primeiro na luta rápida como P1/CPU; vida 100,
+      mobilidade média, seis normais, sem especial exclusivo ou campanha
+- [x] Sprite RGBA 1536×1120 em 40 células 192×224 e portrait RGBA 240×300; fontes e prompts versionados
+- [x] Idle com guarda discreta, normalização reproduzível de escala/âncoras, alpha e margens validados
+- [x] Testes de assets, animações, roster, estados, CPU e determinismo; playtest com F2 contra o elenco
+- [x] Branch baseada na feature da Amanda para permitir o confronto solicitado, sem merge na main
 
 ## NEXT (próximas tarefas recomendadas)
 
