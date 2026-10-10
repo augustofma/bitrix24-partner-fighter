@@ -17,6 +17,15 @@ Uso autorizado para esta implementação; arte gerada para o projeto.
 baseline 216, margens ≥4, escala 1 e offsets 0/8. Frames voltados à direita, espelhamento genérico;
 fases dos seis golpes sincronizadas pelo config. Retrato entra no boot e sheet na tela VS.
 
+## Douglas — Dohko Technology
+
+Arte original gerada com ImageGen integrado a partir da foto real e do pôster aprovado
+fornecidos pelo usuário: cabelo preto penteado, cavanhaque, terno escuro, camisa branca,
+gravata cinza e sapatos sociais. Sem logos ou sprites de terceiros. Uso autorizado pelo usuário.
+Fontes, prompts e normalização em [scripts/douglas-art](../scripts/douglas-art/README.md).
+Sheet RGBA 1536×1120, 40 células 192×224, retrato RGBA 240×300. Baseline 216, margem ≥4,
+escala 1 e offsets 0/8. Idle refeito como guarda discreta; seis golpes sincronizados por fases.
+
 ## Direção
 
 - **Gênero e época:** fighting game arcade dos anos 90 (energia, cores saturadas, leitura
@@ -699,6 +708,7 @@ registrada aqui:
 | Asset                                                                                               | Autor                                                                                              | Licença                                                           |
 | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `public/fighters/amanda-konrad/*.png` e `scripts/amanda-konrad-art/*.png`                           | ImageGen integrado, fotos e poster fornecidos pelo usuario; montagem local                         | Arte original gerada para o projeto; uso autorizado pelo usuario  |
+| `public/fighters/douglas/*.png` e `scripts/douglas-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/fighter-a/*.png` (demo)                                                            | Gerado por `scripts/generate-demo-fighter-art.mjs`                                                 | Original do projeto                                               |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                                       | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local             | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`                             | ImageGen integrado, referências autorizadas pelo usuário; montagem local                           | Arte original gerada para o projeto; sem assets de terceiros      |
