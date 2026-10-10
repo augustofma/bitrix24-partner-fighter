@@ -7,8 +7,7 @@ prédios da cidade, o rio e a ponte estaiada Octávio Frias de Oliveira.
 `prepare_douglas_ending.py` faz o mesmo preparo dos outros finais 16:9 (recorte centralizado) e
 gera `public/story/endings/douglas.jpg` (1440×810).
 
-A arte é ligada ao lutador em `STORY_ENDING_ART` (`src/story/storyEndings.ts`) quando o
-personagem entrar no elenco; aparece na `CampaignCompleteScene`, ao zerar o Modo História com
+A arte é ligada ao lutador em `STORY_ENDING_ART` (`src/story/storyEndings.ts`) e aparece na `CampaignCompleteScene`, ao zerar o Modo História com
 ele, e na galeria de finais.
 
 Uso (ferramenta offline, fora do build; requer Python 3 e Pillow):

@@ -771,6 +771,8 @@ sem pedido explícito.**
 - [x] Idle com guarda discreta, normalização reproduzível de escala/âncoras, alpha e margens validados
 - [x] Testes de assets, animações, roster, estados, CPU e determinismo; playtest com F2 contra o elenco
 - [x] Integrado sobre a main atual na branch `feature/douglas-story` (Amanda com POWER COMBO)
+- [x] Modo História: perfil `home: 'sao-paulo'` (campanha própria, rival das outras; Partner
+      Summit) e final com a ponte estaiada (`prepare_douglas_ending.py`, 1440×810); galeria com 11
 
 ## NEXT (próximas tarefas recomendadas)
 

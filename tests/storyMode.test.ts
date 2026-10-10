@@ -107,6 +107,7 @@ describe('campaigns', () => {
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'gabriele', destination: 'rio-de-janeiro' },
       { opponent: 'amanda-konrad', destination: 'florianopolis' },
+      { opponent: 'douglas', destination: 'sao-paulo' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities(fixedStory('augusto'))).toEqual([
@@ -120,6 +121,7 @@ describe('campaigns', () => {
       'castelo-branco',
       'rio-de-janeiro',
       'florianopolis',
+      'sao-paulo',
       'russia',
     ]);
   });
@@ -135,6 +137,7 @@ describe('campaigns', () => {
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'gabriele', destination: 'rio-de-janeiro' },
       { opponent: 'amanda-konrad', destination: 'florianopolis' },
+      { opponent: 'douglas', destination: 'sao-paulo' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities(fixedStory('filipe'))).toEqual([
@@ -148,6 +151,7 @@ describe('campaigns', () => {
       'castelo-branco',
       'rio-de-janeiro',
       'florianopolis',
+      'sao-paulo',
       'russia',
     ]);
   });
@@ -165,6 +169,7 @@ describe('campaigns', () => {
       'gabriel-mattozo',
       'gabriele',
       'amanda-konrad',
+      'douglas',
     ]);
     expect(() => startStory('fighter-a')).toThrow();
   });

@@ -26,4 +26,6 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   romulo: 'story/endings/romulo.jpg',
   // Amanda Konrad at a Florianópolis lookout, the Hercílio Luz bridge at sunset.
   'amanda-konrad': 'story/endings/amanda-konrad.jpg',
+  // Douglas at a São Paulo lookout, the skyline and the cable-stayed bridge at sunset.
+  douglas: 'story/endings/douglas.jpg',
 };
