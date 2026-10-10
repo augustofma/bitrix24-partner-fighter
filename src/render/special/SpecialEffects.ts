@@ -10,6 +10,7 @@ import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
 import { POLICE_THEME } from './policeTheme';
 import { POWER_THEME } from './powerTheme';
+import { DIMENSION_THEME } from './dimensionTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
 import { WORKFLOW_THEME } from './workflowTheme';
@@ -25,6 +26,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   workflowNodes: WORKFLOW_THEME,
   policeRaid: POLICE_THEME,
   powerCombo: POWER_THEME,
+  dimensionRift: DIMENSION_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;

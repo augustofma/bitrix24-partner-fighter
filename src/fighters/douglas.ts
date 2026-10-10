@@ -1,7 +1,8 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** Measured normals trade slightly longer reach for slower startup. */
+/** Measured normals trade slightly longer reach for slower startup; OUTRA DIMENSÃO special. */
 export const douglas: FighterConfig = {
   id: 'douglas',
   name: 'douglas',
@@ -120,9 +121,60 @@ export const douglas: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // OUTRA DIMENSÃO: a rift opens in front of him at a controlled distance. The first contact
+      // pulls the rival toward it, the second is the rift collapsing (the main hit).
+      id: 'douglas.outraDimensao',
+      displayName: STRINGS.specialOutraDimensao,
+      state: 'special',
+      level: 'mid',
+      meterCost: 40,
+      groundOnly: true,
+      // He stands still: the rift does the work.
+      advanceSpeed: 0,
+      // A visible conjuring: the hand gathers energy and the space cracks open.
+      startupFrames: 16,
+      // Two steps (see hits): the pull at 0, the collapse at 6.
+      activeFrames: 8,
+      // Punishable on block (28 recovery against the collapse's 16 blockstun).
+      recoveryFrames: 28,
+      // Defaults are the pull: light damage, long hitstun so the collapse always follows.
+      damage: 6,
+      chipDamage: 1,
+      // Medium reach (210 px), at body height: a well-timed jump clears it.
+      hitbox: { x: 30, y: -140, width: 180, height: 90 },
+      hitstunFrames: 20,
+      blockstunFrames: 12,
+      knockback: 1,
+      blockPushback: 1.5,
+      hitstopFrames: 6,
+      hits: [
+        { activeFrame: 0 },
+        // The rift collapses: the main hit, strong hitstun and freeze, a real push back.
+        {
+          activeFrame: 6,
+          damage: 16,
+          chipDamage: 2,
+          hitstunFrames: 26,
+          blockstunFrames: 16,
+          knockback: 9,
+          blockPushback: 6,
+          hitstopFrames: 13,
+        },
+      ],
+    },
+  ],
   palette: { body: 0x293142, accent: 0xc3c7d2, skin: 0xdca278, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'douglas.outraDimensao': {
+        style: 'dimensionRift',
+        label: STRINGS.specialOutraDimensao,
+        sound: 'special-dimension',
+        hitSounds: ['special-hit', 'special-dimension-impact'],
+      },
+    },
     portrait: 'fighters/douglas/portrait.png',
     pixelArt: true,
     sprite: {
@@ -149,6 +201,8 @@ export const douglas: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
+        // OUTRA DIMENSÃO: guard (conjuring), then the hand stretched out while the rift is open.
+        special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },
     },

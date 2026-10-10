@@ -13,7 +13,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Douglas fighter integration', () => {
-  it('has unique ids, a balanced standard-body profile and no exclusive special', () => {
+  it('has unique ids, a balanced standard-body profile and OUTRA DIMENSÃO as his special', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(douglas.stats).toEqual({
       maxHealth: 100,
@@ -22,7 +22,7 @@ describe('Douglas fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(douglas.specials.map((special) => special.id)).toEqual([]);
+    expect(douglas.specials.map((special) => special.id)).toEqual(['douglas.outraDimensao']);
     expect(Object.values(douglas.attacks).map((a) => a.damage)).toEqual([7, 10, 5, 9, 6, 10]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

@@ -757,7 +757,7 @@ multi-hit. Nada disso conhece personagem.
 
 SpecialMeterBar desenha as barras do HUD e prontidão pelo custo configurado. Os VFX dos
 especiais ficam em `src/render/special/`: `assets.specialEffects[activeAttack.id]` diz o tema
-(`zapMessages`, `mindNetwork`, ... `powerCombo`), o rótulo, o emblema / símbolo (imagens pixel-art em
+(`zapMessages`, `mindNetwork`, ... `powerCombo`, `dimensionRift`), o rótulo, o emblema / símbolo (imagens pixel-art em
 `public/vfx/`, carregadas pelo mesmo `collectFighterAssets` dos sprites) e o som do início. O
 golpe é desenhado só a partir de `stateFrame` e da fase (`startup` / `active` / `recovery`),
 então congela no hitstop e some no instante em que o golpe acaba ou é interrompido; o impacto

@@ -195,6 +195,9 @@ export interface FighterAssetManifest {
  * - `powerCombo`: two apps in sequence (POWER COMBO): chat bubbles and digital bursts racing to
  *   the rival on each messaging hit, then an AI scan (reticle, node network, bot hologram) and
  *   a digital explosion on the finisher. Made for a multi-hit `hits` timeline.
+ * - `dimensionRift`: a cosmic rift (OUTRA DIMENSÃO): particles gather in the hand, a vertical
+ *   crack opens into an oval portal full of stars, the rival is pulled toward it (first hit)
+ *   and it collapses in a burst of cosmic energy (last hit). Original drawing, no symbols.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
 export type SpecialEffectStyle =
@@ -206,7 +209,8 @@ export type SpecialEffectStyle =
   | 'skyLightning'
   | 'workflowNodes'
   | 'policeRaid'
-  | 'powerCombo';
+  | 'powerCombo'
+  | 'dimensionRift';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

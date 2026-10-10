@@ -425,6 +425,31 @@ def sfx_special_hit(rng):
     return np.tanh(mix(attack(body, 1), thump, crack, at(energy, 0.01)) * 3.2)
 
 
+def sfx_special_dimension(rng):
+    """OUTRA DIMENSÃO starts: a shimmering space-energy swell in the hand, a warp whoosh as the
+    rift tears open, then a deep tone rising (the pull of the rift)."""
+    swell_len = 0.3
+    shimmer = mix(*[np.sin(sweep(hz, hz * 1.5, swell_len)) * 0.08 for hz in (420, 630, 945)])
+    shimmer *= np.linspace(0, 1, int(swell_len * SR)) ** 2
+    warp_len = 0.28
+    warp = bandpass(rng.uniform(-1, 1, int(warp_len * SR)), 500, 4000)
+    warp *= np.sin(np.pi * seconds(warp_len) / warp_len) ** 2 * 0.5
+    warp_tone = np.sin(sweep(900, 140, warp_len, 1.4)) * decay(warp_len, 5) * 0.35
+    pull_len = 0.45
+    pull = lowpass(saw(sweep(45, 110, pull_len, 0.6), 10), 700) * np.linspace(0.2, 1, int(pull_len * SR)) * 0.45
+    return mix(shimmer, at(mix(warp, warp_tone), 0.22), at(pull, 0.36))
+
+
+def sfx_special_dimension_impact(rng):
+    """The rift collapses: a cosmic digital explosion (deep implosion boom, bright crack, a
+    shimmering tail that falls away)."""
+    boom = np.sin(sweep(220, 36, 0.6, 1.8)) * decay(0.6, 6) * 0.95
+    crack = highpass(rng.uniform(-1, 1, int(0.06 * SR)), 1800) * decay(0.06, 50) * 0.6
+    noise = lowpass(rng.uniform(-1, 1, int(0.6 * SR)), 3000) * decay(0.6, 8) * 0.4
+    shimmer = mix(*[np.sin(sweep(hz, hz * 0.5, 0.5)) * decay(0.5, 6) * 0.08 for hz in (1320, 1760, 2640)])
+    return np.tanh(mix(boom, crack, noise, at(shimmer, 0.03)) * 2.6)
+
+
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
     """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
     and a slightly different onset, summed into one crowd roar."""
@@ -494,6 +519,8 @@ EFFECTS = {
     "special-190": sfx_special_190,
     "special-powerzap": sfx_special_powerzap,
     "special-hit": sfx_special_hit,
+    "special-dimension": sfx_special_dimension,
+    "special-dimension-impact": sfx_special_dimension_impact,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,

@@ -802,6 +802,11 @@ como imagem lisa.
   branco (retícula, rede de nós, bot holográfico genérico, glitch e estilhaços). Sem logo dos
   apps: só balões, nós e um rosto de bot genérico; nenhuma imagem (nada a carregar no primeiro
   uso).
+- **OUTRA DIMENSÃO:** azul-elétrico (#2F6BFF), roxo (#8A3CFF), ciano (#34E8FF), branco e o fundo
+  da fenda quase preto (#05020F) com névoa roxa (#14062E); brilhos dourados (#FFD75A) pontuais. A
+  fenda é um oval de linhas de pixel (sem triangulação), com estrelas que derivam para o centro
+  (profundidade). Inspiração só no conceito de ataque dimensional: nenhum símbolo, armadura ou
+  efeito de franquia. Tudo procedural: nada para carregar.
 - **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
   borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
   fluxo (nós, conexões e pacotes), sem logo de produto.

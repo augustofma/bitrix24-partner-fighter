@@ -774,6 +774,16 @@ sem pedido explícito.**
 - [x] Modo História: perfil `home: 'sao-paulo'` (campanha própria, rival das outras; Partner
       Summit) e final com a ponte estaiada (`prepare_douglas_ending.py`, 1440×810); galeria com 11
 
+## DONE (OUTRA DIMENSÃO do Douglas, branch `feature/douglas-outra-dimensao`)
+
+- [x] Especial por dados no sistema atual (multi-hit `hits`): custo 40, sucção 6 + colapso 16
+      (22), chip 1 + 2, startup 16 / ativo 8 / recovery 28, hitstop final 13, alcance 210, pulável
+- [x] Tema `dimensionRift` procedural (partículas na mão, tela escurecida, rachadura, portal
+      oval com estrelas e órbitas, sucção, colapso com clarão e onda roxa); rótulo OUTRA DIMENSÃO;
+      sons `special-dimension` e `special-dimension-impact`
+- [x] Testes (dados, meter, acerto, erro, pulo, defesa/chip, hitstop, K.O., sons, primeiro uso,
+      determinismo, CPU nos três níveis); playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
