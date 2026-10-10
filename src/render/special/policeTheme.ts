@@ -43,10 +43,17 @@ const ENTRY_DISTANCE = 520;
 const TRACERS = 6;
 const IMPACT_BURSTS = 7;
 /**
- * Artwork is 1448x1086; wheels touch y=829, with its center at (724,543). Drawn at the size of
- * a real car next to Gabriele: the roof (with the light bar) close to her head height.
+ * Artwork measured in source pixels (1448x1086; wheels touch y=829, center at (724,543)). Drawn
+ * at the size of a real car next to Gabriele: the roof (with the light bar) close to her head
+ * height. The game file is the source at half resolution (`fileScale`), drawn twice as big.
  */
-const CAR_ART = { scale: 0.28, groundOffset: 286, roofX: -72, roofY: -524 } as const;
+const CAR_ART = {
+  scale: 0.28,
+  fileScale: 0.5,
+  groundOffset: 286,
+  roofX: -72,
+  roofY: -524,
+} as const;
 
 type Point = { x: number; y: number };
 
@@ -69,7 +76,7 @@ function patrolCar(
     image.show({
       x: cx,
       y: ground - CAR_ART.groundOffset * CAR_ART.scale,
-      scale: CAR_ART.scale,
+      scale: CAR_ART.scale / CAR_ART.fileScale,
       alpha,
       flipX: dir < 0,
     });

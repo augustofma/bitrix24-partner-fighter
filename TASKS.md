@@ -5,9 +5,6 @@ sem pedido explícito.**
 
 ## DONE (v0.1: vertical slice)
 
-- [x] Viatura do especial de Gabriele substituída por pixel art detalhada baseada na referência
-      fornecida, com dois policiais, espelhamento e efeitos de disparo preservados.
-
 - [x] Projeto Vite + TypeScript (strict) + Phaser 3.90; ESLint, Prettier, Vitest
 - [x] Documentação: README, AGENTS, ARCHITECTURE, GAME_DESIGN, ART_DIRECTION, TASKS
 - [x] Simulação pura e determinística em passo fixo de 60 Hz (`FightSimulation`)
@@ -714,6 +711,11 @@ sem pedido explícito.**
 - [x] Tema `policeRaid` (viatura, giroflex, policiais, traçantes, rajada no impacto) e som
       `special-190`; pose de ligação (frames 39, 15, 16)
 - [x] Testes de dados, acerto, defesa, alcance e VFX
+- [x] Viatura substituída por pixel art detalhada baseada na referência fornecida, com dois
+      policiais, espelhamento e efeitos de disparo preservados
+- [x] Viatura no tamanho de um carro de verdade ao lado dela (escala 0,28, vaga 208 px atrás) e
+      arquivo em meia resolução (`scripts/vfx-art/police-car/prepare.py`: 730 KB → 220 KB na
+      abertura)
 
 ## DONE (narrador, falas, combo e torcida, branch `feature/announcer-quotes-combo-crowd`)
 
@@ -728,6 +730,7 @@ sem pedido explícito.**
       `scripts/ambience/generate_ambience.py`) e gritos da torcida (`crowd-ooh`, `crowd-cheer`)
       nas reações; sem torcida no escritório da Bitrix24
 - [x] Testes de voz, falas, combo, ambiente e gritos; playtest no navegador
+- [x] Balão da vitória ancorado pela ponta do rabicho, junto do rosto do vencedor
 
 ## NEXT (próximas tarefas recomendadas)
 

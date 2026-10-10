@@ -250,7 +250,7 @@ describe('app-themed special VFX: timing and cleanup', () => {
     expect(car).toMatchObject({
       texture: { key: vfxTextureKey('vfx/police-car.png') },
       flipX: direction < 0,
-      scale: 0.28,
+      scale: 0.56,
     });
     sim.fighters[0].resetForRound({ x: 300, y: partnerArena.groundY }, 1);
     effects.sync(sim.fighters);
