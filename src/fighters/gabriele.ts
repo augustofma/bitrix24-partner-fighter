@@ -154,6 +154,7 @@ export const gabriele: FighterConfig = {
     specialEffects: {
       'gabriele.190': {
         style: 'policeRaid',
+        emblem: 'vfx/police-car.png',
         label: STRINGS.specialPolice,
         sound: 'special-190',
       },

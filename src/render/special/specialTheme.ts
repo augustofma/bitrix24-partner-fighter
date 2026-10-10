@@ -12,6 +12,8 @@ export interface EffectImage {
     scale: number;
     alpha: number;
     rotation?: number;
+    /** Mirror directional artwork without rotating it upside down. */
+    flipX?: boolean;
     tint?: number;
     /** Additive blending: a glow. */
     glow?: boolean;
