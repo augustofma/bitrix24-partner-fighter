@@ -8,8 +8,10 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
-JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO e GABRIELE. Todos os nove estão disponíveis na luta rápida.
-Todos os nove também têm campanha no Modo História (a Gabriele começa no Rio de Janeiro). Na **LUTA RÁPIDA** são três
+JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE e AMANDA KONRAD.
+Todos os dez estão disponíveis na luta rápida. Amanda (BR24) tem 100 de vida, seis normais,
+mobilidade média e arte própria; ainda sem especial exclusivo ou campanha.
+Os nove anteriores têm campanha no Modo História (a Gabriele começa no Rio de Janeiro). Na **LUTA RÁPIDA** são três
 passos: **seu lutador**, **o rival** (qualquer jogável, inclusive o mesmo; começa sugerindo o
 próximo do roster) e **a fase** (todos os cenários ilustrados, com prévia; começa no cenário da
 cidade dos lutadores). Esc volta um passo. `FIGHTER_A` (sprite

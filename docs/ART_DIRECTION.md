@@ -4,6 +4,19 @@
 > **de demonstração** (gerada por script, não é arte final); o FIGHTER_B e o cenário ainda são
 > desenhados em código. Este documento define a direção artística e o formato dos assets.
 
+## Amanda Konrad — BR24
+
+Arte original criada com ImageGen integrado usando as duas fotos reais e o pôster aprovado
+fornecidos pelo usuário. Cabelo acobreado preso com ondas, blusa off-white com babados,
+jeans, crachá e tênis claros. Sem assets de franquias ou logos copiados.
+Fontes e prompts em [scripts/amanda-konrad-art](../scripts/amanda-konrad-art/README.md).
+Uso autorizado para esta implementação; arte gerada para o projeto.
+
+`public/fighters/amanda-konrad/sprite.png`: RGBA 1536×1120, grade 8×5 de células 192×224.
+`portrait.png`: RGBA 240×300. Normalização reproduzível com Pillow/NumPy já usados pelo projeto,
+baseline 216, margens ≥4, escala 1 e offsets 0/8. Frames voltados à direita, espelhamento genérico;
+fases dos seis golpes sincronizadas pelo config. Retrato entra no boot e sheet na tela VS.
+
 ## Direção
 
 - **Gênero e época:** fighting game arcade dos anos 90 (energia, cores saturadas, leitura
@@ -685,6 +698,7 @@ registrada aqui:
 
 | Asset                                                                                               | Autor                                                                                              | Licença                                                           |
 | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `public/fighters/amanda-konrad/*.png` e `scripts/amanda-konrad-art/*.png`                           | ImageGen integrado, fotos e poster fornecidos pelo usuario; montagem local                         | Arte original gerada para o projeto; uso autorizado pelo usuario  |
 | `public/fighters/fighter-a/*.png` (demo)                                                            | Gerado por `scripts/generate-demo-fighter-art.mjs`                                                 | Original do projeto                                               |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                                       | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local             | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`                             | ImageGen integrado, referências autorizadas pelo usuário; montagem local                           | Arte original gerada para o projeto; sem assets de terceiros      |

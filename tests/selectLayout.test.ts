@@ -80,9 +80,9 @@ describe('select screen layout: roster-driven grid', () => {
     expect(SELECT_LAYOUT.footerY).toBeLessThan(GAME_HEIGHT);
   });
 
-  it(`today's roster (${CURRENT}) and roster + 3 (${EXPANDED}) fit on a single page`, () => {
+  it('rosters up to twelve fit on a single page', () => {
     expect(CURRENT).toBeGreaterThanOrEqual(6);
-    for (const count of [CURRENT, EXPANDED]) {
+    for (const count of [6, 9, 10, 11, 12]) {
       const grid = rosterGrid(count);
       expect(grid.pages).toBe(1);
       expect(grid.perPage).toBeGreaterThanOrEqual(count);
@@ -93,9 +93,9 @@ describe('select screen layout: roster-driven grid', () => {
     // Today's 6 keep the original 3 x 2 grid of 196 x 166 cards.
     expect(rosterGrid(6)).toMatchObject({ columns: 3, rows: 2, cardWidth: 196, cardHeight: 166 });
     // Roster + 3: more columns, smaller cards, still two rows.
-    const expanded = rosterGrid(EXPANDED);
-    expect(expanded.columns).toBeGreaterThan(rosterGrid(CURRENT).columns);
-    expect(expanded.cardWidth).toBeLessThan(rosterGrid(CURRENT).cardWidth);
+    const expanded = rosterGrid(12);
+    expect(expanded.columns).toBeGreaterThan(rosterGrid(6).columns);
+    expect(expanded.cardWidth).toBeLessThan(rosterGrid(6).cardWidth);
   });
 
   it('only rosters too large for readable cards paginate, with every page the same grid', () => {
@@ -132,17 +132,18 @@ describe('select screen layout: keyboard navigation in the grid', () => {
   });
 
   it('↑ ↓ move one row in the same column, a short last row lands on its last card', () => {
-    const grid = rosterGrid(EXPANDED); // 2 rows
+    const count = 11;
+    const grid = rosterGrid(count); // 2 rows, single page
     const { columns } = grid;
-    expect(moveInGrid(1, 'down', EXPANDED, grid)).toBe(1 + columns);
-    expect(moveInGrid(1 + columns, 'up', EXPANDED, grid)).toBe(1);
+    expect(moveInGrid(1, 'down', count, grid)).toBe(1 + columns);
+    expect(moveInGrid(1 + columns, 'up', count, grid)).toBe(1);
     // Last column of the top row, with no card under it: the last card of the row below.
-    if (EXPANDED % columns !== 0) {
-      expect(moveInGrid(columns - 1, 'down', EXPANDED, grid)).toBe(EXPANDED - 1);
+    if (count % columns !== 0) {
+      expect(moveInGrid(columns - 1, 'down', count, grid)).toBe(count - 1);
     }
     // Past the bottom / top edge: wraps to the other row (single page).
-    expect(moveInGrid(columns, 'down', EXPANDED, grid)).toBe(0);
-    expect(moveInGrid(0, 'up', EXPANDED, grid)).toBe(columns);
+    expect(moveInGrid(columns, 'down', count, grid)).toBe(0);
+    expect(moveInGrid(0, 'up', count, grid)).toBe(columns);
   });
 
   it('↑ ↓ cross pages when the roster paginates', () => {

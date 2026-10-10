@@ -826,6 +826,21 @@ acima da música; **M** silencia tudo. Lista e níveis em
   golpe forte, comemoração no especial, K.O. e PERFECT). O escritório da Bitrix24 em Moscou não
   tem plateia.
 
+## Amanda Konrad — BR24
+
+Jogável na luta rápida como P1 ou CPU. Vida 100; avanço 3,2, recuo 2,6 e velocidade horizontal
+do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão, sem especial exclusivo e sem campanha.
+Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
+
+| Golpe         | Dano | Startup / ativo / recovery |
+| ------------- | ---- | -------------------------- |
+| Soco          | 7    | 4 / 3 / 11                 |
+| Chute         | 10   | 9 / 4 / 17                 |
+| Soco agachado | 5    | 4 / 3 / 9                  |
+| Rasteira      | 9    | 9 / 4 / 18                 |
+| Soco aéreo    | 6    | 5 / 6 / 10                 |
+| Chute aéreo   | 10   | 8 / 8 / 14                 |
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |

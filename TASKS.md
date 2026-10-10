@@ -732,6 +732,16 @@ sem pedido explícito.**
 - [x] Testes de voz, falas, combo, ambiente e gritos; playtest no navegador
 - [x] Balão da vitória ancorado pela ponta do rabicho, junto do rosto do vencedor
 
+## DONE (Amanda Konrad — BR24, branch `feature/amanda-konrad-fighter`)
+
+- [x] Décima fighter selecionável na luta rápida, criada do zero por FighterConfig; seis normais,
+      vida 100, mobilidade média, sem especial exclusivo ou rota de história
+- [x] Sheet RGBA 1536×1120 (40 células 192×224), portrait RGBA 240×300 e fontes/prompts versionados
+- [x] Normalização offline reproduzível, KO refeito em faixa separada, margens e baseline validados
+- [x] Testes de roster, animações, alpha, CPU, estados de combate e determinismo; fixtures de seleção
+      atualizadas para respeitar paginação ao crescer o elenco
+- [x] Playtest com F2 e onze confrontos completos; seleção, teclado, cross-up e multitouch no mobile emulado
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

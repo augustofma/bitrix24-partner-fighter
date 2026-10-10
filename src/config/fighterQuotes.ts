@@ -57,6 +57,10 @@ export const FIGHTER_QUOTES: Readonly<Record<string, FighterQuotes>> = {
     versus: ['Cuidado que eu chamo o 190, hein!', 'Aqui é Rio de Janeiro, meu amor.'],
     victory: ['Inovar é isso: vencer sem suar.', 'Polícia chegou, caso encerrado!'],
   },
+  'amanda-konrad': {
+    versus: ['Ideias grandes, atitude maior ainda!', 'Vamos fazer acontecer!'],
+    victory: ['Conexões que fazem a diferença.', 'O próximo passo é sempre em frente!'],
+  },
   dmitry: {
     versus: ['Bem-vindo à sede da Bitrix24.', 'Vamos ver se você é parceiro gold.'],
     victory: ['Seu plano foi rebaixado para o gratuito.', 'Volte quando tiver mais licenças.'],

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { amandaKonrad } from '../src/fighters/amandaKonrad';
 import { AIController } from '../src/controllers/AIController';
 import { aiProfileFor } from '../src/controllers/aiProfiles';
 import { FightSimulation } from '../src/core/FightSimulation';
@@ -58,78 +59,84 @@ describe('João Guiotti and Romualdo', () => {
     expect(joaoGuiotti.stats.maxHealth).toBe(romualdo.stats.maxHealth);
   });
 
-  it.each([...NEW_FIGHTERS, isaqueFerreira, aislan, dmitry, romulo, gabrielMattozo, gabriele])(
-    '$id goes through every state in a real simulation',
-    (config) => {
-      const sim = new FightSimulation({
-        fighters: [config, augusto],
-        stage: partnerArena,
-        roundTiming: FAST_TIMING,
-      });
-      const [self, other] = sim.fighters;
-      const seen = new Set<FighterStateId>();
-      const run = (
-        frames: number,
-        input: InputState | ((frame: number) => InputState) = idle(),
-        cpu: InputState = idle(),
-      ) => {
-        for (let f = 0; f < frames; f++) {
-          sim.step([typeof input === 'function' ? input(f) : input, cpu]);
-          seen.add(self.state);
-        }
-      };
-      run(2);
-      run(10, press({ right: true }));
-      run(50, (f: number) => press({ up: f < 2 }));
-      run(50, (f: number) => press({ up: f < 2, punch: f === 12 }));
-      run(50, (f: number) => press({ up: f < 2, kick: f === 12 }));
-      run(6, press({ down: true }));
-      run(30, (f: number) => press({ down: true, punch: f === 0 }));
-      run(40, (f: number) => press({ down: true, kick: f === 0 }));
-      run(30, (f: number) => press({ punch: f === 0 }));
-      run(40, (f: number) => press({ kick: f === 0 }));
-      run(4, press({ block: true }));
-      run(4, press({ block: true, down: true }));
-      run(10);
-      // Get hit, then knocked out, then let the other side win.
-      other.position.x = self.position.x + 70;
-      run(40, idle(), press({ punch: true }));
-      self.health = 1;
-      run(30, idle(), press({ kick: true }));
-      for (const state of [
-        'walk',
-        'jump',
-        'crouch',
-        'punch',
-        'kick',
-        'crouchPunch',
-        'crouchKick',
-        'airPunch',
-        'airKick',
-        'block',
-        'crouchBlock',
-        'hurt',
-        'knockout',
-      ] as const) {
-        expect(seen, state).toContain(state);
+  it.each([
+    ...NEW_FIGHTERS,
+    isaqueFerreira,
+    aislan,
+    dmitry,
+    romulo,
+    gabrielMattozo,
+    gabriele,
+    amandaKonrad,
+  ])('$id goes through every state in a real simulation', (config) => {
+    const sim = new FightSimulation({
+      fighters: [config, augusto],
+      stage: partnerArena,
+      roundTiming: FAST_TIMING,
+    });
+    const [self, other] = sim.fighters;
+    const seen = new Set<FighterStateId>();
+    const run = (
+      frames: number,
+      input: InputState | ((frame: number) => InputState) = idle(),
+      cpu: InputState = idle(),
+    ) => {
+      for (let f = 0; f < frames; f++) {
+        sim.step([typeof input === 'function' ? input(f) : input, cpu]);
+        seen.add(self.state);
       }
-      // And they can win (victory pose).
-      const win = new FightSimulation({
-        fighters: [config, augusto],
-        stage: partnerArena,
-        roundTiming: FAST_TIMING,
-      });
-      win.step([idle(), idle()]);
-      win.fighters[1].health = 1;
-      win.fighters[1].position.x = win.fighters[0].position.x + 70;
-      const states = new Set<FighterStateId>();
-      for (let f = 0; f < 120; f++) {
-        win.step([press({ punch: f % 2 === 0 }), idle()]);
-        states.add(win.fighters[0].state);
-      }
-      expect(states).toContain('victory');
-    },
-  );
+    };
+    run(2);
+    run(10, press({ right: true }));
+    run(50, (f: number) => press({ up: f < 2 }));
+    run(50, (f: number) => press({ up: f < 2, punch: f === 12 }));
+    run(50, (f: number) => press({ up: f < 2, kick: f === 12 }));
+    run(6, press({ down: true }));
+    run(30, (f: number) => press({ down: true, punch: f === 0 }));
+    run(40, (f: number) => press({ down: true, kick: f === 0 }));
+    run(30, (f: number) => press({ punch: f === 0 }));
+    run(40, (f: number) => press({ kick: f === 0 }));
+    run(4, press({ block: true }));
+    run(4, press({ block: true, down: true }));
+    run(10);
+    // Get hit, then knocked out, then let the other side win.
+    other.position.x = self.position.x + 70;
+    run(40, idle(), press({ punch: true }));
+    self.health = 1;
+    run(30, idle(), press({ kick: true }));
+    for (const state of [
+      'walk',
+      'jump',
+      'crouch',
+      'punch',
+      'kick',
+      'crouchPunch',
+      'crouchKick',
+      'airPunch',
+      'airKick',
+      'block',
+      'crouchBlock',
+      'hurt',
+      'knockout',
+    ] as const) {
+      expect(seen, state).toContain(state);
+    }
+    // And they can win (victory pose).
+    const win = new FightSimulation({
+      fighters: [config, augusto],
+      stage: partnerArena,
+      roundTiming: FAST_TIMING,
+    });
+    win.step([idle(), idle()]);
+    win.fighters[1].health = 1;
+    win.fighters[1].position.x = win.fighters[0].position.x + 70;
+    const states = new Set<FighterStateId>();
+    for (let f = 0; f < 120; f++) {
+      win.step([press({ punch: f % 2 === 0 }), idle()]);
+      states.add(win.fighters[0].state);
+    }
+    expect(states).toContain('victory');
+  });
 
   it.each(AI_DIFFICULTIES)(
     'the CPU plays both on %s, best of three to the end, meter charging, deterministically',

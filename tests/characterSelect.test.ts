@@ -474,18 +474,18 @@ describe('CharacterSelectScene with room for more fighters (roster + 3 test-only
     expect(cards.every((c) => fake(c)?.visible)).toBe(true);
   });
 
-  it('roster + 3: every new entry gets a card on the same page, laid out by the grid', () => {
+  it('roster + 3: every new entry gets a card on its grid page', () => {
     withExpandedRoster((added) => {
       const { cards } = openScene();
       const fighters = cards.filter((c) => c.config).map((c) => c.config);
       expect(fighters).toHaveLength(current + 3);
       expect(fighters.slice(-3)).toEqual(added);
       const grid = rosterGrid(current + 3);
-      expect(grid.pages).toBe(1);
-      // All cards (fighters + "coming soon" fillers) visible at the grid's slots, no overlap.
+      expect(grid.pages).toBe(Math.ceil((current + 3) / grid.perPage));
+      // Only the current page is visible; each page has distinct card slots.
       cards.forEach((card, index) => {
         const display = fake(card)!;
-        expect(display.visible).toBe(true);
+        expect(display.visible).toBe(cardSlot(index, grid).page === 0);
         expect(display.x).toBeCloseTo(cardSlot(index, grid).x);
         expect(display.y).toBeCloseTo(cardSlot(index, grid).y);
         const { gridArea } = SELECT_LAYOUT;
@@ -494,7 +494,9 @@ describe('CharacterSelectScene with room for more fighters (roster + 3 test-only
           gridArea.left + gridArea.width + 1e-6,
         );
       });
-      const keys = new Set(cards.map((c) => `${fake(c)!.x},${fake(c)!.y}`));
+      const keys = new Set(
+        cards.map((c, i) => `${cardSlot(i, grid).page},${fake(c)!.x},${fake(c)!.y}`),
+      );
       expect(keys.size).toBe(cards.length);
     });
   });
@@ -531,6 +533,9 @@ describe('CharacterSelectScene with room for more fighters (roster + 3 test-only
         const { scene, cards } = openScene();
         ui.goToScene.mockClear();
         const card = cards.find((c) => c.config === fighter);
+        const grid = rosterGrid(getPlayableFighters().length);
+        const page = cardSlot(getPlayableFighters().indexOf(fighter), grid).page;
+        for (let i = 0; i < page; i++) ui.buttons.get(STRINGS.nextFighter)?.();
         expect(fake(card)?.input?.enabled).toBe(true);
         fake(card)?.handlers.get('pointerup')?.();
         // The first card opens selected, so its first tap already confirms.

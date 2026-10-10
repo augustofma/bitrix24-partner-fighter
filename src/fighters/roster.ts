@@ -5,6 +5,7 @@ import { fighterA } from './fighterA';
 import { fighterB } from './fighterB';
 import { joaoGuiotti } from './joaoGuiotti';
 import { romualdo } from './romualdo';
+import { amandaKonrad } from './amandaKonrad';
 import { gabriele } from './gabriele';
 import { gabrielMattozo } from './gabrielMattozo';
 import { romulo } from './romulo';
@@ -26,6 +27,7 @@ export const ROSTER: readonly FighterConfig[] = [
   romulo,
   gabrielMattozo,
   gabriele,
+  amandaKonrad,
   dmitry,
   fighterA,
   fighterB,
