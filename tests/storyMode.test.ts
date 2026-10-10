@@ -106,6 +106,7 @@ describe('campaigns', () => {
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'gabriele', destination: 'rio-de-janeiro' },
+      { opponent: 'amanda-konrad', destination: 'florianopolis' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities(fixedStory('augusto'))).toEqual([
@@ -118,6 +119,7 @@ describe('campaigns', () => {
       'joinville',
       'castelo-branco',
       'rio-de-janeiro',
+      'florianopolis',
       'russia',
     ]);
   });
@@ -132,6 +134,7 @@ describe('campaigns', () => {
       { opponent: 'aislan', destination: 'joinville', stageId: 'joinville-zopu' },
       { opponent: 'romulo', destination: 'castelo-branco' },
       { opponent: 'gabriele', destination: 'rio-de-janeiro' },
+      { opponent: 'amanda-konrad', destination: 'florianopolis' },
       { opponent: 'dmitry', destination: 'russia', stageId: 'bitrix24-moscow' },
     ]);
     expect(routeCities(fixedStory('filipe'))).toEqual([
@@ -144,6 +147,7 @@ describe('campaigns', () => {
       'joinville',
       'castelo-branco',
       'rio-de-janeiro',
+      'florianopolis',
       'russia',
     ]);
   });
@@ -160,6 +164,7 @@ describe('campaigns', () => {
       'romulo',
       'gabriel-mattozo',
       'gabriele',
+      'amanda-konrad',
     ]);
     expect(() => startStory('fighter-a')).toThrow();
   });

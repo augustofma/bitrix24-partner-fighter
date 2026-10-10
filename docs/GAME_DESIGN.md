@@ -738,19 +738,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/9 LIBERADOS" no topo:
+do Modo História, com o contador "x/10 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com os 9 finais liberados, o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com todos os finais liberados (hoje 10), o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/9" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/10" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -778,7 +778,8 @@ Uma turnê pelo Brasil e pelo mundo contra os rivais, usando as mesmas lutas da 
   RECIFE); em Portugal, contra o Filipe, no calçadão à beira-mar (cenário PORTUGAL); na Espanha, contra o
   Isaque, na Puerta de Alcalá (cenário MADRI); no **Rio de Janeiro** (cidade da Gabriele, Inovar
   Consulting), no calçadão de Copacabana (cenário RIO DE JANEIRO); os outros
-  lugares usam o Partner Summit até terem cenário próprio.
+  lugares (como **Florianópolis**, cidade da Amanda Konrad, BR24) usam o Partner Summit até
+  terem cenário próprio.
 - **Início:** o mapa abre no lugar de partida com "PONTO DE PARTIDA", o retrato e o lugar
   (ex.: "JOÃO GUIOTTI · RÚSSIA"); em seguida "PRÓXIMO DESTINO" e o voo.
 - **Mapa:** pixel-art (azul escuro, contorno ciano, rotas douradas, linhas magenta do Equador e
@@ -850,7 +851,9 @@ acima da música; **M** silencia tudo. Lista e níveis em
 ## Amanda Konrad — BR24
 
 Jogável na luta rápida como P1 ou CPU. Vida 100; avanço 3,2, recuo 2,6 e velocidade horizontal
-do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão e especial POWER COMBO; sem campanha.
+do pulo 3,9 px/frame; impulso vertical 16,5. Corpo padrão e especial POWER COMBO. No Modo História ela é de **Florianópolis (SC)**:
+campanha própria e rival das outras na cidade dela (sem cenário próprio: Partner Summit); final
+com a Ponte Hercílio Luz ao pôr do sol.
 Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 
 | Golpe         | Dano | Startup / ativo / recovery |

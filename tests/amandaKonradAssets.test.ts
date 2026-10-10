@@ -12,11 +12,11 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Amanda Konrad PNG assets', () => {
-  it('keeps one roster entry, her own portrait, and remains quick-fight only', () => {
+  it('keeps one roster entry, her own portrait, and has a story campaign', () => {
     expect(ROSTER.filter((f) => f.id === 'amanda-konrad')).toEqual([amandaKonrad]);
     expect(amandaKonrad.assets.portrait).toBe('fighters/amanda-konrad/portrait.png');
     expect(amandaKonrad.playable).toBe(true);
-    expect(hasStoryCampaign(amandaKonrad.id)).toBe(false);
+    expect(hasStoryCampaign(amandaKonrad.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(amandaKonrad, 40)).toEqual([]);

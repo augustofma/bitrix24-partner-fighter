@@ -24,4 +24,6 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   aislan: 'story/endings/aislan.jpg',
   // Romulo on a seaside promenade, watching the sunset over the beach (fighter in progress).
   romulo: 'story/endings/romulo.jpg',
+  // Amanda Konrad at a Florianópolis lookout, the Hercílio Luz bridge at sunset.
+  'amanda-konrad': 'story/endings/amanda-konrad.jpg',
 };

@@ -74,6 +74,20 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     // Fights here happen at the Jardim Botânico.
     stageId: 'curitiba',
   },
+  {
+    // Amanda Konrad's city (BR24). South of Joinville on both maps: drawn a little south-east,
+    // label to the right. No stage of its own yet: fights here use the default stage.
+    id: 'florianopolis',
+    kind: 'city',
+    name: 'Florianópolis',
+    country: HOME_COUNTRY,
+    region: 'Santa Catarina',
+    regionCode: 'SC',
+    latitude: -27.6,
+    longitude: -48.55,
+    mapNudge: { dx: 4, dy: 7 },
+    mapLabel: { side: 'right', dy: 8 },
+  },
   // Countries are marked at a central, recognizable point (Russia: around Moscow, where the
   // European side meets the map's frame).
   {

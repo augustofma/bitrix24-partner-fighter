@@ -753,6 +753,9 @@ sem pedido explícito.**
       `special-powerzap` / `powerzap-hit` / `special-powerbot`, câmera mais forte no final
 - [x] Testes (dados, meter, ordem, dano, defesa, alcance, pulo, IA, K.O. no meio, primeiro uso,
       determinismo); playtest desktop, CPU nos três níveis e mobile
+- [x] Modo História da Amanda: Florianópolis (SC) no mapa (marcador ao sul de Joinville), perfil
+      `home: 'florianopolis'` (campanha própria, rival das outras; Partner Summit) e final com a
+      Ponte Hercílio Luz (`prepare_amanda_konrad_ending.py`, 1440×810); galeria com 10 finais
 
 ## NEXT (próximas tarefas recomendadas)
 
