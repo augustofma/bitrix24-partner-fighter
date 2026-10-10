@@ -744,6 +744,10 @@ como imagem lisa.
   quadrado roxo cortado pela faixa diagonal escura, reduzido à grade de 48 px com cantos em
   degrau e contorno escuro (sem o nome "fluidz").
 
+- **CHAMA O 190!:** viatura genérica branca (#F4F6FA) com faixa azul (#1F4FBF), giroflex
+  vermelho (#FF2D3D) e azul (#2F8BFF), policiais de farda azul-clara (#6F9BEA) e boné marinho,
+  traçantes amarelas (#FFE066). Formas de pixel desenhadas no código, sem brasão nem marca real
+  de polícia, sem sangue.
 - **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
   borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
   fluxo (nós, conexões e pacotes), sem logo de produto.

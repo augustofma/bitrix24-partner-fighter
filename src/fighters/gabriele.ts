@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -120,9 +121,43 @@ export const gabriele: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // CHAMA O 190!: she calls the police and a patrol car fires a volley at the rival (cartoon).
+      // The longest reach in the cast, paid for with a slow call and a long recovery.
+      id: 'gabriele.190',
+      displayName: STRINGS.specialPolice,
+      state: 'special',
+      level: 'mid',
+      meterCost: 40,
+      groundOnly: true,
+      // She stays put while the car pulls up behind her.
+      advanceSpeed: 0,
+      damage: 18,
+      chipDamage: 3,
+      // The car has to arrive: easy to see coming.
+      startupFrames: 18,
+      activeFrames: 9,
+      // Very punishable when blocked (26 recovery against 14 blockstun).
+      recoveryFrames: 26,
+      // The volley's reach: 280 px (N8N!: 176; her kick: ~100).
+      hitbox: { x: 30, y: -136, width: 250, height: 74 },
+      hitstunFrames: 24,
+      blockstunFrames: 14,
+      knockback: 9,
+      blockPushback: 6,
+      hitstopFrames: 12,
+    },
+  ],
   palette: { body: 0xf0d3ad, accent: 0xd90835, skin: 0xd99b77, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'gabriele.190': {
+        style: 'policeRaid',
+        label: STRINGS.specialPolice,
+        sound: 'special-190',
+      },
+    },
     portrait: 'fighters/gabriele/portrait.png',
     pixelArt: true,
     sprite: {
@@ -150,6 +185,8 @@ export const gabriele: FighterConfig = {
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
         victory: { frames: [39] },
+        // CHAMA O 190!: hand up (the call), then pointing the police at the rival.
+        special: { frames: [39, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
       },
     },
   },

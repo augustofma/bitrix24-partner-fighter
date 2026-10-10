@@ -165,6 +165,8 @@ export interface FighterAssetManifest {
  *   with data packets racing to the rival, and an "executed" check burst.
  * - `skyLightning`: a boss storm (ALAIO STRIKE!): a storm cloud over the whole
  *   screen and lightning bolts from it to the floor across the stage, a bolt onto the victim.
+ * - `policeRaid`: a cartoon police call (CHAMA O 190!): a patrol car screeching in with flashing
+ *   lights, officers firing tracers along the reach, a volley landing on the rival.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
 export type SpecialEffectStyle =
@@ -174,7 +176,8 @@ export type SpecialEffectStyle =
   | 'agentBuilder'
   | 'liquidFlow'
   | 'skyLightning'
-  | 'workflowNodes';
+  | 'workflowNodes'
+  | 'policeRaid';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

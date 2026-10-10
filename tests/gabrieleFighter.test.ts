@@ -13,7 +13,7 @@ import { AI_DIFFICULTIES } from '../src/types/match';
 import { FAST_TIMING } from './helpers';
 
 describe('Gabriele fighter integration', () => {
-  it('has unique ids, a balanced standard-body profile and no exclusive special', () => {
+  it('has unique ids, a balanced standard-body profile and one special (CHAMA O 190!)', () => {
     expect(new Set(ROSTER.map((f) => f.id)).size).toBe(ROSTER.length);
     expect(gabriele.stats).toEqual({
       maxHealth: 100,
@@ -22,7 +22,7 @@ describe('Gabriele fighter integration', () => {
       jumpForce: 16.5,
       jumpHorizontalSpeed: 3.9,
     });
-    expect(gabriele.specials).toEqual([]);
+    expect(gabriele.specials.map((special) => special.id)).toEqual(['gabriele.190']);
     expect(Object.values(gabriele.attacks).map((a) => a.damage)).toEqual([7, 10, 5, 9, 6, 10]);
   });
   it.each(AI_DIFFICULTIES)('completes the same seeded CPU match on %s twice', (difficulty) => {

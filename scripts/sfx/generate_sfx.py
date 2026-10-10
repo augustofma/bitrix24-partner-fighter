@@ -372,6 +372,24 @@ def sfx_special_n8n(rng):
     return mix(blips, at(flow, 0.2), at(chime, 0.36), at(hit, 0.36), at(click, 0.36))
 
 
+def sfx_special_190(rng):
+    """CHAMA O 190!: a two-tone siren (wee-woo) as the patrol car rushes in, a tyre screech as it
+    brakes, then a cartoon burst of shots (sharp cracks with a low thump) landing on the rival."""
+    siren = mix(*[
+        at(np.sin(np.cumsum(np.full(int(0.11 * SR), 2 * np.pi * hz / SR))) * decay(0.11, 3) * 0.32, i * 0.11)
+        for i, hz in enumerate([960, 740, 960])
+    ])
+    screech_len = 0.16
+    screech = bandpass(rng.uniform(-1, 1, int(screech_len * SR)), 2500, 5200) * decay(screech_len, 6) * 0.35
+    shots = []
+    for i in range(6):
+        crack = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 1800) * decay(0.05, 70) * 0.75
+        thump = np.sin(sweep(180, 60, 0.07)) * decay(0.07, 30) * 0.5
+        shots.append(at(mix(crack, thump), 0.3 + i * 0.045))
+    hit = np.sin(sweep(160, 50, 0.24)) * decay(0.24, 11) * 0.7
+    return mix(siren, at(screech, 0.16), *shots, at(hit, 0.32))
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -400,6 +418,7 @@ EFFECTS = {
     "special-fluidz": sfx_special_fluidz,
     "special-alaio-strike": sfx_special_alaio_strike,
     "special-n8n": sfx_special_n8n,
+    "special-190": sfx_special_190,
 }
 
 

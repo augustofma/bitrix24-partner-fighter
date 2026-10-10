@@ -705,9 +705,14 @@ sem pedido explícito.**
       Copacabana) e final ilustrado (`prepare_gabriele_ending.py`, 1440×810)
 - [x] Testes de rota completa atualizados; ordem fixa de rivais removida dos testes (sorteio)
 
-## NEXT (próximas tarefas recomendadas)
+## DONE (especial da Gabriele, branch `feature/gabriele-190-special`)
 
-0. [ ] Especial exclusivo da Gabriele (hoje só normais; F não faz nada com ela).
+- [x] CHAMA O 190!: custo 40, mid, 18 de dano, alcance 280 px, startup 18 / recovery 26
+- [x] Tema `policeRaid` (viatura, giroflex, policiais, traçantes, rajada no impacto) e som
+      `special-190`; pose de ligação (frames 39, 15, 16)
+- [x] Testes de dados, acerto, defesa, alcance e VFX
+
+## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
 2. [ ] Salvar o progresso da campanha em `localStorage` (hoje vale só para a sessão).

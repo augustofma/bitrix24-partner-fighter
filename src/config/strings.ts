@@ -122,6 +122,7 @@ export const STRINGS = {
   specialFluidz: 'FLUIDZ!',
   specialAlaioStrike: 'ALAIO STRIKE!',
   specialN8n: 'N8N!',
+  specialPolice: 'CHAMA O 190!',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:

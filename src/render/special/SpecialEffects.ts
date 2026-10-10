@@ -8,6 +8,7 @@ import { AGENT_THEME } from './agentTheme';
 import { FLUID_THEME } from './fluidTheme';
 import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
+import { POLICE_THEME } from './policeTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
 import { WORKFLOW_THEME } from './workflowTheme';
@@ -21,6 +22,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   liquidFlow: FLUID_THEME,
   skyLightning: LIGHTNING_THEME,
   workflowNodes: WORKFLOW_THEME,
+  policeRaid: POLICE_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;

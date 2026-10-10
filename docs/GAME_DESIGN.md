@@ -194,7 +194,7 @@ Tempos em frames a 60 Hz. A IA e a seleção usam o config genérico do roster.
 
 Jogável e rival CPU na luta rápida; no Modo História mora no **Rio de Janeiro** (calçadão de
 Copacabana, cenário RIO DE JANEIRO), onde começa a campanha dela e onde as outras a enfrentam.
-Final ilustrado num mirante do Rio ao pôr do sol. Ainda sem especial exclusivo. Vida 100,
+Final ilustrado num mirante do Rio ao pôr do sol. Especial CHAMA O 190! (abaixo). Vida 100,
 avanço/recuo 3,25/2,55 px/frame, salto 16,5 e velocidade aérea 3,9. Caixas padrão.
 Mobilidade próxima à do Filipe, menos rápida que Augusto/Gabriel; normais de dano médio,
 com socos de startup curto e recuperação que permite punição. Tempos a 60 Hz:
@@ -501,6 +501,12 @@ nível `mid`, dano 16, chip 2, startup 12 / ativo 7 / recovery 22, hitstun 22, b
 knockback 8 e hitstop 11. Hitbox (30, -132, 146, 70): alcance de 176 px. Bloqueado, deixa o
 Gabriel em desvantagem (22 de recovery contra 14 de blockstun).
 
+**CHAMA O 190! (Gabriele):** ela chama a polícia (é do Rio) e uma viatura dispara uma rajada no
+rival. Custo 40, somente no chão, nível `mid`, dano 18, chip 3, startup 18 / ativo 9 / recovery
+26, hitstun 24, blockstun 14, knockback 9, pushback 6 e hitstop 12. Hitbox (30, -136, 250, 74):
+alcance de 280 px, o maior do elenco, pago com a saída mais lenta (a viatura precisa chegar) e o
+maior castigo na defesa (26 de recovery contra 14 de blockstun).
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -545,6 +551,13 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   raio cai em cima do rival, com explosão elétrica e faíscas (na defesa: um estalo menor na
   guarda); depois a nuvem vai embora e sobe fumaça. Som: tempestade, chiado "zzzt", trovão e
   estrondo longo.
+- **CHAMA O 190! (Gabriele), a polícia do Rio:** na carga, ela levanta a mão (a ligação) e uma
+  viatura branca e azul chega cantando pneu por trás dela, com o giroflex alternando vermelho e
+  azul e fumaça na freada; no disparo, dois policiais se debruçam pelas janelas e soltam uma
+  rajada de balas traçantes por todo o alcance, com clarões nos canos e cápsulas voando; no
+  acerto, os tiros chegam um atrás do outro no rival (clarões, faíscas e o vermelho/azul da
+  sirene; na defesa: faíscas ricocheteando na guarda); depois a viatura sai de ré. Tudo em
+  desenho de pixel, sem sangue. Som: sirene de dois tons, pneu cantando, rajada e impacto.
 - **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
   frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
   disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por

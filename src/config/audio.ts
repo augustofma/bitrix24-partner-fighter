@@ -93,6 +93,7 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-fluidz': sfx('special-fluidz', 0.85),
   'special-alaio-strike': sfx('special-alaio-strike', 0.9),
   'special-n8n': sfx('special-n8n', 0.85),
+  'special-190': sfx('special-190', 0.85),
 };
 
 /** Variation range of `vary` effects: playback rate 1 ± this, level 1 - [0, this]. */
