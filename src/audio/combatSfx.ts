@@ -9,7 +9,7 @@ import type { SfxId } from '../types/audio';
  * produces no contact event, so it never sounds like an impact.
  */
 
-/** Impact of each attack that connected (specials hit with the heaviest one). */
+/** Impact of each attack that connected (specials have their own, heavier one). */
 const IMPACT_BY_ATTACK: Readonly<Record<AttackStateId, SfxId>> = {
   punch: 'punch',
   kick: 'kick',
@@ -17,7 +17,7 @@ const IMPACT_BY_ATTACK: Readonly<Record<AttackStateId, SfxId>> = {
   crouchKick: 'crouch-kick',
   airPunch: 'air-punch',
   airKick: 'air-kick',
-  special: 'kick',
+  special: 'special-hit',
 };
 
 export function impactSfx(attackState: AttackStateId): SfxId {

@@ -532,7 +532,8 @@ perdeu vida`. O `MatchSystem` soma `perfects` por lado no `MatchOutcome`. A `Fig
 
 **Combate (`combatSfx`):** a `FightScene` passa todo `SimulationEvent` por `combatSfx(event)`.
 Só eventos reais geram som: `hit`/`koHit` → impacto do golpe que conectou (`punch`, `kick`,
-`crouch-punch`, `crouch-kick`, `air-punch`, `air-kick`; especial usa `kick`) + `hurt`; `block`
+`crouch-punch`, `crouch-kick`, `air-punch`, `air-kick`; especial usa `special-hit`, mais pesado,
+ou o `hitSounds` da etapa) + `hurt`; `block`
 → `block`; `ko` → `ko` (uma vez por round); `fightStart` → `fight`; `victoryPose` → `victory`.
 Um golpe no ar não gera evento de contato, então whiff nunca soa como impacto. Para pulo,
 aterrissagem e especial, o `Fighter` registra **ações** no próprio frame (`jump` ao sair do chão,

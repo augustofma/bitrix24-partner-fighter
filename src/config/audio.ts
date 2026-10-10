@@ -102,9 +102,9 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-alaio-strike': sfx('special-alaio-strike', 0.9),
   'special-n8n': sfx('special-n8n', 0.85),
   'special-190': sfx('special-190', 0.85),
+  // Any special that connects: a heavier impact than a kick.
+  'special-hit': sfx('special-hit', 0.8, true),
   'special-powerzap': sfx('special-powerzap', 0.8),
-  // A light hit of a multi-hit special: at the level of a punch.
-  'powerzap-hit': sfx('powerzap-hit', 0.62, true),
   'special-powerbot': sfx('special-powerbot', 0.9),
   // The crowd sits behind the fight: under the hits, above the ambience bed.
   'crowd-cheer': sfx('crowd-cheer', 0.5, true),

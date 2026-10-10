@@ -760,6 +760,8 @@ sem pedido explícito.**
       arena igual às outras, ambiente de torcida; seleção de fases cabe 12 cenários sem rolar
 - [x] Som ambiente sem mar nem gaivotas (Rio, Portugal e Florianópolis): só torcida e batucada
 - [x] Balões da tela VS acima dos cards (não cobrem mais o rosto de quem tem a cabeça alta)
+- [x] Especiais sem som de passarinho: a comemoração da torcida perdeu os assobios; todo especial
+      que conecta toca `special-hit` (golpe especial pesado); POWER COMBO sem bolhas/chirps
 
 ## NEXT (próximas tarefas recomendadas)
 

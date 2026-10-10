@@ -176,7 +176,7 @@ export const amandaKonrad: FighterConfig = {
         label: STRINGS.specialPowerCombo,
         sound: 'special-powerzap',
         hitLabels: [STRINGS.specialPowerZap, STRINGS.specialPowerZap, STRINGS.specialPowerBot],
-        hitSounds: ['powerzap-hit', 'powerzap-hit', 'special-powerbot'],
+        hitSounds: ['special-hit', 'special-hit', 'special-powerbot'],
       },
     },
     portrait: 'fighters/amanda-konrad/portrait.png',

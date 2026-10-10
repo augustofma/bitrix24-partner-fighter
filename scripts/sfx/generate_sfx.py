@@ -391,37 +391,38 @@ def sfx_special_190(rng):
 
 
 def sfx_special_powerzap(rng):
-    """POWER COMBO starts (POWERZAP): a quick "message sent" whoosh rising, three bubble pops
-    climbing in pitch and a short digital chirp: messages flying out."""
-    whoosh_len = 0.22
-    whoosh = bandpass(rng.uniform(-1, 1, int(whoosh_len * SR)), 900, 4200) * np.sin(np.linspace(0, np.pi, int(whoosh_len * SR))) * 0.45
-    pops = [
-        at(np.sin(sweep(hz, hz * 1.9, 0.05)) * decay(0.05, 45) * 0.55, 0.05 + i * 0.06)
-        for i, hz in enumerate([620, 840, 1120])
-    ]
-    chirp = at(square(sweep(1400, 2600, 0.08), 6) * decay(0.08, 25) * 0.18, 0.24)
-    return mix(whoosh, *pops, chirp)
-
-
-def sfx_powerzap_hit(rng):
-    """A POWERZAP message lands: a light, bright digital pop with a tiny thump (a small hit)."""
-    pop = np.sin(sweep(1300, 520, 0.07)) * decay(0.07, 40) * 0.6
-    thump = np.sin(sweep(190, 90, 0.08)) * decay(0.08, 35) * 0.55
-    fizz = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 3000) * decay(0.05, 60) * 0.25
-    return mix(thump, pop, fizz)
+    """POWER COMBO starts (POWERZAP): a fast rising energy charge (a low saw sweeping up under a
+    filtered whoosh) that cuts into a short punchy thump: the messages are fired."""
+    charge_len = 0.26
+    charge = lowpass(saw(sweep(90, 420, charge_len, 0.7), 14), 2200) * np.linspace(0.2, 1, int(charge_len * SR)) * 0.35
+    whoosh = bandpass(rng.uniform(-1, 1, int(charge_len * SR)), 700, 3500)
+    whoosh *= np.sin(np.pi * seconds(charge_len) / charge_len) ** 2 * 0.4
+    fire = np.sin(sweep(170, 60, 0.18)) * decay(0.18, 14) * 0.8
+    crack = highpass(rng.uniform(-1, 1, int(0.04 * SR)), 2200) * decay(0.04, 70) * 0.35
+    return mix(charge, whoosh, at(mix(fire, crack), charge_len - 0.02))
 
 
 def sfx_special_powerbot(rng):
-    """POWERBOT finisher lands: a scan "lock" double blip, then a heavy digital boom with a
-    bit-crushed tail and a falling synth zap."""
-    lock = mix(at(square(sweep(1800, 1800, 0.04), 4) * decay(0.04, 30) * 0.2, 0),
-               at(square(sweep(2400, 2400, 0.04), 4) * decay(0.04, 30) * 0.2, 0.05))
+    """POWERBOT finisher lands: a heavy digital boom with a bit-crushed tail and a falling synth
+    zap (the strongest hit of the move)."""
     boom_len = 0.5
     boom = np.sin(sweep(150, 38, boom_len, 1.6)) * decay(boom_len, 7) * 0.9
     noise = lowpass(rng.uniform(-1, 1, int(boom_len * SR)), 2600) * decay(boom_len, 9) * 0.5
     crushed = np.round(noise * 6) / 6
-    zap = saw(sweep(2200, 180, 0.35, 1.4), 10) * decay(0.35, 8) * 0.22
-    return mix(lock, at(mix(boom, crushed, zap), 0.1))
+    crack = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 1800) * decay(0.05, 60) * 0.5
+    zap = saw(sweep(1600, 140, 0.35, 1.4), 10) * decay(0.35, 8) * 0.2
+    return np.tanh(mix(boom, crushed, crack, zap) * 2.6)
+
+
+def sfx_special_hit(rng):
+    """A special connects (any special): heavier than a kick: a deep body boom, a sharp crack and
+    a short burst of energy sizzling away."""
+    body = np.sin(sweep(190, 45, 0.42, 1.5)) * decay(0.42, 8) * 0.95
+    thump = np.sin(sweep(320, 110, 0.06)) * decay(0.06, 40) * 0.6
+    crack = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 1600) * decay(0.05, 55) * 0.6
+    energy = bandpass(rng.uniform(-1, 1, int(0.3 * SR)), 1200, 5000) * decay(0.3, 12) * 0.25
+    # Driven like the normal hits (impact()), so it is as dense and loud as a kick, only bigger.
+    return np.tanh(mix(attack(body, 1), thump, crack, at(energy, 0.01)) * 3.2)
 
 
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
@@ -439,20 +440,15 @@ def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> n
 
 
 def sfx_crowd_cheer(rng):
-    """The crowd erupts (a special, a KO, a perfect): a roar that swells and fades, scattered
-    claps and a couple of whistles on top."""
+    """The crowd erupts (a special, a KO, a perfect): a roar that swells and fades, with scattered
+    claps. No whistles: their high glides sounded like birds over every special."""
     duration = 1.6
     roar = crowd_voices(rng, duration, 24, 350, 1800) * np.exp(-seconds(duration) * 1.6) * 2.4
     claps = []
     for _ in range(26):
         clap = bandpass(rng.uniform(-1, 1, int(0.03 * SR)), 900, 3200) * decay(0.03, 120) * rng.uniform(0.15, 0.35)
         claps.append(at(clap, rng.uniform(0.05, 1.2)))
-    whistles = []
-    for _ in range(2):
-        start, end, length = rng.uniform(1800, 2300), rng.uniform(2600, 3200), rng.uniform(0.25, 0.4)
-        tone = np.sin(sweep(start, end, length, 0.6)) * np.minimum(1, decay(length, 3) * 1.4) * 0.12
-        whistles.append(at(attack(tone, 20), rng.uniform(0.1, 0.6)))
-    return mix(attack(roar, 60), *claps, *whistles)
+    return mix(attack(roar, 60), *claps)
 
 
 def sfx_crowd_ooh(rng):
@@ -497,7 +493,7 @@ EFFECTS = {
     "special-n8n": sfx_special_n8n,
     "special-190": sfx_special_190,
     "special-powerzap": sfx_special_powerzap,
-    "powerzap-hit": sfx_powerzap_hit,
+    "special-hit": sfx_special_hit,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,

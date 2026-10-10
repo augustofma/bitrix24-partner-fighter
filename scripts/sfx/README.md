@@ -16,7 +16,7 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | Efeito                 | Quando toca                             | Som                                                              | Volume |
 | ---------------------- | --------------------------------------- | ---------------------------------------------------------------- | ------ |
 | `punch`                | Soco conecta                            | Impacto seco (corpo 210→85 Hz + estalo)                          | 0,65   |
-| `kick`                 | Chute conecta (e especial que acerta)   | Impacto mais grave e longo                                       | 0,75   |
+| `kick`                 | Chute conecta                           | Impacto mais grave e longo                                       | 0,75   |
 | `crouch-punch`         | Soco agachado conecta                   | Impacto curto e estalado                                         | 0,62   |
 | `crouch-kick`          | Rasteira conecta                        | Impacto grave com raspado                                        | 0,72   |
 | `air-punch`            | Soco aéreo conecta                      | Impacto brilhante                                                | 0,65   |
@@ -42,12 +42,12 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-alaio-strike` | ALAIO STRIKE! começa (Dmitry)           | Tempestade se formando, chiado elétrico, trovão e estrondo longo | 0,9    |
 | `special-n8n`          | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
 | `special-190`          | CHAMA O 190! começa (Gabriele)          | Sirene de dois tons, pneu cantando, rajada de tiros e impacto    | 0,85   |
-| `special-powerzap`     | POWER COMBO começa (Amanda Konrad)      | Envio subindo, três bolhas e um chirp digital                    | 0,80   |
-| `powerzap-hit`         | Cada mensagem do POWERZAP que conecta   | Pop digital curto com baque leve                                 | 0,62   |
-| `special-powerbot`     | O POWERBOT conecta                      | Trava de mira (dois blips) e estrondo digital com zap descendo   | 0,90   |
+| `special-powerzap`     | POWER COMBO começa (Amanda Konrad)      | Carga de energia subindo e um baque seco (o disparo)             | 0,80   |
+| `special-hit`          | Qualquer especial que conecta           | Golpe especial: boom grave, estalo e energia chiando             | 0,80   |
+| `special-powerbot`     | O POWERBOT conecta                      | Estrondo digital pesado, estalo e zap descendo                   | 0,90   |
 | `victory`              | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
 | `crowd-ooh`            | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |
-| `crowd-cheer`          | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido, palmas e assobios                       | 0,50   |
+| `crowd-cheer`          | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido e palmas (sem assobios)                  | 0,50   |
 
 As falas do narrador (`voice-*`) ficam na mesma pasta mas vêm de
 [scripts/voice](../voice/README.md).

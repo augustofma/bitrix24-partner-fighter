@@ -66,7 +66,7 @@ describe('Amanda Konrad: POWER COMBO', () => {
       label: 'POWER COMBO',
       sound: 'special-powerzap',
       hitLabels: ['POWERZAP', 'POWERZAP', 'POWERBOT'],
-      hitSounds: ['powerzap-hit', 'powerzap-hit', 'special-powerbot'],
+      hitSounds: ['special-hit', 'special-hit', 'special-powerbot'],
     });
     expect(amandaKonrad.assets.sprite?.animations.special?.frames).toEqual([39, 15, 16]);
   });
@@ -142,8 +142,8 @@ describe('Amanda Konrad: POWER COMBO', () => {
   it('each step sounds its own impact; normal single-hit specials are unchanged', () => {
     const { contacts, sim } = fight(150);
     expect(contacts.map((c) => combatSfx(c, sim.fighters)[0])).toEqual([
-      'powerzap-hit',
-      'powerzap-hit',
+      'special-hit',
+      'special-hit',
       'special-powerbot',
     ]);
     const police = fight(150).contacts[0]!;
@@ -168,7 +168,7 @@ describe('Amanda Konrad: POWER COMBO', () => {
 
   it('first use loads nothing: its sounds are boot SFX and the VFX needs no image', () => {
     const bootKeys = new Set(SFX_ASSETS.map((a) => a.key));
-    for (const id of ['special-powerzap', 'powerzap-hit', 'special-powerbot'] as const) {
+    for (const id of ['special-powerzap', 'special-hit', 'special-powerbot'] as const) {
       expect(SFX[id]).toBeDefined();
       expect([...bootKeys].some((key) => key.endsWith(id))).toBe(true);
     }

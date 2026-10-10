@@ -577,8 +577,8 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   nós se ligando, um pequeno bot holográfico escaneando e um feixe da mão até o alvo; no acerto,
   explosão digital azul-elétrico e roxa com clarão branco, barras de glitch, estilhaços de pixel e
   o bot piscando por cima (câmera treme um pouco mais que num golpe comum). Rótulo POWER COMBO
-  com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: envio com bolhas, um "pop" digital por
-  mensagem e, no final, trava de mira e estrondo digital.
+  com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: carga de energia com um baque no disparo, o
+  golpe especial em cada mensagem e, no final, um estrondo digital.
 - **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
   frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
   disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por
@@ -827,7 +827,7 @@ Sons originais de fliperama, sempre ligados a eventos reais da luta: o impacto s
 golpe conecta (soco, chute, agachados e aéreos têm sons próprios; o chute é mais grave), errar
 não faz som de impacto, defesa tem som próprio (baque abafado no antebraço), quem apanha tem um baque de dano, o pulo
 toca ao sair do chão e a aterrissagem no contato com o chão. K.O. toca uma vez, o especial quando
-realmente começa e SPECIAL READY quando a barra fica pronta (não a cada frame). Anúncios ROUND e
+realmente começa (e, ao acertar, um som próprio de golpe especial, mais pesado que o chute) e SPECIAL READY quando a barra fica pronta (não a cada frame). Anúncios ROUND e
 FIGHT!, a pose de vitória e os menus (mover, confirmar, voltar) também têm som. Os efeitos ficam
 acima da música; **M** silencia tudo. Lista e níveis em
 [scripts/sfx/README.md](../scripts/sfx/README.md).
