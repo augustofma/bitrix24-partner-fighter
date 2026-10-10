@@ -252,6 +252,7 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         key: portraitTextureKey('fighters/gabriele/portrait.png'),
         path: 'fighters/gabriele/portrait.png',
       },
+      { type: 'image', key: vfxTextureKey('vfx/police-car.png'), path: 'vfx/police-car.png' },
       {
         type: 'spritesheet',
         key: 'gabriele-sheet',
@@ -308,6 +309,7 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'romulo-sheet',
         'gabriel-mattozo-sheet',
         'gabriele-sheet',
+        vfxTextureKey('vfx/police-car.png'),
         portraitTextureKey('fighters/gabriele/portrait.png'),
         portraitTextureKey('fighters/gabriel-mattozo/portrait.png'),
         portraitTextureKey('fighters/romulo/portrait.png'),

@@ -35,6 +35,7 @@ describe('Gabriele: CHAMA O 190!', () => {
     });
     expect(gabriele.assets.specialEffects?.[police.id]).toEqual({
       style: 'policeRaid',
+      emblem: 'vfx/police-car.png',
       label: 'CHAMA O 190!',
       sound: 'special-190',
     });
