@@ -2,7 +2,7 @@ import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** Measured normals trade slightly longer reach for slower startup; OUTRA DIMENSÃO special. */
+/** Measured normals trade slightly longer reach for slower startup; CÓLERA DOS 100 DRAGÕES special. */
 export const douglas: FighterConfig = {
   id: 'douglas',
   name: 'douglas',
@@ -123,44 +123,51 @@ export const douglas: FighterConfig = {
   },
   specials: [
     {
-      // OUTRA DIMENSÃO: a rift opens in front of him at a controlled distance. The first contact
-      // pulls the rival toward it, the second is the rift collapsing (the main hit).
-      id: 'douglas.outraDimensao',
-      displayName: STRINGS.specialOutraDimensao,
+      // CÓLERA DOS 100 DRAGÕES: he gathers energy and releases an avalanche of energy dragons.
+      // A lead dragon opens the way, three waves of smaller ones bite in passing and a final,
+      // larger dragon crosses the rival. Five real contacts (not a hundred): the "hundred" is
+      // visual. Each wave reaches a little farther, so the onslaught travels forward instead of
+      // tracking the rival: far away, behind him or in the air at the right time, it misses.
+      id: 'douglas.hundredDragons',
+      displayName: STRINGS.specialHundredDragons,
       state: 'special',
       level: 'mid',
       meterCost: 40,
       groundOnly: true,
-      // He stands still: the rift does the work.
+      // He stands his ground: the dragons do the work.
       advanceSpeed: 0,
-      // A visible conjuring: the hand gathers energy and the space cracks open.
+      // A short concentration: energy spirals around him before the release.
       startupFrames: 16,
-      // Two steps (see hits): the pull at 0, the collapse at 6.
-      activeFrames: 8,
-      // Punishable on block (28 recovery against the collapse's 16 blockstun).
+      // The lead dragon at 0, the waves at 4, 7 and 10, the final dragon at 16.
+      activeFrames: 22,
+      // Punishable on block (6 active frames left + 28 recovery against 18 blockstun).
       recoveryFrames: 28,
-      // Defaults are the pull: light damage, long hitstun so the collapse always follows.
-      damage: 6,
+      // Defaults are the lead dragon and the waves: light bites whose hitstun bridges the gap
+      // to the next one (the counter shows the combo); chip only on every other bite.
+      damage: 3,
       chipDamage: 1,
-      // Medium reach (210 px), at body height: a well-timed jump clears it.
-      hitbox: { x: 30, y: -140, width: 180, height: 90 },
-      hitstunFrames: 20,
+      hitbox: { x: 30, y: -150, width: 160, height: 100 },
+      hitstunFrames: 16,
       blockstunFrames: 12,
-      knockback: 1,
-      blockPushback: 1.5,
-      hitstopFrames: 6,
+      knockback: 0.8,
+      blockPushback: 1.2,
+      hitstopFrames: 4,
       hits: [
         { activeFrame: 0 },
-        // The rift collapses: the main hit, strong hitstun and freeze, a real push back.
+        { activeFrame: 4, chipDamage: 0, hitbox: { x: 40, y: -150, width: 180, height: 100 } },
+        { activeFrame: 7, hitbox: { x: 50, y: -150, width: 190, height: 100 } },
+        { activeFrame: 10, chipDamage: 0, hitbox: { x: 60, y: -150, width: 200, height: 100 } },
+        // The final dragon: the main hit, strong hitstun and freeze, a real push back.
         {
-          activeFrame: 6,
-          damage: 16,
+          activeFrame: 16,
+          damage: 10,
           chipDamage: 2,
-          hitstunFrames: 26,
-          blockstunFrames: 16,
-          knockback: 9,
+          hitbox: { x: 40, y: -165, width: 240, height: 120 },
+          hitstunFrames: 28,
+          blockstunFrames: 18,
+          knockback: 10,
           blockPushback: 6,
-          hitstopFrames: 13,
+          hitstopFrames: 14,
         },
       ],
     },
@@ -168,11 +175,19 @@ export const douglas: FighterConfig = {
   palette: { body: 0x293142, accent: 0xc3c7d2, skin: 0xdca278, outline: 0x0b0820 },
   assets: {
     specialEffects: {
-      'douglas.outraDimensao': {
-        style: 'dimensionRift',
-        label: STRINGS.specialOutraDimensao,
-        sound: 'special-dimension',
-        hitSounds: ['special-hit', 'special-dimension-impact'],
+      'douglas.hundredDragons': {
+        style: 'hundredDragons',
+        label: STRINGS.specialHundredDragons,
+        // Gold lettering, like the dragons.
+        labelColor: 0xffc83a,
+        sound: 'special-dragons',
+        hitSounds: [
+          'special-hit',
+          'special-dragon-bite',
+          'special-dragon-bite',
+          'special-dragon-bite',
+          'special-dragon-impact',
+        ],
       },
     },
     portrait: 'fighters/douglas/portrait.png',
@@ -201,7 +216,8 @@ export const douglas: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
-        // OUTRA DIMENSÃO: guard (conjuring), then the hand stretched out while the rift is open.
+        // CÓLERA DOS 100 DRAGÕES: wide base with the fist cocked back (concentration), then the
+        // fist thrust out while the dragons pour from it.
         special: { frames: [14, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },

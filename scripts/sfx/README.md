@@ -13,44 +13,45 @@ Gera `public/audio/sfx/<id>.ogg` (Vorbis) e `<id>.mp3` (fallback para Safari), m
 com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa por efeito
 (arquivos reproduzíveis).
 
-| Efeito                     | Quando toca                             | Som                                                              | Volume |
-| -------------------------- | --------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `punch`                    | Soco conecta                            | Impacto seco (corpo 210→85 Hz + estalo)                          | 0,65   |
-| `kick`                     | Chute conecta                           | Impacto mais grave e longo                                       | 0,75   |
-| `crouch-punch`             | Soco agachado conecta                   | Impacto curto e estalado                                         | 0,62   |
-| `crouch-kick`              | Rasteira conecta                        | Impacto grave com raspado                                        | 0,72   |
-| `air-punch`                | Soco aéreo conecta                      | Impacto brilhante                                                | 0,65   |
-| `air-kick`                 | Chute aéreo conecta                     | Impacto grave com estalo agudo                                   | 0,75   |
-| `block`                    | Golpe defendido                         | Baque abafado de antebraço + tapa e tecido                       | 0,60   |
-| `hurt`                     | Quem apanha (junto do impacto)          | Baque corporal com formante, sem voz                             | 0,65   |
-| `jump`                     | O pulo sai do chão                      | Swoosh curto para cima                                           | 0,35   |
-| `landing`                  | Contato real com o chão                 | Baque grave discreto                                             | 0,40   |
-| `ko`                       | K.O. (uma vez por round)                | Explosão grave, cauda longa e anel metálico                      | 0,85   |
-| `special`                  | O especial começa (energia paga)        | Subida tecnológica, arpejo digital, zap                          | 0,85   |
-| `special-ready`            | Barra entra em SPECIAL READY            | Sininho de duas notas com faíscas                                | 0,60   |
-| `menu-move`                | Navegar entre opções                    | Blip quadrado curto                                              | 0,45   |
-| `menu-confirm`             | Confirmar / selecionar                  | Dois tons subindo                                                | 0,45   |
-| `menu-back`                | Voltar / sair                           | Dois tons descendo                                               | 0,45   |
-| `round-start`              | "ROUND n" / "FINAL ROUND"               | Gongo arcade com swoosh                                          | 0,70   |
-| `fight`                    | "FIGHT!"                                | Golpe + acorde de synth + prato                                  | 0,80   |
-| `perfect`                  | Round vencido sem perder vida (PERFECT) | Fanfarra subindo, acorde brilhante, faíscas                      | 0,85   |
-| `special-zap`              | Especial do 24zap começa (Augusto)      | Envio de mensagem, bolhas, sininho, impacto                      | 0,85   |
-| `special-mind`             | Especial do Mindhub começa (Filipe)     | Blips digitais, ruído de dados, descarga                         | 0,85   |
-| `special-vibe`             | ALAIO VIBECODE! começa (João, Isaque)   | Digitação, wobble synthwave, arpejo, glitch                      | 0,85   |
-| `special-gpt`              | GPTMAKER! começa (Romualdo)             | Blocos encaixando, servo, bipe-bupe, raio                        | 0,85   |
-| `special-fluidz`           | FLUIDZ! começa (Aislan)                 | Bolhas, jorro borbulhante, splash molhado                        | 0,85   |
-| `special-alaio-strike`     | ALAIO STRIKE! começa (Dmitry)           | Tempestade se formando, chiado elétrico, trovão e estrondo longo | 0,9    |
-| `special-n8n`              | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
-| `special-190`              | CHAMA O 190! começa (Gabriele)          | Sirene de dois tons, pneu cantando, rajada de tiros e impacto    | 0,85   |
-| `special-powerzap`         | POWER COMBO começa (Amanda Konrad)      | Carga de energia subindo e um baque seco (o disparo)             | 0,80   |
-| `special-hit`              | Qualquer especial que conecta           | Golpe especial: boom grave, estalo e energia chiando             | 0,80   |
-| `special-dimension`        | OUTRA DIMENSÃO começa (Douglas)         | Energia espacial, warp abrindo a fenda e grave crescente         | 0,85   |
-| `special-dimension-impact` | O colapso da fenda conecta              | Explosão cósmica: estrondo de implosão, estalo e brilho caindo   | 0,90   |
-| `special-foorce-zap`       | FOORCE ZAP começa (Rodolfo)             | Carga elétrica subindo, zap de mensagem e estalo do soco         | 0,85   |
-| `special-powerbot`         | O POWERBOT conecta                      | Estrondo digital pesado, estalo e zap descendo                   | 0,90   |
-| `victory`                  | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
-| `crowd-ooh`                | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |
-| `crowd-cheer`              | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido e palmas (sem assobios)                  | 0,50   |
+| Efeito                  | Quando toca                             | Som                                                              | Volume |
+| ----------------------- | --------------------------------------- | ---------------------------------------------------------------- | ------ |
+| `punch`                 | Soco conecta                            | Impacto seco (corpo 210→85 Hz + estalo)                          | 0,65   |
+| `kick`                  | Chute conecta                           | Impacto mais grave e longo                                       | 0,75   |
+| `crouch-punch`          | Soco agachado conecta                   | Impacto curto e estalado                                         | 0,62   |
+| `crouch-kick`           | Rasteira conecta                        | Impacto grave com raspado                                        | 0,72   |
+| `air-punch`             | Soco aéreo conecta                      | Impacto brilhante                                                | 0,65   |
+| `air-kick`              | Chute aéreo conecta                     | Impacto grave com estalo agudo                                   | 0,75   |
+| `block`                 | Golpe defendido                         | Baque abafado de antebraço + tapa e tecido                       | 0,60   |
+| `hurt`                  | Quem apanha (junto do impacto)          | Baque corporal com formante, sem voz                             | 0,65   |
+| `jump`                  | O pulo sai do chão                      | Swoosh curto para cima                                           | 0,35   |
+| `landing`               | Contato real com o chão                 | Baque grave discreto                                             | 0,40   |
+| `ko`                    | K.O. (uma vez por round)                | Explosão grave, cauda longa e anel metálico                      | 0,85   |
+| `special`               | O especial começa (energia paga)        | Subida tecnológica, arpejo digital, zap                          | 0,85   |
+| `special-ready`         | Barra entra em SPECIAL READY            | Sininho de duas notas com faíscas                                | 0,60   |
+| `menu-move`             | Navegar entre opções                    | Blip quadrado curto                                              | 0,45   |
+| `menu-confirm`          | Confirmar / selecionar                  | Dois tons subindo                                                | 0,45   |
+| `menu-back`             | Voltar / sair                           | Dois tons descendo                                               | 0,45   |
+| `round-start`           | "ROUND n" / "FINAL ROUND"               | Gongo arcade com swoosh                                          | 0,70   |
+| `fight`                 | "FIGHT!"                                | Golpe + acorde de synth + prato                                  | 0,80   |
+| `perfect`               | Round vencido sem perder vida (PERFECT) | Fanfarra subindo, acorde brilhante, faíscas                      | 0,85   |
+| `special-zap`           | Especial do 24zap começa (Augusto)      | Envio de mensagem, bolhas, sininho, impacto                      | 0,85   |
+| `special-mind`          | Especial do Mindhub começa (Filipe)     | Blips digitais, ruído de dados, descarga                         | 0,85   |
+| `special-vibe`          | ALAIO VIBECODE! começa (João, Isaque)   | Digitação, wobble synthwave, arpejo, glitch                      | 0,85   |
+| `special-gpt`           | GPTMAKER! começa (Romualdo)             | Blocos encaixando, servo, bipe-bupe, raio                        | 0,85   |
+| `special-fluidz`        | FLUIDZ! começa (Aislan)                 | Bolhas, jorro borbulhante, splash molhado                        | 0,85   |
+| `special-alaio-strike`  | ALAIO STRIKE! começa (Dmitry)           | Tempestade se formando, chiado elétrico, trovão e estrondo longo | 0,9    |
+| `special-n8n`           | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
+| `special-190`           | CHAMA O 190! começa (Gabriele)          | Sirene de dois tons, pneu cantando, rajada de tiros e impacto    | 0,85   |
+| `special-powerzap`      | POWER COMBO começa (Amanda Konrad)      | Carga de energia subindo e um baque seco (o disparo)             | 0,80   |
+| `special-hit`           | Qualquer especial que conecta           | Golpe especial: boom grave, estalo e energia chiando             | 0,80   |
+| `special-dragons`       | CÓLERA DOS 100 DRAGÕES começa (Douglas) | Energia crescendo, rosnado grave, rugido e whooshes das ondas    | 0,85   |
+| `special-dragon-bite`   | Uma onda de dragões conecta             | Whoosh curto e estalo de energia (mais leve que o especial)      | 0,80   |
+| `special-dragon-impact` | O dragão final conecta                  | Estrondo grave, estalo e explosão de energia com brilho caindo   | 0,90   |
+| `special-foorce-zap`    | FOORCE ZAP começa (Rodolfo)             | Carga elétrica subindo, zap de mensagem e estalo do soco         | 0,85   |
+| `special-powerbot`      | O POWERBOT conecta                      | Estrondo digital pesado, estalo e zap descendo                   | 0,90   |
+| `victory`               | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
+| `crowd-ooh`             | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |
+| `crowd-cheer`           | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido e palmas (sem assobios)                  | 0,50   |
 
 As falas do narrador (`voice-*`) ficam na mesma pasta mas vêm de
 [scripts/voice](../voice/README.md).

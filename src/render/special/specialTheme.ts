@@ -57,6 +57,8 @@ export interface ImpactFrame {
   /** Which contact of the move this is, and how many it has (multi-hit `hits`; else 0 of 1). */
   hit: number;
   hits: number;
+  /** This contact knocked the rival out (the theme may make it a little bigger). */
+  ko: boolean;
   emblem: EffectImage;
 }
 

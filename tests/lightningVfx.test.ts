@@ -87,6 +87,7 @@ describe('ALAIO STRIKE! storm VFX', () => {
             blocked,
             hit: 0,
             hits: 1,
+            ko: false,
             emblem: noImage,
           });
         }

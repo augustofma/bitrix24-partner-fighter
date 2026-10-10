@@ -11,7 +11,7 @@ Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO
 JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD, DOUGLAS e RODOLFO.
 Todos os doze estão disponíveis na luta rápida. Amanda (BR24) tem 100 de vida, seis normais,
 mobilidade média, arte própria e o especial POWER COMBO (POWERZAP + POWERBOT). Douglas (Dohko
-Technology) tem 100 de vida, seis normais de alcance moderado e o especial OUTRA DIMENSÃO.
+Technology) tem 100 de vida, seis normais de alcance moderado e o especial CÓLERA DOS 100 DRAGÕES.
 Rodolfo (Brasil Leads) tem 100 de vida, caminhada 3,3, socos de startup curto e o especial
 FOORCE ZAP. Todos os doze têm campanha no Modo História (a Gabriele começa no Rio de Janeiro, a
 Amanda em Florianópolis, o Douglas em São Paulo e o Rodolfo em Curitiba). Na **LUTA RÁPIDA** são três

@@ -519,14 +519,19 @@ POWERBOT alcança, e as caixas ficam na altura da cintura/peito, então um pulo 
 por cima de tudo (pular cedo demais cai no POWERBOT). Na defesa fica -15 depois do último
 contato: punível. Um K.O. no meio encerra o combo ali.
 
-**OUTRA DIMENSÃO (Douglas):** uma fenda dimensional abre à frente dele (o nome da Dohko
-Technology vem de um personagem de anime; o golpe é original, sem símbolos nem efeitos da
-obra). Custo 40, somente no chão, nível `mid`, startup 16 / ativo 8 / recovery 28, ele não
-avança. Dois contatos (`hits`): a **sucção** no frame 0 do ativo (6 de dano, chip 1, hitstun 20,
-blockstun 12, knockback 1, hitstop 6) e o **colapso** no frame 6 (16 de dano, chip 2, hitstun 26,
-blockstun 16, knockback 9, pushback 6, hitstop 13). Total 22 no acerto e 3 de chip na defesa.
-Alcance médio (210 px) na altura do corpo: de longe erra e um pulo lido na saída passa por cima.
-Na defesa fica -13 depois do colapso: punível.
+**CÓLERA DOS 100 DRAGÕES (Douglas):** ele concentra energia e solta uma avalanche de dragões
+de energia (ideia de muitos dragões; desenho original, sem poses, quadros ou efeitos de outra
+obra). Custo 40, somente no chão, nível `mid`, startup 16 / ativo 22 / recovery 28, ele não
+avança. Cinco contatos reais (`hits`), não cem: o **dragão líder** no frame 0 do ativo e três
+**ondas** nos frames 4, 7 e 10 (3 de dano cada, chip 1 / 0 / 1 / 0, hitstun 16, blockstun 12,
+knockback 0,8, hitstop 4) e o **dragão final** no frame 16 (10 de dano, chip 2, hitstun 28,
+blockstun 18, knockback 10, pushback 6, hitstop 14). Total 22 no acerto e 4 de chip na defesa.
+Cada onda alcança um pouco mais longe (190 → 220 → 240 → 260 → 280 px): o ataque viaja para a
+frente, sem perseguir o rival. De longe só as últimas ondas chegam (acerto parcial); fora dos
+280 px erra; um pulo na saída escapa dos primeiros dragões, mas quem cai na frente dele toma o
+resto; quem pula por cima dele (cross-up) ou fica atrás escapa de tudo. Na defesa os dragões
+continuam passando, só raspam 4 de chip e ele fica -16 depois do dragão final: punível. Um K.O.
+no meio encerra o combo ali.
 
 **FOORCE ZAP (Rodolfo):** ele carrega o punho e avança num soco que dispara uma rajada de
 mensagens. Custo 35, somente no chão, nível `mid`, dano 19, chip 2, startup 12 / ativo 6 /
@@ -595,14 +600,21 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   o bot piscando por cima (câmera treme um pouco mais que num golpe comum). Rótulo POWER COMBO
   com POWERZAP / POWERBOT embaixo, conforme a etapa. Som: carga de energia com um baque no disparo, o
   golpe especial em cada mensagem e, no final, um estrondo digital.
-- **OUTRA DIMENSÃO (Douglas), fenda dimensional:** na carga, ele estende a mão e partículas
-  cósmicas giram até ela, a tela escurece um pouco e o espaço racha na vertical à frente dele; no
-  ativo, a rachadura vira um portal oval com borda azul-elétrico/roxo/ciano, estrelas pixeladas
-  dentro, linhas de órbita e partículas girando, um feixe da mão até ele e riscos de sucção; no
-  primeiro contato o rival é "puxado" (riscos de velocidade, névoa roxa e estrelas da outra
-  dimensão); no segundo, a fenda colapsa: clarão branco/ciano redondo, onda roxa, anéis e
-  estilhaços com brilhos dourados (câmera treme mais). Na defesa tudo fica menor. Depois a fenda
-  fecha e a tela volta ao normal. Som: energia espacial, warp, grave crescente e explosão cósmica.
+- **CÓLERA DOS 100 DRAGÕES (Douglas), avalanche de dragões:** na concentração (pose de base
+  aberta com o punho recolhido), a tela escurece um pouco em azul-profundo com vinheta nas
+  laterais, energia dourada e verde-esmeralda gira em volta dele com três dragõezinhos nadando no
+  fluxo, um anel de luz e faíscas piscam no chão e o punho carrega. Na liberação, um dragão líder
+  grande sai do punho e abre caminho (primeiro contato); atrás dele vêm ondas de dragões em
+  várias profundidades (perto: grandes e dourados; no meio: verdes; longe: pequenos, ciano e
+  translúcidos), com rastros, afterimages e um enxame de silhuetas distantes; por fim, um dragão
+  bem maior, dourado com olhos e boca brancos, atravessa o rival (clarão dourado na tela). O
+  dragão é pixel art de retângulos: cabeça alongada com contorno escuro, olho brilhante, chifres
+  e crina para trás, mandíbula aberta de energia com presas, e corpo serpentino que ondula. Nas
+  mordidas, mandíbulas de luz se fecham com anel verde e faíscas; no dragão final, anéis
+  brancos/dourados, raios de luz, ondas verde e dourada e uma explosão de partículas (maior no
+  K.O.; câmera treme mais no último contato). Na defesa tudo fica menor. Rótulo CÓLERA DOS 100
+  DRAGÕES em dourado. Som: energia crescendo com rosnado, rugido e uma série de whooshes (as
+  ondas), uma mordida curta em cada onda e um estrondo com explosão de energia no final.
 - **FOORCE ZAP (Rodolfo), soco carregado de mensagens:** na carga, o punho erguido se enche de
   energia verde e dourada, raiozinhos estalam em volta e um anel dourado se fecha nele; no
   avanço, linhas de velocidade atrás dele e, à frente do punho, um cone de ondas de "enviar",
@@ -897,7 +909,7 @@ Golpes equilibrados, com chutes mais lentos e recuperações puníveis:
 
 ## Douglas — Dohko Technology
 
-Disponível na luta rápida como P1 e CPU, com o especial OUTRA DIMENSÃO. No Modo História ele é de
+Disponível na luta rápida como P1 e CPU, com o especial CÓLERA DOS 100 DRAGÕES. No Modo História ele é de
 **São Paulo**: campanha própria e rival das outras na cidade dele (sem cenário próprio: Partner
 Summit); final num mirante com a ponte estaiada ao pôr do sol. Vida 100,
 avanço 3,1, recuo 2,6, impulso do pulo 16,5 e deslocamento aéreo 3,9 px/frame. Corpo padrão.

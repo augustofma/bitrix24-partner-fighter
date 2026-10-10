@@ -195,9 +195,10 @@ export interface FighterAssetManifest {
  * - `powerCombo`: two apps in sequence (POWER COMBO): chat bubbles and digital bursts racing to
  *   the rival on each messaging hit, then an AI scan (reticle, node network, bot hologram) and
  *   a digital explosion on the finisher. Made for a multi-hit `hits` timeline.
- * - `dimensionRift`: a cosmic rift (OUTRA DIMENSÃO): particles gather in the hand, a vertical
- *   crack opens into an oval portal full of stars, the rival is pulled toward it (first hit)
- *   and it collapses in a burst of cosmic energy (last hit). Original drawing, no symbols.
+ * - `hundredDragons`: an avalanche of energy dragons (CÓLERA DOS 100 DRAGÕES): energy spirals
+ *   around the fighter, a lead dragon bursts out (first hit), waves of dragons at several
+ *   depths pour forward (small hits) and a larger white-gold dragon crosses the rival (last
+ *   hit). Original pixel dragons, made for a multi-hit `hits` timeline.
  * - `forceZap`: a charged dash punch (FOORCE ZAP): the raised fist fills with green and gold
  *   energy, then a cone of send waves, bolts and chat bubbles blasts forward from it.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
@@ -212,13 +213,15 @@ export type SpecialEffectStyle =
   | 'workflowNodes'
   | 'policeRaid'
   | 'powerCombo'
-  | 'dimensionRift'
+  | 'hundredDragons'
   | 'forceZap';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;
   /** Short text flashed above the fighter while the move runs. */
   label: string;
+  /** Color of that text (default: the cyan of every special). */
+  labelColor?: number;
   /** Pixel-art app emblem (path in /public) shown on the move and on the impact. */
   emblem?: string;
   /** Symbol-only image (white, path in /public), tinted and glowed by the style. */

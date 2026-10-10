@@ -104,8 +104,9 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-190': sfx('special-190', 0.85),
   // Any special that connects: a heavier impact than a kick.
   'special-hit': sfx('special-hit', 0.8, true),
-  'special-dimension': sfx('special-dimension', 0.85),
-  'special-dimension-impact': sfx('special-dimension-impact', 0.9),
+  'special-dragons': sfx('special-dragons', 0.85),
+  'special-dragon-bite': sfx('special-dragon-bite', 0.8),
+  'special-dragon-impact': sfx('special-dragon-impact', 0.9),
   'special-foorce-zap': sfx('special-foorce-zap', 0.85),
   'special-powerzap': sfx('special-powerzap', 0.8),
   'special-powerbot': sfx('special-powerbot', 0.9),

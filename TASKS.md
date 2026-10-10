@@ -774,7 +774,7 @@ sem pedido explícito.**
 - [x] Modo História: perfil `home: 'sao-paulo'` (campanha própria, rival das outras; Partner
       Summit) e final com a ponte estaiada (`prepare_douglas_ending.py`, 1440×810); galeria com 11
 
-## DONE (OUTRA DIMENSÃO do Douglas, branch `feature/douglas-outra-dimensao`)
+## DONE (OUTRA DIMENSÃO do Douglas, branch `feature/douglas-outra-dimensao`; substituído pela CÓLERA DOS 100 DRAGÕES)
 
 - [x] Especial por dados no sistema atual (multi-hit `hits`): custo 40, sucção 6 + colapso 16
       (22), chip 1 + 2, startup 16 / ativo 8 / recovery 28, hitstop final 13, alcance 210, pulável
@@ -806,6 +806,18 @@ sem pedido explícito.**
 - [x] Setas ← → (e ↑ ↓) movem o foco entre os botões da tela de campanha zerada e do resultado do
       Modo História; Enter aperta o botão em foco
 - [x] Testes (especial, cenário, história, foco dos botões, CPU nos três níveis)
+
+## DONE (CÓLERA DOS 100 DRAGÕES do Douglas, branch `feature/douglas-100-dragoes`)
+
+- [x] Substitui o OUTRA DIMENSÃO (mesmo slot, custo, input, IA, botão ESP e multi-hit `hits`):
+      removidos o tema `dimensionRift`, os sons `special-dimension*`, o texto e os testes antigos
+- [x] Cinco contatos (3 + 3 + 3 + 3 + 10 = 22), chip 4, startup 16 / ativo 22 / recovery 28,
+      hitstop final 14; ondas que alcançam cada vez mais longe (190 → 280 px), sem tracking
+- [x] Tema `hundredDragons` procedural (dragões de pixel art em camadas de profundidade, líder,
+      ondas, silhuetas, dragão final, clarão e explosão maior no K.O.); rótulo dourado
+      (`labelColor`); sons `special-dragons`, `special-dragon-bite` e `special-dragon-impact`
+- [x] Testes (nome, meter, 5 contatos, dano, defesa/chip, parcial, erro, pulo, cross-up, K.O.,
+      sons, primeiro uso, determinismo, custo de desenho do VFX, CPU nos três níveis); playtest
 
 ## NEXT (próximas tarefas recomendadas)
 

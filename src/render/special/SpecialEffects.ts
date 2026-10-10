@@ -2,15 +2,15 @@ import Phaser from 'phaser';
 import type { CombatEvent } from '../../core/systems/CombatSystem';
 import type { ReadonlyFighter } from '../../core/fighter/ReadonlyFighter';
 import type { AttackConfig, SpecialEffectConfig, SpecialEffectStyle } from '../../types/fighter';
-import { COLORS, DEPTH, arcadeText } from '../../ui/theme';
+import { COLORS, DEPTH, arcadeText, css } from '../../ui/theme';
 import { vfxTextureKey } from '../assets/fighterAssets';
 import { AGENT_THEME } from './agentTheme';
+import { DRAGON_THEME } from './dragonTheme';
 import { FLUID_THEME } from './fluidTheme';
 import { LIGHTNING_THEME } from './lightningTheme';
 import { MIND_THEME } from './mindTheme';
 import { POLICE_THEME } from './policeTheme';
 import { POWER_THEME } from './powerTheme';
-import { DIMENSION_THEME } from './dimensionTheme';
 import { FORCE_THEME } from './forceTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
@@ -27,7 +27,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   workflowNodes: WORKFLOW_THEME,
   policeRaid: POLICE_THEME,
   powerCombo: POWER_THEME,
-  dimensionRift: DIMENSION_THEME,
+  hundredDragons: DRAGON_THEME,
   forceZap: FORCE_THEME,
 };
 
@@ -49,6 +49,7 @@ interface Impact {
   blocked: boolean;
   hit: number;
   hits: number;
+  ko: boolean;
   startedAt: number;
 }
 
@@ -160,6 +161,7 @@ export class SpecialEffects {
       blocked: event.type === 'block',
       hit: event.hitIndex,
       hits: event.hitCount,
+      ko: event.type === 'koHit',
       startedAt: this.scene.time.now,
     };
   }
@@ -189,6 +191,8 @@ export class SpecialEffects {
     if (!effect || !attack || !phase || !slots) return;
 
     const alpha = phase === 'recovery' ? 1 - recoveryProgress(fighter, attack) : 1;
+    const labelColor = css(effect.labelColor ?? COLORS.cyan);
+    if (label && label.style.color !== labelColor) label.setColor(labelColor);
     label
       ?.setText(effect.label)
       .setPosition(fighter.position.x, fighter.position.y + LABEL_OFFSET_Y)
@@ -259,6 +263,7 @@ export class SpecialEffects {
         blocked: impact.blocked,
         hit: impact.hit,
         hits: impact.hits,
+        ko: impact.ko,
         emblem: slot,
       });
     });

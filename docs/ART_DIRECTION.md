@@ -839,11 +839,14 @@ como imagem lisa.
   branco (retícula, rede de nós, bot holográfico genérico, glitch e estilhaços). Sem logo dos
   apps: só balões, nós e um rosto de bot genérico; nenhuma imagem (nada a carregar no primeiro
   uso).
-- **OUTRA DIMENSÃO:** azul-elétrico (#2F6BFF), roxo (#8A3CFF), ciano (#34E8FF), branco e o fundo
-  da fenda quase preto (#05020F) com névoa roxa (#14062E); brilhos dourados (#FFD75A) pontuais. A
-  fenda é um oval de linhas de pixel (sem triangulação), com estrelas que derivam para o centro
-  (profundidade). Inspiração só no conceito de ataque dimensional: nenhum símbolo, armadura ou
-  efeito de franquia. Tudo procedural: nada para carregar.
+- **CÓLERA DOS 100 DRAGÕES:** dourado (#FFC83A), amarelo intenso (#FFF05A), verde-esmeralda
+  (#1FD68A), ciano (#3FF0FF) e branco; azul-profundo (#0B1640) no escurecimento e contorno quase
+  preto (#061026) nos dragões. Dragões originais em pixel art de retângulos (sem triangulação):
+  cabeça alongada, olho brilhante, chifres discretos, mandíbula de energia e corpo serpentino.
+  Inspiração só na ideia de muitos dragões de energia: nenhuma pose, quadro ou efeito de outra
+  obra. A quantidade vem de camadas (cerca de 20 dragões em ondas, 22 silhuetas, rastros e
+  afterimages) redesenhadas nos dois Graphics do pool a cada quadro; dragões pequenos dispensam
+  os detalhes finos. Tudo procedural: nada para carregar.
 - **FOORCE ZAP:** verde de mensagem (#25D366) e verde-limão (#8DFF6A) com o dourado (#E0B03A,
   #FFE08A) e o azul-marinho (#1B1F4A) da Brasil Leads, mais branco. Desenho original de balões,
   raios em zigue-zague, ondas e anéis, sem logo de app. Tudo procedural: nada para carregar.

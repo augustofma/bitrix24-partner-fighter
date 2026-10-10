@@ -425,29 +425,46 @@ def sfx_special_hit(rng):
     return np.tanh(mix(attack(body, 1), thump, crack, at(energy, 0.01)) * 3.2)
 
 
-def sfx_special_dimension(rng):
-    """OUTRA DIMENSÃO starts: a shimmering space-energy swell in the hand, a warp whoosh as the
-    rift tears open, then a deep tone rising (the pull of the rift)."""
-    swell_len = 0.3
-    shimmer = mix(*[np.sin(sweep(hz, hz * 1.5, swell_len)) * 0.08 for hz in (420, 630, 945)])
+def sfx_special_dragons(rng):
+    """CÓLERA DOS 100 DRAGÕES starts: energy swelling in the fist (a rising shimmer over a low
+    growl), then the release: a deep roar-like whoosh and a run of short whooshes, the waves of
+    dragons pouring out (they sound even when the move misses)."""
+    swell_len = 0.28
+    shimmer = mix(*[np.sin(sweep(hz, hz * 1.6, swell_len)) * 0.07 for hz in (330, 495, 742)])
     shimmer *= np.linspace(0, 1, int(swell_len * SR)) ** 2
-    warp_len = 0.28
-    warp = bandpass(rng.uniform(-1, 1, int(warp_len * SR)), 500, 4000)
-    warp *= np.sin(np.pi * seconds(warp_len) / warp_len) ** 2 * 0.5
-    warp_tone = np.sin(sweep(900, 140, warp_len, 1.4)) * decay(warp_len, 5) * 0.35
-    pull_len = 0.45
-    pull = lowpass(saw(sweep(45, 110, pull_len, 0.6), 10), 700) * np.linspace(0.2, 1, int(pull_len * SR)) * 0.45
-    return mix(shimmer, at(mix(warp, warp_tone), 0.22), at(pull, 0.36))
+    growl = lowpass(saw(sweep(55, 90, swell_len, 0.7), 12), 600) * np.linspace(0.1, 1, int(swell_len * SR)) * 0.35
+    growl *= 1 + 0.3 * np.sin(2 * np.pi * 22 * seconds(swell_len))
+    roar_len = 0.4
+    roar = bandpass(rng.uniform(-1, 1, int(roar_len * SR)), 250, 2200)
+    roar *= np.sin(np.pi * seconds(roar_len) / roar_len) ** 1.5 * 0.55
+    roar_tone = lowpass(saw(sweep(140, 70, roar_len, 1.3), 10), 900) * decay(roar_len, 4) * 0.3
+    whooshes = []
+    for i in range(5):
+        w_len = 0.11
+        w = bandpass(rng.uniform(-1, 1, int(w_len * SR)), 900 + i * 250, 4500)
+        whooshes.append(at(w * np.sin(np.pi * seconds(w_len) / w_len) ** 2 * 0.32, 0.36 + i * 0.07))
+    return np.tanh(mix(shimmer, growl, at(mix(roar, roar_tone), swell_len - 0.02), *whooshes) * 1.5)
 
 
-def sfx_special_dimension_impact(rng):
-    """The rift collapses: a cosmic digital explosion (deep implosion boom, bright crack, a
-    shimmering tail that falls away)."""
-    boom = np.sin(sweep(220, 36, 0.6, 1.8)) * decay(0.6, 6) * 0.95
-    crack = highpass(rng.uniform(-1, 1, int(0.06 * SR)), 1800) * decay(0.06, 50) * 0.6
-    noise = lowpass(rng.uniform(-1, 1, int(0.6 * SR)), 3000) * decay(0.6, 8) * 0.4
-    shimmer = mix(*[np.sin(sweep(hz, hz * 0.5, 0.5)) * decay(0.5, 6) * 0.08 for hz in (1320, 1760, 2640)])
-    return np.tanh(mix(boom, crack, noise, at(shimmer, 0.03)) * 2.6)
+def sfx_special_dragon_bite(rng):
+    """A dragon of the flood bites in passing: a short whoosh into a light energy snap (lighter
+    than the special hit, so the waves read as a flurry)."""
+    w_len = 0.09
+    whoosh = bandpass(rng.uniform(-1, 1, int(w_len * SR)), 1000, 5000)
+    whoosh *= np.linspace(0, 1, int(w_len * SR)) ** 2 * 0.4
+    snap = np.sin(sweep(260, 90, 0.12)) * decay(0.12, 22) * 0.75
+    crack = highpass(rng.uniform(-1, 1, int(0.03 * SR)), 2200) * decay(0.03, 80) * 0.45
+    return np.tanh(mix(whoosh, at(mix(snap, crack), w_len - 0.01)) * 2.4)
+
+
+def sfx_special_dragon_impact(rng):
+    """The final dragon crashes in: a huge low boom, a bright crack and an energy explosion with
+    a glittering tail falling away."""
+    boom = np.sin(sweep(200, 34, 0.7, 1.8)) * decay(0.7, 5.5) * 0.95
+    crack = highpass(rng.uniform(-1, 1, int(0.06 * SR)), 1800) * decay(0.06, 45) * 0.65
+    blast = lowpass(rng.uniform(-1, 1, int(0.7 * SR)), 3200) * decay(0.7, 7) * 0.45
+    glitter = mix(*[np.sin(sweep(hz, hz * 0.6, 0.6)) * decay(0.6, 5) * 0.07 for hz in (1480, 1975, 2960)])
+    return np.tanh(mix(attack(boom, 1), crack, blast, at(glitter, 0.04)) * 2.8)
 
 
 def sfx_special_foorce_zap(rng):
@@ -533,8 +550,9 @@ EFFECTS = {
     "special-190": sfx_special_190,
     "special-powerzap": sfx_special_powerzap,
     "special-hit": sfx_special_hit,
-    "special-dimension": sfx_special_dimension,
-    "special-dimension-impact": sfx_special_dimension_impact,
+    "special-dragons": sfx_special_dragons,
+    "special-dragon-bite": sfx_special_dragon_bite,
+    "special-dragon-impact": sfx_special_dragon_impact,
     "special-foorce-zap": sfx_special_foorce_zap,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,

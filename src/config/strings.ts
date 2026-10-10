@@ -127,7 +127,7 @@ export const STRINGS = {
   specialPowerCombo: 'POWER COMBO',
   specialPowerZap: 'POWERZAP',
   specialPowerBot: 'POWERBOT',
-  specialOutraDimensao: 'OUTRA DIMENSÃO',
+  specialHundredDragons: 'CÓLERA DOS 100 DRAGÕES',
   specialFoorceZap: 'FOORCE ZAP',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
