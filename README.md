@@ -238,7 +238,7 @@ A arte demo do FIGHTER_A pode ser regenerada com `node scripts/generate-demo-fig
 | Menus              | Enter / Espaço confirma, ← / → modo, Esc volta                                 |
 | Seleção            | ← / → e ↑ / ↓ lutador na grade (seu, depois o rival), Q / E dificuldade da CPU |
 | Fase               | ↑ / ↓ / ← / → cenário, Enter luta, Esc volta ao rival                          |
-| Som                | M liga/desliga música e efeitos                                                |
+| Som                | M liga/desliga música, efeitos, narrador e torcida                             |
 | Debug              | F2 mostra hitboxes (ou `?debug=1` na URL)                                      |
 
 **Touch:** joystick virtual à esquerda (8 direções: ↗ e ↖ fazem o pulo diagonal) e botões

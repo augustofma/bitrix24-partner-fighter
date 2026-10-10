@@ -17,6 +17,7 @@ export const partnerSummit: StageConfig = {
   // Used only by the procedural fallback when the art is not loaded.
   palette: partnerArena.palette,
   music: 'partner-summit-theme',
+  ambience: 'arena',
   art: {
     background: { key: 'stage:partner-summit', path: `${ART_DIR}/background.jpg` },
     // Puts the big LED wall title just below the HUD.

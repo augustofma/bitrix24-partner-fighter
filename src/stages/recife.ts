@@ -28,6 +28,7 @@ export const recife: StageConfig = {
     accent: 0x2fe0ff,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'recife',
   art: {
     background: { key: 'stage:recife', path: `${ART_DIR}/background.jpg` },
     // Puts the Marco Zero floor under the fighters' feet, in front of the barrier.

@@ -1,4 +1,4 @@
-import type { MusicTrackId } from './audio';
+import type { AmbienceId, MusicTrackId } from './audio';
 
 export interface StagePalette {
   skyTop: number;
@@ -26,6 +26,8 @@ export interface StageConfig {
   art?: StageArt;
   /** Fight music of this stage (config/audio.ts DEFAULT_STAGE_MUSIC when missing). */
   music?: MusicTrackId;
+  /** Background loop under the music (crowd, the place's sounds); silent when missing. */
+  ambience?: AmbienceId;
 }
 
 /** An image used by a stage (path relative to /public; key unique in the texture cache). */

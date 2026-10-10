@@ -4,6 +4,7 @@ import type { StageConfig } from '../types/stage';
 export const partnerArena: StageConfig = {
   id: 'partner-arena',
   displayName: 'PARTNER ARENA',
+  ambience: 'arena',
   width: 1440,
   groundY: 470,
   wallMargin: 40,

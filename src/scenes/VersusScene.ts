@@ -6,7 +6,9 @@ import { SceneKeys } from '../config/sceneKeys';
 import { STRINGS } from '../config/strings';
 import { getFighterConfig } from '../fighters/roster';
 import { onKeys } from '../input/menuKeys';
+import { pickQuote } from '../config/fighterQuotes';
 import { createPortrait } from '../render/PortraitView';
+import { SpeechBubble } from '../ui/SpeechBubble';
 import { matchAssets } from '../render/assets/sceneAssets';
 import { getStageConfig } from '../stages/stageRegistry';
 import { getStoryLocation, locationLabel, locationName } from '../story/locations';
@@ -31,6 +33,8 @@ const STAGE_LABEL_Y = 40;
 /** Story fights: where the fight happens, under the VS. */
 const PLACE_Y = 352;
 const BOSS_LABEL_Y = 310;
+/** The fighters' lines: over the inner top corner of each portrait, one after the other. */
+const QUOTE = { x: 335, y: 112, maxWidth: 230, delayMs: 100, gapMs: 750 } as const;
 
 /**
  * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where
@@ -82,6 +86,17 @@ export class VersusScene extends Phaser.Scene {
       x: GAME_WIDTH - PORTRAIT_SIDE_X,
       duration: SLIDE_MS,
       ease: 'Cubic.easeOut',
+    });
+
+    // Each fighter's line, from the inner corner of its portrait: the player first, then the rival.
+    [player, cpu].forEach((config, side) => {
+      const line = pickQuote(config.id, 'versus');
+      if (!line) return;
+      const x = side === 0 ? QUOTE.x : GAME_WIDTH - QUOTE.x;
+      new SpeechBubble(this, x, QUOTE.y, line, {
+        maxWidth: QUOTE.maxWidth,
+        tail: side === 0 ? 'left' : 'right',
+      }).show(SLIDE_MS + QUOTE.delayMs + side * QUOTE.gapMs);
     });
 
     const vs = this.add

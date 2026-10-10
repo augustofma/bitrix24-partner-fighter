@@ -30,6 +30,7 @@ export const spain: StageConfig = {
     accent: 0x2f6fe0,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'spain',
   art: {
     background: { key: 'stage:spain', path: `${ART_DIR}/background.jpg` },
     // Puts the wet paving under the fighters' feet, in front of the barriers.

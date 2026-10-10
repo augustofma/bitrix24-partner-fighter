@@ -43,5 +43,10 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-n8n`          | N8N! começa (Gabriel Mattozo)           | Blips digitais, fluxo de dados, acorde de sucesso e impacto      | 0,85   |
 | `special-190`          | CHAMA O 190! começa (Gabriele)          | Sirene de dois tons, pneu cantando, rajada de tiros e impacto    | 0,85   |
 | `victory`              | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
+| `crowd-ooh`            | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |
+| `crowd-cheer`          | Especial, K.O., PERFECT (com plateia)   | Torcida explode: rugido, palmas e assobios                       | 0,50   |
+
+As falas do narrador (`voice-*`) ficam na mesma pasta mas vêm de
+[scripts/voice](../voice/README.md).
 
 Licença: original do projeto (mesma licença do repositório).

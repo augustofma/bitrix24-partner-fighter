@@ -1,3 +1,4 @@
+import { VERDICT_DELAY_MS, verdictVoice } from '../../audio/announcerVoice';
 import { gameMusic, playSfx } from '../../audio/gameAudio';
 import { SCENE_MUSIC } from '../../config/audio';
 import Phaser from 'phaser';
@@ -77,6 +78,8 @@ export class CampaignCompleteScene extends Phaser.Scene {
   create(): void {
     fadeIn(this);
     gameMusic(this).playSting(SCENE_MUSIC.victory);
+    // The campaign is won: the announcer says so.
+    this.time.delayedCall(VERDICT_DELAY_MS, () => playSfx(this, verdictVoice(0)));
     const progress = getStoryProgress(this);
     if (!progress || progress.phase !== 'complete') {
       quitStory(this);

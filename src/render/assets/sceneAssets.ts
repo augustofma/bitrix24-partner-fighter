@@ -1,6 +1,6 @@
 import type { FighterConfig } from '../../types/fighter';
 import type { StageConfig } from '../../types/stage';
-import { BOOT_AUDIO_ASSETS } from './audioAssets';
+import { BOOT_AUDIO_ASSETS, ambienceRequest } from './audioAssets';
 import { collectFighterAssets, type AssetRequest } from './fighterAssets';
 import { FONT_ASSETS } from './fontAssets';
 import { collectStageAssets } from './stageAssets';
@@ -27,8 +27,9 @@ export function bootAssets(roster: readonly FighterConfig[]): AssetRequest[] {
 }
 
 /**
- * A fight: both fighters (sprite sheets included) and the stage art. In story mode also the
- * player's ending illustration, so the campaign's last screen never waits for it.
+ * A fight: both fighters (sprite sheets included), the stage art and its ambience loop. In
+ * story mode also the player's ending illustration, so the campaign's last screen never waits
+ * for it.
  */
 export function matchAssets(
   fighters: readonly FighterConfig[],
@@ -39,6 +40,7 @@ export function matchAssets(
   return [
     ...collectFighterAssets(fighters),
     ...collectStageAssets([stage]),
+    ...(stage.ambience ? [ambienceRequest(stage.ambience)] : []),
     ...(ending ? [ending] : []),
   ];
 }

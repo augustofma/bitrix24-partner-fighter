@@ -712,6 +712,20 @@ sem pedido explícito.**
       `special-190`; pose de ligação (frames 39, 15, 16)
 - [x] Testes de dados, acerto, defesa, alcance e VFX
 
+## DONE (narrador, falas, combo e torcida, branch `feature/announcer-quotes-combo-crowd`)
+
+- [x] Narrador em inglês de fliperama: ROUND 1-9, FINAL ROUND, FIGHT!, K.O., PERFECT, TIME
+      OVER, DRAW, YOU WIN, YOU LOSE (Kokoro-82M, Apache-2.0, gerado offline por
+      `scripts/voice/generate_announcer.py`; inteligibilidade conferida por reconhecimento de fala)
+- [x] Falas dos parceiros em balão na tela VS (os dois) e na vitória (o vencedor):
+      `src/config/fighterQuotes.ts`
+- [x] Contador "n HITS!" por lado (sequência de acertos sem o rival defender, até 1,2 s entre
+      eles); só apresentação, gameplay intacto
+- [x] Som ambiente por cenário (torcida + som do lugar, loop de 12 s sintetizado por
+      `scripts/ambience/generate_ambience.py`) e gritos da torcida (`crowd-ooh`, `crowd-cheer`)
+      nas reações; sem torcida no escritório da Bitrix24
+- [x] Testes de voz, falas, combo, ambiente e gritos; playtest no navegador
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
@@ -723,15 +737,13 @@ sem pedido explícito.**
 5. [ ] Comandos de entrada por especial (ex.: ↓↘→ + soco), mantendo o botão de especial.
 6. [ ] **Polimento artístico:** revisar continuidade da caminhada e proporções entre poses
        com pessoas reais; refinar correspondência visual dos membros às caixas sem mudar gameplay.
-7. [ ] Vozes/locução dos anúncios (ROUND, FIGHT!, K.O.) e falas dos personagens.
-8. [ ] Contador de combo e pausa de impacto nos golpes fortes.
-9. [ ] Som ambiente de torcida por cenário.
-10. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo) e
-        remapeamento de teclas salvo em `localStorage`.
-11. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
-12. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
-13. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
-14. [ ] Mais cidades no mapa do Modo História.
+7. [ ] Pausa de impacto (hitstop) nos golpes fortes.
+8. [ ] Tela de opções com volumes separados de música e efeitos (hoje só M para mutar tudo) e
+       remapeamento de teclas salvo em `localStorage`.
+9. [ ] Mostrar a dificuldade escolhida na tela VS (o HUD fica limpo de propósito).
+10. [ ] Playtest específico do cross-up (alcance do pulo, `pushHeight`, hitbox do chute aéreo).
+11. [ ] Teste automatizado E2E (Playwright) do fluxo menu → vitória, no CI.
+12. [ ] Mais cidades no mapa do Modo História.
 
 ## FUTURE (não implementar agora)
 
@@ -740,9 +752,9 @@ sem pedido explícito.**
 
 - Elenco de 8 a 16 personagens reais (com autorização) e character select maior
 - Sequências de comando para especiais e suporte a multi-hit real
-- Combos, contador de hits, cancelamentos
+- Combos de verdade (links e cancelamentos)
 - Vários cenários
-- Falas dos personagens e trilha gravada por músicos (hoje é sintetizada)
+- Falas dubladas pelos próprios parceiros e trilha gravada por músicos (hoje é sintetizada)
 - Modo torneio / arcade com chaveamento (o Modo História já cobre a sequência de rivais)
 - Ranking
 - Multiplayer local (2 jogadores no mesmo teclado/gamepads)

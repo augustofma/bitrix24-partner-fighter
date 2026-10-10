@@ -19,6 +19,7 @@ export const joinvilleZopu: StageConfig = {
   // Used only by the procedural fallback when the art is not loaded.
   palette: { ...joinville.palette, accent: 0x22c55e },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'joinville',
   art: {
     ...joinville.art!,
     background: { key: 'stage:joinville-zopu', path: `${ART_DIR}/background.jpg` },

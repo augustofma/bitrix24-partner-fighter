@@ -30,6 +30,7 @@ export const portugal: StageConfig = {
     accent: 0x1f3fbf,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'portugal',
   art: {
     background: { key: 'stage:portugal', path: `${ART_DIR}/background.jpg` },
     // Puts the mosaic under the fighters' feet, in front of the barrier (and keeps the art down

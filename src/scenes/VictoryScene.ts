@@ -1,3 +1,6 @@
+import { VERDICT_DELAY_MS, verdictVoice } from '../audio/announcerVoice';
+import { pickQuote } from '../config/fighterQuotes';
+import { SpeechBubble } from '../ui/SpeechBubble';
 import { gameMusic, playSfx } from '../audio/gameAudio';
 import { SCENE_MUSIC } from '../config/audio';
 import Phaser from 'phaser';
@@ -25,6 +28,8 @@ import { continueStory, finishStoryMatch, quitStory, retryStoryFight } from './s
 import { fadeIn, goToScene } from './transitions';
 
 /** Entrance timeline (ms): title, card, result line, then the button (~1.1 s in total). */
+/** The winner's line: a bubble to the right of the card, after the title lands. */
+const VICTORY_QUOTE = { x: 735, y: 182, maxWidth: 250, delayMs: 900, depth: 50 } as const;
 const ENTRANCE = {
   title: { delay: 80, duration: 420 },
   card: { delay: 300, duration: 380 },
@@ -72,6 +77,7 @@ export class VictoryScene extends Phaser.Scene {
     fadeIn(this);
     // A short original sting, then musical silence on this screen.
     gameMusic(this).playSting(SCENE_MUSIC.victory);
+    this.time.delayedCall(VERDICT_DELAY_MS, () => playSfx(this, verdictVoice(result.winnerIndex)));
     const { setup } = result;
     const sides = [
       getFighterConfig(setup.playerFighterId),
@@ -84,6 +90,17 @@ export class VictoryScene extends Phaser.Scene {
     const hasArt = Object.values(VICTORY_ART).every(({ key }) => this.textures.exists(key));
     if (hasArt) this.createIllustrated(content, actions);
     else this.createProcedural(content, actions);
+    // The winner says something (the CPU too: it taunts when the player loses).
+    const winner = result.winnerIndex === null ? undefined : sides[result.winnerIndex];
+    const line = winner ? pickQuote(winner.id, 'victory') : undefined;
+    if (line) {
+      new SpeechBubble(this, VICTORY_QUOTE.x, VICTORY_QUOTE.y, line, {
+        maxWidth: VICTORY_QUOTE.maxWidth,
+        tail: 'left',
+      })
+        .show(VICTORY_QUOTE.delayMs)
+        .container.setDepth(VICTORY_QUOTE.depth);
+    }
   }
 
   /** Menu sounds on every way out: confirm for the main choices, back for leaving. */

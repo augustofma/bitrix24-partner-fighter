@@ -1,5 +1,7 @@
 import {
   BOOT_MUSIC,
+  ambienceFiles,
+  ambienceKey,
   MUSIC_TRACKS,
   SFX,
   musicFiles,
@@ -7,7 +9,7 @@ import {
   sfxFiles,
   sfxKey,
 } from '../../config/audio';
-import type { MusicTrackId, SfxId } from '../../types/audio';
+import type { AmbienceId, MusicTrackId, SfxId } from '../../types/audio';
 import type { AssetRequest } from './fighterAssets';
 
 function audioRequest(key: string, files: string[]): AssetRequest {
@@ -34,3 +36,7 @@ export const BACKGROUND_AUDIO_ASSETS: readonly AssetRequest[] = (
 )
   .filter((id) => !BOOT_MUSIC.includes(id))
   .map(musicRequest);
+
+/** A stage's ambience loop: fetched with the fight's assets (see matchAssets). */
+export const ambienceRequest = (id: AmbienceId): AssetRequest =>
+  audioRequest(ambienceKey(id), ambienceFiles(id));

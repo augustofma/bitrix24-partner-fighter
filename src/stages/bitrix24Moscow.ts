@@ -28,6 +28,7 @@ export const bitrix24Moscow: StageConfig = {
     accent: 0x2fc7f7,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'office',
   art: {
     background: { key: 'stage:bitrix24-moscow', path: `${ART_DIR}/background.jpg` },
     // Puts the fighters' feet on the hall floor, around the Bitrix24 logo.

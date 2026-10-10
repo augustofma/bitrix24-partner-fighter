@@ -1,4 +1,5 @@
 import type { ReadonlyFighter } from '../core/fighter/ReadonlyFighter';
+import { ANNOUNCER_VOICE } from './announcerVoice';
 import type { SimulationEvent } from '../core/FightSimulation';
 import type { AttackStateId } from '../types/fighter';
 import type { SfxId } from '../types/audio';
@@ -45,10 +46,15 @@ export function combatSfx(
       const themed = move ? fighter.config.assets.specialEffects?.[move.id]?.sound : undefined;
       return [themed ?? 'special'];
     }
+    // The big calls: the stinger and the announcer's voice together.
     case 'ko':
-      return ['ko'];
+      return ['ko', ANNOUNCER_VOICE.ko];
     case 'fightStart':
-      return ['fight'];
+      return ['fight', ANNOUNCER_VOICE.fight];
+    case 'timeUp':
+      return [ANNOUNCER_VOICE.timeOver];
+    case 'roundDraw':
+      return [ANNOUNCER_VOICE.draw];
     case 'victoryPose':
       return ['victory'];
     default:

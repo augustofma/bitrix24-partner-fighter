@@ -97,6 +97,7 @@ export const STRINGS = {
   ko: 'K.O.',
   perfect: 'PERFECT',
   timeOver: 'TIME OVER',
+  comboHits: (hits: number) => `${hits} HITS!`,
   draw: 'EMPATE',
   drawNames: (left: string, right: string) => `${left}  x  ${right}`,
   resultSeparator: '■',

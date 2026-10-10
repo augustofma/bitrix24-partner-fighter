@@ -390,6 +390,49 @@ def sfx_special_190(rng):
     return mix(siren, at(screech, 0.16), *shots, at(hit, 0.32))
 
 
+def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
+    """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
+    and a slightly different onset, summed into one crowd roar."""
+    n = int(duration * SR)
+    out = np.zeros(n)
+    for _ in range(count):
+        centre = rng.uniform(low, high)
+        voice = bandpass(rng.uniform(-1, 1, n), centre * 0.8, centre * 1.25)
+        onset = rng.uniform(0, 0.08)
+        env = np.clip((seconds(duration) - onset) / 0.12, 0, 1) * rng.uniform(0.6, 1.0)
+        out += voice * env
+    return out / count
+
+
+def sfx_crowd_cheer(rng):
+    """The crowd erupts (a special, a KO, a perfect): a roar that swells and fades, scattered
+    claps and a couple of whistles on top."""
+    duration = 1.6
+    roar = crowd_voices(rng, duration, 24, 350, 1800) * np.exp(-seconds(duration) * 1.6) * 2.4
+    claps = []
+    for _ in range(26):
+        clap = bandpass(rng.uniform(-1, 1, int(0.03 * SR)), 900, 3200) * decay(0.03, 120) * rng.uniform(0.15, 0.35)
+        claps.append(at(clap, rng.uniform(0.05, 1.2)))
+    whistles = []
+    for _ in range(2):
+        start, end, length = rng.uniform(1800, 2300), rng.uniform(2600, 3200), rng.uniform(0.25, 0.4)
+        tone = np.sin(sweep(start, end, length, 0.6)) * np.minimum(1, decay(length, 3) * 1.4) * 0.12
+        whistles.append(at(attack(tone, 20), rng.uniform(0.1, 0.6)))
+    return mix(attack(roar, 60), *claps, *whistles)
+
+
+def sfx_crowd_ooh(rng):
+    """A big hit lands: the crowd goes "ooh!" (a low vowel formant whose pitch rises then
+    sags), short and under the hit itself."""
+    duration = 0.85
+    x = seconds(duration)
+    voices = crowd_voices(rng, duration, 18, 280, 650)
+    glide = 1 + 0.25 * np.sin(np.pi * np.clip(x / 0.6, 0, 1))
+    hum = mix(*[np.sin(np.cumsum(2 * np.pi * hz * glide / SR)) * 0.08 for hz in rng.uniform(170, 260, 6)])
+    env = np.clip(x / 0.1, 0, 1) * np.exp(-np.clip(x - 0.15, 0, None) * 4)
+    return lowpass(mix(voices * 1.6, hum), 1400) * env
+
+
 EFFECTS = {
     "punch": sfx_punch,
     "kick": sfx_kick,
@@ -419,6 +462,8 @@ EFFECTS = {
     "special-alaio-strike": sfx_special_alaio_strike,
     "special-n8n": sfx_special_n8n,
     "special-190": sfx_special_190,
+    "crowd-cheer": sfx_crowd_cheer,
+    "crowd-ooh": sfx_crowd_ooh,
 }
 
 

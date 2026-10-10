@@ -810,6 +810,22 @@ FIGHT!, a pose de vitória e os menus (mover, confirmar, voltar) também têm so
 acima da música; **M** silencia tudo. Lista e níveis em
 [scripts/sfx/README.md](../scripts/sfx/README.md).
 
+## Narrador, falas e torcida
+
+- **Narrador** (inglês, estilo fliperama): "ROUND 1"... ou "FINAL ROUND", "FIGHT!", "K.O.",
+  "PERFECT", "TIME OVER", "DRAW" e, na tela de vitória, "YOU WIN" / "YOU LOSE" (do ponto de
+  vista do jogador 1).
+- **Falas:** na tela VS cada lutador solta uma provocação em balão (jogador primeiro, CPU logo
+  depois); na vitória o vencedor comemora. Uma frase sorteada por vez, de
+  `src/config/fighterQuotes.ts` (fácil de editar; até 56 caracteres).
+- **Contador de combo:** "n HITS!" do lado de quem bate, a partir do 2º acerto seguido. A
+  sequência continua enquanto o rival não defende e o próximo acerto vem em até 72 frames
+  (1,2 s); defesa ou novo round zera. Só apresentação: frame data, dano e CPU não mudam.
+- **Torcida:** som ambiente próprio de cada cenário (ver
+  [ART_DIRECTION.md](ART_DIRECTION.md#som-ambiente)) e gritos nas reações da plateia ("ooh!" no
+  golpe forte, comemoração no especial, K.O. e PERFECT). O escritório da Bitrix24 em Moscou não
+  tem plateia.
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |

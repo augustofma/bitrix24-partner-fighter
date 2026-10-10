@@ -647,6 +647,37 @@ Os níveis (golpes 0,62-0,75, defesa 0,60, K.O. e especial 0,85, pulo 0,35, ater
 pulo e aterrissagem variam um pouco de pitch (±6%) e volume (até -10%) a cada vez, só na
 apresentação. Arquivos em `public/audio/sfx/` (`.ogg` e `.mp3`, mono, ~150 KB no total por formato).
 
+## Narrador
+
+Voz de anunciador de fliperama **em inglês** (ROUND 1, FINAL ROUND, FIGHT!, K.O., PERFECT, TIME
+OVER, DRAW, YOU WIN, YOU LOSE), como nos clássicos do gênero. Gerada offline com o modelo aberto
+Kokoro-82M (Apache-2.0, voz `am_michael`) por
+[scripts/voice/generate_announcer.py](../scripts/voice/README.md): fonemas escritos à mão, tom um
+pouco mais grave, saturação leve e um pouco de reverb de arena. Nenhuma voz de outro jogo. Volume
+0,95, acima de tudo; arquivos `public/audio/sfx/voice-*` (~500 KB).
+
+## Som ambiente
+
+Cada cenário tem um loop de 12 s (sem emenda audível) **sintetizado** por
+[scripts/ambience/generate_ambience.py](../scripts/ambience/README.md), por baixo da música
+(volume 0,3): torcida (vozes de ruído filtrado, palmas, assobios) mais o som do lugar.
+
+| Cenário                | Loop             | Som                                           |
+| ---------------------- | ---------------- | --------------------------------------------- |
+| Partner Summit / Arena | `arena`          | Torcida de arena com reverb                   |
+| RIO DE JANEIRO         | `rio`            | Torcida, batucada de samba e o mar            |
+| RECIFE                 | `recife`         | Torcida, alfaias de maracatu e agogô          |
+| MADRI                  | `spain`          | Torcida e palmas de flamenco (compás de 12)   |
+| PORTUGAL               | `portugal`       | Torcida, gaivotas e ondas                     |
+| CASTELO BRANCO         | `castelo-branco` | Torcida, vento e passarinhos                  |
+| JOINVILLE (os dois)    | `joinville`      | Torcida e passarinhos                         |
+| CURITIBA               | `curitiba`       | Torcida, chafariz e passarinhos               |
+| RÚSSIA                 | `russia`         | Torcida e rajadas de vento                    |
+| BITRIX24 MOSCOU        | `office`         | Ar-condicionado, conversa, teclados, telefone |
+
+Nas reações da plateia a torcida grita por cima: "ooh!" (`crowd-ooh`) no golpe forte e
+comemoração (`crowd-cheer`) no especial, K.O. e PERFECT; no escritório não há plateia nem grito.
+
 ## Registro de licenças
 
 Todo asset adicionado ao repositório deve ser original do projeto ou ter licença compatível,
@@ -686,7 +717,9 @@ registrada aqui:
 | `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`, `fluidz-logo.jpg`                      | Logos dos apps 24zap, Mindhub e Fluidz, fornecidos pelo dono do projeto para uso no jogo        | Uso autorizado pelo dono do projeto                               |
 | `public/vfx/24zap-*`, `mindhub-*`, `fluidz-*`                                                       | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
 | `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`                                             | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
-| `public/audio/sfx/*` (25 efeitos)                                                                   | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
+| `public/audio/sfx/*` (efeitos, menos `voice-*`)                                                     | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
+| `public/audio/sfx/voice-*` (narrador)                                                               | Kokoro-82M (hexgrad) gerando offline por `scripts/voice/generate_announcer.py`                  | Modelo Apache-2.0; áudio gerado para o projeto                    |
+| `public/audio/ambience/*` (10 loops)                                                                | Sintetizados por `scripts/ambience/generate_ambience.py`                                        | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                                   | Compostas e sintetizadas por `scripts/music/compose.py`                                         | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                                                 | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`       | Original do projeto                                               |
 | `public/fighters/romualdo/*.png` e `scripts/romualdo-art/*.png`                                     | ImageGen integrado, referências autorizadas pelo usuário; montagem local                        | Arte original gerada para o projeto; sem assets de terceiros      |
@@ -707,7 +740,7 @@ registrada aqui:
 | `scripts/vfx-art/source/24zap-logo.png`, `mindhub-logo.png`, `fluidz-logo.jpg`                      | Logos dos apps 24zap, Mindhub e Fluidz, fornecidos pelo dono do projeto para uso no jogo        | Uso autorizado pelo dono do projeto                               |
 | `public/vfx/24zap-*`, `mindhub-*`, `fluidz-*`                                                       | Derivados dos logos acima por `scripts/vfx-art/prepare_app_emblems.py`                          | Uso autorizado pelo dono do projeto                               |
 | `public/vfx/vibecode-emblem.png`, `gptmaker-emblem.png`                                             | Desenhados forma a forma por `scripts/vfx-art/draw_original_emblems.py` (sem logo de terceiros) | Original do projeto                                               |
-| `public/audio/sfx/*` (25 efeitos)                                                                   | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
+| `public/audio/sfx/*` (efeitos, menos `voice-*`)                                                     | Sintetizados por `scripts/sfx/generate_sfx.py`                                                  | Original do projeto                                               |
 | `public/audio/music/*` (5 faixas)                                                                   | Compostas e sintetizadas por `scripts/music/compose.py`                                         | Original do projeto                                               |
 | Mapa do Brasil, avião e marcadores do Modo História                                                 | Desenhados em código (`src/ui/story/`), contorno simplificado em `src/story/brazilMap.ts`       | Original do projeto                                               |
 | `public/fighters/isaque-ferreira/*.png` e `scripts/isaque-ferreira-art/*.png`                       | ImageGen integrado com referências autorizadas pelo usuário; montagem local                     | Arte original do projeto; sem assets de terceiros                 |

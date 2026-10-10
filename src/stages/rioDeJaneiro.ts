@@ -29,6 +29,7 @@ export const rioDeJaneiro: StageConfig = {
     accent: 0xf2c230,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'rio',
   art: {
     background: { key: 'stage:rio-de-janeiro', path: `${ART_DIR}/background.jpg` },
     // Puts the promenade's wave pattern under the fighters' feet, in front of the barriers.

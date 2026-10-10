@@ -1,5 +1,13 @@
-import type { MusicTrackConfig, MusicTrackId, SfxConfig, SfxId } from '../types/audio';
-import type { StageConfig } from '../types/stage';
+import type {
+  AmbienceConfig,
+  AmbienceId,
+  CrowdReactionSfx,
+  MusicTrackConfig,
+  MusicTrackId,
+  SfxConfig,
+  SfxId,
+} from '../types/audio';
+import type { CrowdReaction, StageConfig } from '../types/stage';
 
 /*
  * Music and sound levels, the track list and which track each screen plays. Original
@@ -94,6 +102,27 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-alaio-strike': sfx('special-alaio-strike', 0.9),
   'special-n8n': sfx('special-n8n', 0.85),
   'special-190': sfx('special-190', 0.85),
+  // The crowd sits behind the fight: under the hits, above the ambience bed.
+  'crowd-cheer': sfx('crowd-cheer', 0.5, true),
+  'crowd-ooh': sfx('crowd-ooh', 0.45, true),
+  // Announcer: over the music and the stingers, never varied (a voice must sound the same).
+  'voice-round-1': sfx('voice-round-1', 0.95),
+  'voice-round-2': sfx('voice-round-2', 0.95),
+  'voice-round-3': sfx('voice-round-3', 0.95),
+  'voice-round-4': sfx('voice-round-4', 0.95),
+  'voice-round-5': sfx('voice-round-5', 0.95),
+  'voice-round-6': sfx('voice-round-6', 0.95),
+  'voice-round-7': sfx('voice-round-7', 0.95),
+  'voice-round-8': sfx('voice-round-8', 0.95),
+  'voice-round-9': sfx('voice-round-9', 0.95),
+  'voice-final-round': sfx('voice-final-round', 0.95),
+  'voice-fight': sfx('voice-fight', 0.95),
+  'voice-ko': sfx('voice-ko', 0.95),
+  'voice-perfect': sfx('voice-perfect', 0.95),
+  'voice-time-over': sfx('voice-time-over', 0.95),
+  'voice-draw': sfx('voice-draw', 0.95),
+  'voice-you-win': sfx('voice-you-win', 0.95),
+  'voice-you-lose': sfx('voice-you-lose', 0.95),
 };
 
 /** Variation range of `vary` effects: playback rate 1 ± this, level 1 - [0, this]. */
@@ -117,4 +146,55 @@ export function sfxFiles(id: SfxId): string[] {
 
 export function sfxKey(id: SfxId): string {
   return `sfx:${id}`;
+}
+
+/*
+ * Stage ambience: a quiet loop per place under the fight music (crowd, the sea, drums, birds,
+ * an office hum). Synthesized for the game: scripts/ambience/generate_ambience.py.
+ */
+
+/** Master ambience level: a bed under the music, never in front of it. */
+export const AMBIENCE_VOLUME = 0.3;
+
+export const AMBIENCE_FADE = { inMs: 1200, outMs: 900 } as const;
+
+const ambience = (id: AmbienceId, gain = 1, crowd = true): AmbienceConfig => ({ id, gain, crowd });
+
+export const AMBIENCES: Readonly<Record<AmbienceId, AmbienceConfig>> = {
+  arena: ambience('arena'),
+  rio: ambience('rio', 0.9),
+  recife: ambience('recife', 0.9),
+  spain: ambience('spain'),
+  portugal: ambience('portugal'),
+  'castelo-branco': ambience('castelo-branco'),
+  joinville: ambience('joinville'),
+  curitiba: ambience('curitiba'),
+  russia: ambience('russia'),
+  // The Bitrix24 office in Moscow: no audience, so no cheers either.
+  office: ambience('office', 1, false),
+};
+
+export function ambienceFiles(id: AmbienceId): string[] {
+  // Ogg Vorbis first (loops gaplessly); AAC for browsers without Vorbis (Safari).
+  return [`audio/ambience/${id}.ogg`, `audio/ambience/${id}.m4a`];
+}
+
+export function ambienceKey(id: AmbienceId): string {
+  return `ambience:${id}`;
+}
+
+/** What the crowd shouts at each reaction: an "ooh" at a big hit, a cheer at the rest. */
+export const CROWD_REACTION_SFX: Readonly<Record<CrowdReaction, CrowdReactionSfx>> = {
+  bigHit: 'crowd-ooh',
+  special: 'crowd-cheer',
+  ko: 'crowd-cheer',
+  perfect: 'crowd-cheer',
+};
+
+/** The crowd's shout for a reaction, or nothing on a stage without a crowd. */
+export function crowdSfx(
+  stage: Pick<StageConfig, 'ambience'>,
+  reaction: CrowdReaction,
+): CrowdReactionSfx | null {
+  return stage.ambience && AMBIENCES[stage.ambience].crowd ? CROWD_REACTION_SFX[reaction] : null;
 }

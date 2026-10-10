@@ -31,6 +31,7 @@ export const russia: StageConfig = {
     accent: 0x2f8bff,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'russia',
   art: {
     background: { key: 'stage:russia', path: `${ART_DIR}/background.jpg` },
     // Puts the paving stones under the fighters' feet, in front of the barriers.

@@ -29,6 +29,7 @@ export const joinville: StageConfig = {
     accent: 0xff8a1f,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'joinville',
   art: {
     background: { key: 'stage:joinville', path: `${ART_DIR}/background.jpg` },
     // Puts the paved square under the fighters' feet, in front of the planters and fences.

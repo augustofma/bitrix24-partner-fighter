@@ -137,7 +137,8 @@ describe('combat sounds come from real simulation events', () => {
   });
 
   it('round calls: FIGHT! on the fight start, victory on the winner pose', () => {
-    expect(combatSfx({ type: 'fightStart' })).toEqual(['fight']);
+    // The stinger and the announcer's voice.
+    expect(combatSfx({ type: 'fightStart' })).toEqual(['fight', 'voice-fight']);
     expect(combatSfx({ type: 'victoryPose', winnerIndex: 0 })).toEqual(['victory']);
   });
 

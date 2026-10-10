@@ -1,6 +1,8 @@
+import { ANNOUNCER_VOICE, roundVoice } from '../audio/announcerVoice';
 import { combatSfx } from '../audio/combatSfx';
+import { StageAmbience } from '../audio/StageAmbience';
 import { gameMusic, gameSfx } from '../audio/gameAudio';
-import { MUSIC_FADE, stageMusic } from '../config/audio';
+import { MUSIC_FADE, crowdSfx, stageMusic } from '../config/audio';
 import Phaser from 'phaser';
 import { DEBUG_TOGGLE_KEY, PAUSE_KEYS, PLAYER_ONE_KEYS } from '../config/controls';
 import { GAME_HEIGHT, GAME_WIDTH } from '../config/display';
@@ -30,7 +32,10 @@ import { LoadingBar } from '../ui/LoadingBar';
 import { queueMissing, watchLoad } from './assetLoading';
 import type { InputSource } from '../types/input';
 import type { MatchResult, MatchSetup, RoundResult } from '../types/match';
+import type { CrowdReaction, StageConfig } from '../types/stage';
 import { Announcer } from '../ui/Announcer';
+import { ComboCounter } from '../ui/hud/ComboCounter';
+import { ComboTracker } from '../ui/hud/comboTracker';
 import { ControlsHint } from '../ui/ControlsHint';
 import { FightHud } from '../ui/FightHud';
 import { PerfectCall } from '../ui/PerfectCall';
@@ -75,6 +80,12 @@ export class FightScene extends Phaser.Scene {
   private debugOverlay!: DebugOverlay;
   private stageView!: StageBackdrop;
   private accumulatorMs = 0;
+  /** Simulation steps since the fight began (the combo counter's clock). */
+  private simFrame = 0;
+  private combos = new ComboTracker();
+  private comboCounter!: ComboCounter;
+  private ambience!: StageAmbience;
+  private stage!: StageConfig;
   /** On-screen controls, when shown: the ESP button mirrors the player's SPECIAL READY. */
   private touch: TouchControls | null = null;
 
@@ -97,9 +108,12 @@ export class FightScene extends Phaser.Scene {
   create(setup: MatchSetup): void {
     this.setup = setup;
     this.accumulatorMs = 0;
+    this.simFrame = 0;
+    this.combos = new ComboTracker();
     fadeIn(this);
 
     const stage = getStageConfig(setup.stageId);
+    this.stage = stage;
     gameMusic(this).play(stageMusic(stage), MUSIC_FADE.fightInMs);
     const configs = [
       getFighterConfig(setup.playerFighterId),
@@ -117,6 +131,8 @@ export class FightScene extends Phaser.Scene {
     this.hud = new FightHud(this, fighters, () => gameSfx(this).play('special-ready'));
     this.announcer = new Announcer(this);
     this.perfectCall = new PerfectCall(this);
+    this.comboCounter = new ComboCounter(this);
+    this.ambience = new StageAmbience(this, stage.ambience);
     this.pendingPerfect = null;
     this.controllers = [
       new PlayerController(this.createPlayerInputSources()),
@@ -242,6 +258,7 @@ export class FightScene extends Phaser.Scene {
       this.controllers[0].getInput({ self: p1, opponent: p2 }),
       this.controllers[1].getInput({ self: p2, opponent: p1 }),
     ] as const;
+    this.simFrame += 1;
     for (const event of this.simulation.step(inputs)) this.handleEvent(event);
   }
 
@@ -250,18 +267,27 @@ export class FightScene extends Phaser.Scene {
     gameSfx(this).playAll(combatSfx(event, this.simulation.fighters));
     // The crowd cheers big moments (presentation only).
     const reaction = crowdReaction(event);
-    if (reaction) this.stageView.react(reaction);
+    if (reaction) this.crowdReacts(reaction);
     switch (event.type) {
       case 'hit':
+        this.comboCounter.show(
+          event.attackerIndex,
+          this.combos.hit(event.attackerIndex, this.simFrame),
+        );
         this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'hit');
         this.fightCamera.shake(80, 0.004);
         return;
       case 'block':
+        this.combos.blocked(event.attackerIndex);
         this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'block');
         return;
       case 'koHit':
+        this.comboCounter.show(
+          event.attackerIndex,
+          this.combos.hit(event.attackerIndex, this.simFrame),
+        );
         this.specialEffects.impact(event, this.simulation.fighters[event.attackerIndex]);
         this.effects.spawn(event.point, 'ko');
         this.fightCamera.shake(350, 0.012);
@@ -299,12 +325,20 @@ export class FightScene extends Phaser.Scene {
         // The fight music winds down; the next screen (victory, or the campaign's ending after
         // its last fight) plays the sting.
         gameMusic(this).stop(MUSIC_FADE.matchEndOutMs);
+        this.ambience.fadeOut(MUSIC_FADE.matchEndOutMs);
         const { winnerIndex, reason, roundWins, perfects } = event.outcome;
         const result: MatchResult = { winnerIndex, reason, roundWins, perfects, setup: this.setup };
         endMatch(this, result);
         return;
       }
     }
+  }
+
+  /** The crowd bursts on screen and, on a stage with an audience, shouts. */
+  private crowdReacts(reaction: CrowdReaction): void {
+    this.stageView.react(reaction);
+    const shout = crowdSfx(this.stage, reaction);
+    if (shout) gameSfx(this).play(shout);
   }
 
   /** "ROUND n", or "FINAL ROUND" when both sides are one win away. */
@@ -316,6 +350,8 @@ export class FightScene extends Phaser.Scene {
   /** The simulation already reset the fighters: reset what only the presentation holds. */
   private startRoundPresentation(): void {
     this.effects.clear();
+    this.combos.reset();
+    this.comboCounter.clear();
     this.stageView.setMood('fight');
     this.controllers.forEach((controller) => controller.reset?.());
     this.fightCamera.follow(this.simulation.fighters, true);
@@ -334,8 +370,8 @@ export class FightScene extends Phaser.Scene {
       this.pendingPerfect = null;
       this.announcer.clear();
       this.perfectCall.show();
-      this.stageView.react('perfect');
-      gameSfx(this).play('perfect');
+      this.crowdReacts('perfect');
+      gameSfx(this).playAll(['perfect', ANNOUNCER_VOICE.perfect]);
     });
   }
 
@@ -345,7 +381,8 @@ export class FightScene extends Phaser.Scene {
     this.pendingPerfect = null;
     this.perfectCall.hide();
     this.announcer.show(this.roundLabel(), 1000);
-    gameSfx(this).play('round-start');
+    const { match } = this.simulation;
+    gameSfx(this).playAll(['round-start', roundVoice(match.currentRound, match.isFinalRound)]);
   }
 
   private renderFrame(timeMs: number): void {

@@ -30,6 +30,7 @@ export const curitiba: StageConfig = {
     accent: 0xa13cff,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'curitiba',
   art: {
     background: { key: 'stage:curitiba', path: `${ART_DIR}/background.jpg` },
     // Puts the mosaic pavement under the fighters' feet, in front of the barrier.

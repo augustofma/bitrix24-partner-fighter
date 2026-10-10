@@ -31,6 +31,7 @@ export const casteloBranco: StageConfig = {
     accent: 0x1f3c88,
   },
   music: DEFAULT_STAGE_MUSIC,
+  ambience: 'castelo-branco',
   art: {
     background: { key: 'stage:castelo-branco', path: `${ART_DIR}/background.jpg` },
     // Puts the terrace's paving under the fighters' feet, in front of the stone wall (and keeps

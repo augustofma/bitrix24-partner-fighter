@@ -553,6 +553,24 @@ simulação tem RNG próprio com semente e nunca vê o áudio.
 **Novo efeito:** adicione a síntese em `scripts/sfx/generate_sfx.py`, o id em `SfxId` e o nível
 em `SFX` (`config/audio.ts`); a `BootScene` já carrega todos.
 
+## Narrador, falas, combo e ambiente
+
+- **Narrador:** as falas são efeitos (`voice-*` em `SfxId`), carregados no boot com os demais.
+  `src/audio/announcerVoice.ts` escolhe a fala (`roundVoice(round, finalRound)`,
+  `ANNOUNCER_VOICE`, `verdictVoice(winnerIndex)`); `combatSfx` acrescenta `voice-fight`,
+  `voice-ko`, `voice-time-over` e `voice-draw` aos eventos da simulação.
+- **Falas:** `src/config/fighterQuotes.ts` (`FIGHTER_QUOTES` por id, `pickQuote`) e o balão
+  `src/ui/SpeechBubble.ts`. Lutador sem falas simplesmente não mostra balão.
+- **Combo:** `ComboTracker` (`src/ui/hud/comboTracker.ts`, puro e testado) conta acertos por
+  lado com o frame da simulação; `ComboCounter` desenha "n HITS!". A `FightScene` só repassa
+  `hit`/`koHit`/`block`; a simulação não sabe do combo.
+- **Ambiente:** `StageConfig.ambience` (`AmbienceId`) aponta o loop do cenário; `AMBIENCES`
+  (`config/audio.ts`) tem ganho e se há plateia. O loop entra no `matchAssets` (carregado na tela
+  VS) e o `StageAmbience` (`src/audio/StageAmbience.ts`) toca em loop com fade-in, some com a
+  música no fim da partida e é liberado no `shutdown` da luta; o mute global (M) vale para ele.
+  `crowdSfx(stage, reaction)` dá o grito da torcida (`crowd-ooh` / `crowd-cheer`) para cada
+  `CrowdReaction`, ou nada num cenário sem plateia.
+
 ## Tipografia
 
 `src/config/fonts.ts` define `GAME_FONTS` com cinco papéis: **TITLE** (Bangers: letreiro de
