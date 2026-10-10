@@ -512,8 +512,7 @@ torcida atrás das grades da BR24
 ([scripts/stage-art/florianopolis/README.md](../scripts/stage-art/florianopolis/README.md)).
 Cena parada, como o RIO DE JANEIRO; a torcida pula em três faixas (as arquibancadas dos lados e os
 fãs do meio) e os celulares piscam. As grades terminam mais alto que no Rio: `top` 0 deixa os
-lutadores no calçadão aberto, à frente delas. Som ambiente: o mesmo do PORTUGAL (mar, gaivotas e
-torcida).
+lutadores no calçadão aberto, à frente delas. Som ambiente: o mesmo do PORTUGAL (só a torcida).
 
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
@@ -684,15 +683,15 @@ Cada cenário tem um loop de 12 s (sem emenda audível) **sintetizado** por
 | Cenário                | Loop             | Som                                           |
 | ---------------------- | ---------------- | --------------------------------------------- |
 | Partner Summit / Arena | `arena`          | Torcida de arena com reverb                   |
-| RIO DE JANEIRO         | `rio`            | Torcida, batucada de samba e o mar            |
+| RIO DE JANEIRO         | `rio`            | Torcida e batucada de samba                   |
 | RECIFE                 | `recife`         | Torcida, alfaias de maracatu e agogô          |
 | MADRI                  | `spain`          | Torcida e palmas de flamenco (compás de 12)   |
-| PORTUGAL               | `portugal`       | Torcida, gaivotas e ondas                     |
+| PORTUGAL               | `portugal`       | Torcida (sem mar nem gaivotas)                |
 | CASTELO BRANCO         | `castelo-branco` | Torcida, vento e passarinhos                  |
 | JOINVILLE (os dois)    | `joinville`      | Torcida e passarinhos                         |
 | CURITIBA               | `curitiba`       | Torcida, chafariz e passarinhos               |
 | RÚSSIA                 | `russia`         | Torcida e rajadas de vento                    |
-| FLORIANÓPOLIS          | `portugal`       | Torcida, gaivotas e ondas (o mesmo loop)      |
+| FLORIANÓPOLIS          | `portugal`       | Torcida (o mesmo loop do PORTUGAL)            |
 | BITRIX24 MOSCOU        | `office`         | Ar-condicionado, conversa, teclados, telefone |
 
 Nas reações da plateia a torcida grita por cima: "ooh!" (`crowd-ooh`) no golpe forte e

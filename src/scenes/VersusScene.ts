@@ -33,8 +33,12 @@ const STAGE_LABEL_Y = 40;
 /** Story fights: where the fight happens, under the VS. */
 const PLACE_Y = 352;
 const BOSS_LABEL_Y = 310;
-/** The fighters' lines: over the inner top corner of each portrait, one after the other. */
-const QUOTE = { x: 335, y: 112, maxWidth: 230, delayMs: 100, gapMs: 750 } as const;
+/**
+ * The fighters' lines, one after the other: above each portrait (in the free band over the
+ * cards), toward the inner side, the tail pointing down at it. Never over a face: the portraits'
+ * heads sit near the top of the card, at different heights.
+ */
+const QUOTE = { x: 300, y: 34, maxWidth: 230, delayMs: 100, gapMs: 750 } as const;
 
 /**
  * "FIGHTER_A VS FIGHTER_B" presentation, then starts the fight. Story fights also show where

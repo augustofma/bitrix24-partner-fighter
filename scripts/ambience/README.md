@@ -16,10 +16,10 @@ toca a 0,3 (`AMBIENCE_VOLUME`) com ganho fino por loop em `AMBIENCES` (`src/conf
 | Loop             | Cenários                  | Som                                                         |
 | ---------------- | ------------------------- | ----------------------------------------------------------- |
 | `arena`          | Partner Summit, Arena     | Torcida de arena com reverb                                 |
-| `rio`            | Rio de Janeiro            | Torcida, batucada (surdo, tamborim, ganzá), mar             |
+| `rio`            | Rio de Janeiro            | Torcida e batucada (surdo, tamborim, ganzá)                 |
 | `recife`         | Recife                    | Torcida, alfaias de maracatu e agogô                        |
 | `spain`          | Madri                     | Torcida e palmas de flamenco                                |
-| `portugal`       | Portugal, Florianópolis   | Torcida, gaivotas e ondas                                   |
+| `portugal`       | Portugal, Florianópolis   | Torcida (o mar e as gaivotas saíram depois do playtest)     |
 | `castelo-branco` | Castelo Branco            | Torcida, vento e passarinhos                                |
 | `joinville`      | Joinville, Joinville Zopu | Torcida e passarinhos                                       |
 | `curitiba`       | Curitiba                  | Torcida, chafariz e passarinhos                             |

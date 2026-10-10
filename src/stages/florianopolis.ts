@@ -29,7 +29,7 @@ export const florianopolis: StageConfig = {
     accent: 0x2fb8f6,
   },
   music: DEFAULT_STAGE_MUSIC,
-  // The sea, gulls and the crowd: the same seaside bed as Portugal's promenade.
+  // The crowd: the same bed as Portugal's promenade.
   ambience: 'portugal',
   art: {
     background: { key: 'stage:florianopolis', path: `${ART_DIR}/background.jpg` },

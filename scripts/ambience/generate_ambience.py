@@ -3,8 +3,8 @@ Stage ambience of Bitrix24 Partner Fighter: a seamless loop per place, under the
 
 Synthesized from scratch with numpy (nothing sampled): a crowd bed (many murmuring "voices" of
 band-limited noise with their own slow swells, claps and whistles) plus each place's own
-flavour: a samba batucada and the sea in Rio, maracatu drums and an agogô in Recife, flamenco
-palmas in Madrid, seagulls in Portugal, birds and a fountain in Curitiba, wind on Red Square,
+flavour: a samba batucada in Rio, maracatu drums and an agogô in Recife, flamenco palmas in
+Madrid, a seaside crowd in Portugal, birds and a fountain in Curitiba, wind on Red Square,
 and an office hum with keyboards (no crowd) at the Bitrix24 office in Moscow.
 
     python3 scripts/ambience/generate_ambience.py          # public/audio/ambience/*.ogg + *.m4a
@@ -111,11 +111,6 @@ def bell(freq: float, duration: float = 0.25) -> np.ndarray:
     return (np.sin(2 * np.pi * freq * x) + 0.5 * np.sin(2 * np.pi * freq * 2.76 * x)) * decay(duration, 14)
 
 
-def waves(rng: np.random.Generator, n: int, gain: float) -> np.ndarray:
-    surf = band(rng.standard_normal(n), 120, 1800)
-    return surf * slow_swell(rng, n, 0.12, 0.9).clip(0) * gain
-
-
 def birds(rng: np.random.Generator, out: np.ndarray, count: int, low: float, high: float) -> None:
     for _ in range(count):
         chirps = rng.integers(2, 5)
@@ -143,8 +138,6 @@ def amb_arena(rng):
 
 def amb_rio(rng):
     out = crowd(rng, size=1.1)
-    n = len(out)
-    out += waves(rng, n, 0.05)
     # Batucada (samba, 2/4): surdo strong on beat 2, tamborim telecoteco, shaker on 16ths.
     beat, count = beat_loop(100, 2)
     pattern = [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0]  # telecoteco over 2 bars
@@ -184,19 +177,8 @@ def amb_spain(rng):
 
 
 def amb_portugal(rng):
-    out = crowd(rng, size=0.9)
-    n = len(out)
-    out += waves(rng, n, 0.06)
-    # Seagulls: falling "kyow" calls.
-    for _ in range(5):
-        start = rng.uniform(0, LOOP_S)
-        for c in range(rng.integers(1, 4)):
-            dur = rng.uniform(0.18, 0.3)
-            glide = np.linspace(rng.uniform(1300, 1600), rng.uniform(700, 900), int(dur * SR))
-            phase = 2 * np.pi * np.cumsum(glide) / SR
-            call = np.sin(phase + 2.2 * np.sin(phase * 0.5)) * np.sin(np.pi * t(dur) / dur) * 0.04
-            place(out, call, start + c * 0.32)
-    return out
+    # Just the crowd (no sea or seagulls: they were cut after playtest).
+    return crowd(rng, size=0.9)
 
 
 def amb_castelo_branco(rng):

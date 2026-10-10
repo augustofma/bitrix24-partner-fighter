@@ -757,7 +757,9 @@ sem pedido explícito.**
       `home: 'florianopolis'` (campanha própria, rival das outras; Partner Summit) e final com a
       Ponte Hercílio Luz (`prepare_amanda_konrad_ending.py`, 1440×810); galeria com 10 finais
 - [x] Cenário FLORIANÓPOLIS (calçadão e Ponte Hercílio Luz, torcida atrás das grades da BR24),
-      arena igual às outras, ambiente do mar; seleção de fases cabe 12 cenários sem rolar
+      arena igual às outras, ambiente de torcida; seleção de fases cabe 12 cenários sem rolar
+- [x] Som ambiente sem mar nem gaivotas (Rio, Portugal e Florianópolis): só torcida e batucada
+- [x] Balões da tela VS acima dos cards (não cobrem mais o rosto de quem tem a cabeça alta)
 
 ## NEXT (próximas tarefas recomendadas)
 
