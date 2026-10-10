@@ -13,11 +13,16 @@ export interface SpeechBubbleOptions {
   /** Where the tail points: towards the speaker, below-left or below-right of the bubble. */
   tail: 'left' | 'right';
   fontSize?: number;
+  /**
+   * What x, y is: the bubble's centre (default) or the tip of its tail, so a bubble of any
+   * length still points at the same spot (a speaker's face).
+   */
+  anchor?: 'center' | 'tail';
 }
 
 /**
  * A comic speech bubble (white, ink border, a tail towards the speaker) holding a fighter's
- * line, centred on x, y. Drawn once (not per frame). Pops in with `show`.
+ * line, centred on x, y (or with its tail tip there). Drawn once (not per frame). Pops in with `show`.
  */
 export class SpeechBubble {
   readonly container: Phaser.GameObjects.Container;
@@ -27,7 +32,7 @@ export class SpeechBubble {
     x: number,
     y: number,
     text: string,
-    { maxWidth, tail, fontSize = 15 }: SpeechBubbleOptions,
+    { maxWidth, tail, fontSize = 15, anchor = 'center' }: SpeechBubbleOptions,
   ) {
     const label = scene.add
       .text(0, 0, text, {
@@ -70,7 +75,11 @@ export class SpeechBubble {
       tipX + (tail === 'left' ? 2 : -2),
       bottom + TAIL - 1,
     );
-    this.container = scene.add.container(x, y, [g, label]).setScale(0).setAlpha(0);
+    const offset = anchor === 'tail' ? { x: tipX, y: bottom + TAIL + BORDER } : { x: 0, y: 0 };
+    this.container = scene.add
+      .container(x - offset.x, y - offset.y, [g, label])
+      .setScale(0)
+      .setAlpha(0);
   }
 
   /** Pops the bubble in after `delayMs`. */

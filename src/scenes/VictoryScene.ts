@@ -28,8 +28,11 @@ import { continueStory, finishStoryMatch, quitStory, retryStoryFight } from './s
 import { fadeIn, goToScene } from './transitions';
 
 /** Entrance timeline (ms): title, card, result line, then the button (~1.1 s in total). */
-/** The winner's line: a bubble to the right of the card, after the title lands. */
-const VICTORY_QUOTE = { x: 735, y: 182, maxWidth: 250, delayMs: 900, depth: 50 } as const;
+/**
+ * The winner's line, after the title lands: a bubble over the card's top-right corner whose
+ * tail tip (x, y) touches the side of the portrait's face, whatever the line's length.
+ */
+const VICTORY_QUOTE = { x: 538, y: 196, maxWidth: 240, delayMs: 900, depth: 50 } as const;
 const ENTRANCE = {
   title: { delay: 80, duration: 420 },
   card: { delay: 300, duration: 380 },
@@ -97,6 +100,7 @@ export class VictoryScene extends Phaser.Scene {
       new SpeechBubble(this, VICTORY_QUOTE.x, VICTORY_QUOTE.y, line, {
         maxWidth: VICTORY_QUOTE.maxWidth,
         tail: 'left',
+        anchor: 'tail',
       })
         .show(VICTORY_QUOTE.delayMs)
         .container.setDepth(VICTORY_QUOTE.depth);
