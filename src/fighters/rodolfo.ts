@@ -1,7 +1,8 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
-/** Forward pressure balanced by recovery on committed normals. */
+/** Forward pressure balanced by recovery on committed normals; FOORCE ZAP special. */
 export const rodolfo: FighterConfig = {
   id: 'rodolfo',
   name: 'rodolfo',
@@ -120,9 +121,42 @@ export const rodolfo: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // FOORCE ZAP: he charges the fist and dashes in with a punch that fires a burst of
+      // messages. One strong contact; the dash gives it a medium reach.
+      id: 'rodolfo.foorceZap',
+      displayName: STRINGS.specialFoorceZap,
+      state: 'special',
+      level: 'mid',
+      meterCost: 35,
+      groundOnly: true,
+      // The dash: 7 px per frame during startup and active (84 px before the punch lands).
+      advanceSpeed: 7,
+      damage: 19,
+      chipDamage: 2,
+      startupFrames: 12,
+      activeFrames: 6,
+      // Punishable on block (24 recovery against 14 blockstun).
+      recoveryFrames: 24,
+      // Reach ~224 px with the dash (24ZAP COMBO: ~153; CHAMA O 190!: 280).
+      hitbox: { x: 30, y: -150, width: 110, height: 70 },
+      hitstunFrames: 24,
+      blockstunFrames: 14,
+      knockback: 10,
+      blockPushback: 7,
+      hitstopFrames: 12,
+    },
+  ],
   palette: { body: 0x762333, accent: 0xa84054, skin: 0xdca278, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'rodolfo.foorceZap': {
+        style: 'forceZap',
+        label: STRINGS.specialFoorceZap,
+        sound: 'special-foorce-zap',
+      },
+    },
     portrait: 'fighters/rodolfo/portrait.png',
     pixelArt: true,
     sprite: {
@@ -149,6 +183,8 @@ export const rodolfo: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
+        // FOORCE ZAP: fist raised (the charge), then the dash punch.
+        special: { frames: [39, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },
     },

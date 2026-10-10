@@ -46,6 +46,7 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-hit`              | Qualquer especial que conecta           | Golpe especial: boom grave, estalo e energia chiando             | 0,80   |
 | `special-dimension`        | OUTRA DIMENSÃO começa (Douglas)         | Energia espacial, warp abrindo a fenda e grave crescente         | 0,85   |
 | `special-dimension-impact` | O colapso da fenda conecta              | Explosão cósmica: estrondo de implosão, estalo e brilho caindo   | 0,90   |
+| `special-foorce-zap`       | FOORCE ZAP começa (Rodolfo)             | Carga elétrica subindo, zap de mensagem e estalo do soco         | 0,85   |
 | `special-powerbot`         | O POWERBOT conecta                      | Estrondo digital pesado, estalo e zap descendo                   | 0,90   |
 | `victory`                  | Pose de vitória do vencedor do round    | Arpejo vencedor curto                                            | 0,70   |
 | `crowd-ooh`                | Golpe forte (cenário com plateia)       | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |

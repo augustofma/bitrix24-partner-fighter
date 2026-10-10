@@ -17,3 +17,9 @@ export function onKeys(
     scene.events.once('shutdown', () => keyboard.off(event, handler));
   }
 }
+
+/** The option `step` places away from `index` in a row of `count`, wrapping at the ends. */
+export function stepFocus(index: number, step: number, count: number): number {
+  if (count <= 0) return 0;
+  return (((index + step) % count) + count) % count;
+}

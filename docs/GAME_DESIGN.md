@@ -528,6 +528,13 @@ blockstun 16, knockback 9, pushback 6, hitstop 13). Total 22 no acerto e 3 de ch
 Alcance médio (210 px) na altura do corpo: de longe erra e um pulo lido na saída passa por cima.
 Na defesa fica -13 depois do colapso: punível.
 
+**FOORCE ZAP (Rodolfo):** ele carrega o punho e avança num soco que dispara uma rajada de
+mensagens. Custo 35, somente no chão, nível `mid`, dano 19, chip 2, startup 12 / ativo 6 /
+recovery 24, hitstun 24, blockstun 14, knockback 10, pushback 7 e hitstop 12. Um contato só. O
+avanço (7 px/frame no startup e no ativo) dá alcance médio: hitbox (30, -150, 110, 70) + 84 px de
+dash = 224 px. Por cobrir a distância rápido, só um pulo lido cedo passa por cima. Na defesa fica
+-10: punível.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -596,6 +603,11 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   dimensão); no segundo, a fenda colapsa: clarão branco/ciano redondo, onda roxa, anéis e
   estilhaços com brilhos dourados (câmera treme mais). Na defesa tudo fica menor. Depois a fenda
   fecha e a tela volta ao normal. Som: energia espacial, warp, grave crescente e explosão cósmica.
+- **FOORCE ZAP (Rodolfo), soco carregado de mensagens:** na carga, o punho erguido se enche de
+  energia verde e dourada, raiozinhos estalam em volta e um anel dourado se fecha nele; no
+  avanço, linhas de velocidade atrás dele e, à frente do punho, um cone de ondas de "enviar",
+  raios em zigue-zague e balões de chat. No acerto, explosão verde e dourada com balões pulando e
+  faíscas; na defesa, uma versão menor e sem balões. Som: carga elétrica, zap e o golpe especial.
 - **N8N! (Gabriel Mattozo), fluxo de automação:** na carga, os nós do fluxo aparecem um a um à
   frente dele (gatilho com raio, engrenagem, código e o nó final), com os conectores piscando; no
   disparo, as conexões curvas se desenham de nó em nó até o rival e pacotes de dados correm por
@@ -755,19 +767,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/11 LIBERADOS" no topo:
+do Modo História, com o contador "x/12 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com todos os finais liberados (hoje 11), o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com todos os finais liberados (hoje 12), o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/11" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/12" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -903,10 +915,12 @@ por startup mais longo. Frame data em startup / ativo / recovery:
 
 ## Rodolfo — Brasil Leads
 
-Novo lutador da luta rápida, como jogador ou CPU. Vida 100, caminhada 3,3, recuo 2,6,
-impulso de salto 16,5 e velocidade horizontal aérea 3,9 (unidades por frame).
-Pressão ofensiva moderada: socos rápidos, com recuperação para permitir resposta.
-Corpo padrão, sem especial exclusivo ou rota de história.
+Disponível na luta rápida como P1 e CPU, com o especial FOORCE ZAP. No Modo História ele é de
+**Curitiba**: campanha própria e rival das outras, enfrentado no cenário CURITIBA BRASIL LEADS
+(as outras lutas em Curitiba seguem no Jardim Botânico original); final ilustrado próprio. Vida
+100, caminhada 3,3, recuo 2,6, impulso de salto 16,5 e velocidade horizontal aérea 3,9
+(unidades por frame). Pressão ofensiva moderada: socos rápidos, com recuperação para permitir
+resposta. Corpo padrão.
 
 | Normal         | Dano / chip | Startup / ativo / recovery |
 | -------------- | ----------- | -------------------------- |

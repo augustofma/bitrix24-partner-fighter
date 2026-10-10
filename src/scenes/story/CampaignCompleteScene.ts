@@ -23,6 +23,7 @@ import {
 } from '../../story/endingGallery';
 import { routeCities } from '../../story/storyProgress';
 import { createArcadeBackground } from '../../ui/ArcadeBackground';
+import { bindButtonRowFocus } from '../../ui/buttonRowFocus';
 import { ArcadeButton } from '../../ui/select/ArcadeButton';
 import { VictoryCard } from '../../ui/victory/VictoryCard';
 import { createVictoryEffects } from '../../ui/victory/VictoryEffects';
@@ -196,12 +197,24 @@ export class CampaignCompleteScene extends Phaser.Scene {
       reveal(0);
     };
 
+    // Arrows move the focus between the two buttons; Enter presses the focused one.
+    const choices = [
+      { button: first, action: playAgain },
+      { button: second, action: menu },
+    ];
+    const focus = bindButtonRowFocus(
+      this,
+      choices.map((choice) => choice.button),
+      () => revealed,
+    );
     onKeys(
       this,
       MENU_CONFIRM_KEYS,
       whenRevealed(() => {
-        first.flash();
-        playAgain();
+        const choice = choices[focus.focused()];
+        if (!choice) return;
+        choice.button.flash();
+        choice.action();
       }),
     );
     onKeys(this, MENU_BACK_KEYS, whenRevealed(menu));

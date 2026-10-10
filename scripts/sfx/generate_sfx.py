@@ -450,6 +450,20 @@ def sfx_special_dimension_impact(rng):
     return np.tanh(mix(boom, crack, noise, at(shimmer, 0.03)) * 2.6)
 
 
+def sfx_special_foorce_zap(rng):
+    """FOORCE ZAP starts: an electric charge buzzing up in the fist, crackles, then the dash: a
+    fast whoosh and a punchy energy blast."""
+    charge_len = 0.2
+    buzz = lowpass(square(sweep(70, 160, charge_len, 0.8), 8), 1800) * np.linspace(0.2, 1, int(charge_len * SR)) * 0.3
+    crackles = [at(highpass(rng.uniform(-1, 1, int(0.02 * SR)), 2500) * decay(0.02, 90) * 0.4, rng.uniform(0.02, 0.18)) for _ in range(6)]
+    whoosh_len = 0.18
+    whoosh = bandpass(rng.uniform(-1, 1, int(whoosh_len * SR)), 900, 4500)
+    whoosh *= np.sin(np.pi * seconds(whoosh_len) / whoosh_len) ** 2 * 0.5
+    blast = np.sin(sweep(260, 70, 0.22)) * decay(0.22, 11) * 0.8
+    zap = saw(sweep(2400, 400, 0.15, 1.3), 10) * decay(0.15, 14) * 0.2
+    return np.tanh(mix(buzz, *crackles, at(whoosh, charge_len - 0.02), at(mix(blast, zap), charge_len + 0.08)) * 1.6)
+
+
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
     """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
     and a slightly different onset, summed into one crowd roar."""
@@ -521,6 +535,7 @@ EFFECTS = {
     "special-hit": sfx_special_hit,
     "special-dimension": sfx_special_dimension,
     "special-dimension-impact": sfx_special_dimension_impact,
+    "special-foorce-zap": sfx_special_foorce_zap,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,

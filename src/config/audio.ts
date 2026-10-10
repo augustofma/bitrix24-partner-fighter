@@ -106,6 +106,7 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-hit': sfx('special-hit', 0.8, true),
   'special-dimension': sfx('special-dimension', 0.85),
   'special-dimension-impact': sfx('special-dimension-impact', 0.9),
+  'special-foorce-zap': sfx('special-foorce-zap', 0.85),
   'special-powerzap': sfx('special-powerzap', 0.8),
   'special-powerbot': sfx('special-powerbot', 0.9),
   // The crowd sits behind the fight: under the hits, above the ambience bed.

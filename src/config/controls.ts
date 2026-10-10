@@ -21,6 +21,9 @@ export const PLAYER_ONE_KEYS: KeyBindings = {
 /** Keys used to confirm / go back in menus. */
 export const MENU_CONFIRM_KEYS: readonly string[] = ['ENTER', 'SPACE'];
 export const MENU_BACK_KEYS: readonly string[] = ['ESC', 'BACKSPACE'];
+/** Move the focus along a row of buttons (story result and campaign screens). */
+export const MENU_PREV_KEYS: readonly string[] = ['LEFT', 'UP'];
+export const MENU_NEXT_KEYS: readonly string[] = ['RIGHT', 'DOWN'];
 
 /** Pauses the fight (and, on the pause screen, resumes it). */
 export const PAUSE_KEYS: readonly string[] = ['ESC', 'P'];

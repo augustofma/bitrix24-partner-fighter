@@ -28,4 +28,6 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   'amanda-konrad': 'story/endings/amanda-konrad.jpg',
   // Douglas at a São Paulo lookout, the skyline and the cable-stayed bridge at sunset.
   douglas: 'story/endings/douglas.jpg',
+  // Rodolfo at a Curitiba lookout, the Jardim Botânico greenhouse at sunset.
+  rodolfo: 'story/endings/rodolfo.jpg',
 };

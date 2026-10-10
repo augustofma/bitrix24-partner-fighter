@@ -128,6 +128,7 @@ export const STRINGS = {
   specialPowerZap: 'POWERZAP',
   specialPowerBot: 'POWERBOT',
   specialOutraDimensao: 'OUTRA DIMENSÃO',
+  specialFoorceZap: 'FOORCE ZAP',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:

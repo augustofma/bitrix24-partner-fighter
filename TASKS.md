@@ -793,6 +793,20 @@ sem pedido explícito.**
 - [x] Testes de roster, config, assets, animações, simulação, CPU e determinismo
 - [x] Treze partidas completas, poses com F2, teclado, cross-up e multitouch no mobile emulado
 
+## DONE (Rodolfo em Curitiba + FOORCE ZAP, branch `feature/rodolfo-curitiba`)
+
+- [x] Conferido o merge do Codex (sheet, frame map, retrato, testes); Douglas (história e OUTRA
+      DIMENSÃO) trazido para cima da main
+- [x] Cenário CURITIBA BRASIL LEADS (arte oficial, escala por `prepare_curitiba_brasil_leads.py`,
+      torcida em duas faixas, ambiente de Curitiba); seleção de fases cabe 13 cenários
+- [x] Modo História: Rodolfo de Curitiba, enfrentado no cenário Brasil Leads; final ilustrado
+      (`prepare_rodolfo_ending.py`, fonte 4:3 → 1440×810); galeria com 12
+- [x] Especial FOORCE ZAP: custo 35, dano 19, chip 2, 12 / 6 / 24, dash de 7 px/frame (alcance
+      224), hitstop 12; tema `forceZap` procedural e som `special-foorce-zap`
+- [x] Setas ← → (e ↑ ↓) movem o foco entre os botões da tela de campanha zerada e do resultado do
+      Modo História; Enter aperta o botão em foco
+- [x] Testes (especial, cenário, história, foco dos botões, CPU nos três níveis)
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

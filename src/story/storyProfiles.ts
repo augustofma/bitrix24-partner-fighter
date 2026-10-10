@@ -49,6 +49,9 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   { fighterId: 'amanda-konrad', home: 'florianopolis' },
   // Douglas (Dohko Technology) is from São Paulo: no stage of its own, met at the Partner Summit.
   { fighterId: 'douglas', home: 'sao-paulo' },
+  // Rodolfo (Brasil Leads) is from Curitiba too: met at the Jardim Botânico dressed for Brasil
+  // Leads (Gabriel Mattozo keeps the city's default stage).
+  { fighterId: 'rodolfo', home: 'curitiba', encounterStageId: 'curitiba-brasil-leads' },
 ];
 
 /**

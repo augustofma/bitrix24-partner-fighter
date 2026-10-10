@@ -542,6 +542,19 @@ Cena parada, como o RIO DE JANEIRO; a torcida pula em três faixas (as arquibanc
 fãs do meio) e os celulares piscam. As grades terminam mais alto que no Rio: `top` 0 deixa os
 lutadores no calçadão aberto, à frente delas. Som ambiente: o mesmo do PORTUGAL (só a torcida).
 
+## Cenário: CURITIBA BRASIL LEADS (Rodolfo)
+
+Arte oficial fornecida pelo dono do projeto: o Jardim Botânico de Curitiba vestido para a Brasil
+Leads, com o calçadão de petit-pavé em frente à estufa, chafarizes e canteiros, uma araucária, a
+cidade ao fundo, bandeiras do Brasil e a torcida atrás das grades da Brasil Leads, com
+bandeirolas e faixas
+([scripts/stage-art/curitiba-brasil-leads/README.md](../scripts/stage-art/curitiba-brasil-leads/README.md)).
+É um segundo cenário da mesma cidade (como JOINVILLE ZOPU): o Rodolfo é enfrentado aqui e as
+outras lutas em Curitiba seguem no Jardim Botânico original. Cena parada, escala só; a torcida
+pula em duas faixas (dos dois lados da escadaria) e os celulares piscam. `top` 0: as grades
+terminam acima do chão, e os lutadores ficam na praça, à frente delas. Som ambiente: o mesmo de
+CURITIBA.
+
 ## Cenário: BITRIX24 MOSCOU (chefe final)
 
 Arte oficial fornecida pelo dono do projeto: o salão da sede da Bitrix24 em Moscou, com o
@@ -717,7 +730,7 @@ Cada cenário tem um loop de 12 s (sem emenda audível) **sintetizado** por
 | PORTUGAL               | `portugal`       | Torcida (sem mar nem gaivotas)                |
 | CASTELO BRANCO         | `castelo-branco` | Torcida, vento e passarinhos                  |
 | JOINVILLE (os dois)    | `joinville`      | Torcida e passarinhos                         |
-| CURITIBA               | `curitiba`       | Torcida, chafariz e passarinhos               |
+| CURITIBA (os dois)     | `curitiba`       | Torcida, chafariz e passarinhos               |
 | RÚSSIA                 | `russia`         | Torcida e rajadas de vento                    |
 | FLORIANÓPOLIS          | `portugal`       | Torcida (o mesmo loop do PORTUGAL)            |
 | BITRIX24 MOSCOU        | `office`         | Ar-condicionado, conversa, teclados, telefone |
@@ -749,6 +762,8 @@ registrada aqui:
 | `scripts/stage-art/rio-de-janeiro/source.webp` e `public/stages/rio-de-janeiro/*`                   | Arte oficial fornecida pelo usuário; escala por `prepare_rio_de_janeiro.py`                        | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/florianopolis/source.webp` e `public/stages/florianopolis/*`                     | Arte oficial fornecida pelo usuário; escala por `prepare_florianopolis.py`                         | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/stage-art/curitiba/source.webp` e `public/stages/curitiba/*`                               | Arte oficial fornecida pelo usuário; camadas separadas por `prepare_curitiba.py`                   | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/stage-art/curitiba-brasil-leads/source.webp` e `public/stages/curitiba-brasil-leads/*`     | Arte oficial fornecida pelo usuário; escala por `prepare_curitiba_brasil_leads.py`                 | Arte do projeto, aprovada pelo usuário                            |
+| `scripts/story-ending-art/rodolfo/source.webp` e `public/story/endings/rodolfo.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_rodolfo_ending.py`      | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/augusto/source.webp` e `public/story/endings/augusto.jpg`                 | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_augusto_ending.py`                  | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/romualdo/source.webp` e `public/story/endings/romualdo.jpg`               | Arte oficial fornecida pelo usuário; recorte 16:9 por `prepare_romualdo_ending.py`                 | Arte do projeto, aprovada pelo usuário                            |
 | `scripts/story-ending-art/aislan/source.webp` e `public/story/endings/aislan.jpg`                   | Arte oficial fornecida pelo usuário; recorte 16:9 (fonte 4:3) por `prepare_aislan_ending.py`       | Arte do projeto, aprovada pelo usuário                            |
@@ -829,6 +844,9 @@ como imagem lisa.
   fenda é um oval de linhas de pixel (sem triangulação), com estrelas que derivam para o centro
   (profundidade). Inspiração só no conceito de ataque dimensional: nenhum símbolo, armadura ou
   efeito de franquia. Tudo procedural: nada para carregar.
+- **FOORCE ZAP:** verde de mensagem (#25D366) e verde-limão (#8DFF6A) com o dourado (#E0B03A,
+  #FFE08A) e o azul-marinho (#1B1F4A) da Brasil Leads, mais branco. Desenho original de balões,
+  raios em zigue-zague, ondas e anéis, sem logo de app. Tudo procedural: nada para carregar.
 - **N8N!:** coral (#FF6D5A) e rosa (#EA4B71) das conexões, nós em ameixa escuro (#2A1630) com
   borda coral e pictogramas brancos, verde-menta (#3FF2A2) para "executado". Desenho original de
   fluxo (nós, conexões e pacotes), sem logo de produto.

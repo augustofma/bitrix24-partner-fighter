@@ -198,6 +198,8 @@ export interface FighterAssetManifest {
  * - `dimensionRift`: a cosmic rift (OUTRA DIMENSÃO): particles gather in the hand, a vertical
  *   crack opens into an oval portal full of stars, the rival is pulled toward it (first hit)
  *   and it collapses in a burst of cosmic energy (last hit). Original drawing, no symbols.
+ * - `forceZap`: a charged dash punch (FOORCE ZAP): the raised fist fills with green and gold
+ *   energy, then a cone of send waves, bolts and chat bubbles blasts forward from it.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
  */
 export type SpecialEffectStyle =
@@ -210,7 +212,8 @@ export type SpecialEffectStyle =
   | 'workflowNodes'
   | 'policeRaid'
   | 'powerCombo'
-  | 'dimensionRift';
+  | 'dimensionRift'
+  | 'forceZap';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

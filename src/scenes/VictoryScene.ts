@@ -16,6 +16,7 @@ import { createPortrait } from '../render/PortraitView';
 import type { MatchResult, MatchSetup } from '../types/match';
 import { createArcadeBackground } from '../ui/ArcadeBackground';
 import { ArtButton } from '../ui/ArtButton';
+import { bindButtonRowFocus } from '../ui/buttonRowFocus';
 import { ArcadeButton } from '../ui/select/ArcadeButton';
 import { MenuButton } from '../ui/MenuButton';
 import { COLORS, arcadeText, bodyText } from '../ui/theme';
@@ -178,12 +179,19 @@ export class VictoryScene extends Phaser.Scene {
   /** The art's VOLTAR AO MENU button, or a row of arcade buttons for story choices. */
   private createButtons(actions: ScreenActions): {
     root: Phaser.GameObjects.Container;
-    press: () => void;
+    /** Shows the press on the focused button and returns its action. */
+    press: () => () => void;
   } {
     const { button: at } = VICTORY_LAYOUT;
     if (actions.buttons.length === 0) {
       const art = new ArtButton(this, at.x, at.y, VICTORY_ART.button.key, actions.primary);
-      return { root: art, press: () => art.press() };
+      return {
+        root: art,
+        press: () => {
+          art.press();
+          return actions.primary;
+        },
+      };
     }
     const row = this.add.container(at.x, at.y);
     const span =
@@ -200,7 +208,16 @@ export class VictoryScene extends Phaser.Scene {
       row.add(button);
       return button;
     });
-    return { root: row, press: () => buttons[0]?.flash() };
+    // Arrows move the focus along the row; Enter presses the focused button.
+    const focus = bindButtonRowFocus(this, buttons);
+    return {
+      root: row,
+      press: () => {
+        const i = focus.focused();
+        buttons[i]?.flash();
+        return actions.buttons[i]?.onSelect ?? actions.primary;
+      },
+    };
   }
 
   private createIllustrated(content: VictoryContent, actions: ScreenActions): void {
@@ -222,8 +239,7 @@ export class VictoryScene extends Phaser.Scene {
 
     this.playEntrance(title, card, result, buttons.root);
     onKeys(this, MENU_CONFIRM_KEYS, () => {
-      buttons.press();
-      this.time.delayedCall(KEY_PRESS_MS, actions.primary);
+      this.time.delayedCall(KEY_PRESS_MS, buttons.press());
     });
     onKeys(this, MENU_BACK_KEYS, actions.cancel);
   }
@@ -311,10 +327,11 @@ export class VictoryScene extends Phaser.Scene {
         height: 56,
         fontSize: 26,
       }).setHighlighted(true);
+      onKeys(this, MENU_CONFIRM_KEYS, actions.primary);
     } else {
-      this.createButtons(actions);
+      const buttons = this.createButtons(actions);
+      onKeys(this, MENU_CONFIRM_KEYS, () => buttons.press()());
     }
-    onKeys(this, MENU_CONFIRM_KEYS, actions.primary);
     onKeys(this, MENU_BACK_KEYS, actions.cancel);
   }
 }
