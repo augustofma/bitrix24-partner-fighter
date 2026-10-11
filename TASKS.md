@@ -821,6 +821,15 @@ sem pedido explícito.**
 - [x] Testes (nome, meter, 5 contatos, dano, defesa/chip, parcial, erro, pulo, cross-up, K.O.,
       sons, primeiro uso, determinismo, custo de desenho do VFX, CPU nos três níveis); playtest
 
+## DONE (Jonas — Sapiens, branch `feature/jonas-sapiens-fighter`)
+
+- [x] Novo fighter por configuração, décimo terceiro parceiro; vida 100, mobilidade média,
+      seis normais técnicos, sem especial exclusivo ou Story Route
+- [x] Sheet RGBA 1536×1120 em 40 células e portrait RGBA 240×300; fontes e prompts versionados
+- [x] Normalização reproduzível com alpha, margens e baseline validados
+- [x] Testes de roster, assets, animações, estados, CPU e determinismo
+- [x] Quatorze partidas completas, poses com F2, teclado, seleção paginada e multitouch emulado
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

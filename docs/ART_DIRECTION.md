@@ -25,6 +25,17 @@ baseline 216 e margens mínimas de 4 px. Poses aéreas geradas em fonte suplemen
 Recuperações reutilizam poses recolhidas; início do KO reutiliza a segunda reação de dano.
 Recortes e normalização proporcional reproduzíveis; nenhuma colisão definida pela arte.
 
+## Jonas — Sapiens
+
+Arte original criada com ImageGen integrado usando a foto real (identidade) e o pôster
+aprovado (direção artística) fornecidos pelo usuário. Uso autorizado para o projeto.
+Cabelo curto castanho claro, barba aparada castanha/grisalha, olhos claros, expressão séria,
+corpo magro/atlético, camiseta preta, calça e sapatos escuros. Sem logos ou sprites copiados.
+Fontes e prompts em [scripts/jonas-art](../scripts/jonas-art/README.md).
+Sheet RGBA 1536×1120, 40 células 192×224; portrait RGBA 240×300. Normalização proporcional
+offline, baseline 216, margem mínima 4 px, escala 1 e offsets 0/8. Base à direita e flipX
+genérico. Fases por configuração; colisões e timing independentes da arte.
+
 ## Direção
 
 - **Gênero e época:** fighting game arcade dos anos 90 (energia, cores saturadas, leitura
@@ -748,6 +759,7 @@ registrada aqui:
 | `public/fighters/amanda-konrad/*.png` e `scripts/amanda-konrad-art/*.png`                           | ImageGen integrado, fotos e poster fornecidos pelo usuario; montagem local                         | Arte original gerada para o projeto; uso autorizado pelo usuario  |
 | `public/fighters/douglas/*.png` e `scripts/douglas-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/rodolfo/*.png` e `scripts/rodolfo-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
+| `public/fighters/jonas/*.png` e `scripts/jonas-art/*.png`                                           | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/fighter-a/*.png` (demo)                                                            | Gerado por `scripts/generate-demo-fighter-art.mjs`                                                 | Original do projeto                                               |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                                       | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local             | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`                             | ImageGen integrado, referências autorizadas pelo usuário; montagem local                           | Arte original gerada para o projeto; sem assets de terceiros      |

@@ -170,9 +170,10 @@ describe('CharacterSelectScene roster integration', () => {
     const playable = ROSTER.filter((fighter) => fighter.playable);
     expect(getPlayableFighters()).toEqual(playable);
     expect(ui.portraits).toEqual(playable);
+    const grid = rosterGrid(playable.length);
     expect(cards.map((card) => card.config)).toEqual([
       ...playable,
-      ...Array<null>(rosterGrid(playable.length).perPage - playable.length).fill(null),
+      ...Array<null>(grid.pages * grid.perPage - playable.length).fill(null),
     ]);
     expect(lastHero()).toBe(augusto);
     for (const card of cards.filter((c) => !c.config)) expect(fake(card)?.input).toBeUndefined();
@@ -185,6 +186,7 @@ describe('CharacterSelectScene roster integration', () => {
       expect(fighter.playable).toBe(true);
       expect(shown).toContain(fighter);
       expect(fake(cards[shown.indexOf(fighter)])?.input?.enabled).toBe(true);
+      ui.keys.get('RIGHT')?.();
     }
     for (const placeholder of [fighterA, fighterB]) {
       expect(placeholder.playable).toBe(false);
@@ -303,10 +305,18 @@ describe('CharacterSelectScene roster integration', () => {
   });
 
   it('the badge shows the step (1 of 3, then 2 of 3)', () => {
-    openScene();
-    expect(ui.texts.some((t) => t.text === STRINGS.selectStep(1, 3))).toBe(true);
-    ui.keys.get('ENTER')?.();
-    expect(ui.texts.some((t) => t.text === STRINGS.selectStep(2, 3))).toBe(true);
+    // The step badge shares its space with the pager, so use a one-page fixture.
+    const roster = ROSTER as FighterConfig[];
+    const original = [...roster];
+    try {
+      roster.splice(0, roster.length, ...getPlayableFighters().slice(0, 8));
+      openScene();
+      expect(ui.texts.some((t) => t.text === STRINGS.selectStep(1, 3))).toBe(true);
+      ui.keys.get('ENTER')?.();
+      expect(ui.texts.some((t) => t.text === STRINGS.selectStep(2, 3))).toBe(true);
+    } finally {
+      roster.splice(0, roster.length, ...original);
+    }
   });
 
   it.each([8, 9, 16, 30])(
@@ -468,10 +478,13 @@ describe('CharacterSelectScene with room for more fighters (roster + 3 test-only
   }
   const current = getPlayableFighters().length;
 
-  it("renders today's roster as cards on one page, in roster order", () => {
+  it("renders today's roster in order, showing only the current page", () => {
     const { cards } = openScene();
     expect(cards.filter((c) => c.config).map((c) => c.config)).toEqual(getPlayableFighters());
-    expect(cards.every((c) => fake(c)?.visible)).toBe(true);
+    const grid = rosterGrid(current);
+    cards.forEach((card, index) => {
+      expect(fake(card)?.visible).toBe(index < grid.perPage);
+    });
   });
 
   it('roster + 3: every new entry gets a card on its grid page', () => {

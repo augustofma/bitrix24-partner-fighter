@@ -943,6 +943,22 @@ resposta. Corpo padrão.
 | Soco aéreo     | 6 / 0       | 4 / 6 / 10                 |
 | Chute aéreo    | 10 / 1      | 8 / 8 / 14                 |
 
+## Jonas — Sapiens
+
+Disponível na luta rápida como jogador e CPU, sem especial exclusivo ou rota de história.
+Vida 100, caminhada 3,2, recuo 2,6, impulso vertical 16,5 e velocidade aérea horizontal 3,9.
+Corpo padrão; socos técnicos com startup curto e recuperação compensatória, chutes de
+alcance moderado e maior compromisso. Tempos em frames, simulação a 60 Hz.
+
+| Normal         | Dano / chip | Startup / ativo / recovery |
+| -------------- | ----------- | -------------------------- |
+| Soco           | 7 / 0       | 4 / 3 / 12                 |
+| Chute          | 10 / 1      | 10 / 4 / 17                |
+| Soco agachado  | 5 / 0       | 4 / 3 / 10                 |
+| Chute agachado | 9 / 1       | 10 / 4 / 18                |
+| Soco aéreo     | 6 / 0       | 4 / 6 / 10                 |
+| Chute aéreo    | 10 / 1      | 8 / 8 / 14                 |
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |
