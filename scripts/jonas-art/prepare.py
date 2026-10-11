@@ -66,9 +66,10 @@ def prepare():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     atlas.save(OUTPUT / 'sprite.png')
     portrait, _ = isolate(Image.open(HERE / 'portrait-source.png'))
-    # Bottom-aligned cover cards crop the top of the texture on paginated layouts.
-    # Keep the complete face inside their visible lower region without changing the renderer.
-    scale = min(232/portrait.width,216/portrait.height)
+    # Same framing as the other portraits: the bust fills the width (4 px margins), feet of the
+    # canvas at the bottom, a little headroom on top. A shorter bust left an empty band above
+    # the head and a smaller figure than the rest of the roster on the select screen.
+    scale = min(232/portrait.width,290/portrait.height)
     portrait = portrait.resize((round(portrait.width*scale),round(portrait.height*scale)),Image.Resampling.NEAREST)
     canvas = Image.new('RGBA',(240,300))
     canvas.paste(portrait,((240-portrait.width)//2,300-portrait.height))
