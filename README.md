@@ -30,7 +30,7 @@ os rounds e zera numa nova partida.
 Estatísticas e frame data: [GAME_DESIGN.md](docs/GAME_DESIGN.md#augusto).
 A seleção tem visual de fliperama brasileiro: mapa pixel-art procedural ao fundo, grade de
 cards calculada pela quantidade de lutadores (6 → 3 × 2; 7–8 → 4 × 2; 9–10 → 5 × 2; 11–12 →
-6 × 2; acima disso, páginas), painel de destaque
+6 × 2; 13–14 → 7 × 2; acima disso, páginas), painel de destaque
 com retrato ampliado e barras de PODER / VELOCIDADE / ALCANCE derivadas do config, botões
 VOLTAR e SELECIONAR. Não há posições específicas por personagem.
 Na mesma tela escolhe-se a dificuldade da CPU (FÁCIL, NORMAL ou DIFÍCIL; padrão NORMAL, a

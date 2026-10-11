@@ -59,8 +59,8 @@ atualizada e siga as regras do [AGENTS.md](../AGENTS.md).
 
 ## 5. O que se ajusta sozinho (não mexa)
 
-- **Seleção de personagens:** a grade é calculada pela quantidade (12 jogáveis: 6×2; com o
-  Dmitry liberado, 13).
+- **Seleção de personagens:** a grade é calculada pela quantidade (12 jogáveis: 6×2; 13 ou
+  14, com o Dmitry liberado: 7×2; acima disso, páginas).
 - **Galeria de finais:** um card a mais por personagem com campanha e o contador "x/N"
   (hoje 12). O Dmitry passa a exigir todos os finais.
 - Luta rápida (CPU em rodízio, cenário pela cidade do rival), VS, HUD, carregamento sob demanda.

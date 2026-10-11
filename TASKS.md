@@ -821,6 +821,16 @@ sem pedido explícito.**
 - [x] Testes (nome, meter, 5 contatos, dano, defesa/chip, parcial, erro, pulo, cross-up, K.O.,
       sons, primeiro uso, determinismo, custo de desenho do VFX, CPU nos três níveis); playtest
 
+## DONE (preparação do Jonas — Sapiens, branch `feature/jonas-prep`)
+
+- [x] Seleção: 13 e 14 lutadores (Jonas, e o Dmitry liberado) cabem numa página, em 7 × 2
+      (`CARD_RULES.minPortrait` 60, possível porque o retrato preenche o card)
+- [x] Final ilustrado do Jonas registrado antes do lutador (`prepare_jonas_ending.py`, fonte 4:3
+      → 1440×810); só é carregado quando o id `jonas` entrar no elenco
+- [ ] Quando o lutador do Codex entrar: perfil em `STORY_PROFILES`
+      (`{ fighterId: 'jonas', home: 'sao-paulo' }`, enfrentado no Partner Summit como o
+      Douglas) e conferir que o id do config é `jonas`
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
