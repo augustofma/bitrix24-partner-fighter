@@ -1,13 +1,14 @@
 """Prepares Jonas's story ending art (the screen shown when his campaign is completed).
 
-Input : scripts/story-ending-art/jonas/source.webp (1448x1086, 4:3: Jonas, from behind, at a
-        São Paulo lookout, watching the sunset over the skyline and the cable-stayed bridge)
+Input : scripts/story-ending-art/jonas/source.webp (1448x1086, 4:3: Jonas, from behind, on the
+        São José waterfront, watching the sunset over the bay, Florianópolis island and the
+        Hercílio Luz bridge)
 Output: public/story/endings/jonas.jpg, 1440x810 (16:9, 1.5x the 960x540 game so it stays
         sharp on big screens and has room for the slow zoom of the ending screen).
 
 Unlike the other endings the source is 4:3, so a 16:9 cut loses ~270 px of height and he is
 taller than what is kept: the cut starts CROP_TOP px down, keeping his head and some sky above
-it (the title goes to the right of his head) and leaving out the bottom of the wall, which
+it (the title goes to the right of his head) and leaving out his legs and the promenade floor, which
 would sit behind the result panel and the buttons anyway.
 
 A still illustration: no layers. Everything that depends on the campaign (title, route, buttons)
@@ -25,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / 'scripts/story-ending-art/jonas/source.webp'
 OUT = ROOT / 'public/story/endings/jonas.jpg'
 SIZE = (1440, 810)
-CROP_TOP = 100
+CROP_TOP = 110
 
 
 def main() -> None:

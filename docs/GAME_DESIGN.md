@@ -948,7 +948,8 @@ resposta. Corpo padrão.
 Disponível na luta rápida como jogador e CPU, ainda sem especial exclusivo. No Modo História
 ele é de **São José (SC)**, a cidade continental em frente à Ilha de Florianópolis: campanha
 própria e rival das outras, enfrentado no Partner Summit (São José não tem cenário próprio);
-final num mirante com grafite, olhando o pôr do sol sobre os prédios e a ponte estaiada.
+final na beira-mar de São José, olhando o pôr do sol sobre a baía, a Ilha de Florianópolis e a
+ponte Hercílio Luz.
 Vida 100, caminhada 3,2, recuo 2,6, impulso vertical 16,5 e velocidade aérea horizontal 3,9.
 Corpo padrão; socos técnicos com startup curto e recuperação compensatória, chutes de
 alcance moderado e maior compromisso. Tempos em frames, simulação a 60 Hz.

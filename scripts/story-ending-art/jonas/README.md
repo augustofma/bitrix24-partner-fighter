@@ -1,8 +1,8 @@
 # Arte do final do Jonas no Modo História
 
 `source.webp` é a arte oficial (1448×1086, 4:3) fornecida pelo usuário: o Jonas (Sapiens), de
-costas, camiseta preta, num mirante de São Paulo com grafite olhando o pôr do sol sobre os
-prédios e a ponte estaiada.
+costas, camiseta preta, na beira-mar de São José olhando o pôr do sol sobre a baía, a Ilha de
+Florianópolis e a ponte Hercílio Luz.
 
 `prepare_jonas_ending.py` recorta em 16:9 a partir de `CROP_TOP` (como o final do Aislan, que
 também é 4:3) e gera `public/story/endings/jonas.jpg` (1440×810).

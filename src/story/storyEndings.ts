@@ -30,7 +30,7 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   douglas: 'story/endings/douglas.jpg',
   // Rodolfo at a Curitiba lookout, the Jardim Botânico greenhouse at sunset.
   rodolfo: 'story/endings/rodolfo.jpg',
-  // Jonas (Sapiens) at a São Paulo lookout, the skyline and the cable-stayed bridge at sunset
-  // (fighter in progress: shown once `jonas` joins the roster).
+  // Jonas (Sapiens) on the São José waterfront, the bay, Florianópolis island and the Hercílio
+  // Luz bridge at sunset.
   jonas: 'story/endings/jonas.jpg',
 };
