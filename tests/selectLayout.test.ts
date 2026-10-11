@@ -80,9 +80,9 @@ describe('select screen layout: roster-driven grid', () => {
     expect(SELECT_LAYOUT.footerY).toBeLessThan(GAME_HEIGHT);
   });
 
-  it('rosters up to twelve fit on a single page', () => {
+  it('rosters up to fourteen fit on a single page', () => {
     expect(CURRENT).toBeGreaterThanOrEqual(6);
-    for (const count of [6, 9, 10, 11, 12]) {
+    for (const count of [6, 9, 10, 11, 12, 13, 14]) {
       const grid = rosterGrid(count);
       expect(grid.pages).toBe(1);
       expect(grid.perPage).toBeGreaterThanOrEqual(count);
@@ -96,6 +96,9 @@ describe('select screen layout: roster-driven grid', () => {
     const expanded = rosterGrid(12);
     expect(expanded.columns).toBeGreaterThan(rosterGrid(6).columns);
     expect(expanded.cardWidth).toBeLessThan(rosterGrid(6).cardWidth);
+    // A thirteenth partner (and Dmitry unlocked on top): seven columns, still two rows.
+    expect(rosterGrid(13)).toMatchObject({ columns: 7, rows: 2, pages: 1 });
+    expect(rosterGrid(14)).toMatchObject({ columns: 7, rows: 2, pages: 1 });
   });
 
   it('only rosters too large for readable cards paginate, with every page the same grid', () => {

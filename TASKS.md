@@ -830,6 +830,16 @@ sem pedido explícito.**
 - [x] Testes de roster, assets, animações, estados, CPU e determinismo
 - [x] Quatorze partidas completas, poses com F2, teclado, seleção paginada e multitouch emulado
 
+## DONE (preparação do Jonas — Sapiens, branch `feature/jonas-prep`)
+
+- [x] Seleção: 13 e 14 lutadores (Jonas, e o Dmitry liberado) cabem numa página, em 7 × 2
+      (`CARD_RULES.minPortrait` 60, possível porque o retrato preenche o card)
+- [x] Final ilustrado do Jonas registrado antes do lutador (`prepare_jonas_ending.py`, fonte 4:3
+      → 1440×810); só é carregado quando o id `jonas` entrar no elenco
+- [x] Modo História: Jonas é de São José (SC), a cidade continental em frente à Ilha de
+      Florianópolis; nova `StoryLocation` `sao-jose` (luta no Partner Summit) e perfil
+      `{ fighterId: 'jonas', home: 'sao-jose' }`; galeria com 13
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

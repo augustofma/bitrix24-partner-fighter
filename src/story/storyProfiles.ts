@@ -52,6 +52,9 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Rodolfo (Brasil Leads) is from Curitiba too: met at the Jardim Botânico dressed for Brasil
   // Leads (Gabriel Mattozo keeps the city's default stage).
   { fighterId: 'rodolfo', home: 'curitiba', encounterStageId: 'curitiba-brasil-leads' },
+  // Jonas (Sapiens) is from São José (SC), on the mainland facing Florianópolis island: met at
+  // the Partner Summit (the city has no stage of its own).
+  { fighterId: 'jonas', home: 'sao-jose' },
 ];
 
 /**

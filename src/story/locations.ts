@@ -90,6 +90,22 @@ export const STORY_LOCATIONS: readonly StoryLocation[] = [
     // Fights here happen on the promenade by the Hercílio Luz bridge.
     stageId: 'florianopolis',
   },
+  {
+    // Jonas's city (Sapiens): on the mainland, facing Florianópolis island across the bay. A
+    // few px from Florianópolis on both maps: drawn a little west, label to the left
+    // (Florianópolis's goes right).
+    id: 'sao-jose',
+    kind: 'city',
+    name: 'São José',
+    country: HOME_COUNTRY,
+    region: 'Santa Catarina',
+    regionCode: 'SC',
+    latitude: -27.61,
+    longitude: -48.63,
+    mapNudge: { dx: -12, dy: 8 },
+    mapLabel: { side: 'left', dy: 8 },
+    // No stage of its own: fights here happen at the Partner Summit.
+  },
   // Countries are marked at a central, recognizable point (Russia: around Moscow, where the
   // European side meets the map's frame).
   {

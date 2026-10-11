@@ -33,10 +33,12 @@ export const CARD_RULES = {
   artInset: 7,
   namePlateHeight: 28,
   /**
-   * Smallest portrait side (logical px) a card may have. At 844x390 (scale 0.72) this is still
-   * ~55 css px, and the whole card stays a comfortable touch target.
+   * Smallest portrait side (logical px) a card may have. The cards fill their art area
+   * (`fit: 'cover'`), so a narrow card still shows the face, only with less of the shoulders:
+   * 60 keeps 13 and 14 fighters (a 7 x 2 grid of 77 px cards) on one page. At 844x390 (scale
+   * 0.72) a card is still ~55 css px wide, a comfortable touch target.
    */
-  minPortrait: 76,
+  minPortrait: 60,
   maxColumns: 8,
   maxRows: 3,
   /** Score lost per empty slot: a full grid beats one with holes when portraits are similar. */

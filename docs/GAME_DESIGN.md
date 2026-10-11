@@ -22,8 +22,8 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    Modo História tem seção própria.
 2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelos lutadores jogáveis
    (roster filtrado por `playable`). A grade se ajusta à quantidade: 6 → 3 × 2, 7–8 → 4 × 2,
-   9–10 → 5 × 2, 11–12 → 6 × 2 (cards menores, nomes longos em duas linhas); só acima disso há
-   páginas, com ◀ ▶ e "1/2" no topo. Slots "EM BREVE" completam a última linha. Augusto é a seleção inicial; todos os jogáveis podem
+   9–10 → 5 × 2, 11–12 → 6 × 2, 13–14 → 7 × 2 (cards menores, nomes longos em duas linhas; o
+   retrato preenche o card e só perde um pouco dos ombros); só acima disso há páginas, com ◀ ▶ e "1/2" no topo. Slots "EM BREVE" completam a última linha. Augusto é a seleção inicial; todos os jogáveis podem
    ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
    destaque mostra retrato ampliado, nome e barras PODER / VELOCIDADE / ALCANCE
@@ -779,19 +779,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/12 LIBERADOS" no topo:
+do Modo História, com o contador "x/13 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com todos os finais liberados (hoje 12), o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com todos os finais liberados (hoje 13), o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/12" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/13" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -945,7 +945,10 @@ resposta. Corpo padrão.
 
 ## Jonas — Sapiens
 
-Disponível na luta rápida como jogador e CPU, sem especial exclusivo ou rota de história.
+Disponível na luta rápida como jogador e CPU, ainda sem especial exclusivo. No Modo História
+ele é de **São José (SC)**, a cidade continental em frente à Ilha de Florianópolis: campanha
+própria e rival das outras, enfrentado no Partner Summit (São José não tem cenário próprio);
+final num mirante com grafite, olhando o pôr do sol sobre os prédios e a ponte estaiada.
 Vida 100, caminhada 3,2, recuo 2,6, impulso vertical 16,5 e velocidade aérea horizontal 3,9.
 Corpo padrão; socos técnicos com startup curto e recuperação compensatória, chutes de
 alcance moderado e maior compromisso. Tempos em frames, simulação a 60 Hz.

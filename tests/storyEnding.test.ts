@@ -30,6 +30,7 @@ describe('story endings', () => {
     'romualdo',
     'aislan',
     'romulo',
+    'jonas',
   ])('%s has his own illustration, prepared at 16:9 (1440x810)', (fighterId) => {
     const asset = storyEndingAsset(fighterId);
     expect(asset).toEqual({
@@ -72,6 +73,19 @@ describe('story endings', () => {
     // ...and as soon as a fighter with that id is in it, it is.
     expect(collectStoryEndingAssets(['romulo']).map((a) => a.path)).toEqual([
       'story/endings/romulo.jpg',
+    ]);
+  });
+
+  it('Jonas (Sapiens) has his ending ready before his fighter joins', () => {
+    // Registered ahead, like Romulo's: not loaded while there is no `jonas` in the roster...
+    if (!ROSTER.some((f) => f.id === 'jonas')) {
+      expect(collectStoryEndingAssets(ROSTER.map((f) => f.id)).map((a) => a.path)).not.toContain(
+        'story/endings/jonas.jpg',
+      );
+    }
+    // ...and picked up as soon as he is.
+    expect(collectStoryEndingAssets(['jonas']).map((a) => a.path)).toEqual([
+      'story/endings/jonas.jpg',
     ]);
   });
 });
