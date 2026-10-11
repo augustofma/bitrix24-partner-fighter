@@ -540,6 +540,16 @@ avanço (7 px/frame no startup e no ativo) dá alcance médio: hitbox (30, -150,
 dash = 224 px. Por cobrir a distância rápido, só um pulo lido cedo passa por cima. Na defesa fica
 -10: punível.
 
+**TRACKEADO! (Jonas):** o rastreador de campanhas de WhatsApp dele trava a mira no rival à
+distância e leva ele pelo funil: **CLIQUE**, **LEAD** e **VENDA!**. Custo 35, somente no chão,
+nível `mid`, startup 15 / ativo 18 / recovery 26, ele não avança. Três contatos (`hits`): o
+clique no frame 0 do ativo (3 de dano, chip 1, hitstun 16), o lead no frame 6 (4 de dano, chip
+1, hitstun 17) e a venda no frame 13 (12 de dano, chip 2, hitstun 26, blockstun 16, knockback
+8, pushback 6, hitstop 13). Total 19 no acerto e 4 de chip na defesa. É uma zona de 90 a 320
+px à frente dele: alcança longe, mas tem um **ponto cego** colado nele (a menos de ~70 px erra
+tudo). A zona fica na altura do corpo: um pulo no tempo certo escapa de tudo; cedo ou tarde
+demais, pega parte do funil. Na defesa fica -18 depois da venda: punível.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -615,6 +625,17 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   defesa o impacto fica menor. Rótulo CÓLERA DOS 100 DRAGÕES em dourado. Som: energia crescendo
   com rosnado, rugido e uma série de whooshes (as ondas), uma mordida curta em cada onda e um
   estrondo com explosão de energia no final.
+- **TRACKEADO! (Jonas), rastreador de campanhas:** na preparação (braços cruzados), um
+  celular com um mini dashboard acende à frente dele, arcos de radar varrem para a frente, uma
+  linha tracejada de escaneamento avança sobre a zona e pins de mapa caem no chão. No ativo, ele
+  aponta o celular: um feixe liga o celular ao alvo e uma mira de cantos se fecha sobre ele. No
+  CLIQUE, um balão branco com um link azul aparece sobre o rival e um cursor clica nele; no
+  LEAD, pins caem em volta do rival, um funil captura o lead e balões de dados com o "visto"
+  voam de volta ao celular por um arco; na VENDA!, um painel de dashboard abre atrás do rival e
+  o gráfico de barras sobe com uma seta dourada disparando. Impactos: ondas de clique e, na
+  venda, explosão verde com moedas e confete. Rótulos CLIQUE / LEAD / VENDA! sob o nome. Som:
+  pings de radar e bipe de mira, um "plim" de notificação no clique e no lead, e um estrondo com
+  "cha-ching" de caixa na venda.
 - **FOORCE ZAP (Rodolfo), soco carregado de mensagens:** na carga, o punho erguido se enche de
   energia verde e dourada, raiozinhos estalam em volta e um anel dourado se fecha nele; no
   avanço, linhas de velocidade atrás dele e, à frente do punho, um cone de ondas de "enviar",
@@ -945,7 +966,7 @@ resposta. Corpo padrão.
 
 ## Jonas — Sapiens
 
-Disponível na luta rápida como jogador e CPU, ainda sem especial exclusivo. No Modo História
+Disponível na luta rápida como jogador e CPU, com o especial TRACKEADO!. No Modo História
 ele é de **São José (SC)**, a cidade continental em frente à Ilha de Florianópolis: campanha
 própria e rival das outras, enfrentado no Partner Summit (São José não tem cenário próprio);
 final na beira-mar de São José, olhando o pôr do sol sobre a baía, a Ilha de Florianópolis e a

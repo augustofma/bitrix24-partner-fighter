@@ -199,6 +199,9 @@ export interface FighterAssetManifest {
  *   around the fighter, a lead dragon bursts out (first hit), copies of a band of dragons pour
  *   forward at several depths (small hits) and a much larger dragon crosses the rival (last
  *   hit). Uses `emblem` (the band) and `glyph` (the largest dragon); made for `hits`.
+ * - `campaignTracker`: a WhatsApp campaign tracker (TRACKEADO!): a radar sweep from the phone,
+ *   a reticle locking onto the rival, then the funnel: a click, a lead (pins and data flowing
+ *   back), a sale (a chart spiking up). Made for a three-step `hits` timeline.
  * - `forceZap`: a charged dash punch (FOORCE ZAP): the raised fist fills with green and gold
  *   energy, then a cone of send waves, bolts and chat bubbles blasts forward from it.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
@@ -214,7 +217,8 @@ export type SpecialEffectStyle =
   | 'policeRaid'
   | 'powerCombo'
   | 'hundredDragons'
-  | 'forceZap';
+  | 'forceZap'
+  | 'campaignTracker';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

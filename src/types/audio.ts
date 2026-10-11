@@ -49,6 +49,9 @@ export type SfxId =
   | 'special-dragon-bite'
   | 'special-dragon-impact'
   | 'special-foorce-zap'
+  | 'special-track'
+  | 'special-track-ping'
+  | 'special-track-sale'
   | 'special-powerzap'
   | 'special-powerbot'
   // Crowd reactions (stages with a crowd only).

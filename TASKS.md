@@ -840,6 +840,17 @@ sem pedido explícito.**
       Florianópolis; nova `StoryLocation` `sao-jose` (luta no Partner Summit) e perfil
       `{ fighterId: 'jonas', home: 'sao-jose' }`; galeria com 13
 
+## DONE (TRACKEADO! do Jonas, branch `feature/jonas-sao-jose`)
+
+- [x] Especial por dados (multi-hit `hits`): custo 35, clique 3 + lead 4 + venda 12 (19), chip
+      4, startup 15 / ativo 18 / recovery 26, hitstop final 13; zona de 90 a 320 px com ponto cego
+      colado nele; um pulo no tempo certo escapa
+- [x] Tema `campaignTracker` procedural (celular, radar, mira, link clicado, pins, funil, dados
+      voltando, dashboard com gráfico); rótulos CLIQUE / LEAD / VENDA!; sons `special-track`,
+      `special-track-ping` e `special-track-sale`
+- [x] Testes (dados, meter, acerto, ponto cego, alcance, pulo, defesa/chip, K.O., sons, primeiro
+      uso, determinismo, VFX, CPU nos três níveis); playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).

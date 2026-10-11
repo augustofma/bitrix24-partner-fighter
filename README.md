@@ -10,7 +10,8 @@ selecionável, com sprite e retrato pixel-art originais gerados a partir das ref
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
 JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD, DOUGLAS, RODOLFO e JONAS.
 Todos os treze estão disponíveis na luta rápida. Jonas (Sapiens) tem 100 de vida, mobilidade
-média e seis normais técnicos, ainda sem especial exclusivo. Amanda (BR24) tem 100 de vida, seis normais,
+média, seis normais técnicos e o especial TRACKEADO! (rastreador de campanhas de
+WhatsApp: CLIQUE, LEAD e VENDA!). Amanda (BR24) tem 100 de vida, seis normais,
 mobilidade média, arte própria e o especial POWER COMBO (POWERZAP + POWERBOT). Douglas (Dohko
 Technology) tem 100 de vida, seis normais de alcance moderado e o especial CÓLERA DOS 100 DRAGÕES.
 Rodolfo (Brasil Leads) tem 100 de vida, caminhada 3,3, socos de startup curto e o especial

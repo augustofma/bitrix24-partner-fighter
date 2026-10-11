@@ -129,6 +129,10 @@ export const STRINGS = {
   specialPowerBot: 'POWERBOT',
   specialHundredDragons: 'CÓLERA DOS 100 DRAGÕES',
   specialFoorceZap: 'FOORCE ZAP',
+  specialTrackeado: 'TRACKEADO!',
+  trackClick: 'CLIQUE',
+  trackLead: 'LEAD',
+  trackSale: 'VENDA!',
   debugHint: 'F2: hitboxes',
   /** Fixed controls bar at the bottom of the fight (keyboard players). */
   fightControlsHint:

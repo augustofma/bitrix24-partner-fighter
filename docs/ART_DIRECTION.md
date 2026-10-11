@@ -861,6 +861,11 @@ como imagem lisa.
   verde-esmeralda (#1FD68A), ciano (#3FF0FF) e branco, com azul-profundo (#0B1640) no
   escurecimento. A quantidade vem de cópias da faixa de dragões em escalas, alturas e
   transparências diferentes (até seis imagens do pool por quadro), não de cem objetos.
+- **TRACKEADO!:** verde-neon (#3DFF8A) e verde-azulado (#18C48F) de dashboard, ciano
+  (#21E6FF) no radar e na mira, rosa (#FF3DA8) nos pins, dourado (#FFD84A) na seta da venda e
+  nas moedas, azul de link (#2D6BFF) e ardósia escura (#0D1B2A) nos contornos e no painel, para
+  ler em cenários claros e escuros. Desenho original (celular, radar, mira, pins, funil, balões
+  com "visto" e gráfico), sem logo de app. Tudo procedural: nada para carregar.
 - **FOORCE ZAP:** verde de mensagem (#25D366) e verde-limão (#8DFF6A) com o dourado (#E0B03A,
   #FFE08A) e o azul-marinho (#1B1F4A) da Brasil Leads, mais branco. Desenho original de balões,
   raios em zigue-zague, ondas e anéis, sem logo de app. Tudo procedural: nada para carregar.

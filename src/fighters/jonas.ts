@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -120,9 +121,64 @@ export const jonas: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // TRACKEADO!: his campaign tracker locks onto the rival at a distance and walks them down
+      // the funnel: the CLICK, the LEAD, then the SALE (the main hit). A zone at mid/long range:
+      // it reaches far but leaves a blind spot right in front of him (point-blank, it misses).
+      id: 'jonas.trackeado',
+      displayName: STRINGS.specialTrackeado,
+      state: 'special',
+      level: 'mid',
+      meterCost: 35,
+      groundOnly: true,
+      // He stands still: the tracker does the work.
+      advanceSpeed: 0,
+      // Phone up, radar sweeping: a readable warning.
+      startupFrames: 15,
+      // The click at 0, the lead at 6, the sale at 13.
+      activeFrames: 18,
+      // Punishable on block (5 active frames left + 26 recovery against the sale's 16 blockstun),
+      // and from point-blank, where it whiffs.
+      recoveryFrames: 26,
+      // Defaults are the click: light, with a hitstun that bridges to the lead.
+      damage: 3,
+      chipDamage: 1,
+      // From 90 px out to 320 px: the blind spot is the space right in front of him.
+      hitbox: { x: 90, y: -125, width: 230, height: 105 },
+      hitstunFrames: 16,
+      blockstunFrames: 10,
+      knockback: 0.5,
+      blockPushback: 1,
+      hitstopFrames: 5,
+      hits: [
+        { activeFrame: 0 },
+        { activeFrame: 6, damage: 4, hitstunFrames: 17, hitstopFrames: 6 },
+        // The sale: the main hit, strong hitstun and freeze, a real push back.
+        {
+          activeFrame: 13,
+          damage: 12,
+          chipDamage: 2,
+          hitstunFrames: 26,
+          blockstunFrames: 16,
+          knockback: 8,
+          blockPushback: 6,
+          hitstopFrames: 13,
+        },
+      ],
+    },
+  ],
   palette: { body: 0x171c27, accent: 0x6b839d, skin: 0xe4b087, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'jonas.trackeado': {
+        style: 'campaignTracker',
+        label: STRINGS.specialTrackeado,
+        sound: 'special-track',
+        hitLabels: [STRINGS.trackClick, STRINGS.trackLead, STRINGS.trackSale],
+        hitSounds: ['special-track-ping', 'special-track-ping', 'special-track-sale'],
+      },
+    },
     portrait: 'fighters/jonas/portrait.png',
     pixelArt: true,
     sprite: {
@@ -149,6 +205,9 @@ export const jonas: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
+        // TRACKEADO!: arms crossed, confident (the tracker arming), then the arm thrown out
+        // pointing at the target.
+        special: { frames: [39, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },
     },

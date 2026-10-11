@@ -108,6 +108,9 @@ export const SFX: Readonly<Record<SfxId, SfxConfig>> = {
   'special-dragon-bite': sfx('special-dragon-bite', 0.8),
   'special-dragon-impact': sfx('special-dragon-impact', 0.9),
   'special-foorce-zap': sfx('special-foorce-zap', 0.85),
+  'special-track': sfx('special-track', 0.85),
+  'special-track-ping': sfx('special-track-ping', 0.8),
+  'special-track-sale': sfx('special-track-sale', 0.9),
   'special-powerzap': sfx('special-powerzap', 0.8),
   'special-powerbot': sfx('special-powerbot', 0.9),
   // The crowd sits behind the fight: under the hits, above the ambience bed.

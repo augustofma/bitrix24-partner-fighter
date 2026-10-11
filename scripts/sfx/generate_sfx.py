@@ -481,6 +481,41 @@ def sfx_special_foorce_zap(rng):
     return np.tanh(mix(buzz, *crackles, at(whoosh, charge_len - 0.02), at(mix(blast, zap), charge_len + 0.08)) * 1.6)
 
 
+def sfx_special_track(rng):
+    """TRACKEADO! starts: the tracker arms: two radar pings with a soft echo, a quick rising
+    digital scan and a lock-on double beep."""
+    pings = []
+    for i, hz in enumerate((1180, 1480)):
+        ping = np.sin(2 * np.pi * hz * seconds(0.18)) * decay(0.18, 14) * 0.35
+        echo = np.sin(2 * np.pi * hz * seconds(0.18)) * decay(0.18, 18) * 0.12
+        pings += [at(ping, i * 0.11), at(echo, i * 0.11 + 0.07)]
+    scan_len = 0.16
+    scan = lowpass(square(sweep(300, 1400, scan_len, 0.8), 6), 3500) * np.linspace(0.2, 1, int(scan_len * SR)) * 0.18
+    beeps = [at(np.sin(2 * np.pi * 1960 * seconds(0.05)) * decay(0.05, 30) * 0.4, 0.42 + i * 0.07) for i in range(2)]
+    return mix(*pings, at(scan, 0.24), *beeps)
+
+
+def sfx_special_track_ping(rng):
+    """A funnel step lands (the click, the lead): a bright notification pop over a light thump."""
+    pop = mix(
+        np.sin(2 * np.pi * 1320 * seconds(0.12)) * decay(0.12, 22) * 0.5,
+        at(np.sin(2 * np.pi * 1760 * seconds(0.12)) * decay(0.12, 22) * 0.45, 0.05),
+    )
+    thump = np.sin(sweep(200, 80, 0.1)) * decay(0.1, 25) * 0.7
+    tick = highpass(rng.uniform(-1, 1, int(0.02 * SR)), 2500) * decay(0.02, 90) * 0.35
+    return np.tanh(mix(thump, tick, pop) * 1.8)
+
+
+def sfx_special_track_sale(rng):
+    """The sale closes (the main hit): a heavy boom with a cash-register "cha-ching" (two bright
+    bell tones and a coin rattle) on top."""
+    boom = np.sin(sweep(180, 40, 0.5, 1.6)) * decay(0.5, 7) * 0.9
+    crack = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 1800) * decay(0.05, 55) * 0.5
+    bell = lambda hz: mix(*[np.sin(2 * np.pi * hz * k * seconds(0.5)) * decay(0.5, 5 + k) * (0.25 / k) for k in (1, 2, 3)])
+    rattle = bandpass(rng.uniform(-1, 1, int(0.25 * SR)), 3000, 8000) * decay(0.25, 12) * 0.25
+    return np.tanh(mix(attack(boom, 1), crack, at(bell(1568), 0.03), at(bell(2093), 0.12), at(rattle, 0.04)) * 2.2)
+
+
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
     """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
     and a slightly different onset, summed into one crowd roar."""
@@ -554,6 +589,9 @@ EFFECTS = {
     "special-dragon-bite": sfx_special_dragon_bite,
     "special-dragon-impact": sfx_special_dragon_impact,
     "special-foorce-zap": sfx_special_foorce_zap,
+    "special-track": sfx_special_track,
+    "special-track-ping": sfx_special_track_ping,
+    "special-track-sale": sfx_special_track_sale,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,
