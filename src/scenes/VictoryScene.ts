@@ -28,12 +28,13 @@ import { createResultLine, createVictoryTitle } from '../ui/victory/victoryText'
 import { continueStory, finishStoryMatch, quitStory, retryStoryFight } from './story/storyFlow';
 import { fadeIn, goToScene } from './transitions';
 
-/** Entrance timeline (ms): title, card, result line, then the button (~1.1 s in total). */
 /**
- * The winner's line, after the title lands: a bubble over the card's top-right corner whose
- * tail tip (x, y) touches the side of the portrait's face, whatever the line's length.
+ * The winner's line, after the title lands: a bubble just outside the card frame, on its right,
+ * whose tail tip (x, y) points back at the portrait's head height, whatever the line's length.
+ * Inside the frame it covered the face of fighters with long hair or a head off-centre.
  */
-const VICTORY_QUOTE = { x: 538, y: 196, maxWidth: 240, delayMs: 900, depth: 50 } as const;
+const VICTORY_QUOTE = { x: 612, y: 186, maxWidth: 230, delayMs: 900, depth: 50 } as const;
+/** Entrance timeline (ms): title, card, result line, then the button (~1.1 s in total). */
 const ENTRANCE = {
   title: { delay: 80, duration: 420 },
   card: { delay: 300, duration: 380 },
