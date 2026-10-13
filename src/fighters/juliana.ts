@@ -1,3 +1,4 @@
+import { STRINGS } from '../config/strings';
 import type { FighterConfig } from '../types/fighter';
 import { STANDARD_BODY } from './shared/standardBody';
 
@@ -120,9 +121,66 @@ export const juliana: FighterConfig = {
       hitstopFrames: 8,
     },
   },
-  specials: [],
+  specials: [
+    {
+      // GOLD PARTNER!: she levels up the partnership on the spot: a bronze, a silver and a
+      // gold medal burst out of the floor in front of her in a pillar of light, the gold one
+      // the main hit. Close range but tall: it catches rivals jumping in (a golden reversal),
+      // and whiffs from mid range.
+      id: 'juliana.goldPartner',
+      displayName: STRINGS.specialGoldPartner,
+      state: 'special',
+      level: 'mid',
+      meterCost: 40,
+      groundOnly: true,
+      // She stands her ground.
+      advanceSpeed: 0,
+      // Quick to come out (a reversal), but very punishable when it misses or is blocked.
+      startupFrames: 12,
+      // Bronze at 0, silver at 5, gold at 11.
+      activeFrames: 16,
+      recoveryFrames: 30,
+      // Defaults are the bronze and silver tiers: light hits bridging to the next one.
+      damage: 4,
+      chipDamage: 1,
+      // A tall pillar right in front of her: up to 160 px, from the floor to well above her
+      // head (it hits jumping rivals).
+      hitbox: { x: 20, y: -250, width: 140, height: 250 },
+      hitstunFrames: 16,
+      blockstunFrames: 11,
+      knockback: 1,
+      blockPushback: 1.5,
+      hitstopFrames: 6,
+      hits: [
+        { activeFrame: 0 },
+        { activeFrame: 5, damage: 5, hitstunFrames: 17, hitstopFrames: 7 },
+        // GOLD: the main hit, strong hitstun and freeze, a real push back.
+        {
+          activeFrame: 11,
+          damage: 11,
+          chipDamage: 2,
+          hitstunFrames: 28,
+          blockstunFrames: 17,
+          knockback: 9,
+          blockPushback: 6,
+          hitstopFrames: 14,
+        },
+      ],
+    },
+  ],
   palette: { body: 0xa94d2e, accent: 0xdca36e, skin: 0xe4b087, outline: 0x0b0820 },
   assets: {
+    specialEffects: {
+      'juliana.goldPartner': {
+        style: 'goldPartner',
+        label: STRINGS.specialGoldPartner,
+        // Gold lettering, like the medal.
+        labelColor: 0xffd24a,
+        sound: 'special-gold',
+        hitLabels: [STRINGS.tierBronze, STRINGS.tierSilver, STRINGS.tierGold],
+        hitSounds: ['special-gold-tier', 'special-gold-tier', 'special-gold-final'],
+      },
+    },
     portrait: 'fighters/juliana/portrait.png',
     pixelArt: true,
     sprite: {
@@ -149,6 +207,9 @@ export const juliana: FighterConfig = {
         crouchBlock: { frames: [33] },
         hurt: { frames: [34, 35], frameRate: 10 },
         knockout: { frames: [36, 37, 38], frameRate: 8 },
+        // GOLD PARTNER!: the confident hand-on-hip pose (the tiers powering up), then the arm
+        // thrown out as the medals burst from the floor.
+        special: { frames: [39, 15, 16], attackPhases: { startup: 1, active: 1, recovery: 1 } },
         victory: { frames: [39] },
       },
     },

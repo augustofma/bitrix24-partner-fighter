@@ -516,6 +516,34 @@ def sfx_special_track_sale(rng):
     return np.tanh(mix(attack(boom, 1), crack, at(bell(1568), 0.03), at(bell(2093), 0.12), at(rattle, 0.04)) * 2.2)
 
 
+def sfx_special_gold(rng):
+    """GOLD PARTNER! starts: a sparkling rising arpeggio (bell-like tones climbing a major
+    chord) over a soft shimmer swell, ending in a bright chime."""
+    notes = (784, 988, 1175, 1568)
+    bells = [at(mix(*[np.sin(2 * np.pi * hz * k * seconds(0.4)) * decay(0.4, 6 + 2 * k) * (0.22 / k) for k in (1, 2, 3)]), i * 0.07) for i, hz in enumerate(notes)]
+    shimmer = bandpass(rng.uniform(-1, 1, int(0.5 * SR)), 5000, 11000) * np.linspace(0, 1, int(0.5 * SR)) ** 2 * 0.12
+    chime = mix(*[np.sin(2 * np.pi * hz * seconds(0.5)) * decay(0.5, 5) * 0.18 for hz in (2093, 2637)])
+    return mix(*bells, shimmer, at(chime, 0.3))
+
+
+def sfx_special_gold_tier(rng):
+    """A tier medal lands (bronze, silver): a metallic medal clang over a light thump."""
+    clang = mix(*[np.sin(2 * np.pi * hz * seconds(0.3)) * decay(0.3, 9 + i * 3) * (0.3 / (i + 1)) for i, hz in enumerate((620, 1240, 1980, 2790))])
+    thump = np.sin(sweep(220, 80, 0.12)) * decay(0.12, 22) * 0.7
+    tick = highpass(rng.uniform(-1, 1, int(0.02 * SR)), 3000) * decay(0.02, 90) * 0.3
+    return np.tanh(mix(thump, tick, clang) * 1.9)
+
+
+def sfx_special_gold_final(rng):
+    """GOLD! lands: a heavy boom with a short triumphant brass-like fanfare (two saw chords) and
+    a burst of glitter."""
+    boom = np.sin(sweep(170, 40, 0.5, 1.6)) * decay(0.5, 7) * 0.9
+    crack = highpass(rng.uniform(-1, 1, int(0.05 * SR)), 1800) * decay(0.05, 55) * 0.5
+    chord = lambda hzs, dur: lowpass(mix(*[saw(2 * np.pi * hz * seconds(dur), 10) for hz in hzs]), 3200) * np.clip(seconds(dur) / 0.02, 0, 1) * decay(dur, 4) * 0.12
+    glitter = bandpass(rng.uniform(-1, 1, int(0.4 * SR)), 6000, 12000) * decay(0.4, 7) * 0.15
+    return np.tanh(mix(attack(boom, 1), crack, at(chord((523, 659, 784), 0.18), 0.02), at(chord((659, 784, 1047), 0.45), 0.18), at(glitter, 0.05)) * 2.0)
+
+
 def crowd_voices(rng, duration: float, count: int, low: float, high: float) -> np.ndarray:
     """Many people at once: band-limited noise "voices", each with its own vowel-ish formant
     and a slightly different onset, summed into one crowd roar."""
@@ -592,6 +620,9 @@ EFFECTS = {
     "special-track": sfx_special_track,
     "special-track-ping": sfx_special_track_ping,
     "special-track-sale": sfx_special_track_sale,
+    "special-gold": sfx_special_gold,
+    "special-gold-tier": sfx_special_gold_tier,
+    "special-gold-final": sfx_special_gold_final,
     "special-powerbot": sfx_special_powerbot,
     "crowd-cheer": sfx_crowd_cheer,
     "crowd-ooh": sfx_crowd_ooh,

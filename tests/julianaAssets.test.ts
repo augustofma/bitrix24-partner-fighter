@@ -12,11 +12,11 @@ import type { FighterStateId } from '../src/types/fighter';
 import { readRgbaPng } from './png';
 
 describe('Juliana PNG assets', () => {
-  it('keeps one roster entry, its own portrait, and remains quick-fight only', () => {
+  it('keeps one roster entry, its own portrait, and has a story campaign', () => {
     expect(ROSTER.filter((f) => f.id === 'juliana')).toEqual([juliana]);
     expect(juliana.assets.portrait).toBe('fighters/juliana/portrait.png');
     expect(juliana.playable).toBe(true);
-    expect(hasStoryCampaign(juliana.id)).toBe(false);
+    expect(hasStoryCampaign(juliana.id)).toBe(true);
   });
   it('uses the real sheet with all animation frames inside its 40 cells', () => {
     expect(validateSpriteAssets(juliana, 40)).toEqual([]);

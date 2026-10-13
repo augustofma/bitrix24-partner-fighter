@@ -202,6 +202,9 @@ export interface FighterAssetManifest {
  * - `campaignTracker`: a WhatsApp campaign tracker (TRACKEADO!): a radar sweep from the phone,
  *   a reticle locking onto the rival, then the funnel: a click, a lead (pins and data flowing
  *   back), a sale (a chart spiking up). Made for a three-step `hits` timeline.
+ * - `goldPartner`: partner tiers leveling up (GOLD PARTNER!): gold sparkles gather, then a
+ *   bronze, a silver and a gold medal burst from the floor in a pillar of light, the gold one
+ *   with a laurel, a star and a burst of glitter. Made for a three-step `hits` timeline.
  * - `forceZap`: a charged dash punch (FOORCE ZAP): the raised fist fills with green and gold
  *   energy, then a cone of send waves, bolts and chat bubbles blasts forward from it.
  * Purely visual: timing comes from the move's frame data, nothing here touches gameplay.
@@ -218,7 +221,8 @@ export type SpecialEffectStyle =
   | 'powerCombo'
   | 'hundredDragons'
   | 'forceZap'
-  | 'campaignTracker';
+  | 'campaignTracker'
+  | 'goldPartner';
 
 export interface SpecialEffectConfig {
   style: SpecialEffectStyle;

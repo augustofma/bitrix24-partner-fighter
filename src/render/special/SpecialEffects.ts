@@ -13,6 +13,7 @@ import { POLICE_THEME } from './policeTheme';
 import { POWER_THEME } from './powerTheme';
 import { FORCE_THEME } from './forceTheme';
 import { TRACKER_THEME } from './trackerTheme';
+import { GOLD_THEME } from './goldTheme';
 import type { EffectImage, SpecialTheme } from './specialTheme';
 import { VIBE_THEME } from './vibeTheme';
 import { WORKFLOW_THEME } from './workflowTheme';
@@ -31,6 +32,7 @@ const THEMES: Readonly<Record<SpecialEffectStyle, SpecialTheme>> = {
   hundredDragons: DRAGON_THEME,
   forceZap: FORCE_THEME,
   campaignTracker: TRACKER_THEME,
+  goldPartner: GOLD_THEME,
 };
 
 const LABEL_OFFSET_Y = -194;

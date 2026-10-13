@@ -551,6 +551,14 @@ px à frente dele: alcança longe, mas tem um **ponto cego** colado nele (a meno
 tudo). A zona fica na altura do corpo: um pulo no tempo certo escapa de tudo; cedo ou tarde
 demais, pega parte do funil. Na defesa fica -18 depois da venda: punível.
 
+**GOLD PARTNER! (Juliana):** ela sobe de nível de parceira na hora: três medalhas saem do chão
+à frente dela num pilar de luz, **BRONZE**, **SILVER** e **GOLD!**. Custo 40, somente no chão,
+nível `mid`, startup 12 / ativo 16 / recovery 30, ela não avança. Três contatos (`hits`): bronze
+no frame 0 do ativo (4 de dano, chip 1, hitstun 16), prata no frame 5 (5 de dano, chip 1, hitstun 17) e ouro no frame 11 (11 de dano, chip 2, hitstun 28, blockstun 17, knockback 9, pushback 6,
+hitstop 14). Total 20 no acerto e 4 de chip na defesa. Curto alcance (160 px), mas alto: o
+pilar vai do chão até bem acima da cabeça dela e pega quem pula em cima (um contra-ataque
+dourado); de média distância erra. Sai rápido, mas é muito punível: -25 depois do ouro na defesa.
+
 **FLUIDZ! (Aislan):** um jato de líquido roxo (o roxo da Fluidz). Custo 30, somente no chão, nível `mid`, dano 17,
 chip 2, startup 13 / ativo 7 / recovery 23, hitstun 24, blockstun 15, knockback 8,5, pushback
 5,5 e hitstop 11. Hitbox (24, -124, 140, 62): alcance de 164 px (o chute dele: 100), da cintura
@@ -637,6 +645,16 @@ dissipação (recovery) e um impacto no acerto ou na defesa.
   venda, explosão verde com moedas e confete. Rótulos CLIQUE / LEAD / VENDA! sob o nome. Som:
   pings de radar e bipe de mira, um "plim" de notificação no clique e no lead, e um estrondo com
   "cha-ching" de caixa na venda.
+- **GOLD PARTNER! (Juliana), medalhas de parceira:** na preparação (mão na cintura,
+  confiante), faixas de luz dourada sobem atrás dela, um anel de luz cresce no chão, faíscas
+  sobem em espiral até a mão erguida e uma estrela gira nela. No ativo, um pilar de luz dourada
+  sai do chão à frente dela e uma medalha sobe nele a cada nível: BRONZE, depois SILVER (maior),
+  depois GOLD! (a maior, com louro, estrela, fitas vermelhas e raios girando atrás); as
+  medalhas anteriores ficam ao lado, menores, mostrando a evolução, e cai uma chuva de brilho.
+  Impactos: anel de faíscas da cor do nível e, no ouro, clarão branco-dourado, explosão de raios,
+  ondas, uma estrela grande e confete (maior no K.O.). Rótulos BRONZE / SILVER / GOLD! sob o
+  nome dourado. Som: arpejo de sinos subindo, tinido de medalha em cada nível e, no ouro,
+  estrondo com fanfarra curta.
 - **FOORCE ZAP (Rodolfo), soco carregado de mensagens:** na carga, o punho erguido se enche de
   energia verde e dourada, raiozinhos estalam em volta e um anel dourado se fecha nele; no
   avanço, linhas de velocidade atrás dele e, à frente do punho, um cone de ondas de "enviar",
@@ -801,19 +819,19 @@ sem uso ~78%, ~34% e ~14% do tempo.
 ## Galeria de finais
 
 No menu, JOGAR abre HISTÓRIA / LUTA RÁPIDA / **GALERIA**. A galeria tem um card por personagem
-do Modo História, com o contador "x/13 LIBERADOS" no topo:
+do Modo História, com o contador "x/14 LIBERADOS" no topo:
 
 - **Liberado** (o jogador já zerou a campanha com esse personagem): miniatura do final; ENTER ou
   toque abre a ilustração em tela cheia (zoom lento), ← → passam para os outros finais
   liberados, ESC ou toque voltam.
 - **Bloqueado:** a silhueta escura do personagem com "?" e "BLOQUEADO"; a legenda diz "Zere o
   Modo História com <NOME> para liberar".
-- **Lutador secreto:** com todos os finais liberados (hoje 13), o **Dmitry** (chefe final) vira jogável na
+- **Lutador secreto:** com todos os finais liberados (hoje 14), o **Dmitry** (chefe final) vira jogável na
   LUTA RÁPIDA (como lutador ou rival). Enquanto falta algum final, a galeria provoca: "Libere
   todos os finais para desbloquear um lutador secreto"; ao liberar o último, a tela de campanha
   concluída anuncia "DMITRY LIBERADO NA LUTA RÁPIDA!". No Modo História ele continua sendo só o
   chefe final (não tem campanha).
-- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/13" no
+- Zerar uma campanha pela primeira vez com um personagem mostra "NOVO FINAL NA GALERIA x/14" no
   final da campanha. Os finais liberados ficam salvos no navegador (`localStorage`); sem acesso
   ao armazenamento, valem só até fechar o jogo.
 
@@ -987,8 +1005,9 @@ alcance moderado e maior compromisso. Tempos em frames, simulação a 60 Hz.
 
 ## Juliana — AxisPro
 
-Nova parceira disponível na luta rápida como jogadora e CPU, sem especial exclusivo ou
-rota de história. Vida 100, caminhada 3,35, recuo 2,6, impulso vertical 16,5 e velocidade
+Disponível na luta rápida como jogadora e CPU, com o especial GOLD PARTNER!. No Modo História
+ela é de **São Paulo**: campanha própria e rival das outras, enfrentada no Partner Summit; final
+num terraço à beira do rio ao pôr do sol. Vida 100, caminhada 3,35, recuo 2,6, impulso vertical 16,5 e velocidade
 horizontal aérea 3,9. Corpo padrão; mobilidade levemente acima da média, socos rápidos com
 recuperação compensatória e chutes de alcance moderado. Tempos em frames a 60 Hz.
 

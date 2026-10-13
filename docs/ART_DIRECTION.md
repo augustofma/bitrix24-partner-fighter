@@ -880,6 +880,11 @@ como imagem lisa.
   nas moedas, azul de link (#2D6BFF) e ardósia escura (#0D1B2A) nos contornos e no painel, para
   ler em cenários claros e escuros. Desenho original (celular, radar, mira, pins, funil, balões
   com "visto" e gráfico), sem logo de app. Tudo procedural: nada para carregar.
+- **GOLD PARTNER!:** dourado (#FFD24A, #C8901A, #FFF3B0), prata (#D9E2EE, #8B98AD), bronze
+  (#D98A4A, #8A4D22), fitas vermelhas (#D8323C) e contorno marrom-escuro (#2A1606). Medalhas
+  redondas em pixel art desenhadas por linhas de retângulos (sem triangulação), estrelas de cinco
+  pontas, louro, pilar de luz e brilho. Desenho original, sem selo ou logo de programa de
+  parceiros. Tudo procedural: nada para carregar.
 - **FOORCE ZAP:** verde de mensagem (#25D366) e verde-limão (#8DFF6A) com o dourado (#E0B03A,
   #FFE08A) e o azul-marinho (#1B1F4A) da Brasil Leads, mais branco. Desenho original de balões,
   raios em zigue-zague, ondas e anéis, sem logo de app. Tudo procedural: nada para carregar.

@@ -51,6 +51,9 @@ com pico abaixo de 0 dBFS depois da codificação. O gerador usa semente fixa po
 | `special-track`         | TRACKEADO! começa (Jonas)                | Dois pings de radar, varredura digital e bipe duplo de mira      | 0,85   |
 | `special-track-ping`    | Um passo do funil conecta (clique, lead) | Pop de notificação brilhante sobre um baque leve                 | 0,80   |
 | `special-track-sale`    | A VENDA! conecta                         | Estrondo grave com "cha-ching" de caixa (sinos e moedas)         | 0,90   |
+| `special-gold`          | GOLD PARTNER! começa (Juliana)           | Arpejo de sinos subindo, brilho crescente e um carrilhão         | 0,85   |
+| `special-gold-tier`     | Uma medalha conecta (bronze, prata)      | Tinido metálico de medalha sobre um baque leve                   | 0,80   |
+| `special-gold-final`    | O GOLD! conecta                          | Estrondo grave, fanfarra curta de metais e chuva de brilho       | 0,90   |
 | `special-powerbot`      | O POWERBOT conecta                       | Estrondo digital pesado, estalo e zap descendo                   | 0,90   |
 | `victory`               | Pose de vitória do vencedor do round     | Arpejo vencedor curto                                            | 0,70   |
 | `crowd-ooh`             | Golpe forte (cenário com plateia)        | "Ooh!" da torcida: formante grave que sobe e cai                 | 0,45   |

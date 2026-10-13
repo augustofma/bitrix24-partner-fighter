@@ -52,6 +52,9 @@ export type SfxId =
   | 'special-track'
   | 'special-track-ping'
   | 'special-track-sale'
+  | 'special-gold'
+  | 'special-gold-tier'
+  | 'special-gold-final'
   | 'special-powerzap'
   | 'special-powerbot'
   // Crowd reactions (stages with a crowd only).

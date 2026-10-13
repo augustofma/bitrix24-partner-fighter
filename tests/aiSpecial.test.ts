@@ -26,6 +26,7 @@ import { amandaKonrad } from '../src/fighters/amandaKonrad';
 import { douglas } from '../src/fighters/douglas';
 import { rodolfo } from '../src/fighters/rodolfo';
 import { jonas } from '../src/fighters/jonas';
+import { juliana } from '../src/fighters/juliana';
 import { partnerArena } from '../src/stages/partnerArena';
 import type { FighterConfig, SpecialMoveConfig } from '../src/types/fighter';
 import type { InputState } from '../src/types/input';
@@ -317,17 +318,25 @@ describe('CPU specials by difficulty', () => {
     return specials / (frames / 3600);
   }
 
-  it.each([filipe, augusto, joaoGuiotti, romualdo, aislan, amandaKonrad, douglas, rodolfo, jonas])(
-    '9/10. %s: Easy < Normal < Hard, and every level does use it',
-    (config) => {
-      const easy = specialsPerMinute(config, aiProfileFor('easy'));
-      const normal = specialsPerMinute(config, aiProfileFor('normal'));
-      const hard = specialsPerMinute(config, aiProfileFor('hard'));
-      expect(easy).toBeGreaterThan(0);
-      expect(easy).toBeLessThan(normal);
-      expect(normal).toBeLessThan(hard);
-    },
-  );
+  it.each([
+    filipe,
+    augusto,
+    joaoGuiotti,
+    romualdo,
+    aislan,
+    amandaKonrad,
+    douglas,
+    rodolfo,
+    jonas,
+    juliana,
+  ])('9/10. %s: Easy < Normal < Hard, and every level does use it', (config) => {
+    const easy = specialsPerMinute(config, aiProfileFor('easy'));
+    const normal = specialsPerMinute(config, aiProfileFor('normal'));
+    const hard = specialsPerMinute(config, aiProfileFor('hard'));
+    expect(easy).toBeGreaterThan(0);
+    expect(easy).toBeLessThan(normal);
+    expect(normal).toBeLessThan(hard);
+  });
 
   it('parameters follow the difficulty (chance up, cooldowns and hesitation down)', () => {
     const [e, n, h] = [EASY_AI, NORMAL_AI, HARD_AI].map((p) => p.special);

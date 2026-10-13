@@ -55,6 +55,8 @@ export const STORY_PROFILES: readonly StoryCharacterProfile[] = [
   // Jonas (Sapiens) is from São José (SC), on the mainland facing Florianópolis island: met at
   // the Partner Summit (the city has no stage of its own).
   { fighterId: 'jonas', home: 'sao-jose' },
+  // Juliana (AxisPro) is from São Paulo: met at the Partner Summit, like Douglas.
+  { fighterId: 'juliana', home: 'sao-paulo' },
 ];
 
 /**

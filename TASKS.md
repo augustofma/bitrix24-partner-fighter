@@ -861,6 +861,21 @@ sem pedido explícito.**
 - [x] Normalização reproduzível, cabelo/óculos preservados, alpha, margens e baseline validados
 - [x] Testes de roster, assets, animações, estados, CPU e determinismo
 
+## DONE (Juliana no Modo História e GOLD PARTNER!, branch `feature/juliana-gold-partner`)
+
+- [x] Conferida a lutadora do Codex (sheet, frames, retrato no enquadramento padrão, testes)
+- [x] Seleção: cards baixos (5 × 3, com o Dmitry liberado) mostram rosto e ombros
+- [x] Modo História: Juliana de São Paulo, enfrentada no Partner Summit; final ilustrado no
+      terraço à beira do rio; galeria com 14
+- [x] Especial por dados (multi-hit `hits`): custo 40, bronze 4 + prata 5 + ouro 11 (20), chip
+      4, startup 12 / ativo 16 / recovery 30, hitstop final 14; curto alcance (160 px) e alto
+      (pega quem pula), muito punível
+- [x] Tema `goldPartner` procedural (pilar de luz, medalhas redondas de bronze, prata e ouro
+      com louro, raios, brilho); rótulos BRONZE / SILVER / GOLD!; sons `special-gold`,
+      `special-gold-tier` e `special-gold-final`
+- [x] Testes (dados, meter, acerto, alcance, anti-aéreo, defesa/chip, K.O., sons, primeiro uso,
+      determinismo, VFX, CPU nos três níveis, rotas da história); playtest desktop e mobile
+
 ## NEXT (próximas tarefas recomendadas)
 
 1. [ ] Testar em iPhone/iPad e Android reais (abertura, tela cheia, memória, desempenho).
