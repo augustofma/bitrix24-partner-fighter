@@ -102,12 +102,15 @@ function createPortraitImage(
   const scaleY = area.height / image.height;
   if (fit === 'contain') return image.setScale(Math.min(scaleX, scaleY));
   const scale = Math.max(scaleX, scaleY);
-  // Texture crop (no mask): the middle of the width and the bottom of the height that fit.
+  // Texture crop (no mask): the middle of the width and, when the area is shorter than the
+  // portrait, its top (the face and shoulders; a portrait is a bust with the head on top). The
+  // image moves down by what is cut below, so the kept part still sits on the area's bottom.
   const cropWidth = Math.min(image.width, area.width / scale);
   const cropHeight = Math.min(image.height, area.height / scale);
   return image
     .setScale(scale)
-    .setCrop((image.width - cropWidth) / 2, image.height - cropHeight, cropWidth, cropHeight);
+    .setY(area.bottom + (image.height - cropHeight) * scale)
+    .setCrop((image.width - cropWidth) / 2, 0, cropWidth, cropHeight);
 }
 
 function createPortraitFigure(
