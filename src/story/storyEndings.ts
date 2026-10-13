@@ -33,4 +33,7 @@ export const STORY_ENDING_ART: Readonly<Record<string, string>> = {
   // Jonas (Sapiens) on the São José waterfront, the bay, Florianópolis island and the Hercílio
   // Luz bridge at sunset.
   jonas: 'story/endings/jonas.jpg',
+  // Juliana at a riverside terrace, the river, a boat and an old stone bridge at sunset
+  // (fighter in progress: shown once `juliana` joins the roster).
+  juliana: 'story/endings/juliana.jpg',
 };

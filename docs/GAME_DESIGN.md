@@ -22,8 +22,9 @@ HISTÓRIA:    Menu → Seleção → Mapa (viagem) → VS → Luta → Vitória 
    Modo História tem seção própria.
 2. **Seleção ("ESCOLHA SEU PARCEIRO"):** grade de cards gerada pelos lutadores jogáveis
    (roster filtrado por `playable`). A grade se ajusta à quantidade: 6 → 3 × 2, 7–8 → 4 × 2,
-   9–10 → 5 × 2, 11–12 → 6 × 2, 13–14 → 7 × 2 (cards menores, nomes longos em duas linhas; o
-   retrato preenche o card e só perde um pouco dos ombros); só acima disso há páginas, com ◀ ▶ e "1/2" no topo. Slots "EM BREVE" completam a última linha. Augusto é a seleção inicial; todos os jogáveis podem
+   9–10 → 5 × 2, 11–12 → 6 × 2, 13–14 → 7 × 2, 15 → 5 × 3, 16–18 → 6 × 3 (cards menores, nomes longos em duas linhas;
+   o retrato preenche o card: num card estreito perde um pouco dos ombros, num card baixo
+   mostra rosto e ombros); só acima disso há páginas, com ◀ ▶ e "1/2" no topo. Slots "EM BREVE" completam a última linha. Augusto é a seleção inicial; todos os jogáveis podem
    ser escolhidos, inclusive sem arte própria (retrato e boneco procedurais). O card
    escolhido ganha borda dourada, brilho pulsante e o marcador P1; ao lado, o painel de
    destaque mostra retrato ampliado, nome e barras PODER / VELOCIDADE / ALCANCE
