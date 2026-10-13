@@ -828,6 +828,8 @@ sem pedido explícito.**
 - [x] Sheet RGBA 1536×1120 em 40 células e portrait RGBA 240×300; fontes e prompts versionados
 - [x] Normalização reproduzível com alpha, margens e baseline validados
 - [x] Testes de roster, assets, animações, estados, CPU e determinismo
+- [x] Playtest dos seis golpes com F2, 15 confrontos completos, teclado e touch emulado
+      (seleção, salto diagonal, troca de lado/flipX e movimento + soco)
 - [x] Quatorze partidas completas, poses com F2, teclado, seleção paginada e multitouch emulado
 
 ## DONE (preparação do Jonas — Sapiens, branch `feature/jonas-prep`)
@@ -850,6 +852,14 @@ sem pedido explícito.**
       `special-track-ping` e `special-track-sale`
 - [x] Testes (dados, meter, acerto, ponto cego, alcance, pulo, defesa/chip, K.O., sons, primeiro
       uso, determinismo, VFX, CPU nos três níveis); playtest desktop e mobile
+
+## DONE (Juliana — AxisPro, branch `feature/juliana-axispro-fighter`)
+
+- [x] Nova fighter por configuração, décima quarta parceira; vida 100, seis normais técnicos,
+      mobilidade levemente acima da média; sem especial exclusivo ou Story Route
+- [x] Sheet RGBA 1536×1120 com 40 células e portrait RGBA 240×300; fontes e prompts versionados
+- [x] Normalização reproduzível, cabelo/óculos preservados, alpha, margens e baseline validados
+- [x] Testes de roster, assets, animações, estados, CPU e determinismo
 
 ## NEXT (próximas tarefas recomendadas)
 

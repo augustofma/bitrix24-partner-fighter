@@ -184,6 +184,7 @@ scripts/                  Ferramentas offline de preparação de assets
   douglas-art/            Fontes, prompts e normalização offline do Douglas
   rodolfo-art/            Fontes, poses aéreas suplementares e normalização offline do Rodolfo
   jonas-art/              Fontes, prompts e normalização offline do Jonas
+  juliana-art/            Fontes, prompts e normalização offline da Juliana
   romulo-art/             Fontes e normalização offline do Rômulo
   dmitry-art/             Fontes, prompts e normalização offline do chefe final
   isaque-ferreira-art/     Fontes originais e normalização offline do Isaque

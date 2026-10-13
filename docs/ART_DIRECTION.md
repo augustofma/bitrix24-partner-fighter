@@ -36,6 +36,18 @@ Sheet RGBA 1536×1120, 40 células 192×224; portrait RGBA 240×300. Normalizaç
 offline, baseline 216, margem mínima 4 px, escala 1 e offsets 0/8. Base à direita e flipX
 genérico. Fases por configuração; colisões e timing independentes da arte.
 
+## Juliana — AxisPro
+
+Arte original gerada com ImageGen integrado a partir das três fotos reais (identidade)
+e do pôster aprovado (direção artística) fornecidos pelo usuário, com uso autorizado.
+Cabelo longo castanho claro/loiro escuro, óculos, blusa terracota, calça preta de cintura
+alta, cinto e sapatos discretos. Sem blazer na sheet para preservar a leitura dos movimentos.
+Sem logos ou sprites de terceiros. Fontes e prompts em
+[scripts/juliana-art](../scripts/juliana-art/README.md).
+Sheet RGBA 1536×1120 em 40 células 192×224; portrait RGBA 240×300. Normalização proporcional,
+baseline 216, margem mínima 4 px, escala 1 e offsets 0/8. Óculos e cabelo preservados nos
+recortes. Base à direita; flipX, carregamento e animações pelo pipeline genérico.
+
 ## Direção
 
 - **Gênero e época:** fighting game arcade dos anos 90 (energia, cores saturadas, leitura
@@ -760,6 +772,7 @@ registrada aqui:
 | `public/fighters/douglas/*.png` e `scripts/douglas-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/rodolfo/*.png` e `scripts/rodolfo-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/jonas/*.png` e `scripts/jonas-art/*.png`                                           | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
+| `public/fighters/juliana/*.png` e `scripts/juliana-art/*.png`                                       | ImageGen integrado, referencias fornecidas pelo usuario; montagem local                            | Arte original gerada para o projeto; uso autorizado               |
 | `public/fighters/fighter-a/*.png` (demo)                                                            | Gerado por `scripts/generate-demo-fighter-art.mjs`                                                 | Original do projeto                                               |
 | `public/fighters/augusto/*.png` e `scripts/augusto-art/*.png`                                       | ImageGen, com referências fornecidas e geração autorizada pelo usuário; montagem local             | Arte original gerada para o projeto; sem assets de terceiros      |
 | `public/fighters/joao-guiotti/*.png` e `scripts/joao-guiotti-art/*.png`                             | ImageGen integrado, referências autorizadas pelo usuário; montagem local                           | Arte original gerada para o projeto; sem assets de terceiros      |

@@ -312,6 +312,19 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         frameWidth: 192,
         frameHeight: 224,
       },
+
+      {
+        type: 'image',
+        key: portraitTextureKey('fighters/juliana/portrait.png'),
+        path: 'fighters/juliana/portrait.png',
+      },
+      {
+        type: 'spritesheet',
+        key: 'juliana-sheet',
+        path: 'fighters/juliana/sprite.png',
+        frameWidth: 192,
+        frameHeight: 224,
+      },
       {
         type: 'image',
         key: portraitTextureKey('fighters/dmitry/portrait.png'),
@@ -364,9 +377,11 @@ describe('collectFighterAssets (loading derived from the roster)', () => {
         'douglas-sheet',
         'rodolfo-sheet',
         'jonas-sheet',
+        'juliana-sheet',
         portraitTextureKey('fighters/douglas/portrait.png'),
         portraitTextureKey('fighters/rodolfo/portrait.png'),
         portraitTextureKey('fighters/jonas/portrait.png'),
+        portraitTextureKey('fighters/juliana/portrait.png'),
         'amanda-konrad-sheet',
         portraitTextureKey('fighters/amanda-konrad/portrait.png'),
         vfxTextureKey('vfx/police-car.png'),

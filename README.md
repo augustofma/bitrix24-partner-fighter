@@ -8,14 +8,15 @@ ligados ao universo de CRM, automações, WhatsApp, IA, vendas e parceiros. A ve
 _vertical slice_ pequena e jogável. **AUGUSTO — Arrecife Digital** é o primeiro personagem real
 selecionável, com sprite e retrato pixel-art originais gerados a partir das referências aprovadas.
 Todo lutador completo do roster (`playable: true`) aparece na seleção: AUGUSTO, FILIPE,
-JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD, DOUGLAS, RODOLFO e JONAS.
-Todos os treze estão disponíveis na luta rápida. Jonas (Sapiens) tem 100 de vida, mobilidade
+JOÃO GUIOTTI, ROMUALDO, ISAQUE FERREIRA, AISLAN, RÔMULO, GABRIEL MATTOZO, GABRIELE, AMANDA KONRAD, DOUGLAS, RODOLFO, JONAS e JULIANA.
+Todos os quatorze estão disponíveis na luta rápida. Juliana (AxisPro) tem 100 de vida,
+caminhada 3,35 e seis normais técnicos; sem especial exclusivo ou campanha. Jonas (Sapiens) tem 100 de vida, mobilidade
 média, seis normais técnicos e o especial TRACKEADO! (rastreador de campanhas de
 WhatsApp: CLIQUE, LEAD e VENDA!). Amanda (BR24) tem 100 de vida, seis normais,
 mobilidade média, arte própria e o especial POWER COMBO (POWERZAP + POWERBOT). Douglas (Dohko
 Technology) tem 100 de vida, seis normais de alcance moderado e o especial CÓLERA DOS 100 DRAGÕES.
 Rodolfo (Brasil Leads) tem 100 de vida, caminhada 3,3, socos de startup curto e o especial
-FOORCE ZAP. Todos os treze têm campanha no Modo História (a Gabriele começa no Rio de Janeiro, a
+FOORCE ZAP. Os treze anteriores têm campanha no Modo História (a Gabriele começa no Rio de Janeiro, a
 Amanda em Florianópolis, o Douglas em São Paulo, o Rodolfo em Curitiba e o Jonas em São José/SC). Na **LUTA RÁPIDA** são três
 passos: **seu lutador**, **o rival** (qualquer jogável, inclusive o mesmo; começa sugerindo o
 próximo do roster) e **a fase** (todos os cenários ilustrados, com prévia; começa no cenário da

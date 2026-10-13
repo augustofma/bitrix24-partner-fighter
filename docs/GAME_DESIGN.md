@@ -984,6 +984,22 @@ alcance moderado e maior compromisso. Tempos em frames, simulação a 60 Hz.
 | Soco aéreo     | 6 / 0       | 4 / 6 / 10                 |
 | Chute aéreo    | 10 / 1      | 8 / 8 / 14                 |
 
+## Juliana — AxisPro
+
+Nova parceira disponível na luta rápida como jogadora e CPU, sem especial exclusivo ou
+rota de história. Vida 100, caminhada 3,35, recuo 2,6, impulso vertical 16,5 e velocidade
+horizontal aérea 3,9. Corpo padrão; mobilidade levemente acima da média, socos rápidos com
+recuperação compensatória e chutes de alcance moderado. Tempos em frames a 60 Hz.
+
+| Normal         | Dano / chip | Startup / ativo / recovery |
+| -------------- | ----------- | -------------------------- |
+| Soco           | 7 / 0       | 4 / 3 / 12                 |
+| Chute          | 10 / 1      | 10 / 4 / 17                |
+| Soco agachado  | 5 / 0       | 4 / 3 / 10                 |
+| Chute agachado | 9 / 1       | 10 / 4 / 18                |
+| Soco aéreo     | 6 / 0       | 4 / 6 / 10                 |
+| Chute aéreo    | 10 / 1      | 8 / 8 / 14                 |
+
 ## Controles
 
 | Ação               | Teclado                                    | Touch                               |

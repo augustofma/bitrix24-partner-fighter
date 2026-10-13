@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { juliana } from '../src/fighters/juliana';
 import { jonas } from '../src/fighters/jonas';
 import { rodolfo } from '../src/fighters/rodolfo';
 import { douglas } from '../src/fighters/douglas';
@@ -74,6 +75,7 @@ describe('João Guiotti and Romualdo', () => {
     douglas,
     rodolfo,
     jonas,
+    juliana,
   ])('$id goes through every state in a real simulation', (config) => {
     const sim = new FightSimulation({
       fighters: [config, augusto],
