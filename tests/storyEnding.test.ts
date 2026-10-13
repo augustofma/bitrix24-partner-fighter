@@ -31,6 +31,7 @@ describe('story endings', () => {
     'aislan',
     'romulo',
     'jonas',
+    'juliana',
   ])('%s has his own illustration, prepared at 16:9 (1440x810)', (fighterId) => {
     const asset = storyEndingAsset(fighterId);
     expect(asset).toEqual({
@@ -86,6 +87,17 @@ describe('story endings', () => {
     // ...and picked up as soon as he is.
     expect(collectStoryEndingAssets(['jonas']).map((a) => a.path)).toEqual([
       'story/endings/jonas.jpg',
+    ]);
+  });
+
+  it('Juliana has her ending ready before her fighter joins', () => {
+    if (!ROSTER.some((f) => f.id === 'juliana')) {
+      expect(collectStoryEndingAssets(ROSTER.map((f) => f.id)).map((a) => a.path)).not.toContain(
+        'story/endings/juliana.jpg',
+      );
+    }
+    expect(collectStoryEndingAssets(['juliana']).map((a) => a.path)).toEqual([
+      'story/endings/juliana.jpg',
     ]);
   });
 });
